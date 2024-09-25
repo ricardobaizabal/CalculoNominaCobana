@@ -1,0 +1,12 @@
+100001E12102019                12102019
+2000024      ATRIANO                       RODRIGUEZ           GERARDO                       9876543210      000000000001050000
+2000033      CANO                          JIMENEZ             ALAN JARETH ALIYERI                           000000000000478657
+2000041      CANO                          SALDANA             FAVIO                                         000000000001219651
+2000056      CANO                          SALDANA             SOLEDAD                                       000000000002034912
+20000611     HERNANDEZ                     PERDOMO             RENE                                          000000000000596617
+2000072      LEON                          LOPEZ               MARCOS                                        000000000000537637
+2000085      LEON                          LOPEZ               RUBEN                                         000000000000596617
+2000098      MARTINEZ                      CHEMA               VALERIANO                                     000000000000478657
+2000109      PEREZ                         BARRIENTOS          SERGIO                                        000000000000596617
+2000117      ROSETE                        MELENDEZ            RAUL                                          000000000000832537
+30001200010000000000008421902

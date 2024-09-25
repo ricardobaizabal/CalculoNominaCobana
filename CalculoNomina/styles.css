@@ -1,0 +1,113 @@
+﻿body {
+    color: #111 !important;
+}
+
+.glyphicon {
+    color: #0774b4 !important;
+}
+
+.demo-container.wrapper {
+    /*background-image: url(images/background.png);*/
+    border: medium none;
+    padding: 65px 30px 0;
+    height: 250px;
+    width: 910px;
+}
+
+.header {
+    display: block;
+    font: 100 30px "Segoe UI", Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.left-wrapper {
+    float: left;
+    width: 350px;
+}
+.RadLabel {
+    width: 115px;
+    margin-bottom: 15px;
+}
+.left-wrapper .RadLabel {
+    width: 115px;
+    margin-bottom: 15px;
+}
+
+.right-wrapper {
+    float: right;
+    width: 500px;
+    text-align: right;
+}
+
+span.RadInputMultiline {
+    width: 210px;
+    height: 130px;
+    vertical-align: top;
+}
+ 
+.demo-separator {
+    clear: both;
+    margin-bottom: 10px;
+}
+ 
+.button-wrappers {
+    text-align: right;
+}
+
+/*.RadButton {
+    width: 75px;
+    margin-left: 10px;
+}*/
+
+.ibox-content {
+    min-height: 90px !important;
+}
+
+li.rlbItem .rlbText {
+    color: red;
+}
+
+.message {
+    line-height: 37px;
+}
+
+#ctl00_ContentPlaceHolder1_txtPuesto{
+        width: 140%;
+}
+
+.RadGrid_Bootstrap .rgFilterBox {
+    width: 100%;
+}
+
+.RadGrid_Bootstrap .rgHeader, .RadGrid_Bootstrap .rgHeader a {
+    font-weight: bold  !important;
+}
+
+fieldset {
+    border: 1px groove #ddd !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+}
+
+legend {
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    width: auto;
+    padding: 0 10px;
+    border-bottom: none;
+}
+
+.rbSecondaryButton {
+    background-color: #e8e8e8 !important;
+}
+
+.rbDisabled:hover {
+    cursor: not-allowed !important;
+}
+
+/*.TelerikModalOverlay {
+    height: 100% !important;
+}*/

@@ -1,0 +1,1159 @@
+<%@ Page Title="" Language="VB" MasterPageFile="~/MasterPage.Master" AutoEventWireup="false" Inherits="CalculoNomina.clientes" CodeBehind="Clientes.aspx.vb" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <style type="text/css">
+        .style4 {
+            height: 17px;
+        }
+
+        .style5 {
+            height: 14px;
+        }
+
+        .style6 {
+            height: 21px;
+        }
+    </style>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <br />
+    <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1">
+        <fieldset>
+            <legend style="padding-right: 6px; color: Black">
+                <asp:Image ID="Image1" runat="server" ImageUrl="~/images/buscador_03.jpg" ImageAlign="AbsMiddle" />&nbsp;<asp:Label ID="lblFiltros" Text="Buscador" runat="server" Font-Bold="true" CssClass="item"></asp:Label>
+            </legend>
+            <br />
+            <asp:Panel runat="server" DefaultButton="btnSearch">
+                <span class="item">Palabra clave:</span>
+                <telerik:RadTextBox ID="txtSearch" runat="server" Width="300px">
+                </telerik:RadTextBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <telerik:RadButton ID="btnSearch" RenderMode="Lightweight" runat="server" Width="100px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Buscar"></telerik:RadButton>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <telerik:RadButton ID="btnAll" RenderMode="Lightweight" runat="server" Width="100px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Ver todo"></telerik:RadButton>
+            </asp:Panel>
+            <br />
+            <br />
+        </fieldset>
+        <br />
+        <fieldset>
+            <legend style="padding-right: 6px; color: Black">
+                <asp:Label ID="lblClientsListLegend" runat="server" Font-Bold="true" CssClass="item"></asp:Label>
+            </legend>
+            <table width="100%">
+                <tr>
+                    <td style="height: 5px">
+                        <telerik:RadGrid ID="clientslist" runat="server" AllowPaging="True"
+                            AutoGenerateColumns="False" GridLines="None" AllowSorting="true"
+                            PageSize="15" ShowStatusBar="True"
+                            Skin="Bootstrap" Width="100%">
+                            <PagerStyle Mode="NextPrevAndNumeric" />
+                            <MasterTableView AllowMultiColumnSorting="true" AllowSorting="true" DataKeyNames="id"
+                                Name="Clients" Width="100%">
+                                <Columns>
+                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                        <ItemTemplate>
+                                            <asp:ImageButton ID="lnkEdit" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEdit" CausesValidation="false" ImageUrl="~/images/action_edit.png" />
+                                        </ItemTemplate>
+                                        <HeaderStyle HorizontalAlign="Center" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </telerik:GridTemplateColumn>
+                                    <telerik:GridBoundColumn DataField="id" HeaderText="No. Cliente" UniqueName="id"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="razonsocial" HeaderText="Razón Social" UniqueName="razonsocial">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="contacto" HeaderText="Contacto" UniqueName="contacto">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="telefono_contacto" HeaderText="Teléfono" UniqueName="telefono_contacto">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="rfc" HeaderText="RFC" UniqueName="rfc">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                        <ItemTemplate>
+                                            <asp:ImageButton ID="btnDelete" runat="server" CausesValidation="false" CommandArgument='<%# Eval("id") %>' CommandName="cmdDelete" ImageUrl="~/images/action_delete.gif" />
+                                        </ItemTemplate>
+                                        <HeaderStyle HorizontalAlign="Center" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </telerik:GridTemplateColumn>
+                                </Columns>
+                            </MasterTableView>
+                        </telerik:RadGrid>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td align="right" style="height: 5px">
+                        <%--<asp:Button ID="btnAddClient" runat="server" CausesValidation="False" CssClass="item" TabIndex="6" />--%>
+                        <telerik:RadButton ID="btnAddClient" RenderMode="Lightweight" runat="server" Width="130px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Cancelar"></telerik:RadButton>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height: 2px"></td>
+                </tr>
+            </table>
+        </fieldset>
+        <br />
+        <asp:Panel ID="panelClientRegistration" runat="server" Visible="False">
+            <fieldset>
+                <legend style="padding-right: 6px; color: Black">
+                    <asp:Label ID="lblClientEditLegend" runat="server" Font-Bold="True" CssClass="item"></asp:Label>
+                </legend>
+                <br />
+                <telerik:RadTabStrip ID="RadTabStrip1" runat="server" Skin="Bootstrap" MultiPageID="RadMultiPage1" SelectedIndex="0" CausesValidation="False">
+                    <Tabs>
+                        <telerik:RadTab Text="Datos Generales" TabIndex="0" Value="0" Enabled="True" Selected="true">
+                        </telerik:RadTab>
+                        <telerik:RadTab Text="Cuentas Bancarias" TabIndex="1" Value="1" Enabled="False">
+                        </telerik:RadTab>
+                        <telerik:RadTab Text="Detalles" TabIndex="1" Value="1" Enabled="true">
+                        </telerik:RadTab>
+                        <telerik:RadTab Text="Cobros y Condiciones IMSS/ISR Cliente" TabIndex="1" Value="1" Enabled="true">
+                        </telerik:RadTab>
+                        <telerik:RadTab Text="Cobros y Condiciones IMSS/ISR Empleado" TabIndex="1" Value="1" Enabled="true">
+                        </telerik:RadTab>
+                        <telerik:RadTab Text="Tasa IVA" TabIndex="1" Value="1" Enabled="true">
+                        </telerik:RadTab>
+                    </Tabs>
+                </telerik:RadTabStrip>
+                <telerik:RadMultiPage ID="RadMultiPage1" runat="server" SelectedIndex="0" Height="100%" Width="100%">
+                    <telerik:RadPageView ID="RadPageView1" runat="server" Width="100%" Selected="true">
+                        <br />
+                        <table width="100%" border="0">
+                            <tr>
+                                <td colspan="2">
+                                    <asp:Label ID="lblSocialReason" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <telerik:RadTextBox ID="txtSocialReason" runat="server" Width="92%">
+                                    </telerik:RadTextBox>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtSocialReason" ErrorMessage="Requerido" ForeColor="Red" CssClass="item"></asp:RequiredFieldValidator>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <asp:Label ID="lblDenominacionRazonSocial" runat="server" CssClass="item" Font-Bold="True" Text="Denominación/Razón Social:" />
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <telerik:RadTextBox ID="txtDenominacionRazonSocial" runat="server" Width="92%"></telerik:RadTextBox>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <asp:RequiredFieldValidator ID="valDenominacionRazonSocial" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtDenominacionRazonSocial" ErrorMessage="Requerido" ForeColor="Red" CssClass="item"></asp:RequiredFieldValidator>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="style4" width="33%">
+                                    <asp:Label ID="lblContact" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td class="style4" width="33%">
+                                    <asp:Label ID="lblContactEmail" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td class="style4" width="33%">
+                                    <asp:Label ID="lblContactPhone" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style4" width="33%">
+                                    <telerik:RadTextBox ID="txtContact" runat="server" Width="85%">
+                                    </telerik:RadTextBox>
+                                </td>
+                                <td class="style4" width="33%">
+                                    <telerik:RadTextBox ID="txtContactEmail" runat="server" Width="85%">
+                                    </telerik:RadTextBox>
+                                </td>
+                                <td class="style4" width="33%">
+                                    <telerik:RadTextBox ID="txtContactPhone" runat="server" Width="85%">
+                                    </telerik:RadTextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="style4" width="33%">&nbsp;</td>
+                                <td class="style4" width="33%">
+                                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server"
+                                        ControlToValidate="txtContactEmail" CssClass="item"
+                                        ValidationExpression=".*@.*\..*"></asp:RegularExpressionValidator>
+                                </td>
+                                <td class="style4" width="33%"></td>
+                            </tr>
+                            <tr>
+                                <td width="33%" class="style5"></td>
+                                <td width="33%" class="style5"></td>
+                                <td width="33%" class="style5"></td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <asp:Label ID="lblStreet" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td width="33%" align="left">
+                                    <asp:Label ID="lblExtNumber" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <asp:Label ID="lblIntNumber" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td align="left" width="33%">
+                                    <asp:Label ID="lblColony" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <telerik:RadTextBox ID="txtStreet" runat="server" Width="85%">
+                                    </telerik:RadTextBox>
+                                </td>
+                                <td width="33%">
+                                    <telerik:RadTextBox ID="txtExtNumber" runat="server" Width="35%">
+                                    </telerik:RadTextBox>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <telerik:RadTextBox ID="txtIntNumber" runat="server" Width="35%">
+                                </telerik:RadTextBox>
+                                </td>
+                                <td align="left" width="33%">
+                                    <telerik:RadTextBox ID="txtColony" runat="server" Width="85%">
+                                    </telerik:RadTextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtStreet" ForeColor="Red"  CssClass="item"></asp:RequiredFieldValidator>--%>
+                                </td>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtExtNumber" ForeColor="Red" CssClass="item"></asp:RequiredFieldValidator>--%>
+                                </td>
+                                <td align="left" width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtColony" ForeColor="Red" CssClass="item"></asp:RequiredFieldValidator>--%>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%" class="style6"></td>
+                                <td width="33%" class="style6"></td>
+                                <td width="33%" class="style6"></td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <asp:Label ID="lblCountry" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td width="33%">
+                                    <asp:Label ID="lblState" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td width="33%">
+                                    <asp:Label ID="lblTownship" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <%--<asp:DropDownList ID="paisid" runat="server" CssClass="box" AutoPostBack="true"></asp:DropDownList>--%>
+                                    <telerik:RadComboBox ID="paisid" runat="server" AutoPostBack="true" Width="85%"></telerik:RadComboBox>
+                                </td>
+                                <td width="33%">
+                                    <%--<asp:DropDownList ID="estadoid" runat="server" CssClass="box" AutoPostBack="true"></asp:DropDownList>--%>
+                                    <telerik:RadComboBox ID="estadoid" runat="server" AutoPostBack="false" Width="85%"></telerik:RadComboBox>
+                                    <telerik:RadTextBox ID="txtStates" runat="server" Width="85%" Visible="false"></telerik:RadTextBox>
+                                </td>
+                                <td width="33%">
+                                    <telerik:RadTextBox ID="txtTownship" runat="server" Width="85%">
+                                    </telerik:RadTextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="paisid" CssClass="item" ForeColor="Red"  InitialValue="0"></asp:RequiredFieldValidator>--%>
+                                </td>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="estadoid" InitialValue="0" ForeColor="Red"  CssClass="item"></asp:RequiredFieldValidator>--%>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtStates" CssClass="item" ForeColor="Red"  Enabled="false"></asp:RequiredFieldValidator>--%>
+                                </td>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtTownship" ForeColor="Red"  CssClass="item"></asp:RequiredFieldValidator>--%>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <asp:Label ID="lblZipCode" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td width="33%">
+                                    <asp:Label ID="lblRFC" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td width="33%">
+                                    <asp:Label ID="lblCondiciones" runat="server" CssClass="item" Font-Bold="true" Text="Condiciones:"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <telerik:RadTextBox ID="txtZipCode" runat="server" Width="85%" Visible="true">
+                                    </telerik:RadTextBox>
+                                    <%--<telerik:RadAutoCompleteBox TextSettings-SelectionMode="Single" runat="server" ID="txtZipCod"
+                                        DataTextField="codigo" DataValueField="id" InputType="Text" Width="290px" DropDownWidth="150px">
+                                        <TokensSettings AllowTokenEditing="true" />
+                                    </telerik:RadAutoCompleteBox>--%>
+                                </td>
+                                <td width="33%">
+                                    <telerik:RadTextBox ID="txtRFC" runat="server" Width="85%">
+                                    </telerik:RadTextBox>
+                                </td>
+                                <td width="33%">
+                                    <%--<asp:DropDownList ID="condicionesid" runat="server" CssClass="box"></asp:DropDownList>--%>
+                                    <telerik:RadComboBox ID="condicionesid" runat="server" Width="85%"></telerik:RadComboBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="valZipCode1" runat="server" ValidationGroup="DGenerales" ControlToValidate="txtZipCode" SetFocusOnError="true" ErrorMessage="Requerido" ForeColor="Red"  CssClass="item"></asp:RequiredFieldValidator>--%>
+                                    <%--<asp:RequiredFieldValidator ID="valZipCode2" runat="server" ValidationGroup="DGenerales" Enabled="false" InitialValue="" ControlToValidate="txtZipCod" SetFocusOnError="true" ErrorMessage="Requerido" CssClass="item"></asp:RequiredFieldValidator>--%>
+                                </td>
+                                <td width="33%">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtRFC" ForeColor="Red" ErrorMessage="Requerido" CssClass="item"></asp:RequiredFieldValidator>
+                                    <asp:RegularExpressionValidator ID="valRFC" CssClass="item" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" ControlToValidate="txtRFC" ForeColor="Red" ErrorMessage="Formato no válido" ValidationExpression="^([a-zA-Z&]{3,4})\d{6}([a-zA-Z\w]{3})$"></asp:RegularExpressionValidator>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%" class="style6"></td>
+                                <td width="33%" class="style6"></td>
+                                <td width="33%" class="style6"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <asp:Label ID="lblContribuyente" runat="server" Text="Tipo de contribuyente / Honorarios" CssClass="item" Font-Bold="True"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblFormaPago" runat="server" CssClass="item" Font-Bold="true" Text="Forma de pago:"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblNumCtaPago" runat="server" CssClass="item" Font-Bold="true"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <%--<asp:DropDownList ID="tipoContribuyenteid" runat="server" CssClass="box" AutoPostBack="true"></asp:DropDownList>--%>
+                                    <telerik:RadComboBox ID="tipoContribuyenteid" runat="server" AutoPostBack="true" Width="85%"></telerik:RadComboBox>
+                                </td>
+                                <td>
+                                    <%--<asp:DropDownList ID="formapagoid" runat="server" CssClass="box"></asp:DropDownList>--%>
+                                    <telerik:RadComboBox ID="formapagoid" runat="server" Width="85%"></telerik:RadComboBox>
+                                </td>
+                                <td>
+                                    <telerik:RadTextBox ID="txtNumCtaPago" runat="server" Width="55%">
+                                    </telerik:RadTextBox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="valTipoContribuyente" runat="server" ValidationGroup="DGenerales" SetFocusOnError="true" InitialValue="0" ControlToValidate="tipoContribuyenteid" ForeColor="Red" CssClass="item"></asp:RequiredFieldValidator>--%>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <asp:Label ID="lblRegimen" runat="server" CssClass="item" Font-Bold="true" Text="Régimen fiscal:"></asp:Label>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <%--<asp:DropDownList ID="regimenid" CssClass="box" Width="85%" runat="server"></asp:DropDownList>--%>
+                                    <telerik:RadComboBox ID="regimenid" runat="server" Width="85%"></telerik:RadComboBox>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    <%--<asp:RequiredFieldValidator ID="valRegimen" runat="server" ValidationGroup="DGenerales" InitialValue="0" ControlToValidate="regimenid" CssClass="item" SetFocusOnError="true" ForeColor="Red" ErrorMessage="Requerido"></asp:RequiredFieldValidator>--%>
+                                </td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td valign="bottom" colspan="3">
+                                    <telerik:RadButton ID="btnSaveClient" RenderMode="Lightweight" runat="server" Width="100px" Skin="Bootstrap" CssClass="rbPrimaryButton" ValidationGroup="DGenerales" Text="Guardar"></telerik:RadButton>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <telerik:RadButton ID="btnCancel" RenderMode="Lightweight" runat="server" Width="100px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Cancelar"></telerik:RadButton>
+                                    &nbsp;&nbsp;&nbsp;
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="width: 66%; height: 5px;">
+                                    <asp:HiddenField ID="InsertOrUpdate" runat="server" Value="0" />
+                                    <asp:HiddenField ID="ClientsID" runat="server" Value="0" />
+                                </td>
+                            </tr>
+                        </table>
+                    </telerik:RadPageView>
+                    <telerik:RadPageView ID="RadPageView2" runat="server">
+                        <br />
+                        <br />
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label6" runat="server" Text="Agregar / Editar Cuentas Bancarias" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td colspan="7">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">
+                                        <asp:Label ID="lblBanco" runat="server" CssClass="item" Font-Bold="True" Text="Banco Nacional:"></asp:Label>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <asp:Label ID="lblBancoExtr" runat="server" CssClass="item" Font-Bold="True" Text="Banco Extranjero:"></asp:Label>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <asp:Label ID="lblRfc1" runat="server" CssClass="item" Font-Bold="True" Text="RFC:"></asp:Label>
+                                    </td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">
+                                        <telerik:RadTextBox ID="txtBanco" runat="server" Width="95%">
+                                        </telerik:RadTextBox>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <telerik:RadTextBox ID="txtBancoExtr" runat="server" Width="95%">
+                                        </telerik:RadTextBox>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <telerik:RadTextBox ID="txtRFCBAK" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+                                    <td style="width: 10%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator16" runat="server" ValidationGroup="vDatosCuenta" ControlToValidate="txtRFCBAK" SetFocusOnError="True" CssClass="item" Text="Requerido" ForeColor="Red"></asp:RequiredFieldValidator>
+                                        <asp:RegularExpressionValidator ID="RegularExpressionValidator2" CssClass="item" runat="server" ValidationGroup="vDatosCuenta" ControlToValidate="txtRFCBAK" SetFocusOnError="True" ValidationExpression="^([a-zA-Z&]{3,4})\d{6}([a-zA-Z\w]{3})$" ForeColor="Red"></asp:RegularExpressionValidator>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">
+                                        <asp:Label ID="lblNonCuenta" runat="server" CssClass="item" Font-Bold="True" Text="Número de Cuenta:"></asp:Label>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <asp:Label ID="Label7" runat="server" CssClass="item" Font-Bold="True" Text="Predeterminado:"></asp:Label>
+                                    </td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">
+                                        <telerik:RadTextBox ID="txtCuenta" runat="server" Width="96%">
+                                        </telerik:RadTextBox>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <asp:CheckBox runat="server" ID="chkPredeterminado" />
+                                    </td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">
+                                        <asp:RequiredFieldValidator ID="valCuenta" runat="server" SetFocusOnError="true" ControlToValidate="txtCuenta" ValidationGroup="vDatosCuenta" Text="Requerido" ForeColor="Red" CssClass="item"></asp:RequiredFieldValidator>
+                                    </td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">
+                                        <asp:Button ID="btnGuardar" runat="server" ValidationGroup="vDatosCuenta" Text="Guardar" />&nbsp;&nbsp;
+                                    <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" Visible="false" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width: 66%; height: 5px;">
+                                        <asp:HiddenField ID="CuentaID" runat="server" Value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <br />
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="lblSucursalesListLegend" runat="server" Text="Listado de Cuentas Bancarias" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td style="height: 5px">
+                                        <telerik:RadGrid ID="cuentasList" runat="server" AllowPaging="True"
+                                            AutoGenerateColumns="False" GridLines="None"
+                                            PageSize="20" ShowStatusBar="True"
+                                            Skin="Bootstrap" Width="100%">
+                                            <PagerStyle Mode="NumericPages" />
+                                            <MasterTableView AllowMultiColumnSorting="False" DataKeyNames="id" Name="Cuentas" NoMasterRecordsText="No se encontraron datos para mostrar" Width="100%">
+                                                <Columns>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="lnkEdit" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEdit" ImageUrl="~/images/action_edit.png" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    </telerik:GridBoundColumn>
+
+                                                    <telerik:GridBoundColumn DataField="banconacional" HeaderText="Banco Nacional" UniqueName="banconacional">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="bancoextranjero" HeaderText="Banco Extranjero" UniqueName="bancoextranjero">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="rfc" HeaderText="RFC" UniqueName="rfc">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="numctapago" HeaderText="Cuenta Bancaria" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="Predeterminado" UniqueName="">
+                                                        <ItemTemplate>
+                                                            <asp:Image ID="imgPredeterminado" runat="server" ImageAlign="AbsMiddle" ImageUrl="~/images/action_check.gif" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="btnDelete" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdDelete" ImageUrl="~/images/action_delete.gif" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                </Columns>
+                                            </MasterTableView>
+                                        </telerik:RadGrid>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </telerik:RadPageView>
+                    <telerik:RadPageView ID="RadPageView3" runat="server">
+                        <br />
+                        <br />
+
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label1" runat="server" Text="Agregar / Editar Detalles Cliente" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td colspan="7">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label2" runat="server" CssClass="item" Font-Bold="True" Text="Concepto base:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label3" runat="server" CssClass="item" Font-Bold="True" Text="Calculo comisión:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label4" runat="server" CssClass="item" Font-Bold="True" Text="Comisión cliente:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label10" runat="server" CssClass="item" Font-Bold="True" Text="Comisión empleado:"></asp:Label>
+                                    </td>
+
+                                </tr>
+                                <tr>
+
+                                    <td width="20%">
+                                        <asp:DropDownList ID="concepto_base" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList>
+                                    </td>
+
+                                    <td width="20%">
+                                        <asp:DropDownList ID="calculo_comision" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList>
+                                    </td>
+
+                                    <td style="width: 20%;">
+                                        <telerik:RadTextBox ID="comision_cliente" runat="server" Width="95%" ValidationGroup="vDetallesCliente">
+                                        </telerik:RadTextBox>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <telerik:RadTextBox ID="comision_empleado" runat="server" Width="85%" ValidationGroup="vDetallesCliente">
+                                        </telerik:RadTextBox>
+                                    </td>
+
+                                    <td style="width: 20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;"></td>
+                                </tr>
+                                <tr>
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">
+                                        <asp:Button ID="btnGuardarDetalles" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
+                                        <asp:Button ID="btnCancelarDetalle" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width: 66%; height: 5px;">
+                                        <asp:HiddenField ID="HiddenField1" runat="server" Value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <br />
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label9" runat="server" Text="Listado de Detalles del Cliente" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td style="height: 5px">
+                                        <telerik:RadGrid ID="DetallesClienteList" runat="server" AllowPaging="True"
+                                            AutoGenerateColumns="False" GridLines="None"
+                                            PageSize="20" ShowStatusBar="True"
+                                            Skin="Bootstrap" Width="100%">
+                                            <PagerStyle Mode="NumericPages" />
+                                            <MasterTableView AllowMultiColumnSorting="False" DataKeyNames="id" Name="DetallesCliente" NoMasterRecordsText="No se encontraron datos para mostrar" Width="100%">
+                                                <Columns>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="lnkEditDetalle" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEditDetalle" ImageUrl="~/images/action_edit.png" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    </telerik:GridBoundColumn>
+
+                                                    <telerik:GridBoundColumn DataField="concepto_base_descripcion" HeaderText="Concepto Base" UniqueName="banconacional">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="calculo_comision_descripcion" HeaderText="Calculo Comision" UniqueName="bancoextranjero">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="comision_cliente" HeaderText="Comision Cliente" UniqueName="rfc">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="comision_empleado" HeaderText="Comision Empleado" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="DeleteDetalle">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="btnDeleteDetalle" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdDeleteDetalle" ImageUrl="~/images/action_delete.gif" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                </Columns>
+                                            </MasterTableView>
+                                        </telerik:RadGrid>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </telerik:RadPageView>
+                    <telerik:RadPageView ID="RadPageView4" runat="server">
+                        <br />
+                        <br />
+
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label5" runat="server" Text="Agregar / Editar Cobros y Condiciones IMSS/ISR Cliente" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td colspan="7">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label8" runat="server" CssClass="item" Font-Bold="True" Text="Condicion IMSS:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label11" runat="server" CssClass="item" Font-Bold="True" Text="Condicion IMSS Patronal:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label12" runat="server" CssClass="item" Font-Bold="True" Text="Condicion ISR:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label13" runat="server" CssClass="item" Font-Bold="True" Text="Condicion ISN:"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="20%">
+                                        <asp:DropDownList ID="condicionIMSS" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                        <asp:Label ID="Label15" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="CobroIMSS" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+
+                                    <td width="20%">
+                                        <asp:DropDownList ID="condicionIMSSPatronal" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                        <asp:Label ID="Label16" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS Patronal:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="CobroIMSSPatronal" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+
+                                    <td style="width: 20%;">
+                                        <asp:DropDownList ID="CondicionISR" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente">
+                                        </asp:DropDownList><br />
+                                        <asp:Label ID="Label17" runat="server" CssClass="item" Font-Bold="True" Text="Cobro ISR:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="CobroISR" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:DropDownList ID="CondicionISN" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente">
+                                        </asp:DropDownList>
+                                    </td>
+
+                                    <td style="width: 20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;"></td>
+                                </tr>
+                                <tr>
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">
+                                        <asp:Button ID="btnGuardarIMSSISR" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
+                                    <asp:Button ID="btnCancelarIMSSISR" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width: 66%; height: 5px;">
+                                        <asp:HiddenField ID="HiddenField2" runat="server" Value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <br />
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label14" runat="server" Text="Listado de Cobros y Condiciones IMSS/ISR Cliente" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td style="height: 5px">
+                                        <telerik:RadGrid ID="ListadoIMSSISR" runat="server" AllowPaging="True"
+                                            AutoGenerateColumns="False" GridLines="None"
+                                            PageSize="20" ShowStatusBar="True"
+                                            Skin="Bootstrap" Width="100%">
+                                            <PagerStyle Mode="NumericPages" />
+                                            <MasterTableView AllowMultiColumnSorting="False" DataKeyNames="id" Name="IMSSISR" NoMasterRecordsText="No se encontraron datos para mostrar" Width="100%">
+                                                <Columns>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="lnkEditImIs" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEditDetalle" ImageUrl="~/images/action_edit.png" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    </telerik:GridBoundColumn>
+
+                                                    <telerik:GridBoundColumn DataField="condicion_imss_descripcion" HeaderText="Condicion IMSS" UniqueName="banconacional">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="cobro_imss" HeaderText="Cobro IMSS" UniqueName="bancoextranjero">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="condicion_patronal_imss_descripcion" HeaderText="Condicion Patronal IMSS" UniqueName="rfc">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="cobro_patronal_imss" HeaderText="Cobro Patronal IMSS" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="condicion_isr_descripcion" HeaderText="Condicion ISR" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="cobro_isr" HeaderText="Cobro ISR" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="condicion_isn_descripcion" HeaderText="Condicion ISN" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="DeleteDetalle">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="btnDeleteIm_is" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdDeleteDetalle" ImageUrl="~/images/action_delete.gif" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                </Columns>
+                                            </MasterTableView>
+                                        </telerik:RadGrid>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </telerik:RadPageView>
+                    <telerik:RadPageView ID="RadPageView5" runat="server">
+                        <br />
+                        <br />
+
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label18" runat="server" Text="Agregar / Editar Cobros y Condiciones IMSS/ISR Empleado" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td colspan="7">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label19" runat="server" CssClass="item" Font-Bold="True" Text="Condicion IMSS:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label20" runat="server" CssClass="item" Font-Bold="True" Text="Condicion IMSS Patronal:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label21" runat="server" CssClass="item" Font-Bold="True" Text="Condicion ISR:"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="20%">
+                                        <asp:DropDownList ID="CondicionIMSSEmpleado" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                        <br />
+                                        <asp:Label ID="Label23" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="CobroIMSSEmpleado" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+
+                                    <td width="20%">
+                                        <asp:DropDownList ID="CondicionIMSSPatronalEmpleado" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                        <br />
+                                        <asp:Label ID="Label24" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS Patronal:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="CobroIMSSPatronalEmpleado" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+
+                                    <td style="width: 20%;">
+                                        <asp:DropDownList ID="CondicionISREmpleado" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente">
+                                        </asp:DropDownList><br />
+                                        <br />
+                                        <asp:Label ID="Label25" runat="server" CssClass="item" Font-Bold="True" Text="Cobro ISR:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="CobroISREmpleado" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+                                    <td style="width: 20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;"></td>
+                                </tr>
+                                <tr>
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">
+                                        <asp:Button ID="btnGuardarIMSSISREmpleado" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
+                                    <asp:Button ID="btnCancelarIMSSISREmpleado" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width: 66%; height: 5px;">
+                                        <asp:HiddenField ID="HiddenField3" runat="server" Value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <br />
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label26" runat="server" Text="Listado de Cobros y Condiciones IMSS/ISR Empleado" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td style="height: 5px">
+                                        <telerik:RadGrid ID="ListIMSSISREmpleado" runat="server" AllowPaging="True"
+                                            AutoGenerateColumns="False" GridLines="None"
+                                            PageSize="20" ShowStatusBar="True"
+                                            Skin="Bootstrap" Width="100%">
+                                            <PagerStyle Mode="NumericPages" />
+                                            <MasterTableView AllowMultiColumnSorting="False" DataKeyNames="id" Name="IMSSISR" NoMasterRecordsText="No se encontraron datos para mostrar" Width="100%">
+                                                <Columns>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="lnkEditImIs" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEditDetalle" ImageUrl="~/images/action_edit.png" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    </telerik:GridBoundColumn>
+
+                                                    <telerik:GridBoundColumn DataField="condicion_imss_descripcion" HeaderText="Condicion IMSS" UniqueName="banconacional">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="cobro_imss" HeaderText="Cobro IMSS" UniqueName="bancoextranjero">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="condicion_patronal_imss_descripcion" HeaderText="Condicion Patronal IMSS" UniqueName="rfc">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="cobro_patronal_imss" HeaderText="Cobro Patronal IMSS" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="condicion_isr_descripcion" HeaderText="Condicion ISR" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="cobro_isr" HeaderText="Cobro ISR" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="DeleteDetalle">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="btnDeleteIm_is" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdDeleteDetalle" ImageUrl="~/images/action_delete.gif" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                </Columns>
+                                            </MasterTableView>
+                                        </telerik:RadGrid>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </telerik:RadPageView>
+                    <telerik:RadPageView ID="RadPageView6" runat="server">
+                        <br />
+                        <br />
+
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label22" runat="server" Text="Agregar / Editar Tasa IVA" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td colspan="7">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label27" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Remuneracion:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label28" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Comisión:"></asp:Label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="Label29" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Cuota Obrera:"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="20%">
+                                        <telerik:RadTextBox ID="TIRemuneracion" runat="server" Width="85%"></telerik:RadTextBox><br />
+                                        <br />
+                                        <asp:Label ID="Label30" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Cuota Patronal:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="TICuotaPatronal" runat="server" Width="85%">
+                                        </telerik:RadTextBox><br />
+                                        <br />
+                                        <asp:Label ID="Label34" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA ISN:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="TIISN" runat="server" Width="85%">
+                                        </telerik:RadTextBox>
+                                    </td>
+
+                                    <td width="20%">
+                                        <telerik:RadTextBox ID="TIComision" runat="server" Width="85%"></telerik:RadTextBox><br />
+                                        <br />
+                                        <asp:Label ID="Label31" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Infonavit:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="TIInfonavit" runat="server" Width="85%">
+                                        </telerik:RadTextBox><br />
+                                        <br />
+                                        &nbsp;<br />
+                                        <br />
+                                        &nbsp;
+                                    </td>
+
+                                    <td style="width: 20%;">
+                                        <telerik:RadTextBox ID="TICuotaObrera" runat="server" Width="85%">
+                                        </telerik:RadTextBox><br />
+                                        <br />
+                                        <asp:Label ID="Label32" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA ISR:"></asp:Label><br />
+                                        <telerik:RadTextBox ID="TIISR" runat="server" Width="85%">
+                                        </telerik:RadTextBox><br />
+                                        <br />
+                                        &nbsp;<br />
+                                        <br />
+                                        &nbsp;
+                                    </td>
+                                    <td style="width: 20%;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;"></td>
+                                </tr>
+                                <tr>
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+
+
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 10%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">&nbsp;</td>
+                                    <td style="width: 30%;">
+                                        <asp:Button ID="btnGuardarTasaIVA" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
+                                    <asp:Button ID="btnCancelarTasaIVA" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width: 66%; height: 5px;">
+                                        <asp:HiddenField ID="HiddenField4" runat="server" Value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <br />
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="Label33" runat="server" Text="Listado de Tasas de IVA" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td style="height: 5px">
+                                        <telerik:RadGrid ID="ListTasaIva" runat="server" AllowPaging="True"
+                                            AutoGenerateColumns="False" GridLines="None"
+                                            PageSize="20" ShowStatusBar="True"
+                                            Skin="Bootstrap" Width="100%">
+                                            <PagerStyle Mode="NumericPages" />
+                                            <MasterTableView AllowMultiColumnSorting="False" DataKeyNames="id" Name="IMSSISR" NoMasterRecordsText="No se encontraron datos para mostrar" Width="100%">
+                                                <Columns>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="lnkEditImIs" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEditDetalle" ImageUrl="~/images/action_edit.png" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    </telerik:GridBoundColumn>
+
+                                                    <telerik:GridBoundColumn DataField="TIRemuneracion" HeaderText="Tasa IVA Remuneracion" UniqueName="banconacional">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="TIComision" HeaderText="Tasa IVA Comision" UniqueName="bancoextranjero">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="TICuotaObrera" HeaderText="Tasa IVA CuotaObrera" UniqueName="rfc">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="TICuotaPatronal" HeaderText="Tasa IVA CuotaPatronal" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="TIISN" HeaderText="Tasa IVA ISN" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="TIInfonavit" HeaderText="Tasa IVA Infonavit" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="TIISR" HeaderText="Tasa IVA ISR" UniqueName="numctapago">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="DeleteDetalle">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="btnDeleteIm_is" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdDeleteDetalle" ImageUrl="~/images/action_delete.gif" ValidationGroup="vDetallesCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                </Columns>
+                                            </MasterTableView>
+                                        </telerik:RadGrid>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </telerik:RadPageView>
+                </telerik:RadMultiPage>
+            </fieldset>
+        </asp:Panel>
+        <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
+    </telerik:RadAjaxPanel>
+    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Default" Width="100%">
+    </telerik:RadAjaxLoadingPanel>
+</asp:Content>

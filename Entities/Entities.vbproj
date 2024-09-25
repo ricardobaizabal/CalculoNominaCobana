@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E7A0D915-69D3-4DD1-B02C-D92C16383C7A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Entities</RootNamespace>
+    <AssemblyName>Entities</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Entities.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Entities.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAO\DAODeducciones.vb" />
+    <Compile Include="DAO\DAOPercepciones.vb" />
+    <Compile Include="DAO\DAOSalarioMinimo.vb" />
+    <Compile Include="DAO\DAOBanco.vb" />
+    <Compile Include="DAO\DAOCatalogos.vb" />
+    <Compile Include="DAO\DAOConcepto.vb" />
+    <Compile Include="DAO\DAOConfiguracion.vb" />
+    <Compile Include="DAO\DAODepartamento.vb" />
+    <Compile Include="DAO\DAODispersionNomina.vb" />
+    <Compile Include="DAO\DAOEjercicio.vb" />
+    <Compile Include="DAO\DAOEmpleado.vb" />
+    <Compile Include="DAO\DAOEmpresa.vb" />
+    <Compile Include="DAO\DAOErrorTimbrado.vb" />
+    <Compile Include="DAO\DAOEstado.vb" />
+    <Compile Include="DAO\DAOFonacot.vb" />
+    <Compile Include="DAO\DAOInfonavit.vb" />
+    <Compile Include="DAO\DAOMaster.vb" />
+    <Compile Include="DAO\DAOMetodoPago.vb" />
+    <Compile Include="DAO\DAONomina.vb" />
+    <Compile Include="DAO\DAOPeriodicidadpago.vb" />
+    <Compile Include="DAO\DAOPeriodo.vb" />
+    <Compile Include="DAO\DAOPrestamoPersonal.vb" />
+    <Compile Include="DAO\DAOPrestamos.vb" />
+    <Compile Include="DAO\DAOPuesto.vb" />
+    <Compile Include="DAO\DAORegimenContratacion.vb" />
+    <Compile Include="DAO\DAORiesgoPuesto.vb" />
+    <Compile Include="DAO\DAOTablaSubsidio.vb" />
+    <Compile Include="DAO\DAOTarifaDiaria.vb" />
+    <Compile Include="DAO\DAOTarifaMensual.vb" />
+    <Compile Include="DAO\DAOTarifaSemanal.vb" />
+    <Compile Include="DAO\DAOTipoContrato.vb" />
+    <Compile Include="DAO\DAOTipoHorasExtra.vb" />
+    <Compile Include="DAO\DAOTipoJornada.vb" />
+    <Compile Include="DAO\DAOUMA.vb" />
+    <Compile Include="DAO\DAOUsuario.vb" />
+    <Compile Include="Entities\Banco.vb" />
+    <Compile Include="Entities\Catalogos.vb" />
+    <Compile Include="Entities\Concepto.vb" />
+    <Compile Include="Entities\Configuracion.vb" />
+    <Compile Include="DAO\DAOTablaSubsidioSemanal.vb" />
+    <Compile Include="Entities\Departamento.vb" />
+    <Compile Include="Entities\Ejercicio.vb" />
+    <Compile Include="Entities\Empleado.vb" />
+    <Compile Include="Entities\Empresa.vb" />
+    <Compile Include="Entities\ErrorTimbrado.vb" />
+    <Compile Include="Entities\Estado.vb" />
+    <Compile Include="Entities\Fonacot.vb" />
+    <Compile Include="Entities\Infonavit.vb" />
+    <Compile Include="Entities\Master.vb" />
+    <Compile Include="Entities\MetodoPago.vb" />
+    <Compile Include="Entities\DispersionNomina.vb" />
+    <Compile Include="Entities\Nomina.vb" />
+    <Compile Include="Entities\Periodicidadpago.vb" />
+    <Compile Include="Entities\Periodo.vb" />
+    <Compile Include="Entities\PrestamoPersonal.vb" />
+    <Compile Include="Entities\Prestamos.vb" />
+    <Compile Include="Entities\Puesto.vb" />
+    <Compile Include="Entities\RegimenContratacion.vb" />
+    <Compile Include="Entities\RiesgoPuesto.vb" />
+    <Compile Include="Entities\SalarioMinimo.vb" />
+    <Compile Include="Entities\TablaSubsidio.vb" />
+    <Compile Include="Entities\TablaSubsidioSemanal.vb" />
+    <Compile Include="Entities\TarifaDiaria.vb" />
+    <Compile Include="Entities\TarifaMensual.vb" />
+    <Compile Include="Entities\TarifaSemanal.vb" />
+    <Compile Include="Entities\TipoContrato.vb" />
+    <Compile Include="Entities\TipoJornada.vb" />
+    <Compile Include="Entities\UMA.vb" />
+    <Compile Include="Entities\Usuario.vb" />
+    <Compile Include="Entities\UsuarioPerfil.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DBManager\DBManager.vbproj">
+      <Project>{974a70e2-2504-40f0-ae8a-903a6d071bcb}</Project>
+      <Name>DBManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

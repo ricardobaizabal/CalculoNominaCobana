@@ -1,0 +1,3 @@
+﻿Clave,Nombre,Apellido Paterno,Apellido Materno,Sexo,RFC,Curp,No IMSS,Cliente,Estado Civil,Pais,Estado,Municipio,Codigo Postal,Email,Fecha de Nacimiento,Puesto de Trabajo,Periodo de Pago,Salario Base,Salario Diario Integrado,Sueldos y Salarios,Excendente,Cantidad Excedente
+5556,Prueba 1,Pprueba1,Mprueba1,Masculino,123,123,1234,BOCK PRECISE COMPONENTS DE MEXICO,Soltero,MEXICO,Nuevo León,Monterrey,67800,correo,09/09/2000,MONITOREO,Semanal,100,120,si,no,0
+5557,Prueba 2,Pprueba2,Mprueba2,Femenino,124,124,1234,BOCK PRECISE COMPONENTS DE MEXICO,Soltero,MEXICO,Nuevo León,Monterrey,67800,correo,10/09/2000,MONITOREO,Semanal,100,120,si,no,0

@@ -1,0 +1,116 @@
+﻿.modal-footer {border-top: 0px; }
+
+.navbar-nav > li > a {
+    min-height: 70px !important;
+    padding: 25px 15px 15px 15px;
+}
+
+@media screen and (max-width: 768px) {
+
+    #loginModal .modal-dialog {
+        width: 90% !important;
+        margin: 0 auto !important;
+        margin-top: 20px;
+    }
+
+    #loginModal .modal-content {
+        margin: 0 auto;
+        margin-top: 20px;
+        padding: 35% 20% 15% 20%;
+        background-image: url('../images/login-Nomilink1.jpg');
+        background-size: 100% 100%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    #loginModal .modal-dialog {
+        width: 90% !important;
+        margin: 0 auto !important;
+        margin-top: 20px;
+    }
+
+    #loginModal .modal-content {
+        margin: 0 auto;
+        margin-top: 20px;
+        padding: 50% 20% 20% 20%;
+        background-image: url('../images/login-Nomilink1.jpg');
+        background-size: 100% 100%;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    #loginModal .modal-dialog {
+        width: 50% !important;
+        margin: 0 auto !important;
+    }
+
+    #loginModal .modal-content {
+        margin: 0 auto;
+        margin-top: 20px;
+        padding: 35% 20% 15% 20%;
+        background-image: url('../images/login-Nomilink1.jpg');
+        background-size: 100% 100%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    #loginModal .modal-dialog {
+        width: 500px !important;
+        margin: 0 auto !important;
+        margin-top: 50px;
+    }
+
+    #loginModal .modal-content {
+        margin: 0 auto;
+        margin-top: 50px;
+        padding: 30% 20% 15% 20%;
+        background-image: url('../images/login-Nomilink1.jpg');
+        background-size: 100% 100%;
+    }
+}
+
+#txtEmail_wrapper{
+        margin-top: 40px;
+}
+
+/*.btn-primary {
+    color: #ffffff;
+    background-color: #08143b;
+    border-color: #0d2060;
+    width: 100px;
+}
+
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active,
+    .btn-primary.active,
+    .open .dropdown-toggle.btn-primary {
+        color: #ffffff;
+        background-color: #293c7b;
+        border-color: #293c7b;
+    }
+
+    .btn-primary:active,
+    .btn-primary.active,
+    .open .dropdown-toggle.btn-primary {
+        background-image: none;
+    }
+
+    .btn-primary.disabled,
+    .btn-primary[disabled],
+    fieldset[disabled] .btn-primary,
+    .btn-primary.disabled:hover,
+    .btn-primary[disabled]:hover,
+    fieldset[disabled] .btn-primary:hover,
+    .btn-primary.disabled:focus,
+    .btn-primary[disabled]:focus,
+    fieldset[disabled] .btn-primary:focus,
+    .btn-primary.disabled:active,
+    .btn-primary[disabled]:active,
+    fieldset[disabled] .btn-primary:active,
+    .btn-primary.disabled.active,
+    .btn-primary[disabled].active,
+    fieldset[disabled] .btn-primary.active {
+        background-color: #0d2060 !important;
+        border-color: #0d2060 !important;
+    }*/

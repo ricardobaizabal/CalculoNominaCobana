@@ -1,0 +1,303 @@
+﻿<%@ Master Language="VB" AutoEventWireup="false" CodeBehind="MasterPage.master.vb" Inherits="CalculoNomina.MasterPage" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+<!DOCTYPE html>
+<html>
+<head id="Head1" runat="server">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Sistema - Cálculo de Nómina</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet" />
+
+    <!-- Toastr style -->
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <!-- Gritter -->
+    <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="scripts/Master.js"></script>
+
+    <style>
+        .pace-inactive, .pace-progress, .pace-active {
+            display: none !important;
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+
+<body>
+    <form id="form1" runat="server">
+        <telerik:RadScriptManager ID="RadScriptManager1" runat="server">
+            <Scripts>
+                <asp:ScriptReference Path="js/FixFocus.js" />
+            </Scripts>
+        </telerik:RadScriptManager>
+
+        <div class="container">
+            <div id="wrapper">
+                <nav class="navbar-default navbar-static-side" role="navigation">
+                    <div class="sidebar-collapse">
+                        <ul class="nav metismenu" id="side-menu">
+                            <li class="nav-header">
+                                <div class="dropdown profile-element">
+                                    <span>
+                                        <img alt="image" class="img-thumbnail" src="images/NOMILINK2_03.png" /></span>
+                                </div>
+                                <div class="logo-element">
+                                    <img alt="image" class="img-thumbnail" src="images/LOGOLINKIUM_03.png" />
+                                </div>
+                            </li>
+                            <li>
+                                <a href="Empresa.aspx"><i class="fa fa-edit"></i><span class="nav-label">Empresa</span></a>
+                            </li>
+                            <li>
+                                <a href="Clientes.aspx"><i class="fa fa-users"></i><span class="nav-label">Clientes</span></a>
+                            </li>
+                            <li class='disabled'>
+                                <a href="#"><i class="fa fa-address-book"></i><span class="nav-label">Empleados</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li>
+                                        <a href="Empleado.aspx">Lista de Empleados</a>
+                                    </li>
+                                    <li>
+                                        <a href="AltaMasivaEmpleados.aspx">Alta masiva de empleados</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class='disabled'>
+                                <a href="#"><i class="fa fa-adjust"></i><span class="nav-label">Nómina Ordinaria</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li>
+                                        <a href="#">Nómina semanal<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="PeriodosSemanales.aspx">Creación de periodos</a>
+                                            </li>
+                                            <li>
+                                                <a href="ListadoNominaNormal.aspx">Cálculo nómina normal</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosSemanal.aspx">Cálculo de finiquitos</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosGeneradosSemanal.aspx">Finiquitos generados</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">Nómina catorcenal<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="PeriodosCatorcenales.aspx">Creación de periodos</a>
+                                            </li>
+                                            <li>
+                                                <a href="ListadoNominaNormalCatorcenal.aspx">Cálculo nómina normal</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosCatorcenal.aspx">Cálculo de finiquitos</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosGeneradosCatorcenal.aspx">Finiquitos generados</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">Nómina quincenal<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="PeriodosQuincenales.aspx">Creación de periodos</a>
+                                            </li>
+                                            <li>
+                                                <a href="ListadoNominaQuincenal.aspx">Cálculo nómina normal</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosQuincenal.aspx">Cálculo de finiquitos</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosGeneradosQuincenal.aspx">Finiquitos generados</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <!--li>
+                                        <a href="#">Nómina mensual<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="ListadoNominaMensual.aspx">Cálculo nómina normal</a>
+                                            </li>
+                                        </ul>
+                                    </li--->
+                                </ul>
+                            </li>
+                            <li class='disabled'>
+                                <a href="#"><i class="fa fa-info-circle"></i><span class="nav-label">Nómina Extraordinaria</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li>
+                                        <a href="ListadoNominaExtraordinaria.aspx">Especial</a>
+                                    </li>
+                                    <li>
+                                        <a href="CalculoUtilidades.aspx">Cálculo reparto de Utilidades</a>
+                                    </li>
+                                    <li class='disabled'>
+                                        <a href="CalculoAguinaldo.aspx">Cálculo Aguinaldo</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class='disabled'>
+                                <a href="#"><i class="fa fa-bars"></i><span class="nav-label">Módulos</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li>
+                                        <a href="ModuloInfonavit.aspx">Infonavit</a>
+                                    </li>
+                                    <li>
+                                        <a href="ModuloPrestamos.aspx">Préstamos<br />
+                                            y Descuentos</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Incapacidades</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class='disabled'>
+                                <a href="#"><i class="fa fa-tags"></i><span class="nav-label">Catálogos</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a href="Ejercicios.aspx">Ejercicio</a></li>
+                                    <li><a href="RegimenContratacion.aspx">Régimen de contratación del trabajador</a></li>
+                                    <li><a href="Bancos.aspx">Bancos</a></li>
+                                    <li><a href="RiespoPuesto.aspx">Riesgo del puesto</a></li>
+                                    <!--li><a href="Conceptos.aspx">Conceptos</a></li-->
+                                    <li><a href="Departamento.aspx">Departamentos</a></li>
+                                    <li><a href="Puesto.aspx">Puestos</a></li>
+                                    <li><a href="Periodicidadpago.aspx">Periodicidad de pago</a></li>
+                                    <li><a href="TipoContrato.aspx">Tipo de contrato</a></li>
+                                    <li><a href="Deducciones.aspx">Deducciones</a></li>
+                                    <li><a href="Percepciones.aspx">Percepciones</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-empire"></i><span class="nav-label">Configuración</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li>
+                                        <a href="#">Tabla de ISPT<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="TablaISPTDiaria.aspx">Diaria</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#">Tabla de subsidio<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="SubsidioDiaria.aspx">Diaria</a>
+                                            </li>
+                                            <li>
+                                                <a href="SubsidioMensual.aspx">Mensual</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="UMA.aspx">UMA</a></li>
+                                    <li><a href="UMI.aspx">UMI</a></li>
+                                    <li><a href="SalarioMinimo.aspx">Salario Mínimo</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa fa-bar-chart-o"></i><span class="nav-label">Reportes</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li><a href="AcumuladosEmpleado.aspx">Acumulados por Empleado</a></li>
+                                    <li><a href="Acumulados.aspx">Acumulados General</a></li>
+                                    <li><a href="DiasLaborados.aspx">Días Laborados</a></li>
+                                    <li><a href="ReporteDeducciones.aspx">Deducciones</a></li>
+                                    <li><a href="ReportePercepciones.aspx">Percepciones</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="Salir.aspx"><i class="fa fa-sign-out"></i><span class="nav-label">Salir</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div id="page-wrapper" class="gray-bg dashbard-1">
+                    <div class="row border-bottom">
+                        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                            <div class="navbar-header">
+                                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i></a>
+                                <%--<form role="search" class="navbar-form-custom" action="search_results.html">--%>
+                                <div class="form-group" style="width: 600px;">
+                                    <br />
+                                    <asp:HiddenField ID="IdEjercicio" runat="server" Value="0" Visible="False" />
+                                    <input type="hidden" class="IdEmpresa" runat="server" id="IdEmpresa" name="IdEmpresa" value="0" />
+                                    <asp:Label class="m-t-none m-b" runat="server" ID="Empresa"></asp:Label>
+                                </div>
+                                <%--</form>--%>
+                            </div>
+                            <ul class="nav navbar-top-links navbar-right">
+                                <li>
+                                    <br />
+                                    <asp:Label class="m-t-none m-b" runat="server" ID="lblUsuario"></asp:Label>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <telerik:RadWindowManager ID="rwMensaje" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight">
+                    </telerik:RadWindowManager>
+                    <div class="row  border-bottom white-bg dashboard-header">
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mainly scripts -->
+            <script src="js/jquery-2.1.1.js"></script>
+            <script src="js/bootstrap.min.js"></script>
+            <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+            <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+            <!-- Flot -->
+            <script src="js/plugins/flot/jquery.flot.js"></script>
+            <script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+            <script src="js/plugins/flot/jquery.flot.spline.js"></script>
+            <script src="js/plugins/flot/jquery.flot.resize.js"></script>
+            <script src="js/plugins/flot/jquery.flot.pie.js"></script>
+
+            <!-- Peity -->
+            <script src="js/plugins/peity/jquery.peity.min.js"></script>
+            <script src="js/demo/peity-demo.js"></script>
+
+            <!-- Custom and plugin javascript -->
+            <script src="js/inspinia.js"></script>
+            <script src="js/plugins/pace/pace.min.js"></script>
+
+            <!-- jQuery UI -->
+            <script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+            <!-- GITTER -->
+            <script src="js/plugins/gritter/jquery.gritter.min.js"></script>
+
+            <!-- Sparkline -->
+            <script src="js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+            <!-- Sparkline demo data  -->
+            <script src="js/demo/sparkline-demo.js"></script>
+
+            <!-- ChartJS-->
+            <script src="js/plugins/chartJs/Chart.min.js"></script>
+
+            <!-- Toastr -->
+            <script src="js/plugins/toastr/toastr.min.js"></script>
+        </div>
+    </form>
+</body>
+</html>
