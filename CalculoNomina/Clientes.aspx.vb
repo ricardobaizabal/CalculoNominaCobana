@@ -37,7 +37,6 @@ Public Class clientes
             'Label Titles'
             ''''''''''''''
 
-            lblSocialReason.Text = Resources.Resource.lblSocialReason
             lblContact.Text = Resources.Resource.lblContact
             lblContactEmail.Text = Resources.Resource.lblContactEmail
             lblContactPhone.Text = Resources.Resource.lblContactPhone
@@ -302,6 +301,7 @@ Public Class clientes
 
             panelClientRegistration.Visible = False
 
+            clientslist.MasterTableView.NoMasterRecordsText = Resources.Resource.ClientsEmptyGridMessage
             clientslist.DataSource = GetClients()
             clientslist.DataBind()
 
@@ -328,7 +328,6 @@ Public Class clientes
 
             If rs.Read Then
 
-                txtSocialReason.Text = rs("razonsocial")
                 txtDenominacionRazonSocial.Text = rs("denominacion_razon_social")
                 txtContact.Text = rs("contacto")
                 txtContactEmail.Text = rs("email_contacto")
@@ -341,14 +340,6 @@ Public Class clientes
                 txtZipCode.Text = rs("fac_cp")
                 txtRFC.Text = rs("rfc")
                 txtNumCtaPago.Text = rs("numctapago")
-
-                'Dim ObjData As New DataControl(0)
-                'ObjData.Catalogo(condicionesid, "select id, nombre from tblCondiciones", rs("condicionesid"))
-                'ObjData.Catalogo(tipoContribuyenteid, "select id, nombre from tblTipoContribuyente", rs("tipoContribuyenteid"))
-                'ObjData.Catalogo(formapagoid, "select id, id + ' - ' + nombre as nombre from tblFormaPago order by nombre", rs("formapagoid"))
-                'ObjData.Catalogo(paisid, "EXEC pCatalogoPais @cmd=6", rs("fac_paisid"))
-                'ObjData.Catalogo(estadoid, "select id, nombre from tblEstado order by nombre", rs("fac_estadoid"))
-                'ObjData = Nothing
 
                 condicionesid.SelectedValue = rs("condicionesid")
                 tipoContribuyenteid.SelectedValue = rs("tipoContribuyenteid")
@@ -376,6 +367,8 @@ Public Class clientes
                 ClientsID.Value = id
 
                 panelClientRegistration.Visible = True
+                panelListadoClientes.Visible = False
+
                 RadMultiPage1.SelectedIndex = 0
                 RadTabStrip1.SelectedIndex = 0
                 RadTabStrip1.Tabs(0).Selected = True
@@ -409,7 +402,6 @@ Public Class clientes
 
         InsertOrUpdate.Value = 0
 
-        txtSocialReason.Text = ""
         txtContact.Text = ""
         txtContactEmail.Text = ""
         txtContactPhone.Text = ""
@@ -428,7 +420,17 @@ Public Class clientes
         estadoid.SelectedValue = 0
 
         panelClientRegistration.Visible = True
+        panelListadoClientes.Visible = False
+
+        RadMultiPage1.SelectedIndex = 0
+        RadTabStrip1.SelectedIndex = 0
+        RadTabStrip1.Tabs(0).Selected = True
+        RadTabStrip1.Tabs(0).Enabled = True
         RadTabStrip1.Tabs(1).Enabled = False
+        RadTabStrip1.Tabs(2).Enabled = False
+        RadTabStrip1.Tabs(3).Enabled = False
+        RadTabStrip1.Tabs(4).Enabled = False
+        RadTabStrip1.Tabs(5).Enabled = False
 
     End Sub
 
@@ -452,13 +454,15 @@ Public Class clientes
 
             If InsertOrUpdate.Value = 0 Then
 
-                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=4, @clienteUnionId='" & Session("clienteid").ToString & "', @razonsocial='" & txtSocialReason.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp.ToString & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "'", conn)
+                InsertOrUpdate.Value = 1
+
+                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=4, @clienteUnionId='" & Session("clienteid").ToString & "', @razonsocial='" & txtDenominacionRazonSocial.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp.ToString & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "'", conn)
 
                 conn.Open()
 
-                cmd.ExecuteReader()
+                ClientsID.Value = cmd.ExecuteScalar()
 
-                panelClientRegistration.Visible = False
+                'panelClientRegistration.Visible = False
 
                 clientslist.MasterTableView.NoMasterRecordsText = Resources.Resource.ClientsEmptyGridMessage
                 clientslist.DataSource = GetClients()
@@ -467,11 +471,18 @@ Public Class clientes
                 conn.Close()
                 conn.Dispose()
 
+                RadTabStrip1.Tabs(0).Enabled = True
+                RadTabStrip1.Tabs(1).Enabled = True
+                RadTabStrip1.Tabs(2).Enabled = True
+                RadTabStrip1.Tabs(3).Enabled = True
+                RadTabStrip1.Tabs(4).Enabled = True
+                RadTabStrip1.Tabs(5).Enabled = True
+
                 rwAlerta.RadAlert("Datos de cliente agregados exitosamente.", 330, 180, "Alerta", "", "")
 
             Else
 
-                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=5, @clienteid='" & ClientsID.Value & "', @razonsocial='" & txtSocialReason.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "'", conn)
+                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=5, @clienteid='" & ClientsID.Value & "', @razonsocial='" & txtDenominacionRazonSocial.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "'", conn)
 
                 conn.Open()
 
@@ -490,6 +501,9 @@ Public Class clientes
 
             End If
 
+            panelClientRegistration.Visible = True
+            panelListadoClientes.Visible = False
+
         Catch ex As Exception
             Throw New Exception(ex.Message)
         Finally
@@ -507,7 +521,7 @@ Public Class clientes
 
         InsertOrUpdate.Value = 0
 
-        txtSocialReason.Text = ""
+        txtDenominacionRazonSocial.Text = ""
         txtContact.Text = ""
         txtContactEmail.Text = ""
         txtContactPhone.Text = ""
@@ -525,20 +539,29 @@ Public Class clientes
         estadoid.SelectedValue = 0
 
         panelClientRegistration.Visible = False
+        panelListadoClientes.Visible = True
 
     End Sub
 
 #End Region
 
     Protected Sub btnSearch_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnSearch.Click
-        clientslist.MasterTableView.NoMasterRecordsText = Resources.Resource.ProductsEmptyGridMessage
+
+        panelClientRegistration.Visible = False
+        panelListadoClientes.Visible = True
+
+        clientslist.MasterTableView.NoMasterRecordsText = Resources.Resource.ClientsEmptyGridMessage
         clientslist.DataSource = GetClients()
         clientslist.DataBind()
     End Sub
 
     Protected Sub btnAll_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnAll.Click
+
+        panelClientRegistration.Visible = False
+        panelListadoClientes.Visible = True
+
         txtSearch.Text = ""
-        clientslist.MasterTableView.NoMasterRecordsText = Resources.Resource.ProductsEmptyGridMessage
+        clientslist.MasterTableView.NoMasterRecordsText = Resources.Resource.ClientsEmptyGridMessage
         clientslist.DataSource = GetClients()
         clientslist.DataBind()
     End Sub
@@ -728,6 +751,7 @@ Public Class clientes
     Sub clearItems()
         txtBanco.Text = ""
         txtBancoExtr.Text = ""
+        txtRFCBAK.Text = ""
         txtCuenta.Text = ""
         chkPredeterminado.Checked = False
         txtBanco.Focus()

@@ -11,7 +11,6 @@
         }
     </script>
     <style type="text/css">
-
         .rgMasterTable {
             width: 100%;
             table-layout: inherit;
@@ -23,9 +22,9 @@
             margin-left: 10px !important;
         }
 
-        .container {
+        /*.container {
             width: 1300px !important;
-        }
+        }*/
     </style>
     <link href="styles.css" rel="stylesheet" />
 </asp:Content>
@@ -55,7 +54,7 @@
                                         <telerik:GridTemplateColumn HeaderText="ENE" UniqueName="Enero">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtEnero" Text='<%#Eval("enero")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtEnero" Text='<%#Eval("enero")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -64,7 +63,7 @@
                                         <telerik:GridTemplateColumn HeaderText="FEB" UniqueName="Febrero">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtFebrero" Text='<%#Eval("febrero")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtFebrero" Text='<%#Eval("febrero")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -73,7 +72,7 @@
                                         <telerik:GridTemplateColumn HeaderText="MAR" UniqueName="Marzo">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtMarzo" Text='<%#Eval("marzo")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtMarzo" Text='<%#Eval("marzo")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -82,7 +81,7 @@
                                         <telerik:GridTemplateColumn HeaderText="ABR" UniqueName="Abril">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtAbril" Text='<%#Eval("abril")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtAbril" Text='<%#Eval("abril")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -91,7 +90,7 @@
                                         <telerik:GridTemplateColumn HeaderText="MAY" UniqueName="Mayo">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtMayo" Text='<%#Eval("mayo")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtMayo" Text='<%#Eval("mayo")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -100,7 +99,7 @@
                                         <telerik:GridTemplateColumn HeaderText="JUN" UniqueName="Junio">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtJunio" Text='<%#Eval("junio")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtJunio" Text='<%#Eval("junio")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -109,7 +108,7 @@
                                         <telerik:GridTemplateColumn HeaderText="JUL" UniqueName="Julio">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtJulio" Text='<%#Eval("julio")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtJulio" Text='<%#Eval("julio")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -118,7 +117,7 @@
                                         <telerik:GridTemplateColumn HeaderText="AGO" UniqueName="Agosto">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtAgosto" Text='<%#Eval("agosto")%>' runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtAgosto" Text='<%#Eval("agosto")%>' runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -127,7 +126,7 @@
                                         <telerik:GridTemplateColumn HeaderText="SEPT" UniqueName="Septiembre">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtSeptiembre" Text='<%#Eval("septiembre")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtSeptiembre" Text='<%#Eval("septiembre")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -136,7 +135,7 @@
                                         <telerik:GridTemplateColumn HeaderText="OCT" UniqueName="Octubre">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtOctubre" Text='<%#Eval("octubre")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtOctubre" Text='<%#Eval("octubre")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -145,7 +144,7 @@
                                         <telerik:GridTemplateColumn HeaderText="NOV" UniqueName="Noviembre">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtNoviembre" Text='<%#Eval("noviembre")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtNoviembre" Text='<%#Eval("noviembre")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -154,7 +153,7 @@
                                         <telerik:GridTemplateColumn HeaderText="DIC" UniqueName="Diciembre">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtDiciembre" Text='<%#Eval("diciembre")%>' DataFormatString="{0:C}" runat="server" Width="50px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtDiciembre" Text='<%#Eval("diciembre")%>' DataFormatString="{0:C}" runat="server" Width="62px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -162,7 +161,7 @@
                                         <telerik:GridTemplateColumn HeaderText="Mens" UniqueName="Mensual">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtMensual" Text='<%#Eval("mensual")%>' DataFormatString="{0:C}" runat="server" Width="73px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtMensual" Text='<%#Eval("mensual")%>' DataFormatString="{0:C}" runat="server" Width="83px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -171,7 +170,7 @@
                                         <telerik:GridTemplateColumn HeaderText="Anual" UniqueName="Anual">
                                             <HeaderStyle Width="65px" />
                                             <ItemTemplate>
-                                                <telerik:RadNumericTextBox ID="txtAnual" Text='<%#Eval("anual")%>' DataFormatString="{0:C}" runat="server" Width="73px" Style="text-align: right"
+                                                <telerik:RadNumericTextBox ID="txtAnual" Text='<%#Eval("anual")%>' DataFormatString="{0:C}" runat="server" Width="83px" Style="text-align: right"
                                                     OnTextChanged="ActualizarUMA" AutoPostBack="true" NumberFormat-GroupSeparator="," Skin="Default" MinValue="0">
                                                 </telerik:RadNumericTextBox>
                                             </ItemTemplate>
@@ -182,7 +181,7 @@
                                                     CommandArgument='<% #Eval("id")%>' CommandName="cmdDelete" BorderStyle="None"
                                                     ImageUrl="~/images/action_delete.gif" />
                                             </ItemTemplate>
-                                            <ItemStyle HorizontalAlign="Center" Width="50px" />
+                                            <ItemStyle HorizontalAlign="Center" Width="62px" />
                                         </telerik:GridTemplateColumn>
                                     </Columns>
                                 </MasterTableView>
@@ -197,7 +196,7 @@
                     </tr>
                     <tr>
                         <td style="text-align: left !important;">
-                            <telerik:RadButton ID="btnAgregar" AutoPostBack="true" RenderMode="Lightweight" runat="server" Visible="true" Width="120px" Skin="Bootstrap" Text="Agregar Año"></telerik:RadButton>
+                            <telerik:RadButton ID="btnAgregar" AutoPostBack="true" RenderMode="Lightweight" runat="server" Visible="true" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Agregar Año"></telerik:RadButton>
                         </td>
                     </tr>
                     <tr>

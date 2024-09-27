@@ -1843,40 +1843,47 @@ Public Class IncidenciasWindow
             CuotaDiaria = 0
         End Try
 
-        If cmbConcepto.SelectedValue.ToString = "2" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "4" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = FactorDestajo * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "5" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = AsimiladoTotalSemanal * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "6" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = ((CuotaDiaria / 8) * 2) * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "7" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = ((CuotaDiaria / 8) * 3) * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "8" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = (CuotaDiaria * 2) * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "9" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = (CuotaDiaria * 2) * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "11" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = PagoPorHora * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "13" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = (CuotaDiaria / 4) * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "14" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "15" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "16" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = (CuotaDiaria * txtUnidadIncidencia.Text) / 4
-        ElseIf cmbConcepto.SelectedValue.ToString = "51" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "57" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "59" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "161" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
-        ElseIf cmbConcepto.SelectedValue.ToString = "162" And txtUnidadIncidencia.Text.Trim <> "" Then
-            txtImporteIncidencia.Text = CuotaDiaria * txtUnidadIncidencia.Text
+        Dim UnidadIncidencia As Decimal = 0
+        Try
+            UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
+        Catch ex As Exception
+            UnidadIncidencia = 0
+        End Try
+
+        If cmbConcepto.SelectedValue.ToString = "2" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "4" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = FactorDestajo * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "5" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = AsimiladoTotalSemanal * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "6" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = ((CuotaDiaria / 8) * 2) * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "7" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = ((CuotaDiaria / 8) * 3) * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "8" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = (CuotaDiaria * 2) * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "9" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = (CuotaDiaria * 2) * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "11" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = PagoPorHora * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "13" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = (CuotaDiaria / 4) * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "14" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "15" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "16" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = ((CuotaDiaria * UnidadIncidencia) / 4)
+        ElseIf cmbConcepto.SelectedValue.ToString = "51" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "57" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "59" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "161" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "162" And UnidadIncidencia > 0 Then
+            txtImporteIncidencia.Text = CuotaDiaria * UnidadIncidencia
         End If
         Page.SetFocus(txtImporteIncidencia)
     End Sub
@@ -2528,15 +2535,15 @@ Public Class IncidenciasWindow
             End If
 
             If PrimaVacacional > 0 Then
-                If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
+                If PrimaVacacional > 0 And PrimaVacacional < (UMA * 15) Then
                     ImporteExento = ImporteExento + PrimaVacacional
                     ImporteExentoPrimaVacacional = PrimaVacacional
                     ImporteGravadoPrimaVacacional = 0
-                ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-                    ImporteGravado = ImporteGravado + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
-                    ImporteExentoPrimaVacacional = SalarioMinimoDiarioGeneral * 15
-                    ImporteGravadoPrimaVacacional = PrimaVacacional - (SalarioMinimoDiarioGeneral * 15)
+                ElseIf PrimaVacacional > 0 And PrimaVacacional > (UMA * 15) Then
+                    ImporteExento = ImporteExento + (UMA * 15)
+                    ImporteGravado = ImporteGravado + (PrimaVacacional - (UMA * 15))
+                    ImporteExentoPrimaVacacional = UMA * 15
+                    ImporteGravadoPrimaVacacional = PrimaVacacional - (UMA * 15)
                 End If
                 GuardarExentoYGravado(16, ImporteGravadoPrimaVacacional, ImporteExentoPrimaVacacional, NoEmpleado, 0)
             End If

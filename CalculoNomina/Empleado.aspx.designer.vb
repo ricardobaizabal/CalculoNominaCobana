@@ -41,6 +41,24 @@ Partial Public Class Empleado
     Protected WithEvents panelListaEmpleados As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''Control Image1.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Image1 As Global.System.Web.UI.WebControls.Image
+
+    '''<summary>
+    '''Control lblFiltros.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblFiltros As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control lblBuscador.
     '''</summary>
     '''<remarks>
@@ -84,6 +102,15 @@ Partial Public Class Empleado
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents btnbuscador As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control lblEmpleadosListLegend.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblEmpleadosListLegend As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control btnAgregaEmpleado.

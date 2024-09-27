@@ -2099,7 +2099,7 @@ Public Class GeneracionDeNominaCatorcenal
 
             Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
             If (rowGenerados.Length > 0) Then
-                'btnGenerarPDF.Enabled = True
+                btnBorrarNomina.Enabled = False
                 'btnGeneraTxtDispersion.Enabled = True
                 If rowGenerados.Length < dt.Rows.Count Then
                     btnModificacionDeNomina.Enabled = True
@@ -2110,6 +2110,7 @@ Public Class GeneracionDeNominaCatorcenal
                 End If
             ElseIf rowGenerados.Length = 0 Then
                 btnGenerarNominaElectronica.Enabled = True
+                btnTimbrarNominaCatorcenal.Enabled = False
             End If
 
             Dim rowPdf() As DataRow = dt.Select("Pdf='S'")
@@ -2919,7 +2920,7 @@ Public Class GeneracionDeNominaCatorcenal
 
                 'Receptor.SetAttribute("SalarioBaseCotApor", Math.Round(oDataRow("SalarioBase"), 2, MidpointRounding.AwayFromZero))
                 'Receptor.SetAttribute("SalarioDiarioIntegrado", Math.Round(oDataRow("SalarioDiarioIntegrado"), 2, MidpointRounding.AwayFromZero))
-                Receptor.SetAttribute("SalarioBaseCotApor", MyRound(Convert.ToDecimal(oDataRow("SalarioBase"))))
+                Receptor.SetAttribute("SalarioBaseCotApor", MyRound(Convert.ToDecimal(oDataRow("SalarioDiarioIntegrado"))))
                 Receptor.SetAttribute("SalarioDiarioIntegrado", MyRound(Convert.ToDecimal(oDataRow("SalarioDiarioIntegrado"))))
                 Receptor.SetAttribute("ClaveEntFed", oDataRow("ClaveEstado"))
 
@@ -3547,11 +3548,12 @@ Public Class GeneracionDeNominaCatorcenal
                     Catch ex As Exception
                         reporte.ReportParameters("txtEmpleadoPuesto").Value = ""
                     End Try
-                    Try
-                        reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = FormatCurrency(CDbl(GetXmlAttribute(FolioXml, "SalarioBaseCotApor", "nomina12:Receptor")), 2).ToString
-                    Catch ex As Exception
-                        reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = ""
-                    End Try
+                    reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = FormatCurrency(CDbl(row("emp_salario_base")), 2).ToString
+                    'Try
+                    '    reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = FormatCurrency(CDbl(GetXmlAttribute(FolioXml, "SalarioBaseCotApor", "nomina12:Receptor")), 2).ToString
+                    'Catch ex As Exception
+                    '    reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = ""
+                    'End Try
                     Try
                         reporte.ReportParameters("txtEmpleadoSalarioDiarioIntegrado").Value = FormatCurrency(CDbl(GetXmlAttribute(FolioXml, "SalarioDiarioIntegrado", "nomina12:Receptor")), 2).ToString
                     Catch ex As Exception

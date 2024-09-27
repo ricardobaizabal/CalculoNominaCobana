@@ -167,6 +167,24 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents lblNoEmpleado As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control txtNoEmpleado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtNoEmpleado As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control valNoEmpleado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents valNoEmpleado As Global.System.Web.UI.WebControls.RequiredFieldValidator
+
+    '''<summary>
     '''Control lblNombre.
     '''</summary>
     '''<remarks>
@@ -347,15 +365,6 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents ddlEstadoCivil As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
-    '''Control RequiredFieldValidator20.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator20 As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
     '''Control lblCalle.
     '''</summary>
     '''<remarks>
@@ -401,15 +410,6 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents txtCalle As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
-    '''Control RequiredFieldValidator3.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator3 As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
     '''Control txtNoExterior.
     '''</summary>
     '''<remarks>
@@ -417,15 +417,6 @@ Partial Public Class AgregarEditarEmpleado
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents txtNoExterior As Global.Telerik.Web.UI.RadTextBox
-
-    '''<summary>
-    '''Control RequiredFieldValidator7.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator7 As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control txtNoInterior.
@@ -482,15 +473,6 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents txtColonia As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
-    '''Control RequiredFieldValidator9.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator9 As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
     '''Control txtPais.
     '''</summary>
     '''<remarks>
@@ -500,15 +482,6 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents txtPais As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
-    '''Control RequiredFieldValidator14.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator14 As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
     '''Control ddlEstado.
     '''</summary>
     '''<remarks>
@@ -516,15 +489,6 @@ Partial Public Class AgregarEditarEmpleado
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents ddlEstado As Global.Telerik.Web.UI.RadComboBox
-
-    '''<summary>
-    '''Control RequiredFieldValidator10.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator10 As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control lblMunicipio.
@@ -552,15 +516,6 @@ Partial Public Class AgregarEditarEmpleado
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents ddlMunicipio As Global.Telerik.Web.UI.RadComboBox
-
-    '''<summary>
-    '''Control RequiredFieldValidator11.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator11 As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control txtCP.
@@ -851,15 +806,6 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents ddlFormaPago As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
-    '''Control RequiredFieldValidator29.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator29 As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
     '''Control ddlBanco.
     '''</summary>
     '''<remarks>
@@ -867,15 +813,6 @@ Partial Public Class AgregarEditarEmpleado
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents ddlBanco As Global.Telerik.Web.UI.RadComboBox
-
-    '''<summary>
-    '''Control valReqBanco.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents valReqBanco As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control txtSucursal.
@@ -959,13 +896,13 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents ddCliente As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
-    '''Control valCLiente.
+    '''Control valCliente.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents valCLiente As Global.System.Web.UI.WebControls.RequiredFieldValidator
+    Protected WithEvents valCliente As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control checkSueldosYSalarios.

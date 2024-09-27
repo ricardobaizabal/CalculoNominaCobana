@@ -72,6 +72,9 @@
                                         <a href="Empleado.aspx">Lista de Empleados</a>
                                     </li>
                                     <li>
+                                        <a href="AgregarEditarEmpleado.aspx?id=0">Alta de empleado</a>
+                                    </li>
+                                    <li>
                                         <a href="AltaMasivaEmpleados.aspx">Alta masiva de empleados</a>
                                     </li>
                                 </ul>
@@ -209,7 +212,7 @@
                                     </li>
                                     <li><a href="UMA.aspx">UMA</a></li>
                                     <li><a href="UMI.aspx">UMI</a></li>
-                                    <li><a href="SalarioMinimo.aspx">Salario Mínimo</a></li>
+                                    <%--<li><a href="SalarioMinimo.aspx">Salario Mínimo</a></li>--%>
                                 </ul>
                             </li>
                             <li>

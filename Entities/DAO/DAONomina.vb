@@ -173,6 +173,7 @@ Partial Public Class Nomina
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pCliente", Cliente))
         p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
+        p.Add(New SqlParameter("@pIdNomina", IdNomina))
         dt = db.ExecuteSP("pConsultarDetalleNominaExtraordinaria", p)
         Return dt
     End Function

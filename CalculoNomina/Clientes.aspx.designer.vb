@@ -68,6 +68,15 @@ Partial Public Class clientes
     Protected WithEvents btnAll As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
+    '''Control panelListadoClientes.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents panelListadoClientes As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
     '''Control lblClientsListLegend.
     '''</summary>
     '''<remarks>
@@ -77,15 +86,6 @@ Partial Public Class clientes
     Protected WithEvents lblClientsListLegend As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control clientslist.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents clientslist As Global.Telerik.Web.UI.RadGrid
-
-    '''<summary>
     '''Control btnAddClient.
     '''</summary>
     '''<remarks>
@@ -93,6 +93,15 @@ Partial Public Class clientes
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents btnAddClient As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control clientslist.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents clientslist As Global.Telerik.Web.UI.RadGrid
 
     '''<summary>
     '''Control panelClientRegistration.
@@ -138,33 +147,6 @@ Partial Public Class clientes
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents RadPageView1 As Global.Telerik.Web.UI.RadPageView
-
-    '''<summary>
-    '''Control lblSocialReason.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblSocialReason As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control txtSocialReason.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents txtSocialReason As Global.Telerik.Web.UI.RadTextBox
-
-    '''<summary>
-    '''Control RequiredFieldValidator1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RequiredFieldValidator1 As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control lblDenominacionRazonSocial.
@@ -617,6 +599,15 @@ Partial Public Class clientes
     Protected WithEvents lblRfc1 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control RegularExpressionValidator2.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RegularExpressionValidator2 As Global.System.Web.UI.WebControls.RegularExpressionValidator
+
+    '''<summary>
     '''Control txtBanco.
     '''</summary>
     '''<remarks>
@@ -651,15 +642,6 @@ Partial Public Class clientes
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents RequiredFieldValidator16 As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
-    '''Control RegularExpressionValidator2.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RegularExpressionValidator2 As Global.System.Web.UI.WebControls.RegularExpressionValidator
 
     '''<summary>
     '''Control lblNonCuenta.

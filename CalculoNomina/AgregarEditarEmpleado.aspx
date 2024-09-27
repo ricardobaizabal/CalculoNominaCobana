@@ -48,6 +48,16 @@
                 return false;
             }
         }
+        function clearFilters(sender, args) {
+            if ($("#ctl00_ContentPlaceHolder1_ddCliente_Input").val() != "") {
+                var obj = jQuery.parseJSON($("#ctl00_ContentPlaceHolder1_ddCliente_Input").val());
+                if (obj.text === "") {
+                    sender.set_cancel(true);
+                }
+            } else {
+                eventArgs.set_cancel(true);
+            }
+        }
     </script>
     <style>
         .ulwrapper {
@@ -188,6 +198,13 @@
                             </tr>
                             <tr>
                                 <td style="width: 25%;">
+                                    <telerik:RadNumericTextBox ID="txtNoEmpleado" NumberFormat-DecimalDigits="0" NumberFormat-GroupSeparator="" runat="server"></telerik:RadNumericTextBox>
+                                    <asp:RequiredFieldValidator ID="valNoEmpleado" runat="server" ControlToValidate="txtNoEmpleado" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                </td>
+                                <td colspan="3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 25%;">
                                     <asp:Label ID="lblNombre" runat="server" CssClass="item" Font-Bold="True" Text="Nombre:"></asp:Label>
                                 </td>
                                 <td style="width: 25%;">
@@ -242,7 +259,7 @@
                                 </td>
                                 <td style="width: 25%;">
                                     <telerik:RadComboBox ID="ddlEstadoCivil" runat="server" Width="300px"></telerik:RadComboBox>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlEstadoCivil" ValidationGroup="vDatosGenerales" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator20" runat="server" ControlToValidate="ddlEstadoCivil" ValidationGroup="vDatosGenerales" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">&nbsp;</td>
                             </tr>
@@ -262,10 +279,12 @@
                             </tr>
                             <tr>
                                 <td style="width: 25%;">
-                                    <telerik:RadTextBox ID="txtCalle" Width="300px" runat="server"></telerik:RadTextBox><asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtCalle" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <telerik:RadTextBox ID="txtCalle" Width="300px" runat="server"></telerik:RadTextBox>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtCalle" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">
-                                    <telerik:RadTextBox ID="txtNoExterior" Width="100px" runat="server"></telerik:RadTextBox><asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtNoExterior" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <telerik:RadTextBox ID="txtNoExterior" Width="100px" runat="server"></telerik:RadTextBox>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="txtNoExterior" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">
                                     <telerik:RadTextBox ID="txtNoInterior" Width="100px" runat="server"></telerik:RadTextBox>
@@ -288,14 +307,16 @@
                             </tr>
                             <tr>
                                 <td style="width: 25%;">
-                                    <telerik:RadTextBox ID="txtColonia" Width="300px" runat="server"></telerik:RadTextBox><asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="txtColonia" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <telerik:RadTextBox ID="txtColonia" Width="300px" runat="server"></telerik:RadTextBox>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ControlToValidate="txtColonia" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">
-                                    <telerik:RadTextBox ID="txtPais" Text="México" Width="300px" runat="server"></telerik:RadTextBox><asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="txtPais" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <telerik:RadTextBox ID="txtPais" Text="México" Width="300px" runat="server"></telerik:RadTextBox>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ControlToValidate="txtPais" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">
                                     <telerik:RadComboBox ID="ddlEstado" runat="server" Width="300px" AutoPostBack="true"></telerik:RadComboBox>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="ddlEstado" ValidationGroup="vDatosGenerales" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ControlToValidate="ddlEstado" ValidationGroup="vDatosGenerales" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">&nbsp;</td>
                             </tr>
@@ -312,7 +333,7 @@
                             <tr>
                                 <td style="width: 25%;">
                                     <telerik:RadComboBox ID="ddlMunicipio" runat="server" Width="300px"></telerik:RadComboBox>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlMunicipio" ValidationGroup="vDatosGenerales" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlMunicipio" ValidationGroup="vDatosGenerales" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">
                                     <telerik:RadTextBox ID="txtCP" Width="100px" runat="server"></telerik:RadTextBox><asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ControlToValidate="txtCP" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
@@ -418,11 +439,11 @@
                             <tr>
                                 <td style="width: 25%;">
                                     <telerik:RadComboBox ID="ddlFormaPago" runat="server" Width="300px" AutoPostBack="true"></telerik:RadComboBox>
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ValidationGroup="vDatosGenerales" ControlToValidate="ddlFormaPago" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator29" runat="server" ValidationGroup="vDatosGenerales" ControlToValidate="ddlFormaPago" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">
                                     <telerik:RadComboBox ID="ddlBanco" runat="server" Width="300px"></telerik:RadComboBox>
-                                    <asp:RequiredFieldValidator ID="valReqBanco" ValidationGroup="vDatosGenerales" runat="server" ControlToValidate="ddlBanco" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <%--<asp:RequiredFieldValidator ID="valReqBanco" ValidationGroup="vDatosGenerales" runat="server" ControlToValidate="ddlBanco" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                 </td>
                                 <td style="width: 25%;">
                                     <telerik:RadTextBox ID="txtSucursal" Width="300px" runat="server"></telerik:RadTextBox>
@@ -453,8 +474,8 @@
                                     <telerik:RadTextBox ID="txtCuenta" Width="300px" runat="server"></telerik:RadTextBox>
                                 </td>
                                 <td style="width: 25%;">
-                                    <telerik:RadComboBox ID="ddCliente" runat="server" Width="300px"></telerik:RadComboBox>
-                                    <asp:RequiredFieldValidator ID="valCLiente" ValidationGroup="vDatosGenerales" runat="server" ControlToValidate="ddCliente" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                    <telerik:RadComboBox ID="ddCliente" runat="server" Filter="StartsWith" OnClientFocus="clearFilters" Width="95%"></telerik:RadComboBox>
+                                    <asp:RequiredFieldValidator ID="valCliente" ValidationGroup="vDatosGenerales" runat="server" ControlToValidate="ddCliente" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                 </td>
                                 <td style="width: 25%;">
                                     <asp:CheckBox ID="checkSueldosYSalarios" runat="server" />
@@ -485,7 +506,7 @@
                                     <%--<asp:Label ID="lblMensajeDatosGenerales" runat="server" CssClass="item"></asp:Label>--%>
                                 </td>
                                 <td width="25%" align="right">
-                                    <telerik:RadButton ID="btnCancelarGuardarEmpleados" runat="server" Text="Cancelar" Width="90px" CausesValidation="False"></telerik:RadButton>
+                                    <telerik:RadButton ID="btnCancelarGuardarEmpleados" runat="server" Text="Cancelar" Width="90px" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
                                     &nbsp;
                                     <telerik:RadButton ID="btnGuardarEmpleado" runat="server" ValidationGroup="vDatosGenerales" Text="Guardar" CssClass="rbPrimaryButton" Width="90px" CausesValidation="True"></telerik:RadButton>
                                 </td>
@@ -541,7 +562,7 @@
                         </telerik:RadGrid>
                         <br />
                         <div style="float: right;">
-                            <telerik:RadButton ID="btnCerrarBeneficiario" runat="server" Text="Cancelar" CausesValidation="False"></telerik:RadButton>
+                            <telerik:RadButton ID="btnCerrarBeneficiario" runat="server" Text="Cancelar" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
                             &nbsp;
                             <telerik:RadButton ID="btnAgregaBeneficiario" runat="server" CausesValidation="false" CssClass="rbPrimaryButton" Text="Agregar Beneficiario"></telerik:RadButton>
                         </div>
@@ -667,7 +688,7 @@
                                             <asp:Label ID="lblMensajeDatosBeneficiario" runat="server" CssClass="item"></asp:Label>
                                         </td>
                                         <td width="25%" align="right">
-                                            <telerik:RadButton ID="btnCancelarDBeneficiarios" runat="server" Text="Cancelar" CausesValidation="False"></telerik:RadButton>
+                                            <telerik:RadButton ID="btnCancelarDBeneficiarios" runat="server" Text="Cancelar" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
                                             &nbsp;
                                         <telerik:RadButton ID="btnGuardarDBeneficiarios" ValidationGroup="vDatosBeneficiario" runat="server" CssClass="rbPrimaryButton" Text="Guardar"></telerik:RadButton>
                                         </td>
@@ -738,7 +759,7 @@
                                 </td>
                                 <td width="25%" align="right">
                                     <%--<telerik:RadButton ID="btnCerrarDIMSS" runat="server" Text="Cerrar" CausesValidation="False" />--%>
-                                    <telerik:RadButton ID="btnCancelarDIMSS" runat="server" Text="Cancelar" CausesValidation="False" />
+                                    <telerik:RadButton ID="btnCancelarDIMSS" runat="server" CssClass="rbPrimaryButton" Text="Cancelar" CausesValidation="False" />
                                     &nbsp;
                                     <telerik:RadButton ID="btnGuardarDIMSS" ValidationGroup="txtNoSegSocial" CssClass="rbPrimaryButton" runat="server" Text="Guardar" />
                                 </td>
@@ -812,7 +833,7 @@
                                 </td>
                                 <td width="25%" align="right">
                                     <%--<telerik:RadButton ID="btnCerrarDInfonavit" runat="server" Text="Cerrar" CausesValidation="False" />--%>
-                                    <telerik:RadButton ID="btnCancelarDInfonavit" runat="server" Text="Cancelar" CausesValidation="False" />
+                                    <telerik:RadButton ID="btnCancelarDInfonavit" runat="server" Text="Cancelar" CssClass="rbPrimaryButton" CausesValidation="False" />
                                     &nbsp;
                                     <telerik:RadButton ID="btnGuardarDInfonavit" ValidationGroup="vDatosInfonavit" CssClass="rbPrimaryButton" runat="server" Text="Guardar" />
                                 </td>
@@ -938,7 +959,7 @@
                             <tr>
                                 <td colspan="4" align="left">
                                     <%--<telerik:RadButton ID="btnCerrarAnexo" runat="server" Text="Cerrar" CausesValidation="False" />--%>
-                                    <telerik:RadButton ID="btnCancelarAnexo" runat="server" Text="Cancelar" CausesValidation="False" />
+                                    <telerik:RadButton ID="btnCancelarAnexo" runat="server" Text="Cancelar" CssClass="rbPrimaryButton" CausesValidation="False" />
                                     &nbsp;
                                     <telerik:RadButton ID="btnGuardarAnexo" ValidationGroup="vAnexoContrato" runat="server" Text="Guardar" CssClass="rbPrimaryButton" />
                                 </td>
@@ -992,12 +1013,12 @@
                             <asp:Label ID="lblDatosContrato" Text="Datos Contrato" runat="server" Font-Bold="True" CssClass="item"></asp:Label>
                         </legend>
                         <br />
-                        <telerik:RadGrid ID="contratosList" runat="server" AllowPaging="True"
-                            AutoGenerateColumns="False" GridLines="None" AllowSorting="true"
-                            PageSize="15" ShowStatusBar="True"
+                        <telerik:RadGrid ID="contratosList" runat="server" AllowPaging="true"
+                            AutoGenerateColumns="false" GridLines="None" AllowSorting="false"
+                            PageSize="20" ShowStatusBar="True"
                             Skin="Bootstrap" Width="100%">
                             <PagerStyle Mode="NextPrevAndNumeric" />
-                            <MasterTableView AllowMultiColumnSorting="true" AllowSorting="true" DataKeyNames="id ,tienealta" Name="Contratos" Width="100%">
+                            <MasterTableView AllowMultiColumnSorting="false" AllowSorting="false" DataKeyNames="id ,tienealta" Name="Contratos" Width="100%">
                                 <Columns>
                                     <telerik:GridBoundColumn DataField="id" HeaderText="Clave" UniqueName="id"></telerik:GridBoundColumn>
                                     <telerik:GridTemplateColumn HeaderText="Fecha Alta" DataField="fecha_alta" SortExpression="fecha_alta" UniqueName="fecha_alta">
@@ -1019,6 +1040,10 @@
                                     <telerik:GridBoundColumn DataField="tipo_jornada" HeaderText="Tipo Jornada" UniqueName="tipo_jornada">
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn DataField="tipo_salario" HeaderText="Tipo Salario" UniqueName="tipo_salario">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="sueldo_diario" HeaderText="Salario Diario" UniqueName="sueldo_diario" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="sueldo_diario_integrado" HeaderText="Salario Diario Integrado" UniqueName="sueldo_diario_integrado" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right">
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn DataField="tipo_contrato" HeaderText="Tipo Contrato" UniqueName="tipo_contrato">
                                     </telerik:GridBoundColumn>
@@ -1054,7 +1079,7 @@
                         <table style="width: 100%;" border="0">
                             <tr>
                                 <td style="text-align: right;">
-                                    <telerik:RadButton ID="btnCerrarContrato" runat="server" Text="Cerrar" CausesValidation="False" />
+                                    <telerik:RadButton ID="btnCerrarContrato" runat="server" Text="Cerrar" CssClass="rbPrimaryButton" CausesValidation="False" />
                                     &nbsp;
                                     <telerik:RadButton ID="btnAgregaContrato" runat="server" Text="Agregar Contrato" CssClass="rbPrimaryButton" />
                                 </td>
@@ -1205,7 +1230,7 @@
                                     </tr>
                                     <tr>
                                         <td style="width: 25%;">
-                                            <asp:Label ID="lblSueldoDiario" runat="server" CssClass="item" Font-Bold="True" Text="Salario Base Cotización:"></asp:Label>
+                                            <asp:Label ID="lblSueldoDiario" runat="server" CssClass="item" Font-Bold="True" Text="Salario Diario:"></asp:Label>
                                             <asp:RequiredFieldValidator ID="valSueldoDiario" runat="server" ControlToValidate="txtSueldoDiario" ValidationGroup="vDatosContrato" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                         </td>
                                         <td style="width: 25%;">
@@ -1480,9 +1505,9 @@
                                 </tr>
                                 <tr>
                                     <td colspan="4" style="text-align: right;">
-                                        <telerik:RadButton ID="btnFiniquito" runat="server" Text="Finiquitos" CausesValidation="False" Visible="false" />
+                                        <telerik:RadButton ID="btnFiniquito" runat="server" Text="Finiquitos" CssClass="rbPrimaryButton" CausesValidation="False" Visible="false" />
                                         &nbsp;&nbsp;&nbsp;
-                                            <telerik:RadButton ID="btnCancelarContrato" runat="server" Text="Cancelar" CausesValidation="False" />
+                                            <telerik:RadButton ID="btnCancelarContrato" runat="server" Text="Cancelar" CssClass="rbPrimaryButton" CausesValidation="False" />
                                         &nbsp;&nbsp;&nbsp;
                                             <telerik:RadButton ID="btnGuardarContrato" ValidationGroup="vDatosContrato" runat="server" CausesValidation="true" Text="Guardar" CssClass="rbPrimaryButton" />
                                     </td>

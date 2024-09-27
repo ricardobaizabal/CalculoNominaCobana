@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/MasterPage.Master"  CodeBehind="SubsidioMensual.aspx.vb" Inherits="CalculoNomina.SubsidioMensual" %>
+﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/MasterPage.Master" CodeBehind="SubsidioMensual.aspx.vb" Inherits="CalculoNomina.SubsidioMensual" %>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <link href="styles.css" rel="stylesheet" />
@@ -11,24 +11,24 @@
             <h3 class="m-t-none m-b">Tabla Subsidio Mensual</h3>
             <hr class="demo-separator" />
             <br />
-            <telerik:RadGrid ID="GridSubsidioMensual" runat="server" AutoGenerateColumns="False" AllowPaging="false" PageSize="11"
-                CellSpacing="0" GridLines="None" Skin="Bootstrap" AllowAutomaticDeletes="True"
-            AllowAutomaticInserts="True" OnItemUpdated="GridSubsidioMensual_ItemUpdated"  AllowAutomaticUpdates="True" DataSourceID ="SubsidioMensual">
+            <telerik:RadGrid ID="GridSubsidioMensual" runat="server" AutoGenerateColumns="false" AllowPaging="false" PageSize="50"
+                CellSpacing="0" GridLines="None" Skin="Bootstrap" AllowAutomaticDeletes="true" AllowSorting="true"
+                AllowAutomaticInserts="True" OnItemUpdated="GridSubsidioMensual_ItemUpdated" AllowAutomaticUpdates="True" DataSourceID="SubsidioMensual">
                 <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
                 </ClientSettings>
-                <MasterTableView DataKeyNames="IdTablaSubsidio" CommandItemDisplay="Bottom"  DataSourceID ="SubsidioMensual" HorizontalAlign="NotSet"  
-                    NoMasterRecordsText="No hay registros para mostrar." EditMode="Batch" AutoGenerateColumns="False" >
-    
-                    <CommandItemSettings ShowAddNewRecordButton ="false" />
-                    <CommandItemSettings SaveChangesText ="Guardar cambios" />
-                    <CommandItemSettings CancelChangesText ="Cancelar" />
-                    <CommandItemSettings ShowRefreshButton ="false" />
+                <MasterTableView DataKeyNames="IdTablaSubsidio" CommandItemDisplay="Bottom" DataSourceID="SubsidioMensual" HorizontalAlign="NotSet"
+                    NoMasterRecordsText="No hay registros para mostrar." EditMode="Batch" AutoGenerateColumns="False">
+
+                    <CommandItemSettings ShowAddNewRecordButton="false" />
+                    <CommandItemSettings SaveChangesText="Guardar cambios" />
+                    <CommandItemSettings CancelChangesText="Cancelar" />
+                    <CommandItemSettings ShowRefreshButton="false" />
 
                     <BatchEditingSettings EditType="Cell" />
-                    
-                    <SortExpressions>
+
+                    <%--<SortExpressions>
                         <telerik:GridSortExpression FieldName="IdTablaSubsidio" SortOrder="Descending" />
-                    </SortExpressions>
+                    </SortExpressions>--%>
 
                     <Columns>
                         <%--<telerik:GridTemplateColumn HeaderText="Folio" DataField="IdTablaSubsidio" SortExpression="IdTablaSubsidio" UniqueName="IdTablaSubsidio">
@@ -37,15 +37,15 @@
                             </ItemTemplate>
                             <ItemStyle HorizontalAlign="Left" />
                         </telerik:GridTemplateColumn>--%>
-                        <telerik:GridBoundColumn DataField="pLimiteInferior" ItemStyle-HorizontalAlign="Left" HeaderText="Limite Inferior" UniqueName="pLimiteInferior">
+                        <telerik:GridBoundColumn DataField="pLimiteInferior" ItemStyle-HorizontalAlign="Left" HeaderText="Limite Inferior" UniqueName="pLimiteInferior" DataFormatString="{0:N2}">
                         </telerik:GridBoundColumn>
-                        <telerik:GridBoundColumn DataField="pLimiteSuperior" ItemStyle-HorizontalAlign="Left" HeaderText="Limite Superior" UniqueName="pLimiteSuperior">
+                        <telerik:GridBoundColumn DataField="pLimiteSuperior" ItemStyle-HorizontalAlign="Left" HeaderText="Limite Superior" UniqueName="pLimiteSuperior" DataFormatString="{0:N2}">
                         </telerik:GridBoundColumn>
-                        <telerik:GridBoundColumn DataField="pCuotaFija" ItemStyle-HorizontalAlign="Left" HeaderText="Subsidio" UniqueName="pCuotaFija">
+                        <telerik:GridBoundColumn DataField="pCuotaFija" ItemStyle-HorizontalAlign="Left" HeaderText="Subsidio" UniqueName="pCuotaFija" DataFormatString="{0:N2}">
                         </telerik:GridBoundColumn>
                     </Columns>
                 </MasterTableView>
-                 <ClientSettings AllowKeyboardNavigation="true"></ClientSettings>
+                <ClientSettings AllowKeyboardNavigation="true"></ClientSettings>
             </telerik:RadGrid>
             <br />
             <telerik:RadButton ID="btnAgregar" RenderMode="Lightweight" runat="server" Skin="Bootstrap" Text="Agregar"></telerik:RadButton>
@@ -55,8 +55,8 @@
     </telerik:RadAjaxLoadingPanel>
 
     <asp:SqlDataSource ID="SubsidioMensual" runat="server" ConnectionString="Data Source=localhost; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=200"
-        SelectCommand ="SELECT IdTablaSubsidio,  isnull(LimiteInferior,0)as pLimiteInferior, isnull(LimiteSuperior,0)as pLimiteSuperior,  isnull(Subsidio,0)as pCuotaFija FROM  tblTablaSubsidioMensual"
-        UpdateCommand="update tblTablaSubsidioMensual set   LimiteInferior=@pLimiteInferior, LimiteSuperior=@pLimiteSuperior, Subsidio=@pCuotaFija WHERE IdTablaSubsidio=@IdTablaSubsidio">
+        SelectCommand="SELECT IdTablaSubsidio,  isnull(LimiteInferior,0) as pLimiteInferior, isnull(LimiteSuperior,0) as pLimiteSuperior, isnull(Subsidio,0) as pCuotaFija FROM tblTablaSubsidioMensual order by LimiteInferior ASC"
+        UpdateCommand="UPDATE tblTablaSubsidioMensual SET LimiteInferior=@pLimiteInferior, LimiteSuperior=@pLimiteSuperior, Subsidio=@pCuotaFija WHERE IdTablaSubsidio=@IdTablaSubsidio">
         <UpdateParameters>
             <asp:Parameter Name="IdTablaSubsidio" Type="Int32"></asp:Parameter>
             <asp:Parameter Name="pLimiteInferior" Type="Decimal"></asp:Parameter>

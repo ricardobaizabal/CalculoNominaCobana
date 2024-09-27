@@ -76,6 +76,7 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%--<telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1">--%>
+    <asp:HiddenField ID="nominaID" runat="server" Value="0" Visible="False" />
     <asp:HiddenField ID="periodoID" runat="server" Value="0" Visible="False" />
     <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
     <asp:HiddenField ID="serie" runat="server" Value="" />
@@ -290,7 +291,7 @@
                 <div class="form-group row">
                     <telerik:RadGrid ID="grdEmpleadosSemanal" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="True" ShowHeader="True" PageSize="100" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False">
                         <PagerStyle Mode="NumericPages" />
-                        <ExportSettings IgnorePaging="True" FileName="ReporteNominaSemanal">
+                        <ExportSettings IgnorePaging="True" ExportOnlyData="true" FileName="ReporteNominaExtraordinaria">
                             <Excel Format="Biff" />
                         </ExportSettings>
                         <MasterTableView NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado,RFC" CommandItemDisplay="Top">
@@ -312,19 +313,19 @@
                                 </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="EstatusContrato" ItemStyle-HorizontalAlign="Left" HeaderText="Estatus" UniqueName="EstatusContrato" AllowFiltering="false">
                                 </telerik:GridBoundColumn>
-                                <telerik:GridTemplateColumn HeaderText="Importar Monto" UniqueName="ImportarIn">
+                                <telerik:GridTemplateColumn HeaderText="Importar Monto" UniqueName="ImportarIn" Exportable="false">
                                     <ItemTemplate>
                                         <asp:ImageButton ID="btnImportarIn" Visible="True" runat="server" CommandName="cmdImportarM" CommandArgument='<%# Eval("NoEmpleado") %>' ImageUrl="~/images/up.png"></asp:ImageButton>
                                     </ItemTemplate>
                                     <ItemStyle HorizontalAlign="Center" Width="50px" />
                                 </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn HeaderText="Generado" UniqueName="Generado">
+                                <telerik:GridTemplateColumn HeaderText="Generado" UniqueName="Generado" Exportable="false">
                                     <ItemTemplate>
                                         <asp:Image ID="imgGenerado" Visible="false" runat="server" ImageUrl="~/images/action_check.gif" />
                                     </ItemTemplate>
                                     <ItemStyle HorizontalAlign="Center" Width="50px" />
                                 </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn HeaderText="" UniqueName="Timbrado">
+                                <telerik:GridTemplateColumn HeaderText="" UniqueName="Timbrado" Exportable="false">
                                     <ItemTemplate>
                                         <asp:ImageButton ID="imgTimbrado" Visible="false" runat="server" ImageUrl="~/images/action_check.gif"></asp:ImageButton>
                                         <asp:ImageButton ID="imgAlert" Visible="false" runat="server" ImageUrl="~/images/alert.png"></asp:ImageButton>

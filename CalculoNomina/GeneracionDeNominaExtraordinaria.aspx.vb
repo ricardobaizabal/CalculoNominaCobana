@@ -195,6 +195,11 @@ Public Class GeneracionDeNominaExtraordinaria
     Private qrForeColor As Integer = System.Drawing.Color.FromArgb(255, 0, 0, 0).ToArgb
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+        Me.WinPeriodoSave.VisibleOnPageLoad = False
+        Me.WinImportarMonto.VisibleOnPageLoad = False
+        Me.WinImportarMontoIndividual.VisibleOnPageLoad = False
+
         If Not IsPostBack Then
             Dim objCat As New DataControl(1)
             Dim cConcepto As New Entities.Catalogos
@@ -204,7 +209,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
             If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
                 Dim folio As Integer = Integer.Parse(Session("Folio").ToString())
-                periodoID.Value = folio.ToString()
+                nominaID.Value = folio.ToString()
 
                 ConsultarFolio(folio)
                 cmbCliente.Enabled = False
@@ -217,8 +222,9 @@ Public Class GeneracionDeNominaExtraordinaria
                 ' Eliminar el folio de la sesión después de haberlo utilizado
                 Session.Remove("Folio")
                 Session("Folio") = Nothing
-            ElseIf Not String.IsNullOrEmpty(Request("id")) Then
+            ElseIf Not String.IsNullOrEmpty(Request("id")) And Not String.IsNullOrEmpty(Request("nid")) Then
                 periodoID.Value = Request("id")
+                nominaID.Value = Request("nid")
                 cmbPeriodicidad.SelectedValue = Session("PeriodicidadIDNomina")
                 'Call LlenaComboPeriodosSemanal(periodoID.Value)
                 cmbCliente.SelectedValue = Session("ClienteIDNomina")
@@ -273,26 +279,23 @@ Public Class GeneracionDeNominaExtraordinaria
     Protected Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
         Response.Redirect("ListadoNominaExtraordinaria.aspx")
     End Sub
-    'Exportar / Importar'
     Protected Sub btnExportar_Click(sender As Object, e As EventArgs) Handles btnExportar.Click
 
         Call CargarVariablesGenerales()
 
-        Dim cEmpleado As New Entities.Empleado
+        Dim dt As New DataTable()
         ' Obtener los datos que quieres exportar, aquí se usa una tabla DataTable como ejemplo
         Dim cNomina As New Entities.Nomina
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Cliente = cmbCliente.SelectedValue
         cNomina.EsEspecial = True
-        Dim dt As New DataTable()
+        cNomina.IdNomina = nominaID.Value
         dt = cNomina.ConsultarDetalleNominaExtraordinaria()
-
 
         ' Crear el contenido CSV
         Dim csvContent As New StringBuilder()
-
         csvContent.Append("Clave Empleado,")
         csvContent.Append("Nombre Empleado,")
         csvContent.Append("Monto,")
@@ -360,7 +363,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 Session("ClienteIDNomina") = cmbCliente.SelectedValue
                 Session("PeriodicidadIDNomina") = cmbPeriodicidad.SelectedValue
                 Session("PeriodoIDNomina") = cmbPeriodo.SelectedValue
-                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString & "&nid=" & nominaID.Value.ToString)
 
             Catch ex As Exception
                 WinImportarMonto.VisibleOnPageLoad = False
@@ -409,16 +412,17 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             cNomina.Ejercicio = IdEjercicio
             cNomina.Cliente = cmbCliente.SelectedValue
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.EsEspecial = 1
             dt = cNomina.ConsultarDatosGeneralesNomina()
 
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Cliente = cmbCliente.SelectedValue
             cNomina.EsEspecial = True
+            cNomina.IdNomina = nominaID.Value
             dt_Empleado = cNomina.ConsultarDetalleNominaExtraordinaria()
 
             cNomina = Nothing
@@ -479,7 +483,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Cliente = cmbCliente.SelectedValue
         cNomina.EsEspecial = 1
@@ -487,10 +491,11 @@ Public Class GeneracionDeNominaExtraordinaria
 
         Dim dt_Empleado As New DataTable()
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Cliente = cmbCliente.SelectedValue
         cNomina.EsEspecial = True
+        cNomina.IdNomina = nominaID.Value
         dt_Empleado = cNomina.ConsultarDetalleNominaExtraordinaria()
 
         If dt.Rows.Count > 0 And dt_Empleado.Rows.Count > 0 Then
@@ -569,11 +574,11 @@ Public Class GeneracionDeNominaExtraordinaria
 
         Dim cNomina As New Nomina()
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Cliente = cmbCliente.SelectedValue
         cNomina.EsEspecial = True
-
+        cNomina.IdNomina = nominaID.Value
         dtEmpleados = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosSemanal.DataSource = dtEmpleados
         grdEmpleadosSemanal.DataBind()
@@ -621,7 +626,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
         Dim dt As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.FechaPago = fchPago.SelectedDate
         'cNomina.EsEspecial = True
@@ -670,7 +675,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Session("PeriodicidadIDNomina") = cmbPeriodicidad.SelectedValue
             Session("PeriodoIDNomina") = cmbPeriodo.SelectedValue
 
-            Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+            Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString & "&nid=" & nominaID.Value.ToString)
 
         End If
     End Sub
@@ -808,7 +813,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = CvoConcepto
@@ -829,7 +834,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = CvoConcepto
@@ -849,7 +854,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = CvoConcepto
@@ -875,7 +880,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = 86
@@ -896,7 +901,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     cNomina = New Nomina()
                     'cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                     cNomina.Periodo = periodoID.Value
                     cNomina.NoEmpleado = NoEmpleado
                     cNomina.CvoConcepto = 54
@@ -917,7 +922,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     cNomina = New Nomina()
                     'cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                     cNomina.Periodo = periodoID.Value
                     cNomina.NoEmpleado = NoEmpleado
                     cNomina.CvoConcepto = 55
@@ -938,7 +943,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     cNomina = New Nomina()
                     'cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                     cNomina.Periodo = periodoID.Value
                     cNomina.NoEmpleado = NoEmpleado
                     cNomina.CvoConcepto = 56
@@ -968,7 +973,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = CvoConcepto
@@ -1005,7 +1010,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             dt = cNomina.ConsultarConceptosEmpleado()
@@ -1067,7 +1072,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             dt = cNomina.ConsultarConceptosEmpleado()
@@ -1331,7 +1336,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 86
@@ -1342,7 +1347,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 54
@@ -1353,7 +1358,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 55
@@ -1364,7 +1369,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 56
@@ -1375,7 +1380,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 108
@@ -1386,7 +1391,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 109
@@ -1431,7 +1436,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 'Me.oDataAdapterChecarPercepcionesGravadasSql = New SqlDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P'", oConexionSql)
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = cmbPeriodo.SelectedValue
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.TipoConcepto = "P"
@@ -1441,7 +1446,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 'Me.oDataAdapterChecarPercepcionesGravadas = New OleDbDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P' AND CVOCONCEPTO<>" + NumeroConcepto.ToString + "", oConexion)
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = cmbPeriodo.SelectedValue
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.TipoConcepto = "P"
@@ -1451,7 +1456,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Else
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = cmbPeriodo.SelectedValue
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.TipoConcepto = "P"
@@ -1673,7 +1678,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
             Dim cNomina = New Nomina()
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Cliente = cmbCliente.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
@@ -1747,10 +1752,11 @@ Public Class GeneracionDeNominaExtraordinaria
 
         Dim cNomina As New Nomina()
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Cliente = cmbCliente.SelectedValue
         cNomina.EsEspecial = True
+        cNomina.IdNomina = nominaID.Value
         dtEmpleados = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosSemanal.DataSource = dtEmpleados
         cNomina = Nothing
@@ -1827,12 +1833,12 @@ Public Class GeneracionDeNominaExtraordinaria
 
             Dim cNomina As New Nomina()
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Cliente = cmbCliente.SelectedValue
             cNomina.EliminaNomina()
 
-            Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+            Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString & "&nid=" & nominaID.Value.ToString)
 
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -1846,7 +1852,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.EliminaEmpleado()
 
@@ -1907,7 +1913,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.TipoConcepto = "D"
@@ -2039,7 +2045,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 Dim cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = NoConceptoGravado
@@ -2052,7 +2058,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 Dim cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = NoConceptoGravado
@@ -2133,7 +2139,7 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina = New Nomina()
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.TipoConcepto = "D"
         cNomina.Tipo = "N"
@@ -2180,7 +2186,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Dim cNomina = New Nomina()
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.Tipo = "N"
         cNomina.NoEmpleado = NoEmpleado
@@ -2221,7 +2227,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Dim cNomina As New Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.Tipo = "N"
         cNomina.EsEspecial = True
@@ -2280,7 +2286,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Dim cNomina As New Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.Tipo = "N"
         cNomina.EsEspecial = True
@@ -2325,7 +2331,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.TipoConcepto = "P"
                 cNomina.Tipo = "N"
@@ -2393,7 +2399,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.TipoConcepto = "D"
                 cNomina.Tipo = "N"
@@ -2547,7 +2553,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.TipoConcepto = "P"
                 cNomina.Tipo = "N"
@@ -2598,7 +2604,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.TipoConcepto = "P"
                 cNomina.CvoSAT = "19"
@@ -2653,7 +2659,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     cNomina = New Nomina()
                     'cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                     cNomina.Periodo = periodoID.Value
                     cNomina.TipoConcepto = "D"
                     cNomina.Tipo = "N"
@@ -2684,7 +2690,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Tipo = "N"
                 cNomina.Periodo = periodoID.Value
                 cNomina.TipoConcepto = "P"
@@ -2744,7 +2750,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 cNomina = New Nomina()
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                 cNomina.Periodo = periodoID.Value
                 cNomina.TipoConcepto = "D"
                 cNomina.Tipo = "N"
@@ -2775,7 +2781,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = CvoConcepto
@@ -2874,7 +2880,7 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina.NoEmpleado = NoEmpleado
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Tipo = "N"
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Generado = "S"
@@ -2896,7 +2902,7 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina.NoEmpleado = NoEmpleado
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal 
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Timbrado = Timbrado
         cNomina.UUID = UUID
@@ -2960,7 +2966,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Dim cNomina As New Entities.Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         dt = cNomina.ConsultarDatosPDF()
 
@@ -2973,7 +2979,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
                     cNomina = New Nomina()
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                     cNomina.Periodo = periodoID.Value
                     cNomina.TipoConcepto = "P"
                     cNomina.Tipo = "N"
@@ -2988,7 +2994,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
                     cNomina = New Nomina()
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                     cNomina.Periodo = periodoID.Value
                     cNomina.TipoConcepto = "D"
                     cNomina.Tipo = "N"
@@ -3209,7 +3215,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
         Dim cNomina As New Nomina()
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.TipoConcepto = "P"
         cNomina.Tipo = "N"
@@ -3224,7 +3230,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
         cNomina = New Nomina()
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.TipoConcepto = "D"
         cNomina.Tipo = "N"
@@ -3241,7 +3247,7 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         dt = cNomina.ConsultarDatosPDF()
 
@@ -3342,7 +3348,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     cNomina = New Nomina()
                     'cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                    cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                     cNomina.Periodo = periodoID.Value
                     cNomina.TipoConcepto = "DE"
                     cNomina.Tipo = "N"
@@ -3438,7 +3444,7 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina.NoEmpleado = NoEmpleado
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Pdf = Pdf
         cNomina.ActualizarEstatusPfNomina()
@@ -3657,7 +3663,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Tipo = "N"
             cNomina.EsEspecial = True
@@ -3722,7 +3728,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     End If
                 Next
 
-                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString & "&nid=" & nominaID.Value.ToString)
 
             ElseIf dt.Rows.Count = 0 Then
                 rwAlerta.RadAlert("Esta nomina ya esta timbrada completamente", 330, 180, "Alerta", "", "")
@@ -3736,7 +3742,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Dim cNomina As New Nomina()
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.TipoConcepto = "P"
         cNomina.Tipo = "N"
@@ -3761,7 +3767,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Dim cNomina As New Nomina()
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = periodoID.Value
         cNomina.TipoConcepto = "D"
         cNomina.Tipo = "N"
@@ -3788,7 +3794,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Cliente = cmbCliente.SelectedValue
             cNomina.EsEspecial = True
@@ -3882,7 +3888,7 @@ Public Class GeneracionDeNominaExtraordinaria
                         Dim dtCreditoFonacot As New DataTable
                         cNomina = New Nomina()
                         cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                         cNomina.Periodo = cmbPeriodo.SelectedValue
                         cNomina.NoEmpleado = oDataRow("NoEmpleado")
                         cNomina.CvoConcepto = 63
@@ -3913,7 +3919,7 @@ Public Class GeneracionDeNominaExtraordinaria
                         Dim dtPrestamosPersonal As New DataTable
                         cNomina = New Nomina()
                         cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                         cNomina.Periodo = cmbPeriodo.SelectedValue
                         cNomina.NoEmpleado = oDataRow("NoEmpleado")
                         cNomina.CvoConcepto = 71
@@ -3978,10 +3984,10 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim SIFEIIdEquipo As String = System.Configuration.ConfigurationManager.AppSettings("SIFEIIdEquipo")
 
                             'Pruebas
-                            Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
+                            'Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
 
                             'Producción
-                            'Dim TimbreSifei As New SIFEI33.SIFEIService()
+                            Dim TimbreSifei As New SIFEI33.SIFEIService()
                             Call Comprimir()
 
                             Dim bytes() As Byte
@@ -4024,7 +4030,7 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim dtPrestamosPersonal As New DataTable
                             cNomina = New Nomina()
                             cNomina.Ejercicio = IdEjercicio
-                            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+                            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
                             cNomina.Periodo = cmbPeriodo.SelectedValue
                             cNomina.NoEmpleado = oDataRow("NoEmpleado")
                             cNomina.CvoConcepto = 71
@@ -4093,7 +4099,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
                 Next
 
-                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString & "&nid=" & nominaID.Value.ToString)
 
             ElseIf dt.Rows.Count = 0 Then
                 rwAlerta.RadAlert("Esta nomina ya esta timbrada completamente!!", 330, 180, "Alerta", "", "")
@@ -4161,7 +4167,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
             Dim cNomina As New Entities.Nomina()
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = periodoID.Value
             cNomina.Tipo = "N"
             dt = cNomina.ConsultarEmpleadosGenerados()
@@ -4228,7 +4234,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
                 Next
 
-                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+                Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString & "&nid=" & nominaID.Value.ToString)
 
             End If
 
@@ -4272,7 +4278,7 @@ Public Class GeneracionDeNominaExtraordinaria
         Session("ClienteIDNomina") = cmbCliente.SelectedValue
         Session("PeriodicidadIDNomina") = cmbPeriodicidad.SelectedValue
         Session("PeriodoIDNomina") = cmbPeriodo.SelectedValue
-        Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+        Response.Redirect("~/GeneracionDeNominaExtraordinaria.aspx?id=" & cmbPeriodo.SelectedValue.ToString & "&nid=" & nominaID.Value.ToString)
     End Sub
     Protected Sub btnCancelarIndividual_Click(sender As Object, e As EventArgs) Handles btnCancelarIndividual.Click
         WinImportarMontoIndividual.VisibleOnPageLoad = False
@@ -4412,7 +4418,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina As New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = periodoID.Value
             cNomina.NoEmpleado = NoEmpleado
 
@@ -4481,7 +4487,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = periodoID.Value
             cNomina.Tipo = "N"
             dt = cNomina.ConsultarEmpleadosGenerados()
@@ -4638,10 +4644,11 @@ Public Class GeneracionDeNominaExtraordinaria
 
             cNomina = New Nomina()
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Cliente = cmbCliente.SelectedValue
             cNomina.EsEspecial = True
+            cNomina.IdNomina = nominaID.Value
             grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
             cNomina = Nothing
 
@@ -4661,7 +4668,7 @@ Public Class GeneracionDeNominaExtraordinaria
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.NoEmpleado = NoEmpleado
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.Tipo = "N"
@@ -4829,7 +4836,7 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina.NoEmpleado = NoEmpleado
         'cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Enviado = Enviado
         cNomina.ActualizarEstatusEnviadoNomina()
@@ -4854,9 +4861,10 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = periodoID.Value
             cNomina.EsEspecial = True
+            cNomina.IdNomina = nominaID.Value
             dt = cNomina.ConsultarDetalleNominaExtraordinaria()
 
             Dim texto As String = ""
@@ -5177,7 +5185,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = periodoID.Value
             cNomina.Tipo = "N"
             dt = cNomina.ConsultarEmpleadosTimbrados()
@@ -5230,7 +5238,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim cNomina = New Nomina()
             'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
+            cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
             cNomina.Periodo = periodoID.Value
             cNomina.Tipo = "N"
             dt = cNomina.ConsultarEmpleadosTimbrados()
@@ -5335,9 +5343,6 @@ Public Class GeneracionDeNominaExtraordinaria
     End Sub
     Private Sub btnSalirImportar_Click(sender As Object, e As EventArgs) Handles btnSalirImportar.Click
         WinImportarMonto.VisibleOnPageLoad = False
-    End Sub
-    Private Sub btnConfirmarGeneraNominaElectronica_Command(sender As Object, e As CommandEventArgs) Handles btnConfirmarGeneraNominaElectronica.Command
-
     End Sub
 
 End Class

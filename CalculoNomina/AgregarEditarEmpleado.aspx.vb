@@ -269,7 +269,7 @@ Public Class AgregarEditarEmpleado
                         RadTabStrip1.Tabs(0).Selected = True
                         RadMultiPage1.SelectedIndex = 0
                     Else
-                        sql = "EXEC pPersonalAdministrado @cmd=1, @nombre='" & txtNombre.Text & "', @apellido_paterno='" & txtApellidoPaterno.Text & "', @apellido_materno='" & txtApellidoMaterno.Text & "', @rfc='" & RFC & "', @curp='" & LTrim(RTrim(txtCURP.Text)).ToString & "', @pais='" & txtPais.Text & "', @estadoid='" & ddlEstado.SelectedValue & "', @calle='" & txtCalle.Text & "', @no_ext='" & txtNoExterior.Text & "', @no_int='" & txtNoInterior.Text & "', @referencia='" & txtReferencia.Text & "', @colonia='" & txtColonia.Text & "', @municipioid='" & ddlMunicipio.SelectedValue & "', @codigo_postal='" & txtCP.Text & "', @telefono='" & txtTelefono.Text & "', @telefono_trabajo='" & txtTelefonoTrabajo.Text & "', @celular='" & txtCelular.Text & "', @email1='" & txtEmail1.Text & "', @email2='" & txtEmail2.Text & "', @email3='" & txtEmail3.Text & "', @sexo='" & rblSexo.SelectedValue.ToString & "', @lugar_nacimiento='" & txtLugarNacimiento.Text & "', @fecha_nacimiento='" & FechaNacimiento.ToString("yyyyMMdd") & "', @nombre_padre='" & txtNombrePadre.Text & "', @nombre_madre='" & txtNombreMadre.Text & "', @estado_civil='" & ddlEstadoCivil.SelectedValue.ToString & "', @formapagoid='" & ddlFormaPago.SelectedValue.ToString & "', @bancoid='" & ddlBanco.SelectedValue.ToString & "', @sucursal='" & txtSucursal.Text & "', @clabe='" & txtClabe.Text & "',@numtarjeta='" & txtNumTarjeta.Text & "',  @numcuenta='" & txtCuenta.Text & "',@userid='" & Session("usuarioid") & "', @mi_cliente_id = '" & ddCliente.SelectedValue & "', @sueldos_y_salarios='" & checkSueldosYSalarios.Checked & "', @excedente='" & checkExcedente.Checked & "', @excedente_dinero='" & excedente_dinero.ToString & "'"
+                        sql = "EXEC pPersonalAdministrado @cmd=1, @clave='" & txtNoEmpleado.Text & "', @nombre='" & txtNombre.Text & "', @apellido_paterno='" & txtApellidoPaterno.Text & "', @apellido_materno='" & txtApellidoMaterno.Text & "', @rfc='" & RFC & "', @curp='" & LTrim(RTrim(txtCURP.Text)).ToString & "', @pais='" & txtPais.Text & "', @estadoid='" & ddlEstado.SelectedValue & "', @calle='" & txtCalle.Text & "', @no_ext='" & txtNoExterior.Text & "', @no_int='" & txtNoInterior.Text & "', @referencia='" & txtReferencia.Text & "', @colonia='" & txtColonia.Text & "', @municipioid='" & ddlMunicipio.SelectedValue & "', @codigo_postal='" & txtCP.Text & "', @telefono='" & txtTelefono.Text & "', @telefono_trabajo='" & txtTelefonoTrabajo.Text & "', @celular='" & txtCelular.Text & "', @email1='" & txtEmail1.Text & "', @email2='" & txtEmail2.Text & "', @email3='" & txtEmail3.Text & "', @sexo='" & rblSexo.SelectedValue.ToString & "', @lugar_nacimiento='" & txtLugarNacimiento.Text & "', @fecha_nacimiento='" & FechaNacimiento.ToString("yyyyMMdd") & "', @nombre_padre='" & txtNombrePadre.Text & "', @nombre_madre='" & txtNombreMadre.Text & "', @estado_civil='" & ddlEstadoCivil.SelectedValue.ToString & "', @formapagoid='" & ddlFormaPago.SelectedValue.ToString & "', @bancoid='" & ddlBanco.SelectedValue.ToString & "', @sucursal='" & txtSucursal.Text & "', @clabe='" & txtClabe.Text & "',@numtarjeta='" & txtNumTarjeta.Text & "',  @numcuenta='" & txtCuenta.Text & "',@userid='" & Session("usuarioid") & "', @mi_cliente_id = '" & ddCliente.SelectedValue & "', @sueldos_y_salarios='" & checkSueldosYSalarios.Checked & "', @excedente='" & checkExcedente.Checked & "', @excedente_dinero='" & excedente_dinero.ToString & "'"
                         EmployeeID.Value = objData.RunSQLScalarQuery(sql)
                         objData = Nothing
                         'EditEmployee(EmployeeID.Value)
@@ -282,7 +282,7 @@ Public Class AgregarEditarEmpleado
                     conn.Dispose()
                 End Try
             Else
-                objData.RunSQLScalarQuery("EXEC pPersonalAdministrado @cmd=5, @nombre='" & txtNombre.Text & "', @apellido_paterno='" & txtApellidoPaterno.Text & "', @apellido_materno='" & txtApellidoMaterno.Text & "', @rfc='" & RFC & "', @curp='" & LTrim(RTrim(txtCURP.Text)).ToString & "', @pais='" & txtPais.Text & "', @estadoid='" & ddlEstado.SelectedValue & "', @calle='" & txtCalle.Text & "', @no_ext='" & txtNoExterior.Text & "', @no_int='" & txtNoInterior.Text & "', @referencia='" & txtReferencia.Text & "', @colonia='" & txtColonia.Text & "', @municipioid='" & ddlMunicipio.SelectedValue & "', @codigo_postal='" & txtCP.Text & "', @telefono='" & txtTelefono.Text & "', @telefono_trabajo='" & txtTelefonoTrabajo.Text & "', @celular='" & txtCelular.Text & "', @email1='" & txtEmail1.Text & "', @email2='" & txtEmail2.Text & "', @email3='" & txtEmail3.Text & "', @sexo='" & rblSexo.SelectedValue.ToString & "', @lugar_nacimiento='" & txtLugarNacimiento.Text & "', @fecha_nacimiento='" & FechaNacimiento.ToString("yyyyMMdd") & "', @nombre_padre='" & txtNombrePadre.Text & "', @nombre_madre='" & txtNombreMadre.Text & "', @estado_civil='" & ddlEstadoCivil.SelectedValue.ToString & "' , @empleadoid='" & EmployeeID.Value.ToString & "', @formapagoid='" & ddlFormaPago.SelectedValue.ToString & "', @bancoid='" & ddlBanco.SelectedValue.ToString & "', @sucursal='" & txtSucursal.Text & "', @clabe='" & txtClabe.Text & "',@numtarjeta='" & txtNumTarjeta.Text & "',  @numcuenta='" & txtCuenta.Text & "', @mi_cliente_id = '" & ddCliente.SelectedValue & "' , @sueldos_y_salarios='" & checkSueldosYSalarios.Checked & "' , @excedente='" & checkExcedente.Checked & "', @excedente_dinero='" & excedente_dinero.ToString & "'")
+                objData.RunSQLScalarQuery("EXEC pPersonalAdministrado @cmd=5, @clave='" & txtNoEmpleado.Text & "', @nombre='" & txtNombre.Text & "', @apellido_paterno='" & txtApellidoPaterno.Text & "', @apellido_materno='" & txtApellidoMaterno.Text & "', @rfc='" & RFC & "', @curp='" & LTrim(RTrim(txtCURP.Text)).ToString & "', @pais='" & txtPais.Text & "', @estadoid='" & ddlEstado.SelectedValue & "', @calle='" & txtCalle.Text & "', @no_ext='" & txtNoExterior.Text & "', @no_int='" & txtNoInterior.Text & "', @referencia='" & txtReferencia.Text & "', @colonia='" & txtColonia.Text & "', @municipioid='" & ddlMunicipio.SelectedValue & "', @codigo_postal='" & txtCP.Text & "', @telefono='" & txtTelefono.Text & "', @telefono_trabajo='" & txtTelefonoTrabajo.Text & "', @celular='" & txtCelular.Text & "', @email1='" & txtEmail1.Text & "', @email2='" & txtEmail2.Text & "', @email3='" & txtEmail3.Text & "', @sexo='" & rblSexo.SelectedValue.ToString & "', @lugar_nacimiento='" & txtLugarNacimiento.Text & "', @fecha_nacimiento='" & FechaNacimiento.ToString("yyyyMMdd") & "', @nombre_padre='" & txtNombrePadre.Text & "', @nombre_madre='" & txtNombreMadre.Text & "', @estado_civil='" & ddlEstadoCivil.SelectedValue.ToString & "' , @empleadoid='" & EmployeeID.Value.ToString & "', @formapagoid='" & ddlFormaPago.SelectedValue.ToString & "', @bancoid='" & ddlBanco.SelectedValue.ToString & "', @sucursal='" & txtSucursal.Text & "', @clabe='" & txtClabe.Text & "',@numtarjeta='" & txtNumTarjeta.Text & "',  @numcuenta='" & txtCuenta.Text & "', @mi_cliente_id = '" & ddCliente.SelectedValue & "' , @sueldos_y_salarios='" & checkSueldosYSalarios.Checked & "' , @excedente='" & checkExcedente.Checked & "', @excedente_dinero='" & excedente_dinero.ToString & "'")
                 rwAlerta.RadAlert("Datos guardados exitosamente.", 330, 180, "Alerta", "", "")
                 'lblMensajeDatosGenerales.ForeColor = Drawing.Color.Green
                 'lblMensajeDatosGenerales.Text = "Datos guardados exitosamente."
@@ -320,9 +320,10 @@ Public Class AgregarEditarEmpleado
             rs = cmd.ExecuteReader()
 
             If rs.Read Then
-                lblNoEmpleado.Text = "No. de Empleado: " + rs("clave")
+                'lblNoEmpleado.Text = "No. de Empleado: " + rs("clave")
                 EmpresaID.Value = rs("clienteid")
                 txtNoClienteFonacot.Text = rs("no_cliente_fonacot")
+                txtNoEmpleado.Text = rs("clave")
                 txtNombre.Text = rs("nombre")
                 txtApellidoPaterno.Text = rs("apellido_paterno")
                 txtApellidoMaterno.Text = rs("apellido_materno")
@@ -430,8 +431,6 @@ Public Class AgregarEditarEmpleado
                 Dim ObjCat As New DataControl(1)
                 ObjCat.CatalogoRad(ddlTipoDescuento, "select id, nombre from tblTipoDescuentoInfonavit order by nombre asc", True)
                 ObjCat.CatalogoRad(ddlMunicipio, cConcepto.ConsultaMunicipio(ddlEstado.SelectedValue), True)
-                'ObjCat.CatalogoStr(ddlBanco, "select id,nombre from tblBanco order by id asc", rs("bancoid"))
-                'ObjCat.CatalogoRad(ddlBanco, cConcepto.ConsultarBanco, True, True)
                 ObjCat = Nothing
                 cConcepto = Nothing
 
@@ -443,21 +442,21 @@ Public Class AgregarEditarEmpleado
                     ddlBanco.Enabled = False
                     txtSucursal.Enabled = False
                     'txtClabe.Enabled = False
-                    valReqBanco.Enabled = False
+                    'valReqBanco.Enabled = False
                     'valReqClabe.Enabled = False
                     'valClabe.Enabled = False
                 ElseIf ddlFormaPago.SelectedValue = 2 Or ddlFormaPago.SelectedValue = 4 Then
                     ddlBanco.Enabled = True
                     txtSucursal.Enabled = True
                     'txtClabe.Enabled = False
-                    valReqBanco.Enabled = True
+                    'valReqBanco.Enabled = True
                     'valReqClabe.Enabled = False
                     'valClabe.Enabled = False
                 ElseIf ddlFormaPago.SelectedValue = 3 Then
                     ddlBanco.Enabled = True
                     txtSucursal.Enabled = True
                     'txtClabe.Enabled = True
-                    valReqBanco.Enabled = True
+                    'valReqBanco.Enabled = True
                     'valReqClabe.Enabled = True
                     'valClabe.Enabled = True
                 End If

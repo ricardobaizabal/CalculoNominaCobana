@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class GeneracionDeNominaExtraordinaria
 
     '''<summary>
+    '''Control nominaID.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents nominaID As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''Control periodoID.
     '''</summary>
     '''<remarks>

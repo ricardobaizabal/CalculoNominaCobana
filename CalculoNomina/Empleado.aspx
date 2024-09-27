@@ -37,6 +37,16 @@
                 return false;
             }
         }
+        function clearFilters(sender, args) {
+            if ($("#ctl00_ContentPlaceHolder1_cmbCliente_Input").val() != "") {
+                var obj = jQuery.parseJSON($("#ctl00_ContentPlaceHolder1_cmbCliente_Input").val());
+                if (obj.text === "") {
+                    sender.set_cancel(true);
+                }
+            } else {
+                eventArgs.set_cancel(true);
+            }
+        }
     </script>
     <style>
         .ulwrapper {
@@ -90,84 +100,91 @@
         <asp:Panel ID="panelListaEmpleados" runat="server">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 class="m-t-none m-b">Listado de Empleados</h3>
-                    <asp:Label ID="lblBuscador" runat="server" CssClass="item" Font-Bold="True" Text="Buscar por Nombre, o Número de imss o RFC:"></asp:Label>&nbsp;&nbsp;
-                    <%--<asp:TextBox ID="txtbuscador" runat="server" CssClass="item" Font-Bold="true"></asp:TextBox>--%>
-                    <telerik:RadTextBox ID="txtbuscador" runat="server" Width="300px"></telerik:RadTextBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:Label ID="lblBuscadorCliente" runat="server" CssClass="item" Font-Bold="True" Text="Cliente:"></asp:Label>&nbsp;&nbsp;
-                    <telerik:RadComboBox ID="cmbCliente" runat="server" Width="500px" AutoPostBack="true"></telerik:RadComboBox>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <telerik:RadButton ID="btnbuscador" runat="server" Text="Buscar" CssClass="rbPrimaryButton" Width="90px" CausesValidation="False"></telerik:RadButton>
-                    <hr class="demo-separator" />
+                    <fieldset>
+                        <legend style="padding-right: 6px; color: Black">
+                            <asp:Image ID="Image1" runat="server" ImageUrl="~/images/buscador_03.jpg" ImageAlign="AbsMiddle" />&nbsp;<asp:Label ID="lblFiltros" Text="Buscador" runat="server" Font-Bold="true" CssClass="item"></asp:Label>
+                        </legend>
+                        <asp:Label ID="lblBuscador" runat="server" CssClass="item" Font-Bold="True" Text="Buscar por nómbre o clave de empleado, número de NSS o RFC:"></asp:Label>&nbsp;&nbsp;
+                        <telerik:RadTextBox ID="txtbuscador" runat="server" Width="300px"></telerik:RadTextBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <asp:Label ID="lblBuscadorCliente" runat="server" CssClass="item" Font-Bold="True" Text="Cliente:"></asp:Label>&nbsp;&nbsp;
+                        <telerik:RadComboBox ID="cmbCliente" runat="server" Width="400px" OnClientFocus="clearFilters" Filter="StartsWith" AutoPostBack="false"></telerik:RadComboBox>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <telerik:RadButton ID="btnbuscador" runat="server" Text="Buscar" CssClass="rbPrimaryButton" Width="90px" CausesValidation="False"></telerik:RadButton>
+                    </fieldset>
                 </div>
+
             </div>
-            <div class="row">
-                <div class="col-lg-12 text-right">
-                    <telerik:RadButton ID="btnAgregaEmpleado" runat="server" Width="150px" Text="Agrega Empleado" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
+            <fieldset>
+                <legend style="padding-right: 6px; color: Black">
+                    <asp:Label ID="lblEmpleadosListLegend" runat="server" Font-Bold="true" Text="Listado de Empleados" CssClass="item"></asp:Label>
+                </legend>
+                <div class="row">
+                    <div class="col-lg-12 text-right">
+                        <telerik:RadButton ID="btnAgregaEmpleado" runat="server" Width="150px" Text="Agregar empleado" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div style="height: 10px;">&nbsp;</div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <telerik:RadGrid ID="GridEmployees" runat="server" AutoGenerateColumns="False" AllowPaging="True" PageSize="50" AllowSorting="true" ExportSettings-ExportOnlyData="true" CellSpacing="0" GridLines="None" Skin="Bootstrap">
-                        <PagerStyle Mode="NumericPages"></PagerStyle>
-                        <ExportSettings IgnorePaging="true" FileName="Empleados">
-                            <Excel Format="ExcelML" />
-                        </ExportSettings>
-                        <MasterTableView DataKeyNames="id" NoMasterRecordsText="No hay registros para mostrar." CommandItemDisplay="Top">
-                            <CommandItemSettings ShowExportToExcelButton="true" ShowAddNewRecordButton="false" ShowRefreshButton="false" ShowExportToPdfButton="false" ExportToExcelText="Exportar a excel"></CommandItemSettings>
-                            <Columns>
-                                <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" HeaderText="Editar">
-                                    <ItemTemplate>
-                                        <asp:ImageButton ID="lnkEdit" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEdit" ImageUrl="~/images/action_edit.png" />
-                                    </ItemTemplate>
-                                    <HeaderStyle HorizontalAlign="Center" />
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </telerik:GridTemplateColumn>
+                <div class="row" style="height: 20px;">&nbsp;</div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <telerik:RadGrid ID="GridEmployees" runat="server" AutoGenerateColumns="False" AllowPaging="True" PageSize="50" AllowSorting="true" ExportSettings-ExportOnlyData="true" CellSpacing="0" GridLines="None" Skin="Bootstrap">
+                            <PagerStyle Mode="NumericPages"></PagerStyle>
+                            <ExportSettings IgnorePaging="true" FileName="Empleados">
+                                <Excel Format="ExcelML" />
+                            </ExportSettings>
+                            <MasterTableView DataKeyNames="id" NoMasterRecordsText="No hay registros para mostrar." CommandItemDisplay="Top">
+                                <CommandItemSettings ShowExportToExcelButton="true" ShowAddNewRecordButton="false" ShowRefreshButton="false" ShowExportToPdfButton="false" ExportToExcelText="Exportar a excel"></CommandItemSettings>
+                                <Columns>
+                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" HeaderText="Editar">
+                                        <ItemTemplate>
+                                            <asp:ImageButton ID="lnkEdit" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEdit" ImageUrl="~/images/action_edit.png" />
+                                        </ItemTemplate>
+                                        <HeaderStyle HorizontalAlign="Center" />
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </telerik:GridTemplateColumn>
 
-                                <telerik:GridBoundColumn DataField="clave" HeaderText="Clave Emp" UniqueName="id"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="clave" HeaderText="Clave Emp" UniqueName="id"></telerik:GridBoundColumn>
 
-                                <telerik:GridBoundColumn DataField="nombre" HeaderText="Nómbre" UniqueName="nombre"></telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="nombre" HeaderText="Nómbre" UniqueName="nombre"></telerik:GridBoundColumn>
 
-                                <telerik:GridBoundColumn DataField="municipio" HeaderText="Municipio" UniqueName="municipio">
-                                </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="cliente" HeaderText="Cliente" UniqueName="cliente"></telerik:GridBoundColumn>
 
-                                <telerik:GridBoundColumn DataField="departamento" HeaderText="Departamento" UniqueName="departamento">
-                                </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="municipio" HeaderText="Municipio" UniqueName="municipio">
+                                    </telerik:GridBoundColumn>
 
-                                <telerik:GridBoundColumn DataField="no_imss" HeaderText="No. Seguro Social" UniqueName="no_imss">
-                                </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="departamento" HeaderText="Departamento" UniqueName="departamento">
+                                    </telerik:GridBoundColumn>
 
-                                <telerik:GridBoundColumn DataField="fecha_alta" HeaderText="Fecha alta" UniqueName="fecha_alta" DataFormatString="{0:d}">
-                                </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="no_imss" HeaderText="No. Seguro Social (NSS)" UniqueName="no_imss">
+                                    </telerik:GridBoundColumn>
 
-                                <telerik:GridBoundColumn DataField="salario" HeaderText="Sueldo Mensual" UniqueName="salario" DataFormatString="{0:c}" ItemStyle-HorizontalAlign="Right">
-                                </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="fecha_alta" HeaderText="Fecha alta" UniqueName="fecha_alta" DataFormatString="{0:d}">
+                                    </telerik:GridBoundColumn>
 
-                                <telerik:GridTemplateColumn DataField="sueldos_y_salarios" HeaderText="Sueldos y Salarios" UniqueName="estatus" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Image ID="IMG_SYS" runat="server" ImageUrl='<%# GetImageUrl(Eval("sueldos_y_salarios")) %>' />
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
+                                    <telerik:GridBoundColumn DataField="salario" HeaderText="Sueldo Mensual" UniqueName="salario" DataFormatString="{0:c}" ItemStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
 
-                                <telerik:GridTemplateColumn DataField="excedente" HeaderText="Excedente" UniqueName="estatus" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Image ID="IMG_EXC" runat="server" ImageUrl='<%# GetImageUrl(Eval("excedente")) %>' />
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
+                                    <telerik:GridTemplateColumn DataField="sueldos_y_salarios" HeaderText="Sueldos y Salarios" UniqueName="estatus" ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:Image ID="IMG_SYS" runat="server" ImageUrl='<%# GetImageUrl(Eval("sueldos_y_salarios")) %>' />
+                                        </ItemTemplate>
+                                    </telerik:GridTemplateColumn>
 
-                                <telerik:GridBoundColumn DataField="estatus" HeaderText="Estatus" UniqueName="estatus">
-                                </telerik:GridBoundColumn>
+                                    <telerik:GridTemplateColumn DataField="excedente" HeaderText="Excedente" UniqueName="estatus" ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:Image ID="IMG_EXC" runat="server" ImageUrl='<%# GetImageUrl(Eval("excedente")) %>' />
+                                        </ItemTemplate>
+                                    </telerik:GridTemplateColumn>
 
-                            </Columns>
-                        </MasterTableView>
+                                    <telerik:GridBoundColumn DataField="estatus" HeaderText="Estatus" UniqueName="estatus">
+                                    </telerik:GridBoundColumn>
 
-                    </telerik:RadGrid>
-                    <div style="height: 10px;">&nbsp;</div>
+                                </Columns>
+                            </MasterTableView>
+
+                        </telerik:RadGrid>
+                    </div>
                 </div>
-            </div>
+            </fieldset>
         </asp:Panel>
         <br />
         <br />
