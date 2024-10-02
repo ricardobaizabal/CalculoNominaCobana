@@ -129,6 +129,10 @@ Public Class ModificacionGeneralQuincenal
                 periodoId.Value = Request.QueryString("id").ToString
                 empresaId.Value = Request.QueryString("cid").ToString
 
+                If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+                    Me.nominaID.Value = Integer.Parse(Session("Folio").ToString())
+                End If
+
                 Call CargarDatos()
                 Call LlenaConceptosComunes(0)
 
@@ -209,9 +213,12 @@ Public Class ModificacionGeneralQuincenal
         CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
+        cNomina.IdNomina = nominaID.Value
+        cNomina.Cliente = empresaId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Periodo = periodoId.Value
+        cNomina.EsEspecial = False
         grdEmpleadosQuincenal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosQuincenal.DataBind()
         cNomina = Nothing
@@ -240,9 +247,12 @@ Public Class ModificacionGeneralQuincenal
         CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
+        cNomina.IdNomina = nominaID.Value
+        cNomina.Cliente = empresaId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Periodo = periodoId.Value
+        cNomina.EsEspecial = False
         grdEmpleadosQuincenal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         cNomina = Nothing
     End Sub

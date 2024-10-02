@@ -126,8 +126,12 @@ Public Class ModificacionGeneralSemanal
         If Not IsPostBack Then
             If Not String.IsNullOrEmpty(Request("id")) Then
 
-                periodoId.Value = Request.QueryString("id").ToString
-                empresaId.Value = Request.QueryString("cid").ToString
+                Me.periodoId.Value = Request.QueryString("id").ToString
+                Me.empresaId.Value = Request.QueryString("cid").ToString
+
+                If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+                    Me.nominaID.Value = Integer.Parse(Session("Folio").ToString())
+                End If
 
                 Call CargarDatos()
                 Call LlenaConceptosComunes(0)
@@ -209,9 +213,12 @@ Public Class ModificacionGeneralSemanal
         CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
+        cNomina.IdNomina = nominaID.Value
+        cNomina.Cliente = empresaId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
+        cNomina.EsEspecial = False
         grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosSemanal.DataBind()
         cNomina = Nothing
@@ -240,9 +247,12 @@ Public Class ModificacionGeneralSemanal
         CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
+        cNomina.IdNomina = nominaID.Value
+        cNomina.Cliente = empresaId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
+        cNomina.EsEspecial = False
         grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         cNomina = Nothing
     End Sub

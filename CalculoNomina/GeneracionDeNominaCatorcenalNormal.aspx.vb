@@ -230,8 +230,8 @@ Public Class GeneracionDeNominaCatorcenal
                 cmbPeriodo_SelectedIndexChanged(cmbPeriodo, EventArgs.Empty)
 
                 ' Eliminar el folio de la sesión después de haberlo utilizado
-                Session.Remove("Folio")
-                Session("Folio") = Nothing
+                'Session.Remove("Folio")
+                'Session("Folio") = Nothing
             ElseIf Not String.IsNullOrEmpty(Request("id")) Then
                 periodoID.Value = Request("id")
                 cmbPeriodicidad.SelectedValue = 2
@@ -448,19 +448,24 @@ Public Class GeneracionDeNominaCatorcenal
         Dim dt As New DataTable
 
         Dim Nomina As New Entities.Nomina()
-        ''cNomina.IdEmpresa = Session("clienteid")
         Nomina.TipoNomina = 2 'Catorcenal
         Nomina.Periodo = cmbPeriodo.SelectedValue
         Nomina.Cliente = cmbCliente.SelectedValue
         Nomina.Periodo = cmbPeriodo.SelectedValue
         Nomina.FechaPago = fchPago.SelectedDate
 
-        Dim idNomina As DataTable = Nomina.InsertaCampoNomina(cmbCliente.SelectedValue)
-        Dim _Nominaid As Integer
-        For Each row As DataRow In idNomina.Rows
-            _Nominaid = Convert.ToInt32(row(0))
-        Next
-        dt = Nomina.ConsultarEmpleadosCatorcenal()
+        Dim _Nominaid As Integer = 0
+        If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+            _Nominaid = Integer.Parse(Session("Folio").ToString())
+        Else
+            Dim idNomina As DataTable = Nomina.InsertaCampoNomina(cmbCliente.SelectedValue)
+            For Each row As DataRow In idNomina.Rows
+                _Nominaid = Convert.ToInt32(row(0))
+                Session("Folio") = Convert.ToInt32(row(0))
+            Next
+        End If
+
+        dt = Nomina.ConsultarEmpleadosSemanal()
         Nomina = Nothing
 
         If dt.Rows.Count > 0 Then
@@ -2011,15 +2016,15 @@ Public Class GeneracionDeNominaCatorcenal
         grdEmpleadosCatorcenal.DataSource = dtEmpleados
         grdEmpleadosCatorcenal.DataBind()
         ' Ordena el DataTable por la columna fechaPago
-        Dim dv As New DataView(dtEmpleados)
-        dv.Sort = "FechaPago ASC"
+        'Dim dv As New DataView(dtEmpleados)
+        'dv.Sort = "FechaPago ASC"
 
         ' Obtén el primer valor de la columna fechaPago
-        Dim firstFechaPago As DateTime = CType(dv(0)("FechaPago"), DateTime)
+        'Dim firstFechaPago As DateTime = CType(dv(0)("FechaPago"), DateTime)
 
         ' Guarda el primer valor en una variable
-        fchPago.SelectedDate = firstFechaPago
-        fchPago.Enabled = False
+        'fchPago.SelectedDate = firstFechaPago
+        'fchPago.Enabled = False
         cNomina = Nothing
     End Sub
     Private Sub grdEmpleadosCatorcenal_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdEmpleadosCatorcenal.NeedDataSource
@@ -2215,13 +2220,15 @@ Public Class GeneracionDeNominaCatorcenal
             Call CargarVariablesGenerales()
 
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.EliminaNomina()
 
-            Response.Redirect("~/GeneracionDeNominaCatorcenalNormal.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+            Call CargarGridEmpleadosCatorcenal()
+            Call BloquearBotones()
+
+            'Response.Redirect("~/GeneracionDeNominaCatorcenalNormal.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
 
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")

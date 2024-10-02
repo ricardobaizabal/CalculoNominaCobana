@@ -76,8 +76,8 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%--<telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1">--%>
-    <asp:HiddenField ID="periodoID" runat="server" Value="0" Visible="False" />
-    <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
+    <asp:HiddenField ID="periodoID" runat="server" Value="0" />
+    <asp:HiddenField ID="registroId" runat="server" Value="0" />
     <asp:HiddenField ID="serie" runat="server" Value="" />
     <asp:HiddenField ID="folio" runat="server" Value="0" />
     <asp:HiddenField ID="FolioUUID" runat="server" Value="" />

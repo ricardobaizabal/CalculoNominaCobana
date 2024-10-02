@@ -104,10 +104,10 @@
                         <legend style="padding-right: 6px; color: Black">
                             <asp:Image ID="Image1" runat="server" ImageUrl="~/images/buscador_03.jpg" ImageAlign="AbsMiddle" />&nbsp;<asp:Label ID="lblFiltros" Text="Buscador" runat="server" Font-Bold="true" CssClass="item"></asp:Label>
                         </legend>
-                        <asp:Label ID="lblBuscador" runat="server" CssClass="item" Font-Bold="True" Text="Buscar por nómbre o clave de empleado, número de NSS o RFC:"></asp:Label>&nbsp;&nbsp;
+                        <asp:Label ID="lblBuscador" runat="server" CssClass="item" Font-Bold="True" Text="Buscar por nombre o clave de empleado, número de NSS o RFC:"></asp:Label>&nbsp;&nbsp;
                         <telerik:RadTextBox ID="txtbuscador" runat="server" Width="300px"></telerik:RadTextBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <asp:Label ID="lblBuscadorCliente" runat="server" CssClass="item" Font-Bold="True" Text="Cliente:"></asp:Label>&nbsp;&nbsp;
-                        <telerik:RadComboBox ID="cmbCliente" runat="server" Width="400px" OnClientFocus="clearFilters" Filter="StartsWith" AutoPostBack="false"></telerik:RadComboBox>
+                        <telerik:RadComboBox ID="cmbCliente" runat="server" Width="300px" OnClientFocus="clearFilters" Filter="StartsWith" AutoPostBack="false"></telerik:RadComboBox>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <telerik:RadButton ID="btnbuscador" runat="server" Text="Buscar" CssClass="rbPrimaryButton" Width="90px" CausesValidation="False"></telerik:RadButton>
                     </fieldset>

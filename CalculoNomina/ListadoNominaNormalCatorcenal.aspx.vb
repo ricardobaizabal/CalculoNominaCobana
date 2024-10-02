@@ -17,6 +17,9 @@ Public Class ListadoNominaNormalCatorcenal
             CargarGridNominas()
             CargaPeriodos(cmbPeriodicidad.SelectedValue)
             cmbPeriodicidad.Enabled = False
+
+            Session("Folio") = Nothing
+
         End If
     End Sub
 

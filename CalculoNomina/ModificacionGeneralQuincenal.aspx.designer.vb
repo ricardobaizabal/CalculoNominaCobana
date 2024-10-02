@@ -50,6 +50,15 @@ Partial Public Class ModificacionGeneralQuincenal
     Protected WithEvents empleadoId As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''Control nominaID.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents nominaID As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''Control lblEjercicio.
     '''</summary>
     '''<remarks>

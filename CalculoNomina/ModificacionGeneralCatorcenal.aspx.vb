@@ -129,6 +129,10 @@ Public Class ModificacionGeneralCatorcenal
                 periodoId.Value = Request.QueryString("id").ToString
                 empresaId.Value = Request.QueryString("cid").ToString
 
+                If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+                    Me.nominaID.Value = Integer.Parse(Session("Folio").ToString())
+                End If
+
                 Call CargarDatos()
                 Call LlenaConceptosComunes(0)
 
@@ -212,6 +216,7 @@ Public Class ModificacionGeneralCatorcenal
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = periodoId.Value
+        cNomina.EsEspecial = False
         grdEmpleadosCatorcenal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosCatorcenal.DataBind()
         cNomina = Nothing
@@ -243,6 +248,7 @@ Public Class ModificacionGeneralCatorcenal
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = periodoId.Value
+        cNomina.EsEspecial = False
         grdEmpleadosCatorcenal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         cNomina = Nothing
     End Sub

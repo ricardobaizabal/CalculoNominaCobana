@@ -2160,7 +2160,7 @@ Public Class IncidenciasCatorcenal
                         cNomina.GuadarNominaPeriodo()
                     End If
                 Else
-                    Call GuardarRegistro(CuotaDiaria, 2)
+                    Call GuardarRegistro(CuotaDiaria, 1)
                 End If
             End If
 
@@ -3754,10 +3754,13 @@ Public Class IncidenciasCatorcenal
             pagina = pagina & "?id=" & Request("id")
         End If
 
-        If Not String.IsNullOrEmpty(Request("nominaid")) Then
-            pagina = pagina & "&cid=" & Request("nominaid")
-        End If
+        'If Not String.IsNullOrEmpty(Request("nominaid")) Then
+        '    pagina = pagina & "&cid=" & Request("nominaid")
+        'End If
+
+        pagina = pagina & "&cid=" & empresaId.Value.ToString
 
         ScriptManager.RegisterStartupScript(Me, GetType(RadWindow), "close", "CloseModal('" & pagina & "');", True)
+
     End Sub
 End Class

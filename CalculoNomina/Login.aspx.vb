@@ -32,10 +32,8 @@ Public Class Login
                         lblMensaje.Text = row("mensaje")
                         ClienteValido = False
                     ElseIf row("error") = 0 Then
-                        'Session("conexion") = "Data Source=localhost; Initial Catalog=" & row("appKey") & "; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;"
-                        'Session("conexion") = "Data Source=U7T24V; Initial Catalog=" & row("appKey") & "; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;"
-                        'Session("conexion") = "Data Source=.\SQLEXPRESS03; Initial Catalog=" & row("appKey") & "; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;"
                         Session("conexion") = "Data Source=" & System.Configuration.ConfigurationManager.AppSettings("server").ToString & "; Initial Catalog=" & row("appKey") & "; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;"
+                        'Session("conexion") = "Data Source=" & System.Configuration.ConfigurationManager.AppSettings("server").ToString & "; Initial Catalog=" & row("appKey") & "; User ID=sa; Password=q<PAQkt5(49(8!R; Max Pool Size=360;"
 
                         Session("clienteid") = row("clienteid")
                         Session("usuarioid") = row("usuarioid")

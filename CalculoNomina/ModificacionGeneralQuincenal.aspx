@@ -47,9 +47,12 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
-        <asp:HiddenField ID="periodoId" runat="server" Value="0" Visible="False" />
-        <asp:HiddenField ID="empresaId" runat="server" Value="0" Visible="False" />
-        <asp:HiddenField ID="empleadoId" runat="server" Value="0" Visible="False" />
+        
+        <asp:HiddenField ID="periodoId" runat="server" Value="0" />
+        <asp:HiddenField ID="empresaId" runat="server" Value="0" />
+        <asp:HiddenField ID="empleadoId" runat="server" Value="0" />
+        <asp:HiddenField ID="nominaID" runat="server" Value="0" />
+
         <div class="ibox-content" style="border: solid 0px">
             <div class="row">
                 <div class="col-md-12">
