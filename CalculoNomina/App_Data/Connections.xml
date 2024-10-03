@@ -1,6 +1,4 @@
 ﻿<connectionStrings>
-	<!--<add name="conn" connectionString="Data Source=LINKIUMSERVER1; Initial Catalog=nomilink_general; User ID=linkiumuser; Password=Verisen90; Connect Timeout=360;" />-->
-	<!--<add name="conn" connectionString="Data Source=lk6.linkium.net; Initial Catalog=nomilink_general; User ID=sa; Password=Jupiter10!; Connect Timeout=360;" />-->
-	<add name="conn" connectionString="Data Source=25.10.96.205; Initial Catalog=nomilink_general; User ID=sa; Password=q&lt;PAQkt5(49(8!R; Connect Timeout=360;" />
-	<!--<add name="conn" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_general; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />-->
+	<!--<add name="conn" connectionString="Data Source=25.10.96.205; Initial Catalog=nomilink_general; User ID=sa; Password=q&lt;PAQkt5(49(8!R; Connect Timeout=360;" />-->
+	<add name="conn" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_general; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
 </connectionStrings>
