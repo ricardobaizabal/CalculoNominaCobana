@@ -882,25 +882,25 @@ Public Class AgregarEditarEmpleado
     End Sub
     Private Sub btnGuardarContrato_Click(sender As Object, e As EventArgs) Handles btnGuardarContrato.Click
         If Page.IsValid Then
-
-            Dim conn As New SqlConnection(Session("conexion"))
+            'Dim conn As New SqlConnection(Session("conexion"))
             Try
-                Dim cmd As New SqlCommand("EXEC pPersonalAdministrado @cmd=22, @empleadoid='" & EmployeeID.Value.ToString & "'", conn)
-                conn.Open()
+                'Dim cmd As New SqlCommand("EXEC pPersonalAdministrado @cmd=22, @empleadoid='" & EmployeeID.Value.ToString & "'", conn)
+                'conn.Open()
 
-                Dim rs As SqlDataReader
-                rs = cmd.ExecuteReader()
+                'Dim rs As SqlDataReader
+                'rs = cmd.ExecuteReader()
 
-                If rs.Read Then
-                    SaveContrato()
-                Else
-                    RadWindowManager2.RadAlert("Es Requerido Registrar un Beneficiario antes de Registrar un Contrato.", 330, 180, "Alert", "", "")
-                End If
+                'If rs.Read Then
+                Call SaveContrato()
+                'Else
+                '    RadWindowManager2.RadAlert("Es requerido registrar un beneficiario antes de registrar un contrato.", 330, 180, "Alert", "", "")
+                'End If
             Catch ex As Exception
                 Response.Write(ex.Message.ToString)
+                Response.End()
             Finally
-                conn.Close()
-                conn.Dispose()
+                'conn.Close()
+                'conn.Dispose()
             End Try
         End If
     End Sub

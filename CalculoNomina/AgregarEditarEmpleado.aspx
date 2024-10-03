@@ -1148,7 +1148,7 @@
                                     <tr>
                                         <td style="width: 25%;">
                                             <asp:Label ID="lblDepartamento" runat="server" CssClass="item" Font-Bold="True" Text="Departamento:"></asp:Label>
-                                            <asp:RequiredFieldValidator ID="valDepartamento" runat="server" ControlToValidate="ddlDepartamento" ValidationGroup="vDatosContrato" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                            <%--<asp:RequiredFieldValidator ID="valDepartamento" runat="server" ControlToValidate="ddlDepartamento" ValidationGroup="vDatosContrato" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                         </td>
                                         <td style="width: 25%;">
                                             <asp:Label ID="lblPuesto" runat="server" CssClass="item" Font-Bold="True" Text="Puesto:"></asp:Label>

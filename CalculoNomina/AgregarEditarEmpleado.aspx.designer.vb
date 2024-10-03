@@ -2030,15 +2030,6 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents lblDepartamento As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control valDepartamento.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents valDepartamento As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
     '''Control lblPuesto.
     '''</summary>
     '''<remarks>

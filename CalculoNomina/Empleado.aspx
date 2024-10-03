@@ -160,6 +160,15 @@
                                     <telerik:GridBoundColumn DataField="fecha_alta" HeaderText="Fecha alta" UniqueName="fecha_alta" DataFormatString="{0:d}">
                                     </telerik:GridBoundColumn>
 
+                                    <telerik:GridBoundColumn DataField="salario_base" HeaderText="SD" UniqueName="salario_base" DataFormatString="{0:c}" ItemStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
+
+                                    <telerik:GridBoundColumn DataField="salario_diario_integrado" HeaderText="SDI" UniqueName="salario_diario_integrado" DataFormatString="{0:c}" ItemStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
+
+                                    <telerik:GridBoundColumn DataField="salario" HeaderText="Sueldo Mensual" UniqueName="salario" DataFormatString="{0:c}" ItemStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
+
                                     <telerik:GridBoundColumn DataField="salario" HeaderText="Sueldo Mensual" UniqueName="salario" DataFormatString="{0:c}" ItemStyle-HorizontalAlign="Right">
                                     </telerik:GridBoundColumn>
 
