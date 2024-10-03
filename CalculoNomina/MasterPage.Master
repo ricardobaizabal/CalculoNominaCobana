@@ -133,6 +133,23 @@
                                             </li>
                                         </ul>
                                     </li>
+                                    <li>
+                                        <a href="#">Nómina mensual<span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="PeriodosMensuales.aspx">Creación de periodos</a>
+                                            </li>
+                                            <li>
+                                                <a href="ListadoNominaMensual.aspx">Cálculo nómina normal</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosMensual.aspx">Cálculo de finiquitos</a>
+                                            </li>
+                                            <li>
+                                                <a href="FiniquitosGeneradosMensual.aspx">Finiquitos generados</a>
+                                            </li>
+                                        </ul>
+                                    </li>
                                     <!--li>
                                         <a href="#">Nómina mensual<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
@@ -140,7 +157,7 @@
                                                 <a href="ListadoNominaMensual.aspx">Cálculo nómina normal</a>
                                             </li>
                                         </ul>
-                                    </li--->
+                                    </li-->
                                 </ul>
                             </li>
                             <li class='disabled'>

@@ -11,10 +11,11 @@ Public Class ListadoNominaMensual
         If Not IsPostBack Then
             Dim objCat As New DataControl(1)
             Dim cConcepto As New Entities.Catalogos
-            objCat.Catalogo(cmbCliente, 0, cConcepto.ConsultarMisClientes, True)
-            objCat.Catalogo(cmbPeriodicidad, 4, cConcepto.ConsultarPeriodoPago2, True)
+            objCat.CatalogoRad(cmbCliente, cConcepto.ConsultarMisClientes, True, False)
+            objCat.CatalogoRad(cmbPeriodicidad, cConcepto.ConsultarPeriodoPago2, True, False)
+            cmbPeriodicidad.SelectedValue = 4
             CargarGridNominas()
-            cargaPeriodos(cmbPeriodicidad.SelectedValue)
+            CargaPeriodos(cmbPeriodicidad.SelectedValue)
             cmbPeriodicidad.Enabled = False
         End If
     End Sub
@@ -90,25 +91,26 @@ Public Class ListadoNominaMensual
             Case "cmdEdit"
                 Dim folio As String = e.CommandArgument.ToString()
                 Session("Folio") = folio
-                Response.Redirect("GeneracionDeNominaNormal.aspx")
+                Response.Redirect("GeneracionDeNominaMensualNormal.aspx")
         End Select
     End Sub
 
     Private Sub btnAgregarNominaE_Click(sender As Object, e As EventArgs) Handles btnAgregarNominaE.Click
-        Response.Redirect("GeneracionDeNominaNormal.aspx")
+        Response.Redirect("GeneracionDeNominaMensualNormal.aspx")
     End Sub
 
     Private Sub btnBuscarNominas_Click(sender As Object, e As EventArgs) Handles btnBuscarNominas.Click
         CargarGridNominas()
     End Sub
 
-    Private Sub cargaPeriodos(Optional ByVal IdTipoNomina As Integer = 0)
+    Private Sub CargaPeriodos(Optional ByVal IdTipoNomina As Integer = 0)
         Call CargarVariablesGenerales()
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
-        cPeriodo.ExtraordinarioBit = Nothing
-        ObjData.Catalogo(cmbPeriodo, 0, cPeriodo.ConsultarPeriodos())
+        cPeriodo.ExtraordinarioBit = False
+        ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
+        ObjData = Nothing
     End Sub
 
     Private Sub CargarVariablesGenerales()
