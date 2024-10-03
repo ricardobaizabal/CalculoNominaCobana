@@ -191,6 +191,7 @@
     <Content Include="AcumuladosEmpleado.aspx" />
     <Content Include="AgregarEditarEmpleado.aspx" />
     <Content Include="AgregarPeriodosCatorcenales.aspx" />
+    <Content Include="AgregarPeriodosMensuales.aspx" />
     <Content Include="AgregarPeriodosQuincenales.aspx" />
     <Content Include="AgregarPeriodosSemanales.aspx" />
     <Content Include="AltaMasivaEmpleados.aspx" />
@@ -381,6 +382,7 @@
     <Content Include="EditorEmpleado.aspx" />
     <Content Include="EditorPeriodicidadP.aspx" />
     <Content Include="EditorPeriodosCatorcenales.aspx" />
+    <Content Include="EditorPeriodosMensuales.aspx" />
     <Content Include="EditorPeriodosQuincenales.aspx" />
     <Content Include="EditorPeriodosSemanales.aspx" />
     <Content Include="EditorPuesto.aspx" />
@@ -402,8 +404,10 @@
     <Content Include="Estado.aspx" />
     <Content Include="FiniquitosCatorcenal.aspx" />
     <Content Include="FiniquitosGeneradosCatorcenal.aspx" />
+    <Content Include="FiniquitosGeneradosMensual.aspx" />
     <Content Include="FiniquitosGeneradosQuincenal.aspx" />
     <Content Include="FiniquitosGeneradosSemanal.aspx" />
+    <Content Include="FiniquitosMensual.aspx" />
     <Content Include="FiniquitosQuincenal.aspx" />
     <Content Include="FiniquitosSemanal.aspx" />
     <Content Include="font-awesome-4.7.0\css\font-awesome.css" />
@@ -416,6 +420,7 @@
     <Content Include="GeneracionDeFiniquitosSemanal.aspx" />
     <Content Include="GeneracionDeNominaCatorcenalNormal.aspx" />
     <Content Include="GeneracionDeNominaExtraordinaria.aspx" />
+    <Content Include="GeneracionDeNominaMensualNormal.aspx" />
     <Content Include="GeneracionDeNominaNormal.aspx" />
     <Content Include="GeneracionDeNominaQuincenalNormal.aspx" />
     <Content Include="Home.aspx" />
@@ -1777,6 +1782,7 @@
     <Content Include="Percepciones.aspx" />
     <Content Include="Periodicidadpago.aspx" />
     <Content Include="PeriodosCatorcenales.aspx" />
+    <Content Include="PeriodosMensuales.aspx" />
     <Content Include="PeriodosQuincenales.aspx" />
     <Content Include="PeriodosSemanales.aspx" />
     <Content Include="Plantilla\404.html" />
@@ -3818,6 +3824,12 @@
       <DependentUpon>AgregarPeriodosCatorcenales.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="AgregarPeriodosMensuales.aspx.designer.vb">
+      <DependentUpon>AgregarPeriodosMensuales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AgregarPeriodosMensuales.aspx.vb">
+      <DependentUpon>AgregarPeriodosMensuales.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AgregarPeriodosQuincenales.aspx.designer.vb">
       <DependentUpon>AgregarPeriodosQuincenales.aspx</DependentUpon>
     </Compile>
@@ -3881,6 +3893,12 @@
       <DependentUpon>EditorPeriodosCatorcenales.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="EditorPeriodosMensuales.aspx.designer.vb">
+      <DependentUpon>EditorPeriodosMensuales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditorPeriodosMensuales.aspx.vb">
+      <DependentUpon>EditorPeriodosMensuales.aspx</DependentUpon>
+    </Compile>
     <Compile Include="FiniquitosCatorcenal.aspx.designer.vb">
       <DependentUpon>FiniquitosCatorcenal.aspx</DependentUpon>
     </Compile>
@@ -3895,6 +3913,12 @@
       <DependentUpon>FiniquitosGeneradosCatorcenal.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="FiniquitosGeneradosMensual.aspx.designer.vb">
+      <DependentUpon>FiniquitosGeneradosMensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FiniquitosGeneradosMensual.aspx.vb">
+      <DependentUpon>FiniquitosGeneradosMensual.aspx</DependentUpon>
+    </Compile>
     <Compile Include="FiniquitosGeneradosQuincenal.aspx.designer.vb">
       <DependentUpon>FiniquitosGeneradosQuincenal.aspx</DependentUpon>
     </Compile>
@@ -3908,6 +3932,12 @@
     <Compile Include="FiniquitosGeneradosSemanal.aspx.vb">
       <DependentUpon>FiniquitosGeneradosSemanal.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FiniquitosMensual.aspx.designer.vb">
+      <DependentUpon>FiniquitosMensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FiniquitosMensual.aspx.vb">
+      <DependentUpon>FiniquitosMensual.aspx</DependentUpon>
     </Compile>
     <Compile Include="FiniquitosQuincenal.aspx.designer.vb">
       <DependentUpon>FiniquitosQuincenal.aspx</DependentUpon>
@@ -3957,6 +3987,9 @@
     <Compile Include="GeneracionDeNominaExtraordinaria.aspx.vb">
       <DependentUpon>GeneracionDeNominaExtraordinaria.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GeneracionDeNominaMensualNormal.aspx.vb">
+      <DependentUpon>GeneracionDeNominaMensualNormal.aspx</DependentUpon>
     </Compile>
     <Compile Include="GeneracionDeNominaQuincenalNormal.aspx.designer.vb">
       <DependentUpon>GeneracionDeNominaQuincenalNormal.aspx</DependentUpon>
@@ -4090,6 +4123,12 @@
     <Compile Include="PeriodosCatorcenales.aspx.vb">
       <DependentUpon>PeriodosCatorcenales.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PeriodosMensuales.aspx.designer.vb">
+      <DependentUpon>PeriodosMensuales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PeriodosMensuales.aspx.vb">
+      <DependentUpon>PeriodosMensuales.aspx</DependentUpon>
     </Compile>
     <Compile Include="PTU.aspx.designer.vb">
       <DependentUpon>PTU.aspx</DependentUpon>

@@ -11,25 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class ListadoNominaMensual
-
-    '''<summary>
-    '''Control RadAjaxPanel1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
-
-    '''<summary>
-    '''Control periodoID.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents periodoID As Global.System.Web.UI.WebControls.HiddenField
+Partial Public Class FiniquitosGeneradosMensual
 
     '''<summary>
     '''Control registroId.
@@ -39,6 +21,15 @@ Partial Public Class ListadoNominaMensual
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents registroId As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''Control empleadoId.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents empleadoId As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''Control serie.
@@ -59,31 +50,13 @@ Partial Public Class ListadoNominaMensual
     Protected WithEvents folio As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
-    '''Control FolioUUID.
+    '''Control lblEjercicio.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents FolioUUID As Global.System.Web.UI.WebControls.HiddenField
-
-    '''<summary>
-    '''Control cmbCliente.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents cmbCliente As Global.Telerik.Web.UI.RadComboBox
-
-    '''<summary>
-    '''Control cmbPeriodicidad.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents cmbPeriodicidad As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control cmbPeriodo.
@@ -92,16 +65,52 @@ Partial Public Class ListadoNominaMensual
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents cmbPeriodo As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents cmbPeriodo As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''Control btnBuscarNominas.
+    '''Control lnkReporte.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnBuscarNominas As Global.Telerik.Web.UI.RadButton
+    Protected WithEvents lnkReporte As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''Control btnGenerarNominaElectronica.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGenerarNominaElectronica As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control btnTimbrarNomina.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnTimbrarNomina As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control btnGenerarPDF.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGenerarPDF As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control btnEnvioComprobantes.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnEnvioComprobantes As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control RadProgressManager1.
@@ -122,22 +131,49 @@ Partial Public Class ListadoNominaMensual
     Protected WithEvents RadProgressArea1 As Global.Telerik.Web.UI.RadProgressArea
 
     '''<summary>
-    '''Control btnAgregarNominaE.
+    '''Control panelDatos.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnAgregarNominaE As Global.Telerik.Web.UI.RadButton
+    Protected WithEvents panelDatos As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''Control GridNominas.
+    '''Control lblTitulo.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents GridNominas As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents lblTitulo As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control grdEmpleados.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents grdEmpleados As Global.Telerik.Web.UI.RadGrid
+
+    '''<summary>
+    '''Control rwAlerta.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents rwAlerta As Global.Telerik.Web.UI.RadWindowManager
+
+    '''<summary>
+    '''Control rwConfirm.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents rwConfirm As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
     '''Control RadWindowManager1.
@@ -158,29 +194,38 @@ Partial Public Class ListadoNominaMensual
     Protected WithEvents wndReporte As Global.Telerik.Web.UI.RadWindow
 
     '''<summary>
-    '''Control rwAlerta.
+    '''Control btnConfirmarGeneraNominaElectronica.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents rwAlerta As Global.Telerik.Web.UI.RadWindowManager
+    Protected WithEvents btnConfirmarGeneraNominaElectronica As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''Control rwConfirmGeneraNomina.
+    '''Control btnConfirmarTimbraNomina.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents rwConfirmGeneraNomina As Global.Telerik.Web.UI.RadWindowManager
+    Protected WithEvents btnConfirmarTimbraNomina As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''Control RadAjaxLoadingPanel1.
+    '''Control btnConfirmarGeneraPDF.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
+    Protected WithEvents btnConfirmarGeneraPDF As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''Control btnConfirmarEnvioPDF.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnConfirmarEnvioPDF As Global.System.Web.UI.WebControls.Button
 End Class
