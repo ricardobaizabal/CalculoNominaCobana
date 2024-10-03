@@ -3988,8 +3988,12 @@
       <DependentUpon>GeneracionDeNominaExtraordinaria.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="GeneracionDeNominaMensualNormal.aspx.designer.vb">
+      <DependentUpon>GeneracionDeNominaMensualNormal.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GeneracionDeNominaMensualNormal.aspx.vb">
       <DependentUpon>GeneracionDeNominaMensualNormal.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="GeneracionDeNominaQuincenalNormal.aspx.designer.vb">
       <DependentUpon>GeneracionDeNominaQuincenalNormal.aspx</DependentUpon>

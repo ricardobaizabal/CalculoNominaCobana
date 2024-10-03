@@ -59,6 +59,21 @@ Partial Public Class Periodo
             Throw ex
         End Try
     End Sub
+
+    Public Sub GuadarPeriodoMensual()
+        Try
+            p.Clear()
+            p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
+            p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
+            p.Add(New SqlParameter("@pFechainicial", FechaInicial))
+            p.Add(New SqlParameter("@pGeneraPeriodos", GeneraPeriodos))
+
+            db.ExecuteSPWithParams("pGuadarPeriodoQuincenal", p)
+
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
     Public Sub UpdatePeriodoQuincenal()
         Try
             p.Clear()
