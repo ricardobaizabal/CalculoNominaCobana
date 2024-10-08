@@ -31,6 +31,12 @@
                     <br />
                     <br />
                     <asp:Label ID="lblInfo" runat="server" Visible="True" Font-Bold="true">Nota: Guardar y subir el archivo en formato .xlsx</asp:Label>
+                    <br />
+                    <br />
+                    <asp:Label ID="lblInfo1" runat="server" Visible="True" Font-Bold="true">Las columnas subrayadas en amarillo son requeridas para poder dar de alta al empleado.</asp:Label>
+                    <br />
+                    <br />
+                    <asp:Label ID="lblInfo2" runat="server" Visible="True" Font-Bold="true">El formato de fecha es Dia/Mes/Año.</asp:Label>
                 </div>
             </div>
             <br />
