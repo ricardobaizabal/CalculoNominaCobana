@@ -364,12 +364,11 @@
                                 </td>
                             </tr>
                             <tr style="height: 30px;">
-                                <td style="width: 10%;">
+                                <td style="width: 12%;">
                                     <label class="control-label">Concepto</label>
                                 </td>
                                 <td colspan="3">
-                                    <%--<asp:DropDownList ID="cmbConcepto" AutoPostBack="true" Width="98%" runat="server"></asp:DropDownList>--%>
-                                    <telerik:RadComboBox ID="cmbConcepto" runat="server" TabIndex="3" Width="98%"></telerik:RadComboBox>
+                                    <telerik:RadComboBox ID="cmbConcepto" runat="server" AutoPostBack="true" TabIndex="3" Width="98%"></telerik:RadComboBox>
                                 </td>
                                 <td colspan="4">
                                     <telerik:RadButton ID="btnAgregar" RenderMode="Lightweight" runat="server" Width="150px" Skin="Bootstrap" TabIndex="6" CssClass="rbPrimaryButton" Text="Agregar Concepto"></telerik:RadButton>
@@ -378,7 +377,7 @@
                                 </td>
                             </tr>
                             <tr style="height: 30px;">
-                                <td style="width: 10%;">
+                                <td style="width: 12%;">
                                     <label class="control-label">Unidad</label>
                                 </td>
                                 <td style="width: 15%;">
@@ -387,13 +386,19 @@
                                         <ClientEvents OnValueChanged="setDisplayValue" OnLoad="setDisplayValue" />
                                     </telerik:RadNumericTextBox>
                                 </td>
-                                <td style="width: 10%;">
+                                <td style="width: 12%;">
                                     <label class="control-label">Importe</label>
                                 </td>
-                                <td style="width: 10%;">
+                                <td style="width: 15%;">
                                     <telerik:RadNumericTextBox ID="txtImporteIncidencia" runat="server" Value="0" MinValue="0" NumberFormat-DecimalDigits="4" Type="Currency" TabIndex="5" Width="100px" AutoPostBack="false"></telerik:RadNumericTextBox>
                                 </td>
-                                <td style="width: 10%;">
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 12%;">
                                     <asp:Label ID="lblDiasHorasExtra" Font-Bold="true" Visible="false" Text="Dias Horas Extra" runat="server"></asp:Label>
                                 </td>
                                 <td style="width: 15%;">
@@ -402,9 +407,16 @@
                                 <td style="width: 12%;">
                                     <asp:Label ID="lblTipoHorasExtra" Font-Bold="true" Visible="false" Text="Tipo Horas Extra" runat="server"></asp:Label>
                                 </td>
-                                <td>
-                                    <asp:DropDownList ID="cmbTipoHorasExtra" AutoPostBack="true" Visible="false" Width="92%" TabIndex="9" runat="server"></asp:DropDownList>
+                                <td style="width: 15%;">
+                                    <telerik:RadComboBox ID="cmbTipoHorasExtra" AutoPostBack="true" Visible="false" Width="92%" TabIndex="9" runat="server"></telerik:RadComboBox>
                                 </td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="8">&nbsp;</td>
                             </tr>
                         </table>
                     </div>

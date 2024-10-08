@@ -8,7 +8,6 @@
     End Sub
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         Dim cPeriodo As New Entities.Periodo
-
         Dim cEmpresa As New Entities.Empresa
         cEmpresa.IdEmpresa = Session("clienteid")
         cEmpresa.IdUsuario = Session("usuarioid")
@@ -29,6 +28,9 @@
     Private Sub resetControles()
         calFechaInicio.Clear()
         registroId.Value = 0
+    End Sub
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+        Response.Redirect("PeriodosMensuales.aspx")
     End Sub
 
 End Class

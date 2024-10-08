@@ -121,7 +121,7 @@
     <value>= IsNull(Parameters.txtLeyenda.Value,"RECIBÍ DE LA COMPAÑIA ARRIBA MENCIONADA EL TOTAL DE LOS VALORES ANOTADOS EN ESTE DOCUMENTO EN MONEDA NACIONAL POR CONCEPTO DE MIS PERCEPCIONES DEVENGADAS EN EL PERIODO QUE SE INDICA, INCLUYENDO TIEMPO ORDINARIO, EXTRAORDINARIO, SÉPTIMO DÍA Y DEMÁS PRESTACIONES A MI FAVOR, NO ADEUDANDOSE HASTA LA FECHA CANTIDAD ALGUNA POR LOS CONCEPTOS ANTES MENCIONADOS ACEPTANDO QUE LAS DEDUCCIONES QUE APARECEN FUERON PREVIAMENTE AUTORIZADAS POR MI.")</value>
   </data>
   <metadata name="$this.Zoom" type="System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>2</value>
+    <value>3</value>
   </metadata>
   <metadata name="$this.ShowSnapGrid" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

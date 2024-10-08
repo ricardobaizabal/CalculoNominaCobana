@@ -30,4 +30,8 @@
         calFechaInicio.Clear()
         registroId.Value = 0
     End Sub
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+        Response.Redirect("PeriodosCatorcenales.aspx")
+    End Sub
+
 End Class

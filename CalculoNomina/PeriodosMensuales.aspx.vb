@@ -3,9 +3,6 @@ Imports Telerik.Web.UI
 
 Public Class PeriodosMensuales
     Inherits System.Web.UI.Page
-    'Private IdEmpresa As Integer = 0
-    Private IdEjercicio As Integer = 0
-    Private Periodo As Integer = 0
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
@@ -13,7 +10,6 @@ Public Class PeriodosMensuales
             registroId.Value = 0
         End If
     End Sub
-
     Private Sub CargarVariablesGenerales()
 
         Dim dt As New DataTable()
@@ -25,11 +21,10 @@ Public Class PeriodosMensuales
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
-                IdEjercicio = oDataRow("IdEjercicio")
+                ejercicioId.Value = oDataRow("IdEjercicio")
             Next
         End If
     End Sub
-
     Private Sub btnAgregar_Click(sender As Object, e As EventArgs) Handles btnAgregar.Click
         Response.Redirect("~/AgregarPeriodosMensuales.aspx")
     End Sub
@@ -47,9 +42,8 @@ Public Class PeriodosMensuales
     End Sub
     Private Sub GridPeriodosMensuales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosMensuales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = Session("clienteid")
         cPeriodo.IdTipoNomina = 4 'Mensual
-        cPeriodo.IdEjercicio = IdEjercicio
+        cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosMensuales.DataSource = cPeriodo.ConsultarPeriodo
         cPeriodo = Nothing
     End Sub
@@ -59,9 +53,8 @@ Public Class PeriodosMensuales
         cPeriodo.EliminaPeriodo()
 
         cPeriodo = New Entities.Periodo
-        'cPeriodo.IdEmpresa = Session("clienteid")
         cPeriodo.IdTipoNomina = 4 'Mensual
-
+        cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosMensuales.DataSource = cPeriodo.ConsultarPeriodo()
         GridPeriodosMensuales.DataBind()
         cPeriodo = Nothing

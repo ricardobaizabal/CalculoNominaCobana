@@ -1326,6 +1326,7 @@
     <Content Include="IncidenciasAguinaldo.aspx" />
     <Content Include="IncidenciasCatorcenal.aspx" />
     <Content Include="IncidenciasExtraordinaria.aspx" />
+    <Content Include="IncidenciasMensual.aspx" />
     <Content Include="IncidenciasQuincenal.aspx" />
     <Content Include="IncidenciasWindow.aspx" />
     <Content Include="js\bootstrap.js" />
@@ -1773,6 +1774,7 @@
     <Content Include="ModificacionGeneralAguinaldo.aspx" />
     <Content Include="ModificacionGeneralCatorcenal.aspx" />
     <Content Include="ModificacionGeneralExtraordinaria.aspx" />
+    <Content Include="ModificacionGeneralMensual.aspx" />
     <Content Include="ModificacionGeneralQuincenal.aspx" />
     <Content Include="ModificacionGeneralSemanal.aspx" />
     <Content Include="ModificacionNominaSemanalNormal.aspx" />
@@ -3829,6 +3831,7 @@
     </Compile>
     <Compile Include="AgregarPeriodosMensuales.aspx.vb">
       <DependentUpon>AgregarPeriodosMensuales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AgregarPeriodosQuincenales.aspx.designer.vb">
       <DependentUpon>AgregarPeriodosQuincenales.aspx</DependentUpon>
@@ -3898,6 +3901,7 @@
     </Compile>
     <Compile Include="EditorPeriodosMensuales.aspx.vb">
       <DependentUpon>EditorPeriodosMensuales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FiniquitosCatorcenal.aspx.designer.vb">
       <DependentUpon>FiniquitosCatorcenal.aspx</DependentUpon>
@@ -3918,6 +3922,7 @@
     </Compile>
     <Compile Include="FiniquitosGeneradosMensual.aspx.vb">
       <DependentUpon>FiniquitosGeneradosMensual.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FiniquitosGeneradosQuincenal.aspx.designer.vb">
       <DependentUpon>FiniquitosGeneradosQuincenal.aspx</DependentUpon>
@@ -3938,6 +3943,7 @@
     </Compile>
     <Compile Include="FiniquitosMensual.aspx.vb">
       <DependentUpon>FiniquitosMensual.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FiniquitosQuincenal.aspx.designer.vb">
       <DependentUpon>FiniquitosQuincenal.aspx</DependentUpon>
@@ -4023,6 +4029,13 @@
       <DependentUpon>IncidenciasExtraordinaria.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="IncidenciasMensual.aspx.designer.vb">
+      <DependentUpon>IncidenciasMensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="IncidenciasMensual.aspx.vb">
+      <DependentUpon>IncidenciasMensual.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="IncidenciasQuincenal.aspx.designer.vb">
       <DependentUpon>IncidenciasQuincenal.aspx</DependentUpon>
     </Compile>
@@ -4086,6 +4099,13 @@
       <DependentUpon>ModificacionGeneralExtraordinaria.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ModificacionGeneralMensual.aspx.designer.vb">
+      <DependentUpon>ModificacionGeneralMensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ModificacionGeneralMensual.aspx.vb">
+      <DependentUpon>ModificacionGeneralMensual.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="ModificacionGeneralQuincenal.aspx.designer.vb">
       <DependentUpon>ModificacionGeneralQuincenal.aspx</DependentUpon>
     </Compile>
@@ -4133,6 +4153,7 @@
     </Compile>
     <Compile Include="PeriodosMensuales.aspx.vb">
       <DependentUpon>PeriodosMensuales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PTU.aspx.designer.vb">
       <DependentUpon>PTU.aspx</DependentUpon>
@@ -4818,7 +4839,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
+      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

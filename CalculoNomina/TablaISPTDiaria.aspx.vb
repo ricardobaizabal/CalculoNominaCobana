@@ -16,9 +16,6 @@ Public Class TablaISPTDiaria
                 Response.Redirect("~/EditorTablaISPTDiaria.aspx?id=" & e.CommandArgument)
         End Select
     End Sub
-    Protected Sub GridTarifaDiaria_EditCommand(sender As Object, e As Telerik.Web.UI.GridBatchEditingEventArgs) Handles GridTarifaDiaria.BatchEditCommand
-
-    End Sub
     Protected Sub GridTarifaDiaria_ItemUpdated(source As Object, e As Telerik.Web.UI.GridUpdatedEventArgs) Handles GridTarifaDiaria.ItemUpdated
         Dim item As GridEditableItem = DirectCast(e.Item, GridEditableItem)
         Dim id As [String] = item.GetDataKeyValue("IdTarifa").ToString()
@@ -27,11 +24,7 @@ Public Class TablaISPTDiaria
             e.KeepInEditMode = True
             e.ExceptionHandled = True
             MsgBox("Product with ID " + id + " cannot be updated. Reason: " + e.Exception.Message)
-        Else
-
         End If
-    End Sub
-    Protected Sub GridTarifaDiaria_ItemCreated(ByVal sender As Object, ByVal e As GridItemEventArgs)
     End Sub
 
 End Class

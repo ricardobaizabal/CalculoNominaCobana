@@ -53,7 +53,9 @@
             <tr>
                 <td>&nbsp;</td>
                 <td align="right">
-                    <telerik:RadButton ID="btnSave" RenderMode="Lightweight" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Guadar" CausesValidation="true" ValidationGroup="vgGuardar"></telerik:RadButton>
+                    <telerik:RadButton ID="btnCancel" runat="server" Text="Cancelar" Width="90px" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
+                    &nbsp;
+                    <telerik:RadButton ID="btnSave" RenderMode="Lightweight" runat="server" Width="90px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Guadar"></telerik:RadButton>
                 </td>
                 <td>&nbsp;</td>
             </tr>

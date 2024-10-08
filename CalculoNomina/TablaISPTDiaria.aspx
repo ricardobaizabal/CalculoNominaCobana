@@ -11,12 +11,12 @@
         <div class="col-lg-12 b-r">
             <br />
             <br />
-            <h3 class="m-t-none m-b">Tarifas ISR retención diaria</h3>
+            <h2 class="m-t-none m-b">TARIFAS ISR RETENCIÓN DIARIA</h2>
             <hr class="demo-separator" />
             <br />
             <telerik:RadGrid ID="GridTarifaDiaria" runat="server" AutoGenerateColumns="false" AllowPaging="false" PageSize="50"
-                CellSpacing="0" GridLines="None" Skin="Bootstrap" OnBatchEditCommand="GridTarifaDiaria_EditCommand" AllowAutomaticDeletes="True" AllowSorting="true"
-                AllowAutomaticInserts="True" OnItemUpdated="GridTarifaDiaria_ItemUpdated" AllowAutomaticUpdates="True" DataSourceID="SqlDataSource1">
+                CellSpacing="0" GridLines="None" Skin="Bootstrap" AllowAutomaticDeletes="True" AllowSorting="true"
+                AllowAutomaticInserts="True" AllowAutomaticUpdates="True" DataSourceID="SqlDataSource1">
                 <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
                 </ClientSettings>
                 <MasterTableView CommandItemDisplay="Bottom" DataKeyNames="IdTarifa" DataSourceID="SqlDataSource1" HorizontalAlign="NotSet"
@@ -26,19 +26,11 @@
                     <CommandItemSettings CancelChangesText="Cancelar" />
                     <CommandItemSettings ShowRefreshButton="false" />
                     <CommandItemSettings ExportToPdfText="Export to PDF" />
-
                     <BatchEditingSettings EditType="Cell" />
                     <%--<SortExpressions>
                         <telerik:GridSortExpression FieldName="IdTarifa" SortOrder="Descending" />
                     </SortExpressions>--%>
-
                     <Columns>
-                        <%--<telerik:GridTemplateColumn HeaderText="Folio" DataField="IdTarifa" SortExpression="IdTarifa" UniqueName="IdTarifa">
-                            <ItemTemplate>
-                                <asp:LinkButton ID="lnkEdit" runat="server" CommandArgument='<%# Eval("IdTarifa") %>' CommandName="cmdEdit" Text='<%# Eval("IdTarifa") %>' CausesValidation="false"></asp:LinkButton>
-                            </ItemTemplate>
-                            <ItemStyle HorizontalAlign="Left" />
-                        </telerik:GridTemplateColumn>--%>
                         <telerik:GridBoundColumn DataField="pLimiteInferior" ItemStyle-HorizontalAlign="Left" SortExpression="pLimiteInferior" HeaderText="Limite Inferior" UniqueName="pLimiteInferior" DataFormatString="{0:N2}">
                         </telerik:GridBoundColumn>
                         <telerik:GridBoundColumn DataField="pLimiteSuperior" ItemStyle-HorizontalAlign="Left" SortExpression="pLimiteSuperior" HeaderText="Limite Superior" UniqueName="pLimiteSuperior" DataFormatString="{0:N2}">
@@ -52,7 +44,7 @@
                 <ClientSettings AllowKeyboardNavigation="true"></ClientSettings>
             </telerik:RadGrid>
             <br />
-            <telerik:RadButton ID="btnAgregar" RenderMode="Lightweight" runat="server" Skin="Bootstrap" Text="Agregar"></telerik:RadButton>
+            <telerik:RadButton ID="btnAgregar" RenderMode="Lightweight" runat="server" Skin="Bootstrap" Visible="false" Text="Agregar"></telerik:RadButton>
         </div>
     </telerik:RadAjaxPanel>
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Bootstrap" Width="100%">
@@ -70,4 +62,3 @@
         </UpdateParameters>
     </asp:SqlDataSource>
 </asp:Content>
-

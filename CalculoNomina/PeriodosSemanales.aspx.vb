@@ -4,9 +4,6 @@ Imports Telerik.Web.UI
 Public Class PeriodosSemanales
     Inherits System.Web.UI.Page
 
-    Private IdEjercicio As Integer = 0
-    Private Periodo As Integer = 0
-
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             Call CargarVariablesGenerales()
@@ -24,7 +21,7 @@ Public Class PeriodosSemanales
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
-                IdEjercicio = oDataRow("IdEjercicio")
+                ejercicioId.Value = oDataRow("IdEjercicio")
             Next
         End If
     End Sub
@@ -47,7 +44,7 @@ Public Class PeriodosSemanales
         Dim cPeriodo As New Entities.Periodo
         'cPeriodo.IdEmpresa = Session("clienteid")
         cPeriodo.IdTipoNomina = 1 'Semanal
-        cPeriodo.IdEjercicio = IdEjercicio
+        cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo
         cPeriodo = Nothing
     End Sub
@@ -61,7 +58,7 @@ Public Class PeriodosSemanales
         cPeriodo = New Entities.Periodo
         'cPeriodo.IdEmpresa = Session("clienteid")
         cPeriodo.IdTipoNomina = 1 'Semanal
-        cPeriodo.IdEjercicio = IdEjercicio
+        cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo()
         GridPeriodosSemanales.DataBind()
         cPeriodo = Nothing

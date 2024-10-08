@@ -407,7 +407,7 @@ Partial Public Class IncidenciasWindow
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents cmbTipoHorasExtra As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents cmbTipoHorasExtra As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control btnEliminarConcepto.

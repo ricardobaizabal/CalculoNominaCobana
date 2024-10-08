@@ -13,6 +13,7 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
+    <asp:HiddenField ID="ejercicioId" runat="server" Value="0" Visible="False" />
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1">
         <div class="col-lg-12 b-r">
             <br />

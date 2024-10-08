@@ -17,6 +17,9 @@ Public Class ListadoNominaMensual
             CargarGridNominas()
             CargaPeriodos(cmbPeriodicidad.SelectedValue)
             cmbPeriodicidad.Enabled = False
+
+            Session("Folio") = Nothing
+
         End If
     End Sub
 
@@ -96,6 +99,7 @@ Public Class ListadoNominaMensual
     End Sub
 
     Private Sub btnAgregarNominaE_Click(sender As Object, e As EventArgs) Handles btnAgregarNominaE.Click
+        Session("Folio") = Nothing
         Response.Redirect("GeneracionDeNominaMensualNormal.aspx")
     End Sub
 

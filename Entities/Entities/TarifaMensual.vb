@@ -4,6 +4,7 @@
     Private _LimiteSuperior As Double
     Private _CuotaFija As Double
     Private _PorcSobreExcli As Double
+    Private _ImporteMensual As Decimal
 
     Public Sub New()
         _IdTarifa = 0
@@ -11,6 +12,7 @@
         _LimiteSuperior = 0
         _CuotaFija = 0
         _PorcSobreExcli = 0
+        _ImporteMensual = 0
     End Sub
     Public Property IdTarifa() As Int32
         Get
@@ -52,4 +54,13 @@
             _PorcSobreExcli = value
         End Set
     End Property
+    Public Property ImporteMensual() As Decimal
+        Get
+            Return _ImporteMensual
+        End Get
+        Set(ByVal value As Decimal)
+            _ImporteMensual = value
+        End Set
+    End Property
+
 End Class

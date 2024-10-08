@@ -3182,15 +3182,21 @@ Public Class GeneracionDeNominaCatorcenal
                     Incapacidades = CrearNodo("nomina12:Incapacidades")
 
                     For Each oDataRowDeducciones In dt.Rows
-                        If oDataRowDeducciones("CvoConcepto").ToString = "59" Then ' INCAPACIDAD POR ENFERMEDAD
+                        If oDataRowDeducciones("CvoConcepto").ToString = "162" Then ' INCAPACIDAD POR RIESGO DE TRABAJO
+                            ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
+                            Incapacidad = CrearNodo("nomina12:Incapacidad")
+                            Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
+                            Incapacidad.SetAttribute("TipoIncapacidad", "01")
+                            Incapacidad.SetAttribute("ImporteMonetario", MyRound(Convert.ToDecimal(oDataRowDeducciones("Importe"))))
+                            Incapacidades.AppendChild(Incapacidad)
+                        ElseIf oDataRowDeducciones("CvoConcepto").ToString = "059" Then ' INCAPACIDAD POR ENFERMEDAD GENERAL
                             ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
                             Incapacidad = CrearNodo("nomina12:Incapacidad")
                             Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
                             Incapacidad.SetAttribute("TipoIncapacidad", "02")
                             Incapacidad.SetAttribute("ImporteMonetario", MyRound(Convert.ToDecimal(oDataRowDeducciones("Importe"))))
                             Incapacidades.AppendChild(Incapacidad)
-                        End If
-                        If oDataRowDeducciones("CvoConcepto").ToString = "161" Then ' INCAPACIDAD POR MATERNIDAD
+                        ElseIf oDataRowDeducciones("CvoConcepto").ToString = "161" Then ' INCAPACIDAD POR MATERNIDAD
                             ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
                             Incapacidad = CrearNodo("nomina12:Incapacidad")
                             Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
@@ -3532,11 +3538,11 @@ Public Class GeneracionDeNominaCatorcenal
                     reporte.ReportParameters("txtEmpleadoFechaIngreso").Value = GetXmlAttribute(FolioXml, "FechaInicioRelLaboral", "nomina12:Receptor").ToString
                     reporte.ReportParameters("txtNoPeriodoPago").Value = row("no_periodo")
 
-                    Try
-                        reporte.ReportParameters("txtEmpleadoAntiguedad").Value = GetXmlAttribute(FolioXml, "Antigüedad", "nomina12:Receptor").ToString
-                    Catch ex As Exception
-                        reporte.ReportParameters("txtEmpleadoAntiguedad").Value = ""
-                    End Try
+                    'Try
+                    '    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = GetXmlAttribute(FolioXml, "Antigüedad", "nomina12:Receptor").ToString
+                    'Catch ex As Exception
+                    '    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = ""
+                    'End Try
 
                     reporte.ReportParameters("txtEmpleadoRegimen").Value = GetXmlAttribute(FolioXml, "TipoRegimen", "nomina12:Receptor").ToString & " - " & row("RegimenFiscalEmpleado").ToUpper
 

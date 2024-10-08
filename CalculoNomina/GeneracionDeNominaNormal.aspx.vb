@@ -13,7 +13,6 @@ Imports System.Data.SqlClient
 Imports System.Data
 Imports System.Globalization
 Imports Telerik.Web.UI.Calendar
-
 Public Class GeneracionDeNominaNormal
     Inherits System.Web.UI.Page
     Dim ObjData As New DataControl()
@@ -2163,38 +2162,46 @@ Public Class GeneracionDeNominaNormal
             btnModificacionDeNomina.Enabled = True
             btnGenerarNominaElectronica.Enabled = True
 
+            Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
+            If (rowGenerados.Length > 0) Then
+                btnGeneraTxtDispersion.Enabled = True
+                If rowGenerados.Length < dt.Rows.Count Then
+                    btnModificacionDeNomina.Enabled = True
+                    btnGenerarNominaElectronica.Enabled = True
+                    btnTimbrarNominaSemanal.Enabled = False
+                Else
+                    btnGenerarNominaElectronica.Enabled = False
+                    btnTimbrarNominaSemanal.Enabled = True
+                End If
+            ElseIf rowGenerados.Length = 0 Then
+                btnGenerarNominaElectronica.Enabled = True
+                btnTimbrarNominaSemanal.Enabled = False
+            End If
+
             Dim rowTimbrado() As DataRow = dt.Select("Timbrado='S'")
             If (rowTimbrado.Length > 0) Then
+                btnGeneraNomina.Enabled = False
+                btnModificacionDeNomina.Enabled = False
                 btnGeneraTxtDispersion.Enabled = True
                 btnGenerarPDF.Enabled = True
                 btnDescargarXMLS.Enabled = True
                 btnBorrarNomina.Enabled = False
-                If rowTimbrado.Length < dt.Rows.Count Then
-                    btnTimbrarNominaSemanal.Enabled = True
-                Else
+
+                If rowGenerados.Length < dt.Rows.Count Then
                     btnTimbrarNominaSemanal.Enabled = False
+                Else
+                    If rowTimbrado.Length < dt.Rows.Count Then
+                        btnTimbrarNominaSemanal.Enabled = True
+                    Else
+                        btnTimbrarNominaSemanal.Enabled = False
+                    End If
                 End If
+
             ElseIf rowTimbrado.Length = 0 Then
                 btnBorrarNomina.Enabled = True
                 btnTimbrarNominaSemanal.Enabled = True
                 btnGenerarPDF.Enabled = False
                 btnGeneraTxtDispersion.Enabled = False
-            End If
-
-            Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
-            If (rowGenerados.Length > 0) Then
-                btnBorrarNomina.Enabled = False
-                btnGeneraTxtDispersion.Enabled = True
-                If rowGenerados.Length < dt.Rows.Count Then
-                    btnModificacionDeNomina.Enabled = True
-                    btnGenerarNominaElectronica.Enabled = True
-                Else
-                    btnModificacionDeNomina.Enabled = False
-                    btnGenerarNominaElectronica.Enabled = False
-                End If
-            ElseIf rowGenerados.Length = 0 Then
-                btnGenerarNominaElectronica.Enabled = True
-                btnTimbrarNominaSemanal.Enabled = False
             End If
 
             Dim rowPdf() As DataRow = dt.Select("Pdf='S'")
@@ -3262,15 +3269,21 @@ Public Class GeneracionDeNominaNormal
                     Incapacidades = CrearNodo("nomina12:Incapacidades")
 
                     For Each oDataRowDeducciones In dt.Rows
-                        If oDataRowDeducciones("CvoConcepto").ToString = "59" Then ' INCAPACIDAD POR ENFERMEDAD
+                        If oDataRowDeducciones("CvoConcepto").ToString = "162" Then ' INCAPACIDAD POR RIESGO DE TRABAJO
+                            ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
+                            Incapacidad = CrearNodo("nomina12:Incapacidad")
+                            Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
+                            Incapacidad.SetAttribute("TipoIncapacidad", "01")
+                            Incapacidad.SetAttribute("ImporteMonetario", MyRound(Convert.ToDecimal(oDataRowDeducciones("Importe"))))
+                            Incapacidades.AppendChild(Incapacidad)
+                        ElseIf oDataRowDeducciones("CvoConcepto").ToString = "059" Then ' INCAPACIDAD POR ENFERMEDAD GENERAL
                             ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
                             Incapacidad = CrearNodo("nomina12:Incapacidad")
                             Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
                             Incapacidad.SetAttribute("TipoIncapacidad", "02")
                             Incapacidad.SetAttribute("ImporteMonetario", MyRound(Convert.ToDecimal(oDataRowDeducciones("Importe"))))
                             Incapacidades.AppendChild(Incapacidad)
-                        End If
-                        If oDataRowDeducciones("CvoConcepto").ToString = "161" Then ' INCAPACIDAD POR MATERNIDAD
+                        ElseIf oDataRowDeducciones("CvoConcepto").ToString = "161" Then ' INCAPACIDAD POR MATERNIDAD
                             ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
                             Incapacidad = CrearNodo("nomina12:Incapacidad")
                             Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
@@ -3605,11 +3618,11 @@ Public Class GeneracionDeNominaNormal
                     reporte.ReportParameters("txtEmpleadoFechaIngreso").Value = GetXmlAttribute(FolioXml, "FechaInicioRelLaboral", "nomina12:Receptor").ToString
                     reporte.ReportParameters("txtNoPeriodoPago").Value = row("no_periodo")
 
-                    Try
-                        reporte.ReportParameters("txtEmpleadoAntiguedad").Value = GetXmlAttribute(FolioXml, "Antigüedad", "nomina12:Receptor").ToString
-                    Catch ex As Exception
-                        reporte.ReportParameters("txtEmpleadoAntiguedad").Value = ""
-                    End Try
+                    'Try
+                    '    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = GetXmlAttribute(FolioXml, "Antigüedad", "nomina12:Receptor").ToString
+                    'Catch ex As Exception
+                    '    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = ""
+                    'End Try
 
                     reporte.ReportParameters("txtEmpleadoRegimen").Value = GetXmlAttribute(FolioXml, "TipoRegimen", "nomina12:Receptor").ToString & " - " & row("RegimenFiscalEmpleado").ToUpper
 

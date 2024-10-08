@@ -34,7 +34,7 @@ Partial Public Class TarifaMensual
     End Sub
     Public Function ConsultarTarifaMensual() As DataTable
         p.Clear()
-        p.Add(New SqlParameter("@pImportePeriodo", CuotaFija))
+        p.Add(New SqlParameter("@pImportePeriodo", ImporteMensual))
         dt = db.ExecuteSP("pConsultarValoresTarifaMensual", p)
         Return dt
     End Function

@@ -212,7 +212,7 @@ Public Class GeneracionDeNominaMensualNormal
             objCat.CatalogoRad(cmbPeriodicidad, cConcepto.ConsultarPeriodoPago2, True, False)
             objCat = Nothing
 
-            cmbPeriodicidad.SelectedValue = 3
+            cmbPeriodicidad.SelectedValue = 4
 
             If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
                 Dim folio As Integer = Integer.Parse(Session("Folio").ToString())
@@ -225,11 +225,11 @@ Public Class GeneracionDeNominaMensualNormal
                 cmbPeriodo_SelectedIndexChanged(cmbPeriodo, EventArgs.Empty)
 
                 ' Eliminar el folio de la sesión después de haberlo utilizado
-                Session.Remove("Folio")
-                Session("Folio") = Nothing
+                'Session.Remove("Folio")
+                'Session("Folio") = Nothing
             ElseIf Not String.IsNullOrEmpty(Request("id")) Then
                 periodoID.Value = Request("id")
-                cmbPeriodicidad.SelectedValue = 3
+                cmbPeriodicidad.SelectedValue = 4
                 cmbCliente.SelectedValue = Session("ClienteIDNomina")
                 CargaPeriodos(cmbPeriodicidad.SelectedValue)
                 cmbPeriodo.SelectedValue = Session("PeriodoIDNomina")
@@ -264,7 +264,6 @@ Public Class GeneracionDeNominaMensualNormal
     Protected Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
         Response.Redirect("ListadoNominaMensual.aspx")
     End Sub
-    'Exportar / Importar'
     Protected Sub btnExportar_Click(sender As Object, e As EventArgs) Handles btnExportar.Click
 
         Call CargarVariablesGenerales()
@@ -389,7 +388,7 @@ Public Class GeneracionDeNominaMensualNormal
             WinPeriodoSave.Title = "Agregar periodo " & cmbPeriodicidad.SelectedItem.Text.ToLower.Trim
             periodicidadid.Value = cmbPeriodicidad.SelectedValue
             fchInicioPeriodo.SelectedDate = DateTime.Now
-            fchFinPeriodo.SelectedDate = DateTime.Now.AddDays(15)
+            fchFinPeriodo.SelectedDate = DateTime.Now.AddDays(30)
         End If
 
     End Sub
@@ -453,11 +452,17 @@ Public Class GeneracionDeNominaMensualNormal
         Nomina.Periodo = cmbPeriodo.SelectedValue
         Nomina.FechaPago = fchPago.SelectedDate
 
-        Dim idNomina As DataTable = Nomina.InsertaCampoNomina(cmbCliente.SelectedValue)
-        Dim _Nominaid As Integer
-        For Each row As DataRow In idNomina.Rows
-            _Nominaid = Convert.ToInt32(row(0))
-        Next
+        Dim _Nominaid As Integer = 0
+        If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+            _Nominaid = Integer.Parse(Session("Folio").ToString())
+        Else
+            Dim idNomina As DataTable = Nomina.InsertaCampoNomina(cmbCliente.SelectedValue)
+            For Each row As DataRow In idNomina.Rows
+                _Nominaid = Convert.ToInt32(row(0))
+                Session("Folio") = Convert.ToInt32(row(0))
+            Next
+        End If
+
         dt = Nomina.ConsultarEmpleadosMensual()
         Nomina = Nothing
 
@@ -472,8 +477,8 @@ Public Class GeneracionDeNominaMensualNormal
 
                 i += 1
 
-                'Dias = 15
-                Dias = oDataRow("Dias") + 1
+                'Dias = oDataRow("Dias") + 1
+                Dias = oDataRow("Dias")
                 ImporteDiario = 0
                 ImportePeriodo = 0
                 Impuesto = 0
@@ -482,8 +487,8 @@ Public Class GeneracionDeNominaMensualNormal
                 UMA = 0
                 UMI = 0
 
-                If Dias > 15 Then
-                    Dias = 15
+                If Dias > 31 Then
+                    Dias = 30
                 End If
 
                 If oDataRow("ClaveRegimenContratacion") = 2 Then 'Sueldos y salarios
@@ -503,7 +508,7 @@ Public Class GeneracionDeNominaMensualNormal
                     Imss = Math.Round(Imss, 6)
                 End If
 
-                Impuesto = Impuesto * Dias
+                'Impuesto = Impuesto * Dias
                 Impuesto = Math.Round(Impuesto, 6)
 
                 GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), Math.Round(ImporteDiario, 6), oDataRow("ClaveRegimenContratacion"), _Nominaid)
@@ -1562,12 +1567,12 @@ Public Class GeneracionDeNominaMensualNormal
         Try
             Impuesto = 0
             Dim dt As New DataTable()
-            Dim TarifaDiaria As New TarifaDiaria()
-            TarifaDiaria.ImporteDiario = ImporteDiario
-            dt = TarifaDiaria.ConsultarValoresTarifaDiaria()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = ImportePeriodo
+            dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
-                Impuesto = ((ImporteDiario - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = ((ImportePeriodo - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
             End If
 
         Catch oExcep As Exception
@@ -1579,7 +1584,7 @@ Public Class GeneracionDeNominaMensualNormal
             Subsidio = 0
             Dim dt As New DataTable()
             Dim TablaSubsidioDiario As New TablaSubsidioDiario()
-            TablaSubsidioDiario.Importe = ImporteDiario
+            TablaSubsidioDiario.Importe = ImportePeriodo
             dt = TablaSubsidioDiario.ConsultarSubsidioDiario()
             If dt.Rows.Count > 0 Then
                 Subsidio = dt.Rows(0).Item("Subsidio")
@@ -1627,7 +1632,7 @@ Public Class GeneracionDeNominaMensualNormal
                 'cNomina.CvoConcepto = 85
                 cNomina.IdContrato = IdContrato
                 cNomina.TipoConcepto = "P"
-                cNomina.Unidad = 15
+                cNomina.Unidad = Dias
                 cNomina.Importe = ImportePeriodo
                 cNomina.ImporteGravado = ImportePeriodo
                 cNomina.ImporteExento = 0
@@ -1839,7 +1844,7 @@ Public Class GeneracionDeNominaMensualNormal
             cPeriodo.ConsultarPeriodoID()
 
             If cPeriodo.FechaPago.ToString.Length > 0 Then
-                If IsNothing(CDate(cPeriodo.FechaPago)) Then
+                If Not IsNothing(CDate(cPeriodo.FechaPago)) Then
                     fchPago.SelectedDate = CDate(cPeriodo.FechaPago)
                 End If
             End If
@@ -1971,15 +1976,15 @@ Public Class GeneracionDeNominaMensualNormal
         grdEmpleadosMensual.DataBind()
 
         ' Ordena el DataTable por la columna fechaPago
-        Dim dv As New DataView(dtEmpleados)
-        dv.Sort = "FechaPago ASC"
+        'Dim dv As New DataView(dtEmpleados)
+        'dv.Sort = "FechaPago ASC"
 
-        ' Obtén el primer valor de la columna fechaPago
-        Dim firstFechaPago As DateTime = CType(dv(0)("FechaPago"), DateTime)
+        '' Obtén el primer valor de la columna fechaPago
+        'Dim firstFechaPago As DateTime = CType(dv(0)("FechaPago"), DateTime)
 
-        ' Guarda el primer valor en una variable
-        fchPago.SelectedDate = firstFechaPago
-        fchPago.Enabled = False
+        '' Guarda el primer valor en una variable
+        'fchPago.SelectedDate = firstFechaPago
+        'fchPago.Enabled = False
 
         cNomina = Nothing
     End Sub
@@ -2179,7 +2184,10 @@ Public Class GeneracionDeNominaMensualNormal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.EliminaNomina()
 
-            Response.Redirect("~/GeneracionDeNominaMensualNormal.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
+            Call CargarGridEmpleadosMensual()
+            Call BloquearBotones()
+
+            'Response.Redirect("~/GeneracionDeNominaMensualNormal.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
 
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -3128,15 +3136,21 @@ Public Class GeneracionDeNominaMensualNormal
                     Incapacidades = CrearNodo("nomina12:Incapacidades")
 
                     For Each oDataRowDeducciones In dt.Rows
-                        If oDataRowDeducciones("CvoConcepto").ToString = "59" Then ' INCAPACIDAD POR ENFERMEDAD
+                        If oDataRowDeducciones("CvoConcepto").ToString = "162" Then ' INCAPACIDAD POR RIESGO DE TRABAJO
+                            ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
+                            Incapacidad = CrearNodo("nomina12:Incapacidad")
+                            Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
+                            Incapacidad.SetAttribute("TipoIncapacidad", "01")
+                            Incapacidad.SetAttribute("ImporteMonetario", MyRound(Convert.ToDecimal(oDataRowDeducciones("Importe"))))
+                            Incapacidades.AppendChild(Incapacidad)
+                        ElseIf oDataRowDeducciones("CvoConcepto").ToString = "059" Then ' INCAPACIDAD POR ENFERMEDAD GENERAL
                             ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
                             Incapacidad = CrearNodo("nomina12:Incapacidad")
                             Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
                             Incapacidad.SetAttribute("TipoIncapacidad", "02")
                             Incapacidad.SetAttribute("ImporteMonetario", MyRound(Convert.ToDecimal(oDataRowDeducciones("Importe"))))
                             Incapacidades.AppendChild(Incapacidad)
-                        End If
-                        If oDataRowDeducciones("CvoConcepto").ToString = "161" Then ' INCAPACIDAD POR MATERNIDAD
+                        ElseIf oDataRowDeducciones("CvoConcepto").ToString = "161" Then ' INCAPACIDAD POR MATERNIDAD
                             ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
                             Incapacidad = CrearNodo("nomina12:Incapacidad")
                             Incapacidad.SetAttribute("DiasIncapacidad", Math.Round(Convert.ToDecimal(oDataRowDeducciones("Unidad")), 0))
@@ -3476,6 +3490,13 @@ Public Class GeneracionDeNominaMensualNormal
                     reporte.ReportParameters("txtEmpleadoDiasLaborados").Value = GetXmlAttribute(FolioXml, "NumDiasPagados", "nomina12:Nomina").ToString
                     reporte.ReportParameters("txtEmpleadoFechaIngreso").Value = GetXmlAttribute(FolioXml, "FechaInicioRelLaboral", "nomina12:Receptor").ToString
                     reporte.ReportParameters("txtNoPeriodoPago").Value = row("no_periodo")
+
+                    'Try
+                    '    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = GetXmlAttribute(FolioXml, "Antigüedad", "nomina12:Receptor").ToString
+                    'Catch ex As Exception
+                    '    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = ""
+                    'End Try
+
                     reporte.ReportParameters("txtEmpleadoRegimen").Value = GetXmlAttribute(FolioXml, "TipoRegimen", "nomina12:Receptor").ToString & " - " & row("RegimenFiscalEmpleado").ToUpper
 
                     Try
@@ -3725,7 +3746,7 @@ Public Class GeneracionDeNominaMensualNormal
                     reporte.ReportParameters("txtEmpleadoEstado").Value = emp_estado.ToString
                     reporte.ReportParameters("txtEmpleadoPais").Value = emp_pais.ToString
                     reporte.ReportParameters("txtEmpleadoFechaIngreso").Value = emp_fecha_ingreso.ToString
-                    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = emp_antiguedad.ToString
+                    'reporte.ReportParameters("txtEmpleadoAntiguedad").Value = emp_antiguedad.ToString
                     reporte.ReportParameters("txtEmpleadoRFC").Value = emp_rfc.ToString
                     reporte.ReportParameters("txtEmpleadoCURP").Value = emp_curp.ToString
                     reporte.ReportParameters("txtEmpleadoNoSeguroSocial").Value = emp_numero_seguro_social.ToString

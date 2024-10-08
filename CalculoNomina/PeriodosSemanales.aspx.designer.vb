@@ -23,6 +23,15 @@ Partial Public Class PeriodosSemanales
     Protected WithEvents registroId As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''Control ejercicioId.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents ejercicioId As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''Control RadAjaxPanel1.
     '''</summary>
     '''<remarks>

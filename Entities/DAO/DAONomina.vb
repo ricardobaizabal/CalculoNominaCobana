@@ -140,13 +140,12 @@ Partial Public Class Nomina
         dt = db.ExecuteSP("pConsultarEmpleadosQuincenal", p)
         Return dt
     End Function
-
     Public Function ConsultarEmpleadosMensual() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@pCliente", Cliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        dt = db.ExecuteSP("pConsultarEmpleadosQuincenal", p)
+        dt = db.ExecuteSP("pConsultarEmpleadosMensual", p)
         Return dt
     End Function
     Public Function ConsultarDatosGeneralesNomina() As DataTable

@@ -77,6 +77,15 @@ Partial Public Class EditorPeriodosQuincenales
     Protected WithEvents valFechapago As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
+    '''Control btnCancel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnCancel As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
     '''Control btnSave.
     '''</summary>
     '''<remarks>

@@ -13,8 +13,8 @@
                 cPeriodo.ConsultarPeriodoID()
                 If cPeriodo.IdPeriodo > 0 Then
                     txtNoPeriodo.Text = cPeriodo.NoPeriodo
-                    calFechaInicio.Enabled = False
-                    calFechaFin.Enabled = False
+                    'calFechaInicio.Enabled = False
+                    'calFechaFin.Enabled = False
                     registroId.Value = cPeriodo.IdPeriodo
                     calFechaInicio.SelectedDate = cPeriodo.FechaInicial
                     calFechaFin.SelectedDate = cPeriodo.FechaFinal
@@ -50,6 +50,9 @@
         calFechaFin.Clear()
         calfechaPago.Clear()
         registroId.Value = 0
+    End Sub
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+        Response.Redirect("PeriodosSemanales.aspx")
     End Sub
 
 End Class

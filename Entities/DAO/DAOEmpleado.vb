@@ -167,7 +167,7 @@ Partial Public Class Empleado
                 Clabe = dt.Rows(0).Item("clabe")
 
                 CuotaDiaria = dt.Rows(0).Item("sueldo_diario")
-                IntegradoImss = dt.Rows(0).Item("sueldo_diario_integrado")
+                IntegradoImss = dt.Rows(0).Item("salario_diario_integrado")
                 Descansosxsemana = dt.Rows(0).Item("descansos_por_semana")
                 Asimiladototalsemanal = dt.Rows(0).Item("asimilado_total_semanal")
                 Porcentajeimptocedularestatal = dt.Rows(0).Item("porcentaje_impto_cedular_estatal")

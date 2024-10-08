@@ -47,7 +47,7 @@
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
-        
+
         <asp:HiddenField ID="periodoId" runat="server" Value="0" />
         <asp:HiddenField ID="empresaId" runat="server" Value="0" />
         <asp:HiddenField ID="empleadoId" runat="server" Value="0" />
@@ -123,6 +123,13 @@
                         <GroupingSettings CaseSensitive="false" />
                         <MasterTableView AllowMultiColumnSorting="true" AllowFilteringByColumn="true" NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado, IdContrato, CuotaPeriodo, IntegradoIMSS, IdContrato, idNomina">
                             <Columns>
+                                <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" HeaderText="Editar">
+                                    <ItemTemplate>
+                                        <asp:ImageButton ID="lnkEditar" runat="server" ImageUrl="~/images/action_edit.png" />
+                                    </ItemTemplate>
+                                    <HeaderStyle HorizontalAlign="Center" />
+                                    <ItemStyle HorizontalAlign="Center" />
+                                </telerik:GridTemplateColumn>
                                 <telerik:GridBoundColumn DataField="NoEmpleado" ItemStyle-HorizontalAlign="Left" HeaderText="No. Empleado" UniqueName="NoEmpleado" AllowFiltering="false">
                                 </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="Empleado" ItemStyle-HorizontalAlign="Left" HeaderText="Empleado" UniqueName="Empleado" AllowFiltering="true" AutoPostBackOnFilter="true" CurrentFilterFunction="Contains" ShowFilterIcon="false">
@@ -201,13 +208,7 @@
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn DataField="Situacion" ItemStyle-HorizontalAlign="Left" HeaderText="Situacion" UniqueName="Situacion">
                                     </telerik:GridBoundColumn>--%>
-                                <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="" UniqueName="Incidencias">
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="lnkEditar" runat="server" Text="Editar" CommandArgument='<%# Eval("NoEmpleado") %>' TabIndex="-1"></asp:LinkButton>
-                                    </ItemTemplate>
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="" UniqueName="Eliminar">
+                                <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="Eliminar" UniqueName="Eliminar">
                                     <ItemTemplate>
                                         <asp:ImageButton ID="btnEliminar" runat="server" CausesValidation="false" CommandArgument='<% #Eval("NoEmpleado")%>' CommandName="cmdDelete" BorderStyle="None" ImageUrl="~/images/action_delete.gif" />
                                     </ItemTemplate>

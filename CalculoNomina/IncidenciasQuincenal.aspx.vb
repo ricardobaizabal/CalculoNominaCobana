@@ -297,9 +297,12 @@ Public Class IncidenciasQuincenal
             Dim cTipoHorasExtra As New Entities.TipoHorasExtra
 
             Dim objData As New DataControl
-            objData.Catalogo(cmbTipoHorasExtra, sel, cTipoHorasExtra.ConsultarTipoHorasExtra)
+            objData.CatalogoRad(cmbTipoHorasExtra, cTipoHorasExtra.ConsultarTipoHorasExtra, True, False)
             objData = Nothing
             cTipoHorasExtra = Nothing
+
+            cmbTipoHorasExtra.SelectedValue = sel
+
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
@@ -1817,6 +1820,20 @@ Public Class IncidenciasQuincenal
             txtImporteIncidencia.Text = (CuotaDiaria * 2) * UnidadIncidencia
         ElseIf cmbConcepto.SelectedValue.ToString = "9" And UnidadIncidencia > 0 Then
             txtImporteIncidencia.Text = (CuotaDiaria * 2) * UnidadIncidencia
+        ElseIf cmbConcepto.SelectedValue.ToString = "10" And UnidadIncidencia > 0 Then
+            Try
+                CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
+            Catch ex As Exception
+                CuotaDiaria = 0
+            End Try
+
+            If cmbTipoHorasExtra.SelectedValue = "01" Then 'Dobles
+                txtImporteIncidencia.Text = ((CuotaDiaria / 8) * 2) * UnidadIncidencia
+            ElseIf cmbTipoHorasExtra.SelectedValue = "02" Then 'Triples
+                txtImporteIncidencia.Text = ((CuotaDiaria / 8) * 3) * UnidadIncidencia
+            ElseIf cmbTipoHorasExtra.SelectedValue = "03" Then 'Simples
+                txtImporteIncidencia.Text = (CuotaDiaria / 8) * UnidadIncidencia
+            End If
         ElseIf cmbConcepto.SelectedValue.ToString = "11" And UnidadIncidencia > 0 Then
             txtImporteIncidencia.Text = PagoPorHora * UnidadIncidencia
         ElseIf cmbConcepto.SelectedValue.ToString = "13" And UnidadIncidencia > 0 Then
@@ -3904,4 +3921,5 @@ Public Class IncidenciasQuincenal
         ScriptManager.RegisterStartupScript(Me, GetType(RadWindow), "close", "CloseModal('" & pagina & "');", True)
 
     End Sub
+
 End Class

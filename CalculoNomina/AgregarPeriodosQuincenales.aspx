@@ -18,8 +18,7 @@
                 <td style="width: 20%;">
                     <telerik:RadDatePicker ID="calFechaInicio" CultureInfo="Español (México)" DateInput-DateFormat="dd/MM/yyyy" Width="100%" runat="server"></telerik:RadDatePicker>
                 </td>
-                <td>
-                    &nbsp;<asp:RequiredFieldValidator ID="ValidarFechaInicio" runat="server" ControlToValidate="calFechaInicio" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarFechaInicio" runat="server" ControlToValidate="calFechaInicio" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -30,20 +29,28 @@
                     <label class="control-label">Generar periodos para el resto del año</label>
                 </td>
                 <td style="width: 20%;">
-                    <asp:DropDownList ID="cmbGeneraPeriodos" runat="server" Width="100%">
-                        <asp:ListItem Value="0" Text="--Seleccione--"></asp:ListItem>
-                        <asp:ListItem Value="1" Text="Si"></asp:ListItem>
-                        <asp:ListItem Value="2" Text="No"></asp:ListItem>
-                    </asp:DropDownList>
+                    <telerik:RadComboBox ID="cmbGeneraPeriodos" runat="server" Width="100%">
+                        <Items>
+                            <telerik:RadComboBoxItem Value="0" Text="--Seleccione--" />
+                            <telerik:RadComboBoxItem Value="1" Text="Si" />
+                            <telerik:RadComboBoxItem Value="2" Text="No" />
+                        </Items>
+                    </telerik:RadComboBox>
                 </td>
-                <td>
-                    &nbsp;<asp:RequiredFieldValidator ID="ValidarGeneraPeriodos" runat="server" ControlToValidate="cmbGeneraPeriodos" InitialValue="0" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarGeneraPeriodos" runat="server" ControlToValidate="cmbGeneraPeriodos" InitialValue="0" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
                 <td align="right">
-                    <telerik:RadButton ID="btnSave" RenderMode="Lightweight" runat="server" Skin="Bootstrap" Text="Guadar"></telerik:RadButton>
+                    <telerik:RadButton ID="btnCancel" runat="server" Text="Cancelar" Width="90px" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
+                    &nbsp;
+                    <telerik:RadButton ID="btnSave" RenderMode="Lightweight" runat="server" Width="90px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Guadar"></telerik:RadButton>
                 </td>
                 <td>&nbsp;</td>
             </tr>

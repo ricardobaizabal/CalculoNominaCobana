@@ -214,6 +214,9 @@
                                             <li>
                                                 <a href="TablaISPTDiaria.aspx">Diaria</a>
                                             </li>
+                                            <li>
+                                                <a href="TablaISPTMensual.aspx">Mensual</a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li>

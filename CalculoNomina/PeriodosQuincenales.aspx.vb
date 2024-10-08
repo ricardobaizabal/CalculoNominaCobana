@@ -3,9 +3,6 @@ Imports Telerik.Web.UI
 
 Public Class PeriodosQuincenales
     Inherits System.Web.UI.Page
-    'Private IdEmpresa As Integer = 0
-    Private IdEjercicio As Integer = 0
-    Private Periodo As Integer = 0
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
@@ -13,7 +10,6 @@ Public Class PeriodosQuincenales
             registroId.Value = 0
         End If
     End Sub
-
     Private Sub CargarVariablesGenerales()
 
         Dim dt As New DataTable()
@@ -25,11 +21,10 @@ Public Class PeriodosQuincenales
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
-                IdEjercicio = oDataRow("IdEjercicio")
+                ejercicioId.Value = oDataRow("IdEjercicio")
             Next
         End If
     End Sub
-
     Private Sub btnAgregar_Click(sender As Object, e As EventArgs) Handles btnAgregar.Click
         Response.Redirect("~/AgregarPeriodosQuincenales.aspx")
     End Sub
@@ -49,7 +44,7 @@ Public Class PeriodosQuincenales
         Dim cPeriodo As New Entities.Periodo
         'cPeriodo.IdEmpresa = Session("clienteid")
         cPeriodo.IdTipoNomina = 3 'Quincenal
-        cPeriodo.IdEjercicio = IdEjercicio
+        cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosQuincenales.DataSource = cPeriodo.ConsultarPeriodo
         cPeriodo = Nothing
     End Sub
@@ -61,7 +56,7 @@ Public Class PeriodosQuincenales
         cPeriodo = New Entities.Periodo
         'cPeriodo.IdEmpresa = Session("clienteid")
         cPeriodo.IdTipoNomina = 3 'Quincenal
-
+        cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosQuincenales.DataSource = cPeriodo.ConsultarPeriodo()
         GridPeriodosQuincenales.DataBind()
         cPeriodo = Nothing

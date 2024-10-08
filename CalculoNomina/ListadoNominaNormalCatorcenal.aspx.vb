@@ -99,6 +99,7 @@ Public Class ListadoNominaNormalCatorcenal
     End Sub
 
     Private Sub btnAgregarNominaE_Click(sender As Object, e As EventArgs) Handles btnAgregarNominaE.Click
+        Session("Folio") = Nothing
         Response.Redirect("GeneracionDeNominaCatorcenalNormal.aspx")
     End Sub
 

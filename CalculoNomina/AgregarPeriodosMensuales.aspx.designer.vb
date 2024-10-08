@@ -47,7 +47,7 @@ Partial Public Class AgregarPeriodosMensuales
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents cmbGeneraPeriodos As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents cmbGeneraPeriodos As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control ValidarGeneraPeriodos.
@@ -57,6 +57,15 @@ Partial Public Class AgregarPeriodosMensuales
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents ValidarGeneraPeriodos As Global.System.Web.UI.WebControls.RequiredFieldValidator
+
+    '''<summary>
+    '''Control btnCancel.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnCancel As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnSave.

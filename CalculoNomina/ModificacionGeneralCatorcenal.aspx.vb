@@ -225,7 +225,7 @@ Public Class ModificacionGeneralCatorcenal
         If TypeOf e.Item Is GridDataItem Then
 
             Dim item As GridDataItem = TryCast(e.Item, GridDataItem)
-            Dim lnkEditar As LinkButton = DirectCast(e.Item.FindControl("lnkEditar"), LinkButton)
+            Dim lnkEditar As ImageButton = DirectCast(e.Item.FindControl("lnkEditar"), ImageButton)
             lnkEditar.Attributes.Add("onclick", "javascript: OpenWindow('" & periodoId.Value.ToString & "','" & item.GetDataKeyValue("NoEmpleado").ToString & "','" & item.GetDataKeyValue("IdContrato").ToString & "','" & item.GetDataKeyValue("idNomina").ToString & "'); return false;")
 
             Dim cell As TableCell = DirectCast(item("EstatusContrato"), TableCell)
