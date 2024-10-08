@@ -23,17 +23,50 @@
                     <br />
                     <asp:Label ID="lblArchivo" Font-Bold="true" runat="server">Archivo:</asp:Label>
                     <asp:FileUpload ID="ImportarFile" Enabled="true" runat="server" Skin="Bootstrap" /><br />
-                    <telerik:RadButton ID="btnDescargarCSV" RenderMode="Lightweight" Enabled="true" runat="server" Skin="Bootstrap" Text="Descargar Plantilla CSV" Font-Bold="false" Width="180px" CssClass="rbPrimaryButton">
+                    <telerik:RadButton ID="btnDescargarXlsx" RenderMode="Lightweight" Enabled="true" runat="server" Skin="Bootstrap" Text="Descargar Plantilla xlsx" Font-Bold="false" Width="180px" CssClass="rbPrimaryButton">
                     </telerik:RadButton>
                     &nbsp;&nbsp;&nbsp;
                     <telerik:RadButton ID="btnCargarEmpleados" RenderMode="Lightweight" Enabled="true" runat="server" Skin="Bootstrap" Text="Cargar Empleados" Font-Bold="false" Width="180px" CssClass="rbPrimaryButton">
                     </telerik:RadButton>
                     <br />
                     <br />
-                    <asp:Label ID="lblInfo" runat="server" Visible="True" Font-Bold="true">Nota: Guardar el archivo como CSV UTF-8 delimitado por comas.</asp:Label>
+                    <asp:Label ID="lblInfo" runat="server" Visible="True" Font-Bold="true">Nota: Guardar y subir el archivo en formato .xlsx</asp:Label>
                 </div>
             </div>
+            <br />
+
+            <!-- Panel para mostrar los que se agregaron -->
+            <asp:Panel ID="panelSuccess" runat="server" Visible="False" CssClass="alert alert-success">
+                <h4>Se agregaron con Exito:</h4>
+                <asp:Label ID="lblEmpleadosSuccess" runat="server" Visible="False" Font-Bold="true"></asp:Label>
+                <asp:Literal ID="litSuccess" runat="server"></asp:Literal>
+                <br />
+            </asp:Panel>
+            <br />
+
+            <!-- Panel para mostrar errores -->
+            <asp:Panel ID="panelErrores" runat="server" Visible="False" CssClass="alert alert-danger">
+                <asp:Label ID="lblEmpleadosError" runat="server" Visible="False" Font-Bold="true"></asp:Label>
+                <br />
+                <h4>Las siguientes filas obtienen errores:</h4>
+                <asp:Literal ID="litErrores" runat="server"></asp:Literal>
+                <br />
+            </asp:Panel>
+            <br />
+
+
+            <!-- Panel para mostrar errores -->
+            <asp:Panel ID="panelErroresCatalogos" runat="server" Visible="False" CssClass="alert alert-danger">
+                <asp:Label ID="lblEmpleadosErrorCatalogos" runat="server" Visible="False" Font-Bold="true"></asp:Label>
+                <br />
+                <h4>Las siguientes filas obtienen errores, los empleados si cumplen con los demas campos requeridos se dieron de alta correctamente solo modificar esos datos en cada uno de ellos:</h4>
+                <asp:Literal ID="litErroresCatalogo" runat="server"></asp:Literal>
+                <br />
+            </asp:Panel>
+            <br />
         </div>
+
+
         <div class="form-group row">
             <asp:Label ID="Mensaje_Resultado" runat="server" Visible="false"></asp:Label>
             <telerik:RadGrid ID="GridErrors" runat="server" AutoGenerateColumns="False" AllowPaging="True" PageSize="15" AllowSorting="true" ExportSettings-ExportOnlyData="true" CellSpacing="0" GridLines="None" Skin="Simple" Visible="false">

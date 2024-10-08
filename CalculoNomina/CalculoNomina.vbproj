@@ -102,6 +102,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="QuickStart, Version=2015.1.331.20, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\QuickStart.dll</HintPath>
@@ -111,6 +113,7 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.DataVisualization" />
@@ -142,6 +145,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\ThoughtWorks.QRCode.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="anexos\" />
@@ -3829,6 +3833,7 @@
     </Compile>
     <Compile Include="AgregarPeriodosMensuales.aspx.vb">
       <DependentUpon>AgregarPeriodosMensuales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="AgregarPeriodosQuincenales.aspx.designer.vb">
       <DependentUpon>AgregarPeriodosQuincenales.aspx</DependentUpon>
@@ -3898,6 +3903,7 @@
     </Compile>
     <Compile Include="EditorPeriodosMensuales.aspx.vb">
       <DependentUpon>EditorPeriodosMensuales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FiniquitosCatorcenal.aspx.designer.vb">
       <DependentUpon>FiniquitosCatorcenal.aspx</DependentUpon>
@@ -3918,6 +3924,7 @@
     </Compile>
     <Compile Include="FiniquitosGeneradosMensual.aspx.vb">
       <DependentUpon>FiniquitosGeneradosMensual.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FiniquitosGeneradosQuincenal.aspx.designer.vb">
       <DependentUpon>FiniquitosGeneradosQuincenal.aspx</DependentUpon>
@@ -3938,6 +3945,7 @@
     </Compile>
     <Compile Include="FiniquitosMensual.aspx.vb">
       <DependentUpon>FiniquitosMensual.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FiniquitosQuincenal.aspx.designer.vb">
       <DependentUpon>FiniquitosQuincenal.aspx</DependentUpon>
@@ -4133,6 +4141,7 @@
     </Compile>
     <Compile Include="PeriodosMensuales.aspx.vb">
       <DependentUpon>PeriodosMensuales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PTU.aspx.designer.vb">
       <DependentUpon>PTU.aspx</DependentUpon>
