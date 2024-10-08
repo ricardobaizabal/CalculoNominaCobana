@@ -68,6 +68,24 @@ Partial Public Class AltaMasivaEmpleados
     Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control lblInfo1.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo1 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblInfo2.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo2 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control panelSuccess.
     '''</summary>
     '''<remarks>

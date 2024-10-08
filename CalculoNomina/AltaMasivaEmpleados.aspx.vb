@@ -47,6 +47,8 @@ Public Class AltaMasivaEmpleados
             Dim worksheet As Excel.Worksheet = Nothing
             Try
 
+                panelSuccess.Visible = False
+                panelErrores.Visible = False
 
                 dt.Clear()
                 ViewState("dt") = dt
@@ -386,32 +388,46 @@ Public Class AltaMasivaEmpleados
 
 
 
+
                         ' ----------- cambio en las fechas -----------
                         Try
-
-                            ' Eliminar el formato AM/PM
+                            ' Eliminar el formato AM/PM si aplica (opcional, puede no ser necesario)
                             fecha_nacimiento = fecha_nacimiento.Replace(" A. M.", "").Replace(" P. M.", "")
                             fecha_alta = fecha_alta.Replace(" A. M.", "").Replace(" P. M.", "")
 
-                            ' Intentar convertir el string a DateTime
-                            If DateTime.TryParseExact(fecha_nacimiento, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, fecha_nacimientoEmp) Then
-                                ' Si la conversión es exitosa, puedes ahora usar fecha_nacimiento como DateTime
-                                ' Envíalo a la base de datos o úsalo como necesites
-                            Else
-                                ' Manejar el error si la conversión falla
-                                Throw New FormatException("La fecha no tiene un formato válido.")
+                            ' Quitar la parte de la hora si está presente
+                            If fecha_nacimiento.Contains(" ") Then
+                                fecha_nacimiento = fecha_nacimiento.Split(" "c)(0) ' Solo la fecha, eliminando la hora
+                            End If
+
+                            If fecha_alta.Contains(" ") Then
+                                fecha_alta = fecha_alta.Split(" "c)(0) ' Solo la fecha, eliminando la hora
                             End If
 
 
-                            ' Intentar convertir el string a DateTime
-                            If DateTime.TryParseExact(fecha_alta, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, fecha_altaEmp) Then
-                                ' Si la conversión es exitosa, puedes ahora usar fecha_nacimiento como DateTime
-                                ' Envíalo a la base de datos o úsalo como necesites
+                            ' Definir múltiples formatos aceptables
+                            Dim formatosAceptables() As String = {"d/M/yyyy", "dd/MM/yyyy", "d/MM/yyyy", "dd/M/yyyy"}
+
+                            ' Intentar convertir el string de fecha_nacimiento usando múltiples formatos
+                            If DateTime.TryParseExact(fecha_nacimiento, formatosAceptables, CultureInfo.InvariantCulture, DateTimeStyles.None, fecha_nacimientoEmp) Then
+                                ' Si la conversión es exitosa, establece la hora a 00:00:00
+                                fecha_nacimientoEmp = fecha_nacimientoEmp.Date ' Fecha con hora 00:00:00
                             Else
                                 ' Manejar el error si la conversión falla
-                                Throw New FormatException("La fecha no tiene un formato válido.")
+                                Throw New FormatException("La fecha de nacimiento no tiene un formato válido.")
                             End If
 
+                            ' Intentar convertir el string de fecha_alta usando múltiples formatos
+                            If DateTime.TryParseExact(fecha_alta, formatosAceptables, CultureInfo.InvariantCulture, DateTimeStyles.None, fecha_altaEmp) Then
+                                ' Si la conversión es exitosa, establece la hora a 00:00:00
+                                fecha_altaEmp = fecha_altaEmp.Date ' Fecha con hora 00:00:00
+                            Else
+                                ' Manejar el error si la conversión falla
+                                Throw New FormatException("La fecha de alta no tiene un formato válido.")
+                            End If
+
+                            ' Aquí ya tienes las fechas como DateTime con la hora establecida a 00:00:00
+                            ' Puedes seguir usando fecha_nacimientoEmp y fecha_altaEmp como necesites
 
                         Catch ex As Exception
                             Dim msjErr_fecha As String = "- Error al cambiar el dato de fecha: " & ex.Message
