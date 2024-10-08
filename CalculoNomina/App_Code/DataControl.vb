@@ -7,12 +7,15 @@ Imports Telerik.Web.UI
 Public Class DataControl
 
     Private p_conexion As String = ""
+    Private p_conexion_cobana As String = ""
     Private parms As String = String.Empty
     Private parametros As String = String.Empty
 
     Sub New(Optional ByVal conexion As Integer = 0)
         If conexion = 0 Then
             p_conexion = ConfigurationManager.ConnectionStrings("conn").ConnectionString
+            p_conexion_cobana = ConfigurationManager.ConnectionStrings("conn_cobana").ConnectionString
+
         Else
             p_conexion = HttpContext.Current.Session("conexion").ToString
         End If
@@ -277,6 +280,50 @@ Public Class DataControl
         conn = Nothing
         Return ds
     End Function
+
+    Public Function FillDataSetMasivo(ByVal SQL As String, ByVal commandType As CommandType, ByVal parameters As ArrayList) As DataSet
+
+        ' Crear la conexión
+        Dim conn As New SqlConnection(p_conexion_cobana)
+
+        ' Crear el comando
+        Dim cmd As New SqlCommand(SQL, conn)
+        cmd.CommandType = commandType
+
+        ' Agregar los parámetros si existen
+        If parameters IsNot Nothing Then
+            For Each param As SqlParameter In parameters
+                cmd.Parameters.Add(param)
+            Next
+        End If
+
+        ' Crear el adaptador y el dataset
+        Dim adapter As New SqlDataAdapter(cmd)
+        Dim ds As New DataSet
+
+        Try
+            ' Abrir la conexión
+            conn.Open()
+
+            ' Llenar el dataset
+            adapter.Fill(ds)
+
+        Catch ex As Exception
+            ' Manejo de excepciones (puedes registrar el error o lanzar la excepción)
+            Throw New Exception("Error al llenar el DataSet: " & ex.Message)
+
+        Finally
+            ' Asegurarse de cerrar la conexión y liberar recursos
+            If conn.State = ConnectionState.Open Then
+                conn.Close()
+            End If
+            conn.Dispose()
+        End Try
+
+        ' Retornar el DataSet
+        Return ds
+    End Function
+
 
     Public Sub CatalogoStr(ByVal combo As Web.UI.WebControls.DropDownList, ByVal sql As String, ByVal sel As String, Optional ByVal todo As Boolean = False)
         '
