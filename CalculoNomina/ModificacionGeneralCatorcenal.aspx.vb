@@ -213,6 +213,8 @@ Public Class ModificacionGeneralCatorcenal
         CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
+        cNomina.IdNomina = nominaID.Value
+        cNomina.Cliente = empresaId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = periodoId.Value
@@ -245,6 +247,8 @@ Public Class ModificacionGeneralCatorcenal
         CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
+        cNomina.IdNomina = nominaID.Value
+        cNomina.Cliente = empresaId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = periodoId.Value

@@ -264,7 +264,6 @@ Public Class GeneracionDeNominaQuincenalNormal
     Protected Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
         Response.Redirect("ListadoNominaQuincenal.aspx")
     End Sub
-    'Exportar / Importar'
     Protected Sub btnExportar_Click(sender As Object, e As EventArgs) Handles btnExportar.Click
 
         Call CargarVariablesGenerales()
@@ -1844,8 +1843,9 @@ Public Class GeneracionDeNominaQuincenalNormal
             cPeriodo.ConsultarPeriodoID()
 
             If cPeriodo.FechaPago.ToString.Length > 0 Then
-                If IsNothing(CDate(cPeriodo.FechaPago)) Then
+                If Not IsNothing(CDate(cPeriodo.FechaPago)) Then
                     fchPago.SelectedDate = CDate(cPeriodo.FechaPago)
+                    fchPago.Enabled = False
                 End If
             End If
         Else
@@ -1861,7 +1861,6 @@ Public Class GeneracionDeNominaQuincenalNormal
         End If
 
         Dim cConfiguracion As New Entities.Configuracion
-        'cConfiguracion.IdEmpresa = Session("clienteid")
         cConfiguracion.IdUsuario = Session("usuarioid")
         cConfiguracion.IdPeriodo = cmbPeriodo.SelectedValue
         cConfiguracion.ActualizaPeriodoNomina()
@@ -1873,7 +1872,6 @@ Public Class GeneracionDeNominaQuincenalNormal
         Session("PeriodoIDNomina") = cmbPeriodo.SelectedValue
 
         Call CargarDatos()
-
 
     End Sub
     Private Sub CargarDatos()
@@ -2045,38 +2043,46 @@ Public Class GeneracionDeNominaQuincenalNormal
             btnModificacionDeNomina.Enabled = True
             btnGenerarNominaElectronica.Enabled = True
 
+            Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
+            If (rowGenerados.Length > 0) Then
+                btnGeneraTxtDispersion.Enabled = True
+                If rowGenerados.Length < dt.Rows.Count Then
+                    btnModificacionDeNomina.Enabled = True
+                    btnGenerarNominaElectronica.Enabled = True
+                    btnTimbrarNominaQuincenal.Enabled = False
+                Else
+                    btnGenerarNominaElectronica.Enabled = False
+                    btnTimbrarNominaQuincenal.Enabled = True
+                End If
+            ElseIf rowGenerados.Length = 0 Then
+                btnGenerarNominaElectronica.Enabled = True
+                btnTimbrarNominaQuincenal.Enabled = False
+            End If
+
             Dim rowTimbrado() As DataRow = dt.Select("Timbrado='S'")
             If (rowTimbrado.Length > 0) Then
+                btnGeneraNomina.Enabled = False
+                btnModificacionDeNomina.Enabled = False
                 btnGeneraTxtDispersion.Enabled = True
                 btnGenerarPDF.Enabled = True
                 btnDescargarXMLS.Enabled = True
                 btnBorrarNomina.Enabled = False
-                If rowTimbrado.Length < dt.Rows.Count Then
-                    btnTimbrarNominaQuincenal.Enabled = True
-                Else
+
+                If rowGenerados.Length < dt.Rows.Count Then
                     btnTimbrarNominaQuincenal.Enabled = False
+                Else
+                    If rowTimbrado.Length < dt.Rows.Count Then
+                        btnTimbrarNominaQuincenal.Enabled = True
+                    Else
+                        btnTimbrarNominaQuincenal.Enabled = False
+                    End If
                 End If
+
             ElseIf rowTimbrado.Length = 0 Then
                 btnBorrarNomina.Enabled = True
                 btnTimbrarNominaQuincenal.Enabled = True
                 btnGenerarPDF.Enabled = False
                 btnGeneraTxtDispersion.Enabled = False
-            End If
-
-            Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
-            If (rowGenerados.Length > 0) Then
-                btnBorrarNomina.Enabled = False
-                btnGeneraTxtDispersion.Enabled = True
-                If rowGenerados.Length < dt.Rows.Count Then
-                    btnModificacionDeNomina.Enabled = True
-                    btnGenerarNominaElectronica.Enabled = True
-                Else
-                    btnModificacionDeNomina.Enabled = False
-                    btnGenerarNominaElectronica.Enabled = False
-                End If
-            ElseIf rowGenerados.Length = 0 Then
-                btnGenerarNominaElectronica.Enabled = True
-                btnTimbrarNominaQuincenal.Enabled = False
             End If
 
             Dim rowPdf() As DataRow = dt.Select("Pdf='S'")

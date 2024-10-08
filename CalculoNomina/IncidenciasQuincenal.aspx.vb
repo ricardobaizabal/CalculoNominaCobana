@@ -1613,6 +1613,31 @@ Public Class IncidenciasQuincenal
                     cNomina.DiasPagados = cPeriodo.Dias
                     cNomina.IdNomina = nominaId.Value
                     cNomina.GuadarNominaPeriodo()
+                ElseIf cmbConcepto.SelectedValue = 82 Then
+                    cNomina = New Nomina()
+                    cNomina.Cliente = empresaId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 3 'Quincenal
+                    cNomina.Periodo = Periodo
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.IdNomina = nominaId.Value
+                    cNomina.GuadarNominaPeriodo()
+                    cNomina = Nothing
                 ElseIf cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
                     cNomina = New Nomina()
                     cNomina.Cliente = empresaId.Value

@@ -2045,38 +2045,46 @@ Public Class GeneracionDeNominaMensualNormal
             btnModificacionDeNomina.Enabled = True
             btnGenerarNominaElectronica.Enabled = True
 
+            Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
+            If (rowGenerados.Length > 0) Then
+                btnGeneraTxtDispersion.Enabled = True
+                If rowGenerados.Length < dt.Rows.Count Then
+                    btnModificacionDeNomina.Enabled = True
+                    btnGenerarNominaElectronica.Enabled = True
+                    btnTimbrarNominaMensual.Enabled = False
+                Else
+                    btnGenerarNominaElectronica.Enabled = False
+                    btnTimbrarNominaMensual.Enabled = True
+                End If
+            ElseIf rowGenerados.Length = 0 Then
+                btnGenerarNominaElectronica.Enabled = True
+                btnTimbrarNominaMensual.Enabled = False
+            End If
+
             Dim rowTimbrado() As DataRow = dt.Select("Timbrado='S'")
             If (rowTimbrado.Length > 0) Then
+                btnGeneraNomina.Enabled = False
+                btnModificacionDeNomina.Enabled = False
                 btnGeneraTxtDispersion.Enabled = True
                 btnGenerarPDF.Enabled = True
                 btnDescargarXMLS.Enabled = True
                 btnBorrarNomina.Enabled = False
-                If rowTimbrado.Length < dt.Rows.Count Then
-                    btnTimbrarNominaMensual.Enabled = True
-                Else
+
+                If rowGenerados.Length < dt.Rows.Count Then
                     btnTimbrarNominaMensual.Enabled = False
+                Else
+                    If rowTimbrado.Length < dt.Rows.Count Then
+                        btnTimbrarNominaMensual.Enabled = True
+                    Else
+                        btnTimbrarNominaMensual.Enabled = False
+                    End If
                 End If
+
             ElseIf rowTimbrado.Length = 0 Then
                 btnBorrarNomina.Enabled = True
                 btnTimbrarNominaMensual.Enabled = True
                 btnGenerarPDF.Enabled = False
                 btnGeneraTxtDispersion.Enabled = False
-            End If
-
-            Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
-            If (rowGenerados.Length > 0) Then
-                btnBorrarNomina.Enabled = False
-                btnGeneraTxtDispersion.Enabled = True
-                If rowGenerados.Length < dt.Rows.Count Then
-                    btnModificacionDeNomina.Enabled = True
-                    btnGenerarNominaElectronica.Enabled = True
-                Else
-                    btnModificacionDeNomina.Enabled = False
-                    btnGenerarNominaElectronica.Enabled = False
-                End If
-            ElseIf rowGenerados.Length = 0 Then
-                btnGenerarNominaElectronica.Enabled = True
-                btnTimbrarNominaMensual.Enabled = False
             End If
 
             Dim rowPdf() As DataRow = dt.Select("Pdf='S'")

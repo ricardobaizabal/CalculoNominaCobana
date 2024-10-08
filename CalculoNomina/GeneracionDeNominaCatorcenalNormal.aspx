@@ -81,7 +81,7 @@
     <div class="ibox-content" style="border: solid 0px">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="m-t-none m-b">Generación de nómina ordinaria semanal</h1>
+                <h1 class="m-t-none m-b">Generación de nómina ordinaria catorcenal</h1>
                 <hr class="demo-separator" />
                 <br />
                 <div class="form-horizontal">
@@ -182,8 +182,8 @@
         <div class="row">
             <div class="col-lg-2 col-md-2 col-sm-2">
                 <div class="form-group">
-                    <%--<telerik:RadButton ID="btnGeneraTxtDispersion" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Genera TXT Dispersion" Font-Bold="false" Width="100%" Height="50px" Visible="false">
-                    </telerik:RadButton>--%>
+                    <telerik:RadButton ID="btnGeneraTxtDispersion" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Genera TXT Dispersion" Font-Bold="false" Width="100%" Height="50px" Visible="false">
+                    </telerik:RadButton>
                 </div>
             </div>
             <div class="col-lg-2 col-md-2 col-sm-2">
@@ -369,7 +369,7 @@
 
     <!-- Start Modal Agregar Periodo -->
     <telerik:RadWindow ID="WinPeriodoSave" Title="" runat="server" Modal="true" CenterIfModal="true"
-        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400" Height="250">
+        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400px" Height="260px">
         <ContentTemplate>
             <telerik:RadAjaxPanel runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
 
@@ -396,8 +396,8 @@
             </telerik:RadAjaxPanel>
             <div style="width: 100%; text-align: end; margin-top: 10px;">
                 <asp:HiddenField ID="periodicidadid" Value="0" runat="server" />
-                <telerik:RadButton ID="btnCancelarPeriodo" runat="server" Text="Salir"></telerik:RadButton>
-                <telerik:RadButton ID="btnCrearPeriodoEspecial" runat="server" Text="Crear"></telerik:RadButton>
+                <telerik:RadButton ID="btnCancelarPeriodo" runat="server" CssClass="rbPrimaryButton" RenderMode="Lightweight" Text="Salir"></telerik:RadButton>
+                <telerik:RadButton ID="btnCrearPeriodoEspecial" runat="server" CssClass="rbPrimaryButton" RenderMode="Lightweight" Text="Crear"></telerik:RadButton>
             </div>
             </div>
         </ContentTemplate>
@@ -406,7 +406,7 @@
 
     <!-- Start Modal Importar -->
     <telerik:RadWindow ID="WinImportarMonto" Title="" runat="server" Modal="true" CenterIfModal="true"
-        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400" Height="200">
+        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400px" Height="200px">
         <ContentTemplate>
             <table style="width: 98%; border-collapse: separate; border-spacing: 10px;">
                 <tr>
@@ -420,8 +420,8 @@
             </table>
             <div style="width: 100%; text-align: center; margin-top: 10px;">
                 <asp:HiddenField ID="HiddenField1" Value="0" runat="server" />
-                <telerik:RadButton ID="btnEImportarCSV" runat="server" Text="Importar" Width="85px"></telerik:RadButton>
-                <telerik:RadButton ID="btnSalirImportar" runat="server" Text="Salir"></telerik:RadButton>
+                <telerik:RadButton ID="btnEImportarCSV" runat="server" CssClass="rbPrimaryButton" RenderMode="Lightweight" Text="Importar" Width="85px"></telerik:RadButton>
+                <telerik:RadButton ID="btnSalirImportar" runat="server" CssClass="rbPrimaryButton" RenderMode="Lightweight" Text="Salir"></telerik:RadButton>
             </div>
             </div>
         </ContentTemplate>

@@ -259,6 +259,9 @@ Public Class GeneracionDeNominaNormal
             Else
                 LlenaComboPeriodosSemanal(0)
             End If
+
+            Call BloquearBotones()
+
         End If
         RadProgressArea1.Localization.TotalFiles = "Total empleados"
         RadProgressArea1.Localization.UploadedFiles = "Calculados"

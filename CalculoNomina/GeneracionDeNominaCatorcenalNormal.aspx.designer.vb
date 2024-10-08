@@ -167,6 +167,15 @@ Partial Public Class GeneracionDeNominaCatorcenal
     Protected WithEvents btnGenerarPDF As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
+    '''Control btnGeneraTxtDispersion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGeneraTxtDispersion As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
     '''Control btnExportar.
     '''</summary>
     '''<remarks>

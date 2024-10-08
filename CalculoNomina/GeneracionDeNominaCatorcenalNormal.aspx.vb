@@ -220,6 +220,7 @@ Public Class GeneracionDeNominaCatorcenal
             cmbPeriodicidad.SelectedValue = 2
 
             If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+
                 Dim folio As Integer = Integer.Parse(Session("Folio").ToString())
                 periodoID.Value = folio.ToString()
 
@@ -1896,8 +1897,19 @@ Public Class GeneracionDeNominaCatorcenal
     End Sub
     Private Sub cmbPeriodo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPeriodo.SelectedIndexChanged
 
+        periodoID.Value = cmbPeriodo.SelectedValue
         If cmbPeriodo.SelectedValue > 0 Then
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+            cPeriodo.ConsultarPeriodoID()
+
+            If cPeriodo.FechaPago.ToString.Length > 0 Then
+                If Not IsNothing(CDate(cPeriodo.FechaPago)) Then
+                    fchPago.SelectedDate = CDate(cPeriodo.FechaPago)
+                    fchPago.Enabled = False
+                End If
+            End If
         Else
             btnModificacionDeNomina.Enabled = False
             btnBorrarNomina.Enabled = False
@@ -1905,13 +1917,12 @@ Public Class GeneracionDeNominaCatorcenal
             btnTimbrarNominaCatorcenal.Enabled = False
             btnGenerarPDF.Enabled = False
             btnEnvioComprobantes.Enabled = False
-            'btnDescargarXMLS.Enabled = False
-            'btnDescargarPDFS.Enabled = False
-            'btnGeneraTxtDispersion.Enabled = False
+            btnDescargarXMLS.Enabled = False
+            btnDescargarPDFS.Enabled = False
+            btnGeneraTxtDispersion.Enabled = False
         End If
 
         Dim cConfiguracion As New Entities.Configuracion
-        'cConfiguracion.IdEmpresa = Session("clienteid")
         cConfiguracion.IdUsuario = Session("usuarioid")
         cConfiguracion.IdPeriodo = cmbPeriodo.SelectedValue
         cConfiguracion.ActualizaPeriodoNomina()
@@ -1923,6 +1934,7 @@ Public Class GeneracionDeNominaCatorcenal
         Session("PeriodoIDNomina") = cmbPeriodo.SelectedValue
 
         Call CargarDatos()
+
     End Sub
     Private Sub CargarDatos()
         Try
@@ -2084,38 +2096,46 @@ Public Class GeneracionDeNominaCatorcenal
             btnModificacionDeNomina.Enabled = True
             btnGenerarNominaElectronica.Enabled = True
 
-            Dim rowTimbrado() As DataRow = dt.Select("Timbrado='S'")
-            If (rowTimbrado.Length > 0) Then
-                'btnGeneraTxtDispersion.Enabled = True
-                btnGenerarPDF.Enabled = True
-                btnDescargarXMLS.Enabled = True
-                btnBorrarNomina.Enabled = False
-                If rowTimbrado.Length < dt.Rows.Count Then
-                    btnTimbrarNominaCatorcenal.Enabled = True
-                Else
-                    btnTimbrarNominaCatorcenal.Enabled = False
-                End If
-            ElseIf rowTimbrado.Length = 0 Then
-                btnBorrarNomina.Enabled = True
-                btnTimbrarNominaCatorcenal.Enabled = True
-                btnGenerarPDF.Enabled = False
-                'btnGeneraTxtDispersion.Enabled = False
-            End If
-
             Dim rowGenerados() As DataRow = dt.Select("Generado='S'")
             If (rowGenerados.Length > 0) Then
-                btnBorrarNomina.Enabled = False
-                'btnGeneraTxtDispersion.Enabled = True
+                btnGeneraTxtDispersion.Enabled = True
                 If rowGenerados.Length < dt.Rows.Count Then
                     btnModificacionDeNomina.Enabled = True
                     btnGenerarNominaElectronica.Enabled = True
+                    btnTimbrarNominaCatorcenal.Enabled = False
                 Else
-                    btnModificacionDeNomina.Enabled = False
                     btnGenerarNominaElectronica.Enabled = False
+                    btnTimbrarNominaCatorcenal.Enabled = True
                 End If
             ElseIf rowGenerados.Length = 0 Then
                 btnGenerarNominaElectronica.Enabled = True
                 btnTimbrarNominaCatorcenal.Enabled = False
+            End If
+
+            Dim rowTimbrado() As DataRow = dt.Select("Timbrado='S'")
+            If (rowTimbrado.Length > 0) Then
+                btnGeneraNomina.Enabled = False
+                btnModificacionDeNomina.Enabled = False
+                btnGeneraTxtDispersion.Enabled = True
+                btnGenerarPDF.Enabled = True
+                btnDescargarXMLS.Enabled = True
+                btnBorrarNomina.Enabled = False
+
+                If rowGenerados.Length < dt.Rows.Count Then
+                    btnTimbrarNominaCatorcenal.Enabled = False
+                Else
+                    If rowTimbrado.Length < dt.Rows.Count Then
+                        btnTimbrarNominaCatorcenal.Enabled = True
+                    Else
+                        btnTimbrarNominaCatorcenal.Enabled = False
+                    End If
+                End If
+
+            ElseIf rowTimbrado.Length = 0 Then
+                btnBorrarNomina.Enabled = True
+                btnTimbrarNominaCatorcenal.Enabled = True
+                btnGenerarPDF.Enabled = False
+                btnGeneraTxtDispersion.Enabled = False
             End If
 
             Dim rowPdf() As DataRow = dt.Select("Pdf='S'")
@@ -2145,7 +2165,7 @@ Public Class GeneracionDeNominaCatorcenal
             btnEnvioComprobantes.Enabled = False
             btnDescargarXMLS.Enabled = False
             btnDescargarPDFS.Enabled = False
-            'btnGeneraTxtDispersion.Enabled = False
+            btnGeneraTxtDispersion.Enabled = False
         End If
     End Sub
     Private Sub grdEmpleadosCatorcenal_ItemDataBound(sender As Object, e As GridItemEventArgs) Handles grdEmpleadosCatorcenal.ItemDataBound

@@ -22,6 +22,21 @@
     <link href="styles.css" rel="stylesheet" />
 
     <script type="text/javascript">
+        function GetRadWindow() {
+            var oWindow = null;
+            if (window.radWindow)
+                oWindow = window.radWindow;
+            else if (window.frameElement && window.frameElement.radWindow)
+                oWindow = window.frameElement.radWindow;
+            return oWindow;
+        }
+        function CloseModal(page) {
+            setTimeout(function () {
+                GetRadWindow().close();
+                window.top.location = page;
+                //document.location.href = document.location.href;
+            }, 100);
+        }
         function confirmCallbackFnEliminaConcepto(arg) {
             if (arg) //the user clicked OK
             {

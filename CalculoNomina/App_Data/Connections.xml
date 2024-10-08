@@ -1,12 +1,9 @@
 ﻿<connectionStrings>
 	<!--<add name="conn" connectionString="Data Source=25.10.96.205; Initial Catalog=nomilink_general; User ID=sa; Password=q&lt;PAQkt5(49(8!R; Connect Timeout=360;" />-->
 	<!--<add name="conn" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_general; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />-->
-
 	<!--String conection necesaria para la carga masiva-->
-	<add name="conn_cobana" connectionString="Data Source=DESKTOP-V5EN31E\SQLEXPRESS; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
-	
+	<add name="conn_cobana" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
 	<!--<add name="conn_cobana" connectionString="Data Source=DESKTOP-V5EN31E\SQLEXPRESS; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />-->
-
 	<!--String conection Local Jorge-->
-	<add name="conn" connectionString="Data Source=DESKTOP-V5EN31E\SQLEXPRESS; Initial Catalog=nomilink_general; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
+	<add name="conn" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_general; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
 </connectionStrings>

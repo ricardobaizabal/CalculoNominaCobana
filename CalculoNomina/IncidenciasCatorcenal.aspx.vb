@@ -1663,7 +1663,7 @@ Public Class IncidenciasCatorcenal
             cNomina.GuadarNominaPeriodo()
 
             If ConImpuesto = 1 Then
-                If cmbConcepto.SelectedValue <= 51 Or cmbConcepto.SelectedValue = 82 Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Or cmbConcepto.SelectedValue = 167 Or cmbConcepto.SelectedValue = 168 Or cmbConcepto.SelectedValue = 169 Or cmbConcepto.SelectedValue = 170 Or cmbConcepto.SelectedValue = 171 Then
+                If cmbConcepto.SelectedValue <= 51 Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Or cmbConcepto.SelectedValue = 167 Or cmbConcepto.SelectedValue = 168 Or cmbConcepto.SelectedValue = 169 Or cmbConcepto.SelectedValue = 170 Or cmbConcepto.SelectedValue = 171 Then
                     cNomina = New Nomina()
                     cNomina.Cliente = empresaId.Value
                     cNomina.Ejercicio = IdEjercicio
@@ -1696,6 +1696,31 @@ Public Class IncidenciasCatorcenal
                     cNomina.DiasPagados = cPeriodo.Dias
                     cNomina.IdNomina = nominaId.Value
                     cNomina.GuadarNominaPeriodo()
+                ElseIf cmbConcepto.SelectedValue = 82 Then
+                    cNomina = New Nomina()
+                    cNomina.Cliente = empresaId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 2 'Catorcenal
+                    cNomina.Periodo = Periodo
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.IdNomina = nominaId.Value
+                    cNomina.GuadarNominaPeriodo()
+                    cNomina = Nothing
                 ElseIf cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
                     cNomina = New Nomina()
                     cNomina.Cliente = empresaId.Value
