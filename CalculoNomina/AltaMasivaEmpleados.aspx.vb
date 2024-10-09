@@ -41,10 +41,6 @@ Public Class AltaMasivaEmpleados
 
     Protected Sub btnCargarEmpleados_Click(sender As Object, e As EventArgs) Handles btnCargarEmpleados.Click
         If ImportarFile.HasFile Then
-
-            Dim excelApp As New Excel.Application
-            Dim workbook As Excel.Workbook = Nothing
-            Dim worksheet As Excel.Worksheet = Nothing
             Try
 
                 panelSuccess.Visible = False
@@ -54,32 +50,32 @@ Public Class AltaMasivaEmpleados
                 ViewState("dt") = dt
 
                 ' Construir la ruta del archivo
-                Dim filePath As String = Server.MapPath("~/UploadsMontos/")
+                Dim folderPath As String = Server.MapPath("~/AltaMasivaEmpleadosDocs/")
+
+
+                ' Verificar si la carpeta existe
+                If Not Directory.Exists(folderPath) Then
+                    ' Si no existe, crear la carpeta
+                    Directory.CreateDirectory(folderPath)
+                End If
+
 
                 ' Se crea un concatenado para el nombre del archivo
                 Dim filename As String = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + "_" + ImportarFile.FileName.ToString
 
-                If Not Directory.Exists(filePath) Then
-                    Directory.CreateDirectory(filePath)
-                End If
-
-
 
                 ' Guardar el archivo en la ruta especificada
                 'ImportarFile.SaveAs(filePath)
-                ImportarFile.SaveAs(filePath & "\" & filename)
+                ImportarFile.SaveAs(folderPath & "\" & filename)
 
 
                 ' Se ingresa al archivo
-                Dim filePathDownload As String = Server.MapPath("~/UploadsMontos/") & filename
+                Dim filePathDownload As String = Server.MapPath("~/AltaMasivaEmpleadosDocs/") & filename
                 If Not System.IO.File.Exists(filePathDownload) Then
                     rwAlerta.RadAlert("El archivo no se encuentra en la ruta especificada.", 300, 300, "Alerta", Nothing)
                     Return
                 End If
 
-
-                workbook = excelApp.Workbooks.Open(filePathDownload)
-                worksheet = workbook.Sheets(1) ' Abre la primera hoja del archivo
 
                 Dim lineErrors As New List(Of String)() ' Para almacenar errores de cada fila
                 Dim lineErrorsCatalogos As New List(Of String)() ' Para almacenar errores de cada fila
@@ -91,10 +87,6 @@ Public Class AltaMasivaEmpleados
 
                 ' Definir una variable para almacenar la fecha convertida
                 Dim fecha_altaEmp As DateTime
-
-
-                Dim rowCount As Integer = worksheet.UsedRange.Rows.Count
-                Dim columnCount As Integer = worksheet.UsedRange.Columns.Count
 
                 Dim empleadosCount As Integer = 0
 
@@ -154,8 +146,14 @@ Public Class AltaMasivaEmpleados
 
 
 
-                ' Se inicia el proceso de lectura del archivo de excel
-                For i As Integer = 2 To rowCount ' Comienza desde 2 para saltar el encabezado
+
+                ' Lectura del archivo CSV
+                Dim lines As String() = File.ReadAllLines(filePathDownload, Encoding.UTF8)
+                Dim headers() As String = lines(0).Split(","c) '
+
+
+                ' Se inicia el proceso de lectura del archivo CSV a partir de la segunda línea
+                For i As Integer = 1 To lines.Length - 1
                     Dim errores As New List(Of String)()
                     Dim erroresCatalogos As New List(Of String)()
 
@@ -163,6 +161,8 @@ Public Class AltaMasivaEmpleados
                     Dim sueldos_y_salarios As Integer = 0
 
                     empleadosCount = empleadosCount + 1
+
+                    Dim filaMensaje = i + 1
 
                     ' Identificadores de los CATALOGOS utilizados
                     Dim sexoid As Integer = 0
@@ -181,120 +181,120 @@ Public Class AltaMasivaEmpleados
                     Dim tipo_jornadanominaid As String = ""
                     Dim tipo_contratonominaid As String = ""
 
+                    ' Dividir la línea actual en valores
+                    Dim values() As String = lines(i).Split(","c)
 
-                    ' Leer los valores de las celdas
-                    'Dim clave As String = worksheet.Cells(i, 1).Value?.ToString().Trim().ToUpper
-                    Dim clave As String = If(worksheet.Cells(i, 1).Value?.ToString().Trim().ToUpper(), Nothing)
+                    ' Asignar los valores a las variables correspondientes con validación y limpieza
+                    Dim clave As String = If(values(0)?.ToString().Trim().ToUpper(), Nothing)
                     clave = If(clave IsNot Nothing, QuitarAcentos(clave), Nothing)
 
-                    Dim nombre As String = If(worksheet.Cells(i, 2).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim nombre As String = If(values(1)?.ToString().Trim().ToUpper(), Nothing)
                     nombre = If(nombre IsNot Nothing, QuitarAcentos(nombre), Nothing)
 
-                    Dim apellido_paterno As String = If(worksheet.Cells(i, 3).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim apellido_paterno As String = If(values(2)?.ToString().Trim().ToUpper(), Nothing)
                     apellido_paterno = If(apellido_paterno IsNot Nothing, QuitarAcentos(apellido_paterno), Nothing)
 
-                    Dim apellido_materno As String = If(worksheet.Cells(i, 4).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim apellido_materno As String = If(values(3)?.ToString().Trim().ToUpper(), Nothing)
                     apellido_materno = If(apellido_materno IsNot Nothing, QuitarAcentos(apellido_materno), Nothing)
 
-                    Dim sexo As String = If(worksheet.Cells(i, 5).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim sexo As String = If(values(4)?.ToString().Trim().ToUpper(), Nothing)
                     sexo = If(sexo IsNot Nothing, QuitarAcentos(sexo), Nothing)
 
-                    Dim fecha_nacimiento As String = If(worksheet.Cells(i, 6).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim fecha_nacimiento As String = If(values(5)?.ToString().Trim().ToUpper(), Nothing)
                     fecha_nacimiento = If(fecha_nacimiento IsNot Nothing, QuitarAcentos(fecha_nacimiento), Nothing)
 
-                    Dim rfc As String = If(worksheet.Cells(i, 7).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim rfc As String = If(values(6)?.ToString().Trim().ToUpper(), Nothing)
                     rfc = If(rfc IsNot Nothing, QuitarAcentos(rfc), Nothing)
 
-                    Dim curp As String = If(worksheet.Cells(i, 8).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim curp As String = If(values(7)?.ToString().Trim().ToUpper(), Nothing)
                     curp = If(curp IsNot Nothing, QuitarAcentos(curp), Nothing)
 
-                    Dim no_imss As String = If(worksheet.Cells(i, 9).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim no_imss As String = If(values(8)?.ToString().Trim().ToUpper(), Nothing)
                     no_imss = If(no_imss IsNot Nothing, QuitarAcentos(no_imss), Nothing)
 
-                    Dim calle As String = If(worksheet.Cells(i, 10).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim calle As String = If(values(9)?.ToString().Trim().ToUpper(), Nothing)
                     calle = If(calle IsNot Nothing, QuitarAcentos(calle), Nothing)
 
-                    Dim no_ext As String = If(worksheet.Cells(i, 11).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim no_ext As String = If(values(10)?.ToString().Trim().ToUpper(), Nothing)
                     no_ext = If(no_ext IsNot Nothing, QuitarAcentos(no_ext), Nothing)
 
-                    Dim no_int As String = If(worksheet.Cells(i, 12).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim no_int As String = If(values(11)?.ToString().Trim().ToUpper(), Nothing)
                     no_int = If(no_int IsNot Nothing, QuitarAcentos(no_int), Nothing)
 
-                    Dim colonia As String = If(worksheet.Cells(i, 13).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim colonia As String = If(values(12)?.ToString().Trim().ToUpper(), Nothing)
                     colonia = If(colonia IsNot Nothing, QuitarAcentos(colonia), Nothing)
 
-                    Dim municipio As String = If(worksheet.Cells(i, 14).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim municipio As String = If(values(13)?.ToString().Trim().ToUpper(), Nothing)
                     municipio = If(municipio IsNot Nothing, QuitarAcentos(municipio), Nothing)
 
-                    Dim codigo_postal As String = If(worksheet.Cells(i, 15).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim codigo_postal As String = If(values(14)?.ToString().Trim().ToUpper(), Nothing)
                     codigo_postal = If(codigo_postal IsNot Nothing, QuitarAcentos(codigo_postal), Nothing)
 
-                    Dim estado As String = If(worksheet.Cells(i, 16).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim estado As String = If(values(15)?.ToString().Trim().ToUpper(), Nothing)
                     estado = If(estado IsNot Nothing, QuitarAcentos(estado), Nothing)
 
-                    Dim pais As String = If(worksheet.Cells(i, 17).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim pais As String = If(values(16)?.ToString().Trim().ToUpper(), Nothing)
                     pais = If(pais IsNot Nothing, QuitarAcentos(pais), Nothing)
 
-                    Dim celular As String = If(worksheet.Cells(i, 18).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim celular As String = If(values(17)?.ToString().Trim().ToUpper(), Nothing)
                     celular = If(celular IsNot Nothing, QuitarAcentos(celular), Nothing)
 
-                    Dim email As String = If(worksheet.Cells(i, 19).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim email As String = If(values(18)?.ToString().Trim().ToUpper(), Nothing)
                     email = If(email IsNot Nothing, QuitarAcentos(email), Nothing)
 
-                    Dim lugar_nacimiento As String = If(worksheet.Cells(i, 20).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim lugar_nacimiento As String = If(values(19)?.ToString().Trim().ToUpper(), Nothing)
                     lugar_nacimiento = If(lugar_nacimiento IsNot Nothing, QuitarAcentos(lugar_nacimiento), Nothing)
 
-                    Dim estado_civil As String = If(worksheet.Cells(i, 21).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim estado_civil As String = If(values(20)?.ToString().Trim().ToUpper(), Nothing)
                     estado_civil = If(estado_civil IsNot Nothing, QuitarAcentos(estado_civil), Nothing)
 
-                    Dim cliente As String = If(worksheet.Cells(i, 22).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim cliente As String = If(values(21)?.ToString().Trim().ToUpper(), Nothing)
                     cliente = If(cliente IsNot Nothing, QuitarAcentos(cliente), Nothing)
 
-                    Dim sueldos_y_salarios_str As String = If(worksheet.Cells(i, 23).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim sueldos_y_salarios_str As String = If(values(22)?.ToString().Trim().ToUpper(), Nothing)
                     sueldos_y_salarios_str = If(sueldos_y_salarios_str IsNot Nothing, QuitarAcentos(sueldos_y_salarios_str), Nothing)
 
-                    Dim excedente_str As String = If(worksheet.Cells(i, 24).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim excedente_str As String = If(values(23)?.ToString().Trim().ToUpper(), Nothing)
                     excedente_str = If(excedente_str IsNot Nothing, QuitarAcentos(excedente_str), Nothing)
 
-                    Dim fecha_alta As String = If(worksheet.Cells(i, 25).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim fecha_alta As String = If(values(24)?.ToString().Trim().ToUpper(), Nothing)
                     fecha_alta = If(fecha_alta IsNot Nothing, QuitarAcentos(fecha_alta), Nothing)
 
-                    Dim registropatronal As String = If(worksheet.Cells(i, 26).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim registropatronal As String = If(values(25)?.ToString().Trim().ToUpper(), Nothing)
                     registropatronal = If(registropatronal IsNot Nothing, QuitarAcentos(registropatronal), Nothing)
 
-                    Dim departamento As String = If(worksheet.Cells(i, 27).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim departamento As String = If(values(26)?.ToString().Trim().ToUpper(), Nothing)
                     departamento = If(departamento IsNot Nothing, QuitarAcentos(departamento), Nothing)
 
-                    Dim puesto As String = If(worksheet.Cells(i, 28).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim puesto As String = If(values(27)?.ToString().Trim().ToUpper(), Nothing)
                     puesto = If(puesto IsNot Nothing, QuitarAcentos(puesto), Nothing)
 
-                    Dim salario_base As String = If(worksheet.Cells(i, 29).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim salario_base As String = If(values(28)?.ToString().Trim().ToUpper(), Nothing)
                     salario_base = If(salario_base IsNot Nothing, QuitarAcentos(salario_base), Nothing)
 
-                    Dim salario_diario_integrado As String = If(worksheet.Cells(i, 30).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim salario_diario_integrado As String = If(values(29)?.ToString().Trim().ToUpper(), Nothing)
                     salario_diario_integrado = If(salario_diario_integrado IsNot Nothing, QuitarAcentos(salario_diario_integrado), Nothing)
 
-                    Dim riesgopuesto As String = If(worksheet.Cells(i, 31).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim riesgopuesto As String = If(values(30)?.ToString().Trim().ToUpper(), Nothing)
                     riesgopuesto = If(riesgopuesto IsNot Nothing, QuitarAcentos(riesgopuesto), Nothing)
 
-                    Dim regimendecontratacion As String = If(worksheet.Cells(i, 32).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim regimendecontratacion As String = If(values(31)?.ToString().Trim().ToUpper(), Nothing)
                     regimendecontratacion = If(regimendecontratacion IsNot Nothing, QuitarAcentos(regimendecontratacion), Nothing)
 
-                    Dim periodopago As String = If(worksheet.Cells(i, 33).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim periodopago As String = If(values(32)?.ToString().Trim().ToUpper(), Nothing)
                     periodopago = If(periodopago IsNot Nothing, QuitarAcentos(periodopago), Nothing)
 
-                    Dim tiponomina As String = If(worksheet.Cells(i, 34).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tiponomina As String = If(values(33)?.ToString().Trim().ToUpper(), Nothing)
                     tiponomina = If(tiponomina IsNot Nothing, QuitarAcentos(tiponomina), Nothing)
 
-                    Dim regimencontratacionnomina As String = If(worksheet.Cells(i, 35).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim regimencontratacionnomina As String = If(values(34)?.ToString().Trim().ToUpper(), Nothing)
                     regimencontratacionnomina = If(regimencontratacionnomina IsNot Nothing, QuitarAcentos(regimencontratacionnomina), Nothing)
 
-                    Dim tipo_jornadanomina As String = If(worksheet.Cells(i, 36).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tipo_jornadanomina As String = If(values(35)?.ToString().Trim().ToUpper(), Nothing)
                     tipo_jornadanomina = If(tipo_jornadanomina IsNot Nothing, QuitarAcentos(tipo_jornadanomina), Nothing)
 
-                    Dim tipo_contratonomina As String = If(worksheet.Cells(i, 37).Value?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tipo_contratonomina As String = If(values(36)?.ToString().Trim().ToUpper(), Nothing)
                     tipo_contratonomina = If(tipo_contratonomina IsNot Nothing, QuitarAcentos(tipo_contratonomina), Nothing)
-
 
 
 
@@ -331,7 +331,7 @@ Public Class AltaMasivaEmpleados
 
                     ' Si hay errores, almacenar en la lista con la fila
                     If errores.Count > 0 Then
-                        Dim mensajeFila As String = "<br />En la fila " & i & " con Nombre: " & nombre & " y CURP: " & curp & ", los siguientes campos son requeridos:<br />" & String.Join("<br />", errores)
+                        Dim mensajeFila As String = "En la fila " & filaMensaje & " con Nombre: " & nombre & " " & apellido_paterno & " y CURP: " & curp & ", los siguientes campos son requeridos:<br />" & String.Join("<br />", errores) & "<br /><br />"
                         lineErrors.Add(mensajeFila)
                     ElseIf errores.Count = 0 Then
 
@@ -810,13 +810,13 @@ Public Class AltaMasivaEmpleados
 
 
                         If erroresCatalogos.Count > 0 Then
-                            Dim mensajeFilaCatalogos As String = "<br />En la fila " & i & " con Nombre: " & nombre & " y CURP: " & curp & ", los siguientes campos son requeridos:<br />" & String.Join("<br />", erroresCatalogos)
+                            Dim mensajeFilaCatalogos As String = "En la fila " & filaMensaje & " con Nombre: " & nombre & " " & apellido_paterno & " y CURP: " & curp & ", cuenta con los siguientes errores:<br />" & String.Join("<br />", erroresCatalogos) & "<br /><br />"
                             lineErrorsCatalogos.Add(mensajeFilaCatalogos)
                         End If
 
                         ' Se valida si no hubo errores en los datos que hacen referencia a un Catalogo
                         If errores.Count > 0 Then
-                            Dim mensajeFila As String = "<br />En la fila " & i & " con Nombre: " & nombre & " y CURP: " & curp & ", los siguientes campos son requeridos:<br />" & String.Join("<br />", errores)
+                            Dim mensajeFila As String = "En la fila " & filaMensaje & " con Nombre: " & nombre & " " & apellido_paterno & " y CURP: " & curp & ", cuenta con los siguientes errores:<br />" & String.Join("<br />", errores) & "<br /><br />"
                             lineErrors.Add(mensajeFila)
 
                         Else
@@ -975,17 +975,7 @@ Public Class AltaMasivaEmpleados
             Catch ex As Exception
                 Response.Write(ex.Message.ToString)
                 rwAlerta.RadAlert(ex.Message.ToString, 330, 180, "Alerta", "", "")
-            Finally
-                ' Cerrar el archivo y liberar recursos
-                If Not worksheet Is Nothing Then
-                    Marshal.ReleaseComObject(worksheet)
-                End If
-                If Not workbook Is Nothing Then
-                    workbook.Close(False)
-                    Marshal.ReleaseComObject(workbook)
-                End If
-                excelApp.Quit()
-                Marshal.ReleaseComObject(excelApp)
+
             End Try
         Else
             rwAlerta.RadAlert("Favor de subir el documento de Excel .csv", 330, 180, "Alerta", "", "")
@@ -1068,100 +1058,24 @@ Public Class AltaMasivaEmpleados
 
 
 
-    Protected Sub btnDescargarExcel_Click(sender As Object, e As EventArgs) Handles btnDescargarXlsx.Click
-        Dim app As Excel.Application = Nothing
-        Dim workbook As Excel.Workbook = Nothing
-        Dim worksheet As Excel.Worksheet = Nothing
-        Dim tempFilePath As String = Path.GetTempPath() & "AltaMasivaEmpleados.xlsx"
+    Protected Sub btnDescargarCSV_Click(sender As Object, e As EventArgs) Handles btnDescargarCSV.Click
+        Dim csvContent As New StringBuilder()
 
-        Try
-            app = New Excel.Application
-            workbook = app.Workbooks.Add()
-            worksheet = CType(workbook.Sheets(1), Excel.Worksheet)
+        ' Añadir encabezados
+        csvContent.AppendLine("Clave del Empleado,Nombre,Apellido Paterno,Apellido Materno,Sexo,Fecha Nacimiento,RFC,Curp,NSS,Calle,Num Exterior,Num Interior,Colonia,Municipio,Codigo Postal,Estado,Pais,Celular,Email,Lugar de Nacimiento,Estado Civil,Cliente,Sueldos y Salarios,Excendente,Fecha de alta,Registro Patronal,Departamento,Puesto,SB,SDI,Riesgo de Puesto,Regimen de contratacion,Periodo de Pago,Tipo de Nomina,Regimen Fiscal,Tipo de Jornada,Tipo de Contrato")
 
 
-            'Campos de tblPersonalAdministrado
-            worksheet.Cells(1, 1).Value = "Clave del Empleado"
-            worksheet.Cells(1, 2).Value = "Nombre"
-            worksheet.Cells(1, 3).Value = "Apellido Paterno"
-            worksheet.Cells(1, 4).Value = "Apellido Materno"
-            worksheet.Cells(1, 5).Value = "Sexo" 'CATALOGO tblSexo
-            worksheet.Cells(1, 6).Value = "Fecha Nacimiento"
-            worksheet.Cells(1, 7).Value = "RFC"
-            worksheet.Cells(1, 8).Value = "Curp"
-            worksheet.Cells(1, 9).Value = "NSS"
-            worksheet.Cells(1, 10).Value = "Calle"
-            worksheet.Cells(1, 11).Value = "Num Exterior"
-            worksheet.Cells(1, 12).Value = "Num Interior"
-            worksheet.Cells(1, 13).Value = "Colonia"
-            worksheet.Cells(1, 14).Value = "Municipio" 'CATALOGO tblMunicipio
-            worksheet.Cells(1, 15).Value = "Codigo Postal"
-            worksheet.Cells(1, 16).Value = "Estado" 'CATALOGO tblEstado
-            worksheet.Cells(1, 17).Value = "Pais"
-            worksheet.Cells(1, 18).Value = "Celular"
-            worksheet.Cells(1, 19).Value = "Email"
-            worksheet.Cells(1, 20).Value = "Lugar de Nacimiento"
-            worksheet.Cells(1, 21).Value = "Estado Civil" 'CATALOGO tblEstadoCivil
-            worksheet.Cells(1, 22).Value = "Cliente" 'CATALOGO tblMisClientes
-            worksheet.Cells(1, 23).Value = "Sueldos y Salarios"
-            worksheet.Cells(1, 24).Value = "Excendente"
-
-            'Campos de tblPersonaContrato
-            worksheet.Cells(1, 25).Value = "Fecha de alta"
-            worksheet.Cells(1, 26).Value = "Registro Patronal" 'CATALOGO tblRegistroPatronal
-            worksheet.Cells(1, 27).Value = "Departamento" 'CATALOGO tblDepartamentoCliente
-            worksheet.Cells(1, 28).Value = "Puesto" 'CATALOGO tblPuesto
-            worksheet.Cells(1, 29).Value = "SB"
-            worksheet.Cells(1, 30).Value = "SDI"
-            worksheet.Cells(1, 31).Value = "Riesgo de Puesto" 'CATALOGO tblRiesgoPuesto
-            worksheet.Cells(1, 32).Value = "Regimen de contratacion" 'CATALOGO tbltblRegimenContratacion
-            worksheet.Cells(1, 33).Value = "Periodo de Pago" 'CATALOGO tblPeriodoPago
-            worksheet.Cells(1, 34).Value = "Tipo de Nomina" 'CATALOGO tblCTipoNomina
-            worksheet.Cells(1, 35).Value = "Regimen Fiscal" 'CATALOGO tblRegimenFiscal
-            worksheet.Cells(1, 36).Value = "Tipo de Jornada" 'CATALOGO tblCTipoContrato
-            worksheet.Cells(1, 37).Value = "Tipo de Contrato" 'CATALOGO tblCTipoJornada
-
-            ' Aplicar color de relleno amarillo a las columnas especificadas
-            worksheet.Range("B1:E1").Interior.Color = RGB(255, 255, 0) ' Nombre hasta Sexo
-            worksheet.Range("F1:I1").Interior.Color = RGB(255, 255, 0) ' Fecha Nacimiento hasta NSS
-            worksheet.Range("N1:Q1").Interior.Color = RGB(255, 255, 0) ' Codigo Postal hasta Pais
-            worksheet.Range("U1:AK1").Interior.Color = RGB(255, 255, 0) ' Cliente hasta Tipo de contrato
-
-
-            ' Si el archivo existe, eliminarlo
-            If File.Exists(tempFilePath) Then
-                File.Delete(tempFilePath)
-            End If
-
-            ' Guardar el archivo temporalmente
-            workbook.SaveAs(tempFilePath)
-
-        Catch ex As Exception
-            ' Manejar el error si es necesario
-            Throw ex
-        Finally
-            ' Liberar objetos COM
-            If workbook IsNot Nothing Then
-                workbook.Close(False)
-                Marshal.ReleaseComObject(workbook)
-            End If
-            If app IsNot Nothing Then
-                app.Quit()
-                Marshal.ReleaseComObject(app)
-            End If
-        End Try
-
-        ' Descargar el archivo
-        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        Response.AddHeader("Content-Disposition", "attachment; filename=AltaMasivaEmpleados.xlsx")
-        Response.TransmitFile(tempFilePath)
+        ' Configurar la respuesta para descargar el archivo CSV
+        Response.Clear()
+        Response.Buffer = True
+        Response.BufferOutput = True
+        Response.ContentType = "text/csv"
+        Response.AddHeader("Content-Disposition", "attachment;filename=AltaMasivaEmpleados.csv")
+        Response.Charset = ""
+        Response.ContentEncoding = Encoding.UTF8
+        Response.BinaryWrite(System.Text.Encoding.UTF8.GetPreamble())
+        Response.Write(csvContent.ToString())
         Response.Flush()
-
-        ' Eliminar el archivo temporal después de descargarlo
-        If File.Exists(tempFilePath) Then
-            File.Delete(tempFilePath)
-        End If
-
         Response.End()
     End Sub
 
