@@ -185,115 +185,115 @@ Public Class AltaMasivaEmpleados
                     Dim values() As String = lines(i).Split(","c)
 
                     ' Asignar los valores a las variables correspondientes con validación y limpieza
-                    Dim clave As String = If(values(0)?.ToString().Trim().ToUpper(), Nothing)
-                    clave = If(clave IsNot Nothing, QuitarAcentos(clave), Nothing)
+                    'Dim clave As String = If(values(0)?.ToString().Trim().ToUpper(), Nothing)
+                    'clave = If(clave IsNot Nothing, QuitarAcentos(clave), Nothing)
 
-                    Dim nombre As String = If(values(1)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim nombre As String = If(values(0)?.ToString().Trim().ToUpper(), Nothing)
                     nombre = If(nombre IsNot Nothing, QuitarAcentos(nombre), Nothing)
 
-                    Dim apellido_paterno As String = If(values(2)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim apellido_paterno As String = If(values(1)?.ToString().Trim().ToUpper(), Nothing)
                     apellido_paterno = If(apellido_paterno IsNot Nothing, QuitarAcentos(apellido_paterno), Nothing)
 
-                    Dim apellido_materno As String = If(values(3)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim apellido_materno As String = If(values(2)?.ToString().Trim().ToUpper(), Nothing)
                     apellido_materno = If(apellido_materno IsNot Nothing, QuitarAcentos(apellido_materno), Nothing)
 
-                    Dim sexo As String = If(values(4)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim sexo As String = If(values(3)?.ToString().Trim().ToUpper(), Nothing)
                     sexo = If(sexo IsNot Nothing, QuitarAcentos(sexo), Nothing)
 
-                    Dim fecha_nacimiento As String = If(values(5)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim fecha_nacimiento As String = If(values(4)?.ToString().Trim().ToUpper(), Nothing)
                     fecha_nacimiento = If(fecha_nacimiento IsNot Nothing, QuitarAcentos(fecha_nacimiento), Nothing)
 
-                    Dim rfc As String = If(values(6)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim rfc As String = If(values(5)?.ToString().Trim().ToUpper(), Nothing)
                     rfc = If(rfc IsNot Nothing, QuitarAcentos(rfc), Nothing)
 
-                    Dim curp As String = If(values(7)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim curp As String = If(values(6)?.ToString().Trim().ToUpper(), Nothing)
                     curp = If(curp IsNot Nothing, QuitarAcentos(curp), Nothing)
 
-                    Dim no_imss As String = If(values(8)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim no_imss As String = If(values(7)?.ToString().Trim().ToUpper(), Nothing)
                     no_imss = If(no_imss IsNot Nothing, QuitarAcentos(no_imss), Nothing)
 
-                    Dim calle As String = If(values(9)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim calle As String = If(values(8)?.ToString().Trim().ToUpper(), Nothing)
                     calle = If(calle IsNot Nothing, QuitarAcentos(calle), Nothing)
 
-                    Dim no_ext As String = If(values(10)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim no_ext As String = If(values(9)?.ToString().Trim().ToUpper(), Nothing)
                     no_ext = If(no_ext IsNot Nothing, QuitarAcentos(no_ext), Nothing)
 
-                    Dim no_int As String = If(values(11)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim no_int As String = If(values(10)?.ToString().Trim().ToUpper(), Nothing)
                     no_int = If(no_int IsNot Nothing, QuitarAcentos(no_int), Nothing)
 
-                    Dim colonia As String = If(values(12)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim colonia As String = If(values(11)?.ToString().Trim().ToUpper(), Nothing)
                     colonia = If(colonia IsNot Nothing, QuitarAcentos(colonia), Nothing)
 
-                    Dim municipio As String = If(values(13)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim municipio As String = If(values(12)?.ToString().Trim().ToUpper(), Nothing)
                     municipio = If(municipio IsNot Nothing, QuitarAcentos(municipio), Nothing)
 
-                    Dim codigo_postal As String = If(values(14)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim codigo_postal As String = If(values(13)?.ToString().Trim().ToUpper(), Nothing)
                     codigo_postal = If(codigo_postal IsNot Nothing, QuitarAcentos(codigo_postal), Nothing)
 
-                    Dim estado As String = If(values(15)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim estado As String = If(values(14)?.ToString().Trim().ToUpper(), Nothing)
                     estado = If(estado IsNot Nothing, QuitarAcentos(estado), Nothing)
 
-                    Dim pais As String = If(values(16)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim pais As String = If(values(15)?.ToString().Trim().ToUpper(), Nothing)
                     pais = If(pais IsNot Nothing, QuitarAcentos(pais), Nothing)
 
-                    Dim celular As String = If(values(17)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim celular As String = If(values(16)?.ToString().Trim().ToUpper(), Nothing)
                     celular = If(celular IsNot Nothing, QuitarAcentos(celular), Nothing)
 
-                    Dim email As String = If(values(18)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim email As String = If(values(17)?.ToString().Trim().ToUpper(), Nothing)
                     email = If(email IsNot Nothing, QuitarAcentos(email), Nothing)
 
-                    Dim lugar_nacimiento As String = If(values(19)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim lugar_nacimiento As String = If(values(18)?.ToString().Trim().ToUpper(), Nothing)
                     lugar_nacimiento = If(lugar_nacimiento IsNot Nothing, QuitarAcentos(lugar_nacimiento), Nothing)
 
-                    Dim estado_civil As String = If(values(20)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim estado_civil As String = If(values(19)?.ToString().Trim().ToUpper(), Nothing)
                     estado_civil = If(estado_civil IsNot Nothing, QuitarAcentos(estado_civil), Nothing)
 
-                    Dim cliente As String = If(values(21)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim cliente As String = If(values(20)?.ToString().Trim().ToUpper(), Nothing)
                     cliente = If(cliente IsNot Nothing, QuitarAcentos(cliente), Nothing)
 
-                    Dim sueldos_y_salarios_str As String = If(values(22)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim sueldos_y_salarios_str As String = If(values(21)?.ToString().Trim().ToUpper(), Nothing)
                     sueldos_y_salarios_str = If(sueldos_y_salarios_str IsNot Nothing, QuitarAcentos(sueldos_y_salarios_str), Nothing)
 
-                    Dim excedente_str As String = If(values(23)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim excedente_str As String = If(values(22)?.ToString().Trim().ToUpper(), Nothing)
                     excedente_str = If(excedente_str IsNot Nothing, QuitarAcentos(excedente_str), Nothing)
 
-                    Dim fecha_alta As String = If(values(24)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim fecha_alta As String = If(values(23)?.ToString().Trim().ToUpper(), Nothing)
                     fecha_alta = If(fecha_alta IsNot Nothing, QuitarAcentos(fecha_alta), Nothing)
 
-                    Dim registropatronal As String = If(values(25)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim registropatronal As String = If(values(24)?.ToString().Trim().ToUpper(), Nothing)
                     registropatronal = If(registropatronal IsNot Nothing, QuitarAcentos(registropatronal), Nothing)
 
-                    Dim departamento As String = If(values(26)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim departamento As String = If(values(25)?.ToString().Trim().ToUpper(), Nothing)
                     departamento = If(departamento IsNot Nothing, QuitarAcentos(departamento), Nothing)
 
-                    Dim puesto As String = If(values(27)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim puesto As String = If(values(26)?.ToString().Trim().ToUpper(), Nothing)
                     puesto = If(puesto IsNot Nothing, QuitarAcentos(puesto), Nothing)
 
-                    Dim salario_base As String = If(values(28)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim salario_base As String = If(values(27)?.ToString().Trim().ToUpper(), Nothing)
                     salario_base = If(salario_base IsNot Nothing, QuitarAcentos(salario_base), Nothing)
 
-                    Dim salario_diario_integrado As String = If(values(29)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim salario_diario_integrado As String = If(values(28)?.ToString().Trim().ToUpper(), Nothing)
                     salario_diario_integrado = If(salario_diario_integrado IsNot Nothing, QuitarAcentos(salario_diario_integrado), Nothing)
 
-                    Dim riesgopuesto As String = If(values(30)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim riesgopuesto As String = If(values(29)?.ToString().Trim().ToUpper(), Nothing)
                     riesgopuesto = If(riesgopuesto IsNot Nothing, QuitarAcentos(riesgopuesto), Nothing)
 
-                    Dim regimendecontratacion As String = If(values(31)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim regimendecontratacion As String = If(values(30)?.ToString().Trim().ToUpper(), Nothing)
                     regimendecontratacion = If(regimendecontratacion IsNot Nothing, QuitarAcentos(regimendecontratacion), Nothing)
 
-                    Dim periodopago As String = If(values(32)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim periodopago As String = If(values(31)?.ToString().Trim().ToUpper(), Nothing)
                     periodopago = If(periodopago IsNot Nothing, QuitarAcentos(periodopago), Nothing)
 
-                    Dim tiponomina As String = If(values(33)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tiponomina As String = If(values(32)?.ToString().Trim().ToUpper(), Nothing)
                     tiponomina = If(tiponomina IsNot Nothing, QuitarAcentos(tiponomina), Nothing)
 
-                    Dim regimencontratacionnomina As String = If(values(34)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim regimencontratacionnomina As String = If(values(33)?.ToString().Trim().ToUpper(), Nothing)
                     regimencontratacionnomina = If(regimencontratacionnomina IsNot Nothing, QuitarAcentos(regimencontratacionnomina), Nothing)
 
-                    Dim tipo_jornadanomina As String = If(values(35)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tipo_jornadanomina As String = If(values(34)?.ToString().Trim().ToUpper(), Nothing)
                     tipo_jornadanomina = If(tipo_jornadanomina IsNot Nothing, QuitarAcentos(tipo_jornadanomina), Nothing)
 
-                    Dim tipo_contratonomina As String = If(values(36)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tipo_contratonomina As String = If(values(35)?.ToString().Trim().ToUpper(), Nothing)
                     tipo_contratonomina = If(tipo_contratonomina IsNot Nothing, QuitarAcentos(tipo_contratonomina), Nothing)
 
 
@@ -307,9 +307,11 @@ Public Class AltaMasivaEmpleados
                     If String.IsNullOrEmpty(rfc) Then errores.Add("RFC")
                     If String.IsNullOrEmpty(curp) Then errores.Add("Curp")
                     If String.IsNullOrEmpty(no_imss) Then errores.Add("NSS")
+                    If String.IsNullOrEmpty(municipio) Then errores.Add("Municipio")
                     If String.IsNullOrEmpty(codigo_postal) Then errores.Add("Codigo Postal")
                     If String.IsNullOrEmpty(estado) Then errores.Add("Estado")
                     If String.IsNullOrEmpty(pais) Then errores.Add("Pais")
+                    If String.IsNullOrEmpty(estado_civil) Then errores.Add("Estado Civil")
                     If String.IsNullOrEmpty(cliente) Then errores.Add("Cliente")
                     If String.IsNullOrEmpty(sueldos_y_salarios_str) Then errores.Add("Sueldos y Salarios")
                     If String.IsNullOrEmpty(excedente_str) Then errores.Add("Excedente")
@@ -825,7 +827,6 @@ Public Class AltaMasivaEmpleados
 
                             ' Agregar el empleado a la lista si no hay errores
                             Dim empleado As New With {
-                                .clave = clave,
                                 .nombre = nombre,
                                 .apellido_paterno = apellido_paterno,
                                 .apellido_materno = apellido_materno,
@@ -1004,7 +1005,7 @@ Public Class AltaMasivaEmpleados
                     cmd.Parameters.AddWithValue("@cmd", 29)
 
                     'Personal Administrado
-                    cmd.Parameters.AddWithValue("@clave", empleado.clave)
+                    'cmd.Parameters.AddWithValue("@clave", empleado.clave)
                     cmd.Parameters.AddWithValue("@nombre", empleado.nombre)
                     cmd.Parameters.AddWithValue("@apellido_paterno", empleado.apellido_paterno)
                     cmd.Parameters.AddWithValue("@apellido_materno", empleado.apellido_materno)
@@ -1062,7 +1063,7 @@ Public Class AltaMasivaEmpleados
         Dim csvContent As New StringBuilder()
 
         ' Añadir encabezados
-        csvContent.AppendLine("Clave del Empleado,Nombre,Apellido Paterno,Apellido Materno,Sexo,Fecha Nacimiento,RFC,Curp,NSS,Calle,Num Exterior,Num Interior,Colonia,Municipio,Codigo Postal,Estado,Pais,Celular,Email,Lugar de Nacimiento,Estado Civil,Cliente,Sueldos y Salarios,Excendente,Fecha de alta,Registro Patronal,Departamento,Puesto,SB,SDI,Riesgo de Puesto,Regimen de contratacion,Periodo de Pago,Tipo de Nomina,Regimen Fiscal,Tipo de Jornada,Tipo de Contrato")
+        csvContent.AppendLine("Nombre,Apellido Paterno,Apellido Materno,Sexo,Fecha Nacimiento,RFC,Curp,NSS,Calle,Num Exterior,Num Interior,Colonia,Municipio,Codigo Postal,Estado,Pais,Celular,Email,Lugar de Nacimiento,Estado Civil,Cliente,Sueldos y Salarios,Excendente,Fecha de alta,Registro Patronal,Departamento,Puesto,SB,SDI,Riesgo de Puesto,Regimen de contratacion,Periodo de Pago,Tipo de Nomina,Regimen Fiscal,Tipo de Jornada,Tipo de Contrato")
 
 
         ' Configurar la respuesta para descargar el archivo CSV
