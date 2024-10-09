@@ -23,20 +23,25 @@
                     <br />
                     <asp:Label ID="lblArchivo" Font-Bold="true" runat="server">Archivo:</asp:Label>
                     <asp:FileUpload ID="ImportarFile" Enabled="true" runat="server" Skin="Bootstrap" /><br />
-                    <telerik:RadButton ID="btnDescargarXlsx" RenderMode="Lightweight" Enabled="true" runat="server" Skin="Bootstrap" Text="Descargar Plantilla xlsx" Font-Bold="false" Width="180px" CssClass="rbPrimaryButton">
+                    <telerik:RadButton ID="btnDescargarCSV" RenderMode="Lightweight" Enabled="true" runat="server" Skin="Bootstrap" Text="Descargar Plantilla csv" Font-Bold="false" Width="180px" CssClass="rbPrimaryButton">
                     </telerik:RadButton>
                     &nbsp;&nbsp;&nbsp;
                     <telerik:RadButton ID="btnCargarEmpleados" RenderMode="Lightweight" Enabled="true" runat="server" Skin="Bootstrap" Text="Cargar Empleados" Font-Bold="false" Width="180px" CssClass="rbPrimaryButton">
                     </telerik:RadButton>
                     <br />
                     <br />
-                    <asp:Label ID="lblInfo" runat="server" Visible="True" Font-Bold="true">Nota: Guardar y subir el archivo en formato .xlsx</asp:Label>
+                    <asp:Label ID="lblInfo" runat="server" Visible="True" Font-Bold="true" ForeColor="Orange">Notas importantes:</asp:Label>
                     <br />
                     <br />
-                    <asp:Label ID="lblInfo1" runat="server" Visible="True" Font-Bold="true">Las columnas subrayadas en amarillo son requeridas para poder dar de alta al empleado.</asp:Label>
+                    <asp:Label ID="lblInfo0" runat="server" Visible="True" Font-Bold="true">Guardar y subir el archivo en formato .CSV</asp:Label>
                     <br />
                     <br />
-                    <asp:Label ID="lblInfo2" runat="server" Visible="True" Font-Bold="true">El formato de fecha es Dia/Mes/Año.</asp:Label>
+                    <asp:Label ID="lblInfo1" runat="server" Visible="True" Font-Bold="true">Las siguientes columnas son requeridas:</asp:Label>
+                    <br />
+                    <asp:Label ID="lblInfo2" runat="server" Visible="True" Font-Bold="true">Nombre, Apellido Paterno, Apellido Materno, Sexo, Fecha Nacimiento, RFC, Curp, NSS, Municipio, Codigo Postal, Estado, Pais, Estado Civil, Cliente, Sueldos y Salarios, Excendente, Fecha de alta, Registro Patronal, Departamento, Puesto, SB, SDI, Riesgo de Puesto, Regimen de contratacion, Periodo de Pago, Tipo de Nomina, Regimen Fiscal, Tipo de Jornada, Tipo de Contrato.</asp:Label>
+                    <br />
+                    <br />
+                    <asp:Label ID="lblInfo3" runat="server" Visible="True" Font-Bold="true">El formato de fecha es Dia/Mes/Año.</asp:Label>
                 </div>
             </div>
             <br />
@@ -53,6 +58,7 @@
             <!-- Panel para mostrar errores -->
             <asp:Panel ID="panelErrores" runat="server" Visible="False" CssClass="alert alert-danger">
                 <asp:Label ID="lblEmpleadosError" runat="server" Visible="False" Font-Bold="true"></asp:Label>
+                <br />
                 <br />
                 <h4>Las siguientes filas obtienen errores:</h4>
                 <asp:Literal ID="litErrores" runat="server"></asp:Literal>

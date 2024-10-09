@@ -41,13 +41,13 @@ Partial Public Class AltaMasivaEmpleados
     Protected WithEvents ImportarFile As Global.System.Web.UI.WebControls.FileUpload
 
     '''<summary>
-    '''Control btnDescargarXlsx.
+    '''Control btnDescargarCSV.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnDescargarXlsx As Global.Telerik.Web.UI.RadButton
+    Protected WithEvents btnDescargarCSV As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnCargarEmpleados.
@@ -68,6 +68,15 @@ Partial Public Class AltaMasivaEmpleados
     Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control lblInfo0.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo0 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control lblInfo1.
     '''</summary>
     '''<remarks>
@@ -84,6 +93,15 @@ Partial Public Class AltaMasivaEmpleados
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblInfo2 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblInfo3.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo3 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control panelSuccess.
