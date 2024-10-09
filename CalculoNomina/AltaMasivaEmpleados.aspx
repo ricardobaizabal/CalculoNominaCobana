@@ -28,20 +28,17 @@
                     &nbsp;&nbsp;&nbsp;
                     <telerik:RadButton ID="btnCargarEmpleados" RenderMode="Lightweight" Enabled="true" runat="server" Skin="Bootstrap" Text="Cargar Empleados" Font-Bold="false" Width="180px" CssClass="rbPrimaryButton">
                     </telerik:RadButton>
-                    <br />
-                    <br />
+                    <br /><br />
+                    <asp:Label ID="lblInfo0" runat="server" Visible="True" Font-Bold="true">Guardar y subir el archivo en formato .csv</asp:Label>
+                    <br /><br />
                     <asp:Label ID="lblInfo" runat="server" Visible="True" Font-Bold="true" ForeColor="Orange">Notas importantes:</asp:Label>
-                    <br />
-                    <br />
-                    <asp:Label ID="lblInfo0" runat="server" Visible="True" Font-Bold="true">Guardar y subir el archivo en formato .CSV</asp:Label>
-                    <br />
-                    <br />
+                    <br /><br />
                     <asp:Label ID="lblInfo1" runat="server" Visible="True" Font-Bold="true">Las siguientes columnas son requeridas:</asp:Label>
                     <br />
-                    <asp:Label ID="lblInfo2" runat="server" Visible="True" Font-Bold="true">Nombre, Apellido Paterno, Apellido Materno, Sexo, Fecha Nacimiento, RFC, Curp, NSS, Municipio, Codigo Postal, Estado, Pais, Estado Civil, Cliente, Sueldos y Salarios, Excendente, Fecha de alta, Registro Patronal, Departamento, Puesto, SB, SDI, Riesgo de Puesto, Regimen de contratacion, Periodo de Pago, Tipo de Nomina, Regimen Fiscal, Tipo de Jornada, Tipo de Contrato.</asp:Label>
+                    <asp:Label ID="lblInfo2" runat="server" Visible="True">1. Nombre<br />2. Apellido Paterno <br />3. Apellido Materno<br />4. Sexo<br />5. Fecha Nacimiento - Formato de fecha: Día/Mes/Año (dd/mm/aaaa)<br />6. RFC<br />7. Curp<br />8. NSS<br />9. Municipio<br />10. Codigo Postal<br />11. Estado<br />12. País<br />13. Estado Civil<br />14. Cliente<br />15. Sueldos y Salarios<br />16. Excendente<br />17. Fecha de alta - Formato de fecha: Día/Mes/Año (dd/mm/aaaa)<br />18. Registro Patronal<br />19. Departamento<br />20. Puesto<br />21. SB (salario Base)<br />22. SDI (Salario Diario Integrado)<br />23. Riesgo de Puesto<br />24. Régimen de contratación<br />25. Periodo de Pago<br />26. Tipo de Nómina<br />27. Régimen Fiscal<br />28. Tipo de Jornada<br />29. Tipo de Contrato</asp:Label>
                     <br />
                     <br />
-                    <asp:Label ID="lblInfo3" runat="server" Visible="True" Font-Bold="true">El formato de fecha es Dia/Mes/Año.</asp:Label>
+                    <%--<asp:Label ID="lblInfo3" runat="server" Visible="True" Font-Bold="true">El formato de fecha es Dia/Mes/Año.</asp:Label>--%>
                 </div>
             </div>
             <br />

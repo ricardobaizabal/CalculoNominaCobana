@@ -59,15 +59,6 @@ Partial Public Class AltaMasivaEmpleados
     Protected WithEvents btnCargarEmpleados As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control lblInfo.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''Control lblInfo0.
     '''</summary>
     '''<remarks>
@@ -75,6 +66,15 @@ Partial Public Class AltaMasivaEmpleados
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblInfo0 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblInfo.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblInfo1.
@@ -93,15 +93,6 @@ Partial Public Class AltaMasivaEmpleados
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblInfo2 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblInfo3.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblInfo3 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control panelSuccess.

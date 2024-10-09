@@ -158,6 +158,7 @@
     <Folder Include="PKI\" />
     <Folder Include="SAT\" />
     <Folder Include="TXT\" />
+    <Folder Include="UploadsMontos\" />
     <Folder Include="XmlGenerados\C\" />
     <Folder Include="XmlGenerados\E\2024\" />
     <Folder Include="XmlGenerados\F\2017\10163\215\" />
@@ -4843,7 +4844,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
+      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
