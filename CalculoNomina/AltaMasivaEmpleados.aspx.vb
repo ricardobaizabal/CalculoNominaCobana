@@ -112,7 +112,7 @@ Public Class AltaMasivaEmpleados
                 Dim tblEstadoTemp As New DataTable
                 Dim tblEstadoCivilTemp As New DataTable
                 Dim tblMisClientesTemp As New DataTable
-                Dim tblRegistroPatronalTemp As New DataTable
+                'Dim tblRegistroPatronalTemp As New DataTable
                 Dim tblDepartamentoClienteTemp As New DataTable
                 Dim tblPuestoTemp As New DataTable
                 Dim tblRiesgoPuestoTemp As New DataTable
@@ -132,16 +132,16 @@ Public Class AltaMasivaEmpleados
                     tblEstadoTemp = ds.Tables(3)
                     tblEstadoCivilTemp = ds.Tables(4)
                     tblMisClientesTemp = ds.Tables(5)
-                    tblRegistroPatronalTemp = ds.Tables(6)
-                    tblDepartamentoClienteTemp = ds.Tables(7)
-                    tblPuestoTemp = ds.Tables(8)
-                    tblRiesgoPuestoTemp = ds.Tables(9)
-                    tblRegimenContratacionTemp = ds.Tables(10)
-                    tblPeriodoPagoTemp = ds.Tables(11)
-                    tblCTipoNominaTemp = ds.Tables(12)
-                    tblRegimenFiscalTemp = ds.Tables(13)
-                    tblCTipoJornadaTemp = ds.Tables(14)
-                    tblCTipoContratoTemp = ds.Tables(15)
+                    'tblRegistroPatronalTemp = ds.Tables(6)
+                    tblDepartamentoClienteTemp = ds.Tables(6)
+                    tblPuestoTemp = ds.Tables(7)
+                    tblRiesgoPuestoTemp = ds.Tables(8)
+                    tblRegimenContratacionTemp = ds.Tables(9)
+                    tblPeriodoPagoTemp = ds.Tables(10)
+                    tblCTipoNominaTemp = ds.Tables(11)
+                    tblRegimenFiscalTemp = ds.Tables(12)
+                    tblCTipoJornadaTemp = ds.Tables(13)
+                    tblCTipoContratoTemp = ds.Tables(14)
                 End If
 
 
@@ -170,7 +170,7 @@ Public Class AltaMasivaEmpleados
                     Dim estadoid As Integer = 0
                     Dim estadocivilid As Integer = 0
                     Dim mi_cliente_id As Integer = 0
-                    Dim registropatronalid As Integer = 0
+                    'Dim registropatronalid As Integer = 0
                     Dim departamentoid As Integer = 0
                     Dim puestoid As Integer = 0
                     Dim riesgopuestoid As Integer = 0
@@ -260,40 +260,40 @@ Public Class AltaMasivaEmpleados
                     Dim fecha_alta As String = If(values(23)?.ToString().Trim().ToUpper(), Nothing)
                     fecha_alta = If(fecha_alta IsNot Nothing, QuitarAcentos(fecha_alta), Nothing)
 
-                    Dim registropatronal As String = If(values(24)?.ToString().Trim().ToUpper(), Nothing)
-                    registropatronal = If(registropatronal IsNot Nothing, QuitarAcentos(registropatronal), Nothing)
+                    'Dim registropatronal As String = If(values(24)?.ToString().Trim().ToUpper(), Nothing)
+                    'registropatronal = If(registropatronal IsNot Nothing, QuitarAcentos(registropatronal), Nothing)
 
-                    Dim departamento As String = If(values(25)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim departamento As String = If(values(24)?.ToString().Trim().ToUpper(), Nothing)
                     departamento = If(departamento IsNot Nothing, QuitarAcentos(departamento), Nothing)
 
-                    Dim puesto As String = If(values(26)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim puesto As String = If(values(25)?.ToString().Trim().ToUpper(), Nothing)
                     puesto = If(puesto IsNot Nothing, QuitarAcentos(puesto), Nothing)
 
-                    Dim salario_base As String = If(values(27)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim salario_base As String = If(values(26)?.ToString().Trim().ToUpper(), Nothing)
                     salario_base = If(salario_base IsNot Nothing, QuitarAcentos(salario_base), Nothing)
 
-                    Dim salario_diario_integrado As String = If(values(28)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim salario_diario_integrado As String = If(values(27)?.ToString().Trim().ToUpper(), Nothing)
                     salario_diario_integrado = If(salario_diario_integrado IsNot Nothing, QuitarAcentos(salario_diario_integrado), Nothing)
 
-                    Dim riesgopuesto As String = If(values(29)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim riesgopuesto As String = If(values(28)?.ToString().Trim().ToUpper(), Nothing)
                     riesgopuesto = If(riesgopuesto IsNot Nothing, QuitarAcentos(riesgopuesto), Nothing)
 
-                    Dim regimendecontratacion As String = If(values(30)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim regimendecontratacion As String = If(values(29)?.ToString().Trim().ToUpper(), Nothing)
                     regimendecontratacion = If(regimendecontratacion IsNot Nothing, QuitarAcentos(regimendecontratacion), Nothing)
 
-                    Dim periodopago As String = If(values(31)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim periodopago As String = If(values(30)?.ToString().Trim().ToUpper(), Nothing)
                     periodopago = If(periodopago IsNot Nothing, QuitarAcentos(periodopago), Nothing)
 
-                    Dim tiponomina As String = If(values(32)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tiponomina As String = If(values(31)?.ToString().Trim().ToUpper(), Nothing)
                     tiponomina = If(tiponomina IsNot Nothing, QuitarAcentos(tiponomina), Nothing)
 
-                    Dim regimencontratacionnomina As String = If(values(33)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim regimencontratacionnomina As String = If(values(32)?.ToString().Trim().ToUpper(), Nothing)
                     regimencontratacionnomina = If(regimencontratacionnomina IsNot Nothing, QuitarAcentos(regimencontratacionnomina), Nothing)
 
-                    Dim tipo_jornadanomina As String = If(values(34)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tipo_jornadanomina As String = If(values(33)?.ToString().Trim().ToUpper(), Nothing)
                     tipo_jornadanomina = If(tipo_jornadanomina IsNot Nothing, QuitarAcentos(tipo_jornadanomina), Nothing)
 
-                    Dim tipo_contratonomina As String = If(values(35)?.ToString().Trim().ToUpper(), Nothing)
+                    Dim tipo_contratonomina As String = If(values(34)?.ToString().Trim().ToUpper(), Nothing)
                     tipo_contratonomina = If(tipo_contratonomina IsNot Nothing, QuitarAcentos(tipo_contratonomina), Nothing)
 
 
@@ -316,7 +316,7 @@ Public Class AltaMasivaEmpleados
                     If String.IsNullOrEmpty(sueldos_y_salarios_str) Then errores.Add("Sueldos y Salarios")
                     If String.IsNullOrEmpty(excedente_str) Then errores.Add("Excedente")
                     If String.IsNullOrEmpty(fecha_alta) Then errores.Add("Fecha de Alta")
-                    If String.IsNullOrEmpty(registropatronal) Then errores.Add("Registro Patronal")
+                    'If String.IsNullOrEmpty(registropatronal) Then errores.Add("Registro Patronal")
                     If String.IsNullOrEmpty(departamento) Then errores.Add("Departamento")
                     If String.IsNullOrEmpty(puesto) Then errores.Add("Puesto")
                     If String.IsNullOrEmpty(salario_base) Then errores.Add("SB")
@@ -547,27 +547,27 @@ Public Class AltaMasivaEmpleados
 
 
 
-                        ' ----------- Se valida el parámetro de registro patronal ----------- 
-                        Try
-                            ' Limpiamos el nombre del registro patronal
-                            Dim registroPatronalLimpiado As String = LTrim(RTrim(registropatronal)).ToString()
+                        '' ----------- Se valida el parámetro de registro patronal ----------- 
+                        'Try
+                        '    ' Limpiamos el nombre del registro patronal
+                        '    Dim registroPatronalLimpiado As String = LTrim(RTrim(registropatronal)).ToString()
 
-                            ' Buscamos el registro patronal en la tabla temporal
-                            Dim rowRegistroPatronal() As DataRow = tblRegistroPatronalTemp.Select("nombre = '" & registroPatronalLimpiado & "'")
+                        '    ' Buscamos el registro patronal en la tabla temporal
+                        '    Dim rowRegistroPatronal() As DataRow = tblRegistroPatronalTemp.Select("nombre = '" & registroPatronalLimpiado & "'")
 
-                            ' Verificamos si se encontró alguna fila
-                            If rowRegistroPatronal.Length > 0 Then
-                                registropatronalid = CInt(rowRegistroPatronal(0)("id")) ' Asigna el ID encontrado
-                            Else
-                                Dim msjErr_registroPatronal As String = "- Registro Patronal: favor de ingresar un valor válido. Opcion: F09-16327-1-0"
-                                errores.Add(msjErr_registroPatronal)
-                                registropatronalid = 0 ' Asigna un valor por defecto si no se encuentra
-                            End If
-                        Catch ex As Exception
-                            Dim msjErr_registroPatronal As String = "- Registro Patronal: Error al validar el registro patronal: " & ex.Message
-                            errores.Add(msjErr_registroPatronal)
-                            registropatronalid = 0 ' Asigna un valor por defecto en caso de error
-                        End Try
+                        '    ' Verificamos si se encontró alguna fila
+                        '    If rowRegistroPatronal.Length > 0 Then
+                        '        registropatronalid = CInt(rowRegistroPatronal(0)("id")) ' Asigna el ID encontrado
+                        '    Else
+                        '        Dim msjErr_registroPatronal As String = "- Registro Patronal: favor de ingresar un valor válido. Opcion: F09-16327-1-0"
+                        '        errores.Add(msjErr_registroPatronal)
+                        '        registropatronalid = 0 ' Asigna un valor por defecto si no se encuentra
+                        '    End If
+                        'Catch ex As Exception
+                        '    Dim msjErr_registroPatronal As String = "- Registro Patronal: Error al validar el registro patronal: " & ex.Message
+                        '    errores.Add(msjErr_registroPatronal)
+                        '    registropatronalid = 0 ' Asigna un valor por defecto en caso de error
+                        'End Try
 
 
 
@@ -799,9 +799,9 @@ Public Class AltaMasivaEmpleados
 
 
                         ' ----------- Se valida el parametro de sueldos y salarios -----------
-                        If sueldos_y_salarios_str = "SI" Or sueldos_y_salarios_str = "SUELDOS" Then
+                        If sueldos_y_salarios_str = "SI" Or sueldos_y_salarios_str = "SUELDOS" Or sueldos_y_salarios_str = "1" Then
                             sueldos_y_salarios = 1
-                        ElseIf sueldos_y_salarios_str = "NO" Then
+                        ElseIf sueldos_y_salarios_str = "NO" Or sueldos_y_salarios_str = "0" Then
                             sueldos_y_salarios = 0
                         Else
 
@@ -851,7 +851,6 @@ Public Class AltaMasivaEmpleados
                                 .sueldos_y_salarios = sueldos_y_salarios,
                                 .excedente = excedente,
                                 .fecha_alta_str = fecha_altaEmp,
-                                .registropatronal = registropatronalid,
                                 .departamento = departamentoid,
                                 .puesto = puestoid,
                                 .salario_base = salario_base,
@@ -956,7 +955,7 @@ Public Class AltaMasivaEmpleados
                     tblEstadoTemp.Clear()
                     tblEstadoCivilTemp.Clear()
                     tblMisClientesTemp.Clear()
-                    tblRegistroPatronalTemp.Clear()
+                    'tblRegistroPatronalTemp.Clear()
                     tblDepartamentoClienteTemp.Clear()
                     tblPuestoTemp.Clear()
                     tblRiesgoPuestoTemp.Clear()
@@ -1032,7 +1031,7 @@ Public Class AltaMasivaEmpleados
 
                     'Persona Contrato
                     cmd.Parameters.AddWithValue("@fecha_alta", empleado.fecha_alta_str)
-                    cmd.Parameters.AddWithValue("@registropatronalid", empleado.registropatronal)
+                    'cmd.Parameters.AddWithValue("@registropatronalid", empleado.registropatronal)
                     cmd.Parameters.AddWithValue("@departamentoid", empleado.departamento)
                     cmd.Parameters.AddWithValue("@puestoid", empleado.puesto)
                     cmd.Parameters.AddWithValue("@salario_base", empleado.salario_base)
@@ -1063,7 +1062,7 @@ Public Class AltaMasivaEmpleados
         Dim csvContent As New StringBuilder()
 
         ' Añadir encabezados
-        csvContent.AppendLine("Nombre,Apellido Paterno,Apellido Materno,Sexo,Fecha Nacimiento,RFC,Curp,NSS,Calle,Num Exterior,Num Interior,Colonia,Municipio,Codigo Postal,Estado,Pais,Celular,Email,Lugar de Nacimiento,Estado Civil,Cliente,Sueldos y Salarios,Excendente,Fecha de alta,Registro Patronal,Departamento,Puesto,SB,SDI,Riesgo de Puesto,Regimen de contratacion,Periodo de Pago,Tipo de Nomina,Regimen Fiscal,Tipo de Jornada,Tipo de Contrato")
+        csvContent.AppendLine("Nombre,Apellido Paterno,Apellido Materno,Sexo,Fecha Nacimiento,RFC,Curp,NSS,Calle,Num Exterior,Num Interior,Colonia,Municipio,Codigo Postal,Estado,Pais,Celular,Email,Lugar de Nacimiento,Estado Civil,Cliente,Sueldos y Salarios,Excendente,Fecha de alta,Departamento,Puesto,SB,SDI,Riesgo de Puesto,Regimen de contratacion,Periodo de Pago,Tipo de Nomina,Regimen Fiscal,Tipo de Jornada,Tipo de Contrato")
 
 
         ' Configurar la respuesta para descargar el archivo CSV
