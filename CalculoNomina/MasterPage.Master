@@ -53,7 +53,8 @@
                             <li class="nav-header">
                                 <div class="dropdown profile-element">
                                     <span>
-                                        <img alt="image" class="img-thumbnail" src="images/NOMILINK2_03.png" /></span>
+                                        <img alt="image" class="img-thumbnail" src="images/NOMILINK2_03.png" />
+                                    </span>
                                 </div>
                                 <div class="logo-element">
                                     <img alt="image" class="img-thumbnail" src="images/LOGOLINKIUM_03.png" />

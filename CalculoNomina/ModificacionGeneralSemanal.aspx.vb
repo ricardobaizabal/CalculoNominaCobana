@@ -9,7 +9,7 @@ Public Class ModificacionGeneralSemanal
 
     Private CuotaPeriodo As Double
     Private HorasTriples As Double
-    Private DescansoTrabajado As Double
+    'Private DescansoTrabajado As Double
     Private PrimaDominical As Double
     Private PrimaVacacional As Double
     Private Vacaciones As Double
@@ -91,10 +91,24 @@ Public Class ModificacionGeneralSemanal
 
     Private HorasDoblesGravadas As Double
     Private HorasDoblesExentas As Double
-    Private FestivoTrabajadoGravado As Double
-    Private FestivoTrabajadoExento As Double
+    'Private FestivoTrabajadoGravado As Double
+    'Private FestivoTrabajadoExento As Double
     Private DobleteGravado As Double
     Private DobleteExento As Double
+
+    Private DescansoTrabajado As Double
+    Private DescansoTrabajadoGravado As Double
+    Private DescansoTrabajadoExento As Double
+    Private FestivoTrabajado As Double
+    Private FestivoTrabajadoGravado As Double
+    Private FestivoTrabajadoExento As Double
+    Private HorasExtraDobles As Double
+    Private HorasExtraDoblesGravadas As Double
+    Private HorasExtraDoblesExentas As Double
+    Private HorasExtraTriples As Double
+    Private ExentoHorasExtra As Double
+    Private ExentoDescansoTrabajado As Double
+    Private ExentoFestivoTrabajado As Double
 
     Private ImporteDiario As Double
     Private ImportePeriodo As Double
@@ -122,6 +136,23 @@ Public Class ModificacionGeneralSemanal
     Private Imss As Double
     Private ImporteSeguroVivienda As Double
 
+    Private PercepcionesExentas As Double
+    Private PercepcionesGravadas As Double
+
+    Private UMA As Double
+    Private UMAMensual As Double
+    Private UMI As Double
+    Private CuotaDiaria As Decimal
+
+    Private BaseGravableMensualSubsidio As Double
+    Private BaseGravableMensualSubsidioDiario As Double
+    Private BaseGravableMensualSubsidioSemanal As Double
+    Private FactorSubsidio As Double
+    Private SubsidioMensual As Double
+    Private SubsidioDiario As Double
+    Private ImporteDiarioGravado As Double
+    Private FactorDiarioPromedio As Double
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             If Not String.IsNullOrEmpty(Request("id")) Then
@@ -136,13 +167,13 @@ Public Class ModificacionGeneralSemanal
                 Call CargarDatos()
                 Call LlenaConceptosComunes(0)
 
-                grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-                grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-                grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-                grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-                grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-                grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-                grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
+                'grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
+                'grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
+                'grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
+                'grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
+                'grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
+                'grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
+                'grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
             End If
         End If
     End Sub
@@ -205,6 +236,11 @@ Public Class ModificacionGeneralSemanal
                 Periodo = oDataRow("IdPeriodo")
                 SalarioMinimoDiarioGeneral = oDataRow("SalarioMinimoDiarioGeneral")
                 ImporteSeguroVivienda = oDataRow("ImporteSeguroVivienda")
+                BaseGravableMensualSubsidio = oDataRow("BaseGravableMensualSubsidio")
+                FactorSubsidio = oDataRow("FactorSubsidio")
+                FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
+                UMA = oDataRow("UMA")
+                UMI = oDataRow("UMI")
             Next
         End If
     End Sub
@@ -348,243 +384,6 @@ Public Class ModificacionGeneralSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Function
-    Private Function ChecarQueExistaLaCuotaPeriodo(ByVal NoEmpleado As Int64, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal) As Boolean
-        Try
-
-            Call CargarVariablesGenerales()
-
-            Dim dt As New DataTable()
-            Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
-            cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = 1 'Semanal
-            cNomina.Periodo = periodoId.Value
-            cNomina.NoEmpleado = NoEmpleado
-            dt = cNomina.ConsultarConceptosEmpleado()
-
-            If dt.Rows.Count = 0 Or dt.Compute("SUM(Importe)", "CvoConcepto=85") Is DBNull.Value Then
-                ChecarQueExistaLaCuotaPeriodo = False
-            ElseIf dt.Rows.Count >= 0 And dt.Compute("SUM(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                If dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") IsNot DBNull.Value Then
-                    If dt.Compute("SUM(Importe)", "CvoConcepto=85") < (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") < (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
-                        ChecarQueExistaLaCuotaPeriodo = False
-                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=85") > (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") > (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
-                        ChecarQueExistaLaCuotaPeriodo = True
-                    End If
-                ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") Is DBNull.Value Then
-                    If dt.Compute("SUM(Importe)", "CvoConcepto=85") < ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") < UnidadIncidencia Then
-                        ChecarQueExistaLaCuotaPeriodo = False
-                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=85") > ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") > UnidadIncidencia Then
-                        ChecarQueExistaLaCuotaPeriodo = True
-                    End If
-                End If
-            End If
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        End Try
-    End Function
-    Private Sub ChecarSiExistenDiasEnPercepciones(ByVal NoEmpleado As Int64, ByVal CvoConcepto As Int32, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal)
-        Try
-            Dim CuotaPeriodo As Double = 0
-            Dim PrimaDominical As Double = 0
-            Dim PrimaVacacional As Double = 0
-            Dim Vacaciones As Double = 0
-            Dim Aguinaldo As Double = 0
-            Dim RepartoUtilidades As Double = 0
-            Dim FondoAhorro As Double = 0
-            Dim AyudaFuneral As Double = 0
-            Dim PrevisionSocial As Double = 0
-            Dim GrupoPercepcionesGravadasTotalmenteSinExentos As Double = 0
-            Dim PagoPorHoras As Double = 0
-            Dim Comisiones As Double = 0
-            Dim Destajo As Double = 0
-            HonorarioAsimilado = 0
-            DiasVacaciones = 0
-            DiasCuotaPeriodo = 0
-            DiasHonorarioAsimilado = 0
-            DiasPagoPorHoras = 0
-            DiasComision = 0
-            DiasDestajo = 0
-            TiempoExtraordinarioDentroDelMargenLegal = 0
-            TiempoExtraordinarioFueraDelMargenLegal = 0
-
-            Call CargarVariablesGenerales()
-
-            Dim dt As New DataTable()
-            Dim cNomina As New Nomina()
-
-            If Agregar = 1 Then
-                'Me.oDataAdapterChecarPercepcionesGravadasSql = New SqlDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P'", oConexionSql)
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = 1 'Semanal
-                cNomina.Periodo = periodoId.Value
-                cNomina.NoEmpleado = NoEmpleado
-                cNomina.TipoConcepto = "P"
-                dt = cNomina.ConsultarConceptosEmpleado()
-            ElseIf Agregar = 0 Then
-                'Me.oDataAdapterChecarPercepcionesGravadas = New OleDbDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P' AND CVOCONCEPTO<>" + NumeroConcepto.ToString + "", oConexion)
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = 1 'Semanal
-                cNomina.Periodo = periodoId.Value
-                cNomina.NoEmpleado = NoEmpleado
-                cNomina.TipoConcepto = "P"
-                cNomina.DiferenteDe = 1
-                cNomina.CvoConcepto = CvoConcepto
-                dt = cNomina.ConsultarConceptosEmpleado()
-            Else
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = 1 'Semanal
-                cNomina.Periodo = periodoId.Value
-                cNomina.NoEmpleado = NoEmpleado
-                cNomina.TipoConcepto = "P"
-                dt = cNomina.ConsultarConceptosEmpleado()
-            End If
-
-            ' PercepcionesGravadas
-            If dt.Rows.Count > 0 Then
-                If dt.Compute("SUM(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    If Agregar <> 3 Then
-                        DiasCuotaPeriodo = dt.Compute("SUM(Unidad)", "CvoConcepto=85")
-                        CuotaPeriodo = dt.Compute("SUM(Importe)", "CvoConcepto=85")
-                    ElseIf Agregar = 3 Then
-                        ''''''''''''''''''''''PENDIENTE'''''''''''''''''''''''''''''
-                        'DiasCuotaPeriodo = TextBox(0).Text
-                        'CuotaPeriodo = TextBoxV(0).Text
-                    End If
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
-                    DiasComision = 7
-                    Comisiones = dt.Compute("SUM(Importe)", "CvoConcepto=3")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=4") IsNot DBNull.Value Then
-                    DiasDestajo = 7
-                    Destajo = dt.Compute("SUM(Importe)", "CvoConcepto=4")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=5") IsNot DBNull.Value Then
-                    DiasHonorarioAsimilado = dt.Compute("SUM(Unidad)", "CvoConcepto=5") * 7
-                    HonorarioAsimilado = dt.Compute("SUM(Importe)", "CvoConcepto=5")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=6 OR CvoConcepto=9 OR CvoConcepto=10") IsNot DBNull.Value Then
-                    TiempoExtraordinarioDentroDelMargenLegal = dt.Compute("SUM(Importe)", "CvoConcepto=6 OR CvoConcepto=9 OR CvoConcepto=10")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=7 OR CvoConcepto=8") IsNot DBNull.Value Then
-                    TiempoExtraordinarioFueraDelMargenLegal = dt.Compute("SUM(Importe)", "CvoConcepto=7 OR CvoConcepto=8")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=11") IsNot DBNull.Value Then
-                    DiasPagoPorHoras = 7
-                    PagoPorHoras = dt.Compute("SUM(Importe)", "CvoConcepto=11")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=13") IsNot DBNull.Value Then
-                    PrimaDominical = dt.Compute("SUM(Importe)", "CvoConcepto=13")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=14") IsNot DBNull.Value Then
-                    Aguinaldo = dt.Compute("SUM(Importe)", "CvoConcepto=14")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=16") IsNot DBNull.Value Then
-                    PrimaVacacional = dt.Compute("SUM(Importe)", "CvoConcepto=16")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=15") IsNot DBNull.Value Then
-                    DiasVacaciones = dt.Compute("SUM(Unidad)", "CvoConcepto=15")
-                    Vacaciones = dt.Compute("SUM(Importe)", "CvoConcepto=15")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=50") IsNot DBNull.Value Then
-                    RepartoUtilidades = dt.Compute("SUM(Importe)", "CvoConcepto=50")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=42") IsNot DBNull.Value Then
-                    FondoAhorro = dt.Compute("SUM(Importe)", "CvoConcepto=42")
-                End If
-                If dt.Compute("SUM(Importe)", "CvoConcepto=44") IsNot DBNull.Value Then
-                    AyudaFuneral = dt.Compute("SUM(Importe)", "CvoConcepto=44")
-                End If
-                '33,34,35,36,37,38,40,41,43,45,46,47,48
-                If dt.Compute("SUM(Importe)", "CvoConcepto=33 OR CvoConcepto=34 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48") IsNot DBNull.Value Then
-                    PrevisionSocial = dt.Compute("SUM(Importe)", "CvoConcepto=6 OR CvoConcepto=9 OR CvoConcepto=10")
-                End If
-                '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49
-                If dt.Compute("SUM(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49") IsNot DBNull.Value Then
-                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("SUM(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49")
-                End If
-            End If
-
-            'Agregar es igual a uno cuando venimos del boton agregar
-            'Agregar es igual a cero cuando venimos del boton quitar
-            'Si viene del boton quitar no se agrega en ningun caso el contenido de ImporteIncidencia, solo se checa lo exento y gravado que ya esta dentro de la base de datos y se recalculan los impuestos
-            If Agregar = 1 Then
-                If CvoConcepto.ToString = "6" Or CvoConcepto.ToString = "9" Or CvoConcepto.ToString = "10" Then
-                    '6=horas exrras dobles, 9=festivo trabajado y 10=doblete(cuando termina la jornada del trabajador y por x circunstancia cubre el siguiente turno)
-                    TiempoExtraordinarioDentroDelMargenLegal = TiempoExtraordinarioDentroDelMargenLegal + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "3" Then
-                    DiasComision = 7
-                    Comisiones = Comisiones + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "4" Then
-                    DiasDestajo = 7
-                    Destajo = Destajo + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "5" Then
-                    DiasHonorarioAsimilado = DiasCuotaPeriodo + (UnidadIncidencia * 7)
-                    HonorarioAsimilado = HonorarioAsimilado + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "7" Or CvoConcepto.ToString = "8" Then
-                    '7=horas extras triples y 8=festivo trabajado
-                    TiempoExtraordinarioFueraDelMargenLegal = TiempoExtraordinarioFueraDelMargenLegal + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "2" Then
-                    DiasCuotaPeriodo = DiasCuotaPeriodo + UnidadIncidencia
-                    CuotaPeriodo = CuotaPeriodo + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "11" Then
-                    DiasPagoPorHoras = 7
-                    PagoPorHoras = PagoPorHoras + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "13" Then
-                    PrimaDominical = PrimaDominical + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "14" Then
-                    Aguinaldo = Aguinaldo + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "16" Then
-                    PrimaVacacional = PrimaVacacional + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "15" Then
-                    DiasVacaciones = DiasVacaciones + UnidadIncidencia
-                    Vacaciones = Vacaciones + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "50" Then
-                    RepartoUtilidades = RepartoUtilidades + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "42" Then
-                    FondoAhorro = FondoAhorro + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "44" Then
-                    AyudaFuneral = AyudaFuneral + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "33" Or CvoConcepto.ToString = "34" Or CvoConcepto.ToString = "35" Or CvoConcepto.ToString = "36" Or CvoConcepto.ToString = "37" Or CvoConcepto.ToString = "38" Or CvoConcepto.ToString = "40" Or CvoConcepto.ToString = "41" Or CvoConcepto.ToString = "43" Or CvoConcepto.ToString = "45" Or CvoConcepto.ToString = "46" Or CvoConcepto.ToString = "47" Or CvoConcepto.ToString = "48" Then
-                    PrevisionSocial = PrevisionSocial + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "12" Or CvoConcepto.ToString = "17" Or CvoConcepto.ToString = "18" Or CvoConcepto.ToString = "19" Or CvoConcepto.ToString = "20" Or CvoConcepto.ToString = "21" Or CvoConcepto.ToString = "22" Or CvoConcepto.ToString = "23" Or CvoConcepto.ToString = "24" Or CvoConcepto.ToString = "25" Or CvoConcepto.ToString = "26" Or CvoConcepto.ToString = "27" Or CvoConcepto.ToString = "28" Or CvoConcepto.ToString = "29" Or CvoConcepto.ToString = "30" Or CvoConcepto.ToString = "31" Or CvoConcepto.ToString = "32" Or CvoConcepto.ToString = "39" Or CvoConcepto.ToString = "49" Then
-                    '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49
-                    GrupoPercepcionesGravadasTotalmenteSinExentos = GrupoPercepcionesGravadasTotalmenteSinExentos + ImporteIncidencia
-                End If
-            End If
-
-            'Estos tipos de percepcion son independientes unos de otros, en teoria no deberian ir juntos nunca, como conllevan implicitamente 7 dias del periodo actual, si estan juntos solo se toman en cuenta 7 dias para todos
-            'El enfoque de que no deberian ir juntos nunca es que a un trabajador de sueldo no se le paga por horas, ni por comision, ni por destajo, si se hace se procede con los dias como se explica en el renglon anterior
-            If DiasCuotaPeriodo > 0 Then
-                DiasPagoPorHoras = 0
-                DiasComision = 0
-                DiasDestajo = 0
-            ElseIf DiasPagoPorHoras > 0 Then
-                DiasCuotaPeriodo = 0
-                DiasComision = 0
-                DiasDestajo = 0
-            ElseIf DiasComision > 0 Then
-                DiasPagoPorHoras = 0
-                DiasCuotaPeriodo = 0
-                DiasDestajo = 0
-            ElseIf DiasDestajo > 0 Then
-                DiasComision = 0
-                DiasPagoPorHoras = 0
-                DiasCuotaPeriodo = 0
-            End If
-            If ImporteGravado > 0 And (DiasCuotaPeriodo + DiasVacaciones + DiasComision + DiasPagoPorHoras + DiasDestajo + DiasHonorarioAsimilado > 0) Then
-                ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-            Else
-                ImporteDiario = 0
-            End If
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        End Try
-    End Sub
     Public Sub BorrarDeducciones(ByVal NoEmpleado As Int64)
         Try
             Call CargarVariablesGenerales()
@@ -656,275 +455,6 @@ Public Class ModificacionGeneralSemanal
 
         Catch oExcep As Exception
             MsgBox(oExcep.Message)
-        End Try
-    End Sub
-    Private Sub ChecarPercepcionesGravadas(ByVal NoEmpleado As Int64, ByVal CvoConcepto As Int32, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal)
-        Try
-            Dim CuotaPeriodo As Double = 0
-            Dim PrimaDominical As Double = 0
-            Dim PrimaVacacional As Double = 0
-            Dim Vacaciones As Double = 0
-            Dim Aguinaldo As Double = 0
-            Dim RepartoUtilidades As Double = 0
-            Dim FondoAhorro As Double = 0
-            Dim AyudaFuneral As Double = 0
-            Dim PrevisionSocial As Double = 0
-            Dim GrupoPercepcionesGravadasTotalmenteSinExentos As Double = 0
-            Dim PagoPorHoras As Double = 0
-            Dim Comisiones As Double = 0
-            Dim Destajo As Double = 0
-            Dim FaltasPermisosIncapacidades As Double = 0
-            HonorarioAsimilado = 0
-            DiasVacaciones = 0
-            DiasCuotaPeriodo = 0
-            DiasHonorarioAsimilado = 0
-            DiasPagoPorHoras = 0
-            DiasComision = 0
-            DiasDestajo = 0
-            DiasFaltasPermisosIncapacidades = 0
-            TiempoExtraordinarioDentroDelMargenLegal = 0
-            TiempoExtraordinarioFueraDelMargenLegal = 0
-
-            ''''''''' Pendiente leer '''''''''
-            'SalarioMinimoDiarioGeneral = 73.04
-
-            Call CargarVariablesGenerales()
-
-            Dim dt As New DataTable()
-            Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
-            cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = 1 'Semanal
-            cNomina.Periodo = periodoId.Value
-            cNomina.NoEmpleado = NoEmpleado
-            dt = cNomina.ConsultarConceptosEmpleado()
-            'PercepcionesGravadas
-            If dt.Rows.Count > 0 Then
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=85")
-                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=85")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
-                    DiasComision = 7
-                    Comisiones = dt.Compute("Sum(Importe)", "CvoConcepto=3")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=4") IsNot DBNull.Value Then
-                    DiasDestajo = 7
-                    Destajo = dt.Compute("Sum(Importe)", "CvoConcepto=4")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=5") IsNot DBNull.Value Then
-                    DiasHonorarioAsimilado = dt.Compute("Sum(UNIDAD)", "CvoConcepto=5") * 7
-                    HonorarioAsimilado = dt.Compute("Sum(Importe)", "CvoConcepto=5")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=6 OR CvoConcepto=9 OR CvoConcepto=10") IsNot DBNull.Value Then
-                    TiempoExtraordinarioDentroDelMargenLegal = dt.Compute("Sum(Importe)", "CvoConcepto=6 OR CvoConcepto=9 OR CvoConcepto=10")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=7 OR CvoConcepto=8") IsNot DBNull.Value Then
-                    TiempoExtraordinarioFueraDelMargenLegal = dt.Compute("Sum(Importe)", "CvoConcepto=7 OR CvoConcepto=8")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=11") IsNot DBNull.Value Then
-                    DiasPagoPorHoras = 7
-                    PagoPorHoras = dt.Compute("Sum(Importe)", "CvoConcepto=11")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=13") IsNot DBNull.Value Then
-                    PrimaDominical = dt.Compute("Sum(Importe)", "CvoConcepto=13")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=14") IsNot DBNull.Value Then
-                    Aguinaldo = dt.Compute("Sum(Importe)", "CvoConcepto=14")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=16") IsNot DBNull.Value Then
-                    PrimaVacacional = dt.Compute("Sum(Importe)", "CvoConcepto=16")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=15") IsNot DBNull.Value Then
-                    DiasVacaciones = dt.Compute("Sum(UNIDAD)", "CvoConcepto=15")
-                    Vacaciones = dt.Compute("Sum(Importe)", "CvoConcepto=15")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=50") IsNot DBNull.Value Then
-                    RepartoUtilidades = dt.Compute("Sum(Importe)", "CvoConcepto=50")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=42") IsNot DBNull.Value Then
-                    FondoAhorro = dt.Compute("Sum(Importe)", "CvoConcepto=42")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=44") IsNot DBNull.Value Then
-                    AyudaFuneral = dt.Compute("Sum(Importe)", "CvoConcepto=44")
-                End If
-                '33,34,35,36,37,38,40,41,43,45,46,47,48
-                If dt.Compute("Sum(Importe)", "CvoConcepto=33 OR CvoConcepto=34 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48") IsNot DBNull.Value Then
-                    PrevisionSocial = dt.Compute("Sum(Importe)", "CvoConcepto=33 OR CvoConcepto=34 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48")
-                End If
-                '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49
-                If dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49") IsNot DBNull.Value Then
-                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49")
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") IsNot DBNull.Value Then
-                    DiasFaltasPermisosIncapacidades = dt.Compute("Sum(UNIDAD)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162")
-                    FaltasPermisosIncapacidades = dt.Compute("Sum(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162")
-                End If
-            End If
-            'Agregar es igual a uno cuando venimos del boton agregar
-            'Agregar es igual a cero cuando venimos del boton quitar
-            'Si viene del boton quitar no se agrega en ningun caso el contenido de ImporteIncidencia, solo se checa lo exento y gravado que ya esta dentro de la base de datos y se recalculan los impuestos
-            If Agregar = 1 Then
-                If CvoConcepto.ToString = "6" Or CvoConcepto.ToString = "9" Or CvoConcepto.ToString = "10" Then
-                    '6=horas exrras dobles, 9=festivo trabajado y 10=doblete(cuando termina la jornada del trabajador y por x circunstancia cubre el siguiente turno)
-                    TiempoExtraordinarioDentroDelMargenLegal = TiempoExtraordinarioDentroDelMargenLegal + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "3" Then
-                    DiasComision = 7
-                    Comisiones = Comisiones + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "4" Then
-                    DiasDestajo = 7
-                    Destajo = Destajo + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "5" Then
-                    DiasHonorarioAsimilado = DiasCuotaPeriodo + (UnidadIncidencia * 7)
-                    HonorarioAsimilado = HonorarioAsimilado + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "7" Or CvoConcepto.ToString = "8" Then
-                    '7=horas extras triples y 8=festivo trabajado
-                    TiempoExtraordinarioFueraDelMargenLegal = TiempoExtraordinarioFueraDelMargenLegal + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "2" Then
-                    DiasCuotaPeriodo = DiasCuotaPeriodo + UnidadIncidencia
-                    CuotaPeriodo = CuotaPeriodo + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "11" Then
-                    DiasPagoPorHoras = 7
-                    PagoPorHoras = PagoPorHoras + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "13" Then
-                    PrimaDominical = PrimaDominical + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "14" Then
-                    Aguinaldo = Aguinaldo + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "16" Then
-                    PrimaVacacional = PrimaVacacional + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "15" Then
-                    DiasVacaciones = DiasVacaciones + UnidadIncidencia
-                    Vacaciones = Vacaciones + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "50" Then
-                    RepartoUtilidades = RepartoUtilidades + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "42" Then
-                    FondoAhorro = FondoAhorro + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "44" Then
-                    AyudaFuneral = AyudaFuneral + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "33" Or CvoConcepto.ToString = "34" Or CvoConcepto.ToString = "35" Or CvoConcepto.ToString = "36" Or CvoConcepto.ToString = "37" Or CvoConcepto.ToString = "38" Or CvoConcepto.ToString = "40" Or CvoConcepto.ToString = "41" Or CvoConcepto.ToString = "43" Or CvoConcepto.ToString = "45" Or CvoConcepto.ToString = "46" Or CvoConcepto.ToString = "47" Or CvoConcepto.ToString = "48" Then
-                    PrevisionSocial = PrevisionSocial + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "12" Or CvoConcepto.ToString = "17" Or CvoConcepto.ToString = "18" Or CvoConcepto.ToString = "19" Or CvoConcepto.ToString = "20" Or CvoConcepto.ToString = "21" Or CvoConcepto.ToString = "22" Or CvoConcepto.ToString = "23" Or CvoConcepto.ToString = "24" Or CvoConcepto.ToString = "25" Or CvoConcepto.ToString = "26" Or CvoConcepto.ToString = "27" Or CvoConcepto.ToString = "28" Or CvoConcepto.ToString = "29" Or CvoConcepto.ToString = "30" Or CvoConcepto.ToString = "31" Or CvoConcepto.ToString = "32" Or CvoConcepto.ToString = "39" Or CvoConcepto.ToString = "49" Then
-                    '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49
-                    GrupoPercepcionesGravadasTotalmenteSinExentos = GrupoPercepcionesGravadasTotalmenteSinExentos + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
-                    'deducciones
-                    'ooooooooooooooooooooooooooooooooooooooooooooooo
-                    ' aqui se descuenta de la cuota periodo el importe de las faltas, permisos e incapacidades
-                    DiasFaltasPermisosIncapacidades = DiasFaltasPermisosIncapacidades + UnidadIncidencia
-                    FaltasPermisosIncapacidades = FaltasPermisosIncapacidades + ImporteIncidencia
-                    'ooooooooooooooooooooooooooooooooooooooooooooooo
-                End If
-            End If
-            'deducciones
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            DiasCuotaPeriodo = DiasCuotaPeriodo - DiasFaltasPermisosIncapacidades
-            CuotaPeriodo = CuotaPeriodo - FaltasPermisosIncapacidades
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            If (TiempoExtraordinarioDentroDelMargenLegal / 2) < (SalarioMinimoDiarioGeneral * 5) Then
-                ImporteExento = TiempoExtraordinarioDentroDelMargenLegal / 2
-                ImporteGravado = TiempoExtraordinarioDentroDelMargenLegal / 2
-            Else
-                ImporteExento = SalarioMinimoDiarioGeneral * 5
-                ImporteGravado = TiempoExtraordinarioDentroDelMargenLegal - (SalarioMinimoDiarioGeneral * 5)
-            End If
-            If PrimaDominical > 0 And Agregar = 0 Then
-                Dim Dias As Integer
-                Dias = dt.Compute("Sum(UNIDAD)", "CvoConcepto=13")
-                If PrimaDominical < (SalarioMinimoDiarioGeneral * Dias) Then
-                    ImporteExento = ImporteExento + PrimaDominical
-                Else
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * Dias)
-                    ImporteGravado = ImporteGravado + (PrimaDominical - (SalarioMinimoDiarioGeneral * Dias))
-                End If
-            ElseIf PrimaDominical > 0 And Agregar = 1 Then
-                If CvoConcepto.ToString = "13" And ImporteIncidencia <= SalarioMinimoDiarioGeneral Then
-                    ImporteExento = ImporteExento + PrimaDominical
-                ElseIf CvoConcepto.ToString = "13" And ImporteIncidencia > SalarioMinimoDiarioGeneral Then
-                    ImporteExento = ImporteExento + SalarioMinimoDiarioGeneral
-                    ImporteGravado = ImporteGravado + (ImporteIncidencia - SalarioMinimoDiarioGeneral)
-                End If
-            End If
-            If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
-                ImporteExento = ImporteExento + Aguinaldo
-            ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-                ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
-            End If
-            If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
-                ImporteExento = ImporteExento + PrimaVacacional
-            ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
-                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-                ImporteGravado = ImporteGravado + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
-            End If
-            If RepartoUtilidades > 0 And RepartoUtilidades < (SalarioMinimoDiarioGeneral * 15) Then
-                ImporteExento = ImporteExento + RepartoUtilidades
-            ElseIf RepartoUtilidades > 0 And RepartoUtilidades > (SalarioMinimoDiarioGeneral * 15) Then
-                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-                ImporteGravado = ImporteGravado + (RepartoUtilidades - (SalarioMinimoDiarioGeneral * 15))
-            End If
-            'El tiempo extraordinario2 es gravado al 100%, no tiene nada exento igual que las vacaciones y la Cuota del periodo
-            ImporteGravado = ImporteGravado + TiempoExtraordinarioFueraDelMargenLegal + Vacaciones + CuotaPeriodo
-            'El fondo de ahorro y ayuda para funeral son exentos total siempre asi que se van directo a ImporteExento sin ningun chequeo mas
-            ImporteExento = ImporteExento + FondoAhorro + AyudaFuneral
-
-            If GrupoPercepcionesGravadasTotalmenteSinExentos > 0 Then
-                ImporteGravado = ImporteGravado + GrupoPercepcionesGravadasTotalmenteSinExentos
-            End If
-            If HonorarioAsimilado > 0 Then
-                ImporteGravado = ImporteGravado + HonorarioAsimilado
-            End If
-            If PagoPorHoras > 0 Then
-                ImporteGravado = ImporteGravado + PagoPorHoras
-            End If
-            If Comisiones > 0 Then
-                ImporteGravado = ImporteGravado + Comisiones
-            End If
-            If Destajo > 0 Then
-                ImporteGravado = ImporteGravado + Destajo
-            End If
-
-            If PrevisionSocial > 0 Then
-                If PrevisionSocial < (SalarioMinimoDiarioGeneral * 7) Then
-                    ImporteExento = ImporteExento + PrevisionSocial
-                ElseIf ImporteGravado + ImporteExento + PrevisionSocial < ((SalarioMinimoDiarioGeneral * 7) * 7) Then
-                    ImporteExento = ImporteExento + PrevisionSocial
-                ElseIf ImporteGravado + ImporteExento + PrevisionSocial > ((SalarioMinimoDiarioGeneral * 7) * 7) And ImporteGravado + ImporteExento > ((SalarioMinimoDiarioGeneral * 7) * 7) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 7)
-                    ImporteGravado = ImporteGravado + (PrevisionSocial - (SalarioMinimoDiarioGeneral * 7))
-                ElseIf ImporteGravado + ImporteExento + PrevisionSocial > ((SalarioMinimoDiarioGeneral * 7) * 7) And ImporteGravado + ImporteExento + (SalarioMinimoDiarioGeneral * 7) < ((SalarioMinimoDiarioGeneral * 7) * 7) Then
-                    ImporteExento = ImporteExento + (((SalarioMinimoDiarioGeneral * 7) * 7) - (ImporteGravado + ImporteExento))
-                    ImporteGravado = ImporteGravado + (PrevisionSocial - (((SalarioMinimoDiarioGeneral * 7) * 7) - (ImporteGravado + ImporteExento)))
-                ElseIf ImporteGravado + ImporteExento + PrevisionSocial > ((SalarioMinimoDiarioGeneral * 7) * 7) And (((SalarioMinimoDiarioGeneral * 7) * 7) - (ImporteGravado + ImporteExento) < SalarioMinimoDiarioGeneral * 7) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 7)
-                    ImporteGravado = ImporteGravado + (PrevisionSocial - (SalarioMinimoDiarioGeneral * 7))
-                End If
-            End If
-            'Estos tipos de percepcion son independientes unos de otros, en teoria no deberian ir juntos nunca, como conllevan implicitamente 7 dias del periodo actual, si estan juntos solo se toman en cuenta 7 dias para todos
-            'El enfoque de que no deberian ir juntos nunca es que a un trabajador de sueldo no se le paga por horas, ni por comision, ni por destajo, si se hace se procede con los dias como se explica en el renglon anterior
-            If DiasCuotaPeriodo > 0 Then
-                DiasPagoPorHoras = 0
-                DiasComision = 0
-                DiasDestajo = 0
-            ElseIf DiasPagoPorHoras > 0 Then
-                DiasCuotaPeriodo = 0
-                DiasComision = 0
-                DiasDestajo = 0
-            ElseIf DiasComision > 0 Then
-                DiasPagoPorHoras = 0
-                DiasCuotaPeriodo = 0
-                DiasDestajo = 0
-            ElseIf DiasDestajo > 0 Then
-                DiasComision = 0
-                DiasPagoPorHoras = 0
-                DiasCuotaPeriodo = 0
-            End If
-            If ImporteGravado > 0 And (DiasCuotaPeriodo + DiasVacaciones + DiasComision + DiasPagoPorHoras + DiasDestajo + DiasHonorarioAsimilado > 0) Then
-                ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-            Else
-                ImporteDiario = 0
-            End If
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
     Private Sub ChecarYGrabarPercepcionesExentasYGravadas(ByVal NoEmpleado As Integer, ByVal IdContrato As Integer)
@@ -1049,9 +579,9 @@ Public Class ModificacionGeneralSemanal
             dt = cNomina.ConsultarConceptosEmpleado()
 
             If dt.Rows.Count > 0 Then
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=85")
-                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=85")
+                If dt.Compute("Sum(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=2")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=2")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -1679,33 +1209,21 @@ Public Class ModificacionGeneralSemanal
             datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
             Infonavit = Nothing
 
-            ''''''''' Pendiente leer '''''''''
-            'ImporteSeguroVivienda = 15
-
             If datos.Rows.Count > 0 Then
-                If datos.Rows(0)("tipo_descuento") = 1 Then
+                If datos.Rows(0)("tipo_descuento") = 1 Then 'Cuota fija
                     Valor = datos.Rows(0)("valor_descuento")
-                    DescuentoInvonavit = ((Valor + ImporteSeguroVivienda) / 30.4) * NumeroDeDiasPagados
-                ElseIf datos.Rows(0)("tipo_descuento") = 2 Then
+                    'DescuentoInvonavit = ((Valor + ImporteSeguroVivienda) / FactorDiarioPromedio) * Dias
+                    DescuentoInvonavit = ((Valor * 2) / datos.Rows(0)("dias")) * NumeroDeDiasPagados
+                ElseIf datos.Rows(0)("tipo_descuento") = 2 Then 'Veces el salario mínimo
                     Valor = datos.Rows(0)("valor_descuento")
-                    DescuentoInvonavit = (((Valor * SalarioMinimoDiarioGeneral) + ImporteSeguroVivienda) / 30.4) * NumeroDeDiasPagados
-                ElseIf datos.Rows(0)("tipo_descuento") = 3 Then
+                    'DescuentoInvonavit = (((Valor * UMA) + ImporteSeguroVivienda) / FactorDiarioPromedio) * Dias
+                    DescuentoInvonavit = (((Valor * UMI) * 2) / datos.Rows(0)("dias")) * NumeroDeDiasPagados
+                ElseIf datos.Rows(0)("tipo_descuento") = 3 Then 'Porcentaje
                     Valor = datos.Rows(0)("valor_descuento")
-                    DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / 30.4)) * NumeroDeDiasPagados
+                    DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / FactorDiarioPromedio)) * NumeroDeDiasPagados
                 End If
 
-                'If datos.Rows(0)("tipo_descuento") = 1 Then
-                '    Valor = datos.Rows(0)("valor_descuento")
-                '    DescuentoInvonavit = (Valor / 30.4) * NumeroDeDiasPagados
-                'ElseIf datos.Rows(0)("tipo_descuento") = 2 Then
-                '    Valor = datos.Rows(0)("valor_descuento")
-                '    DescuentoInvonavit = ((Valor * SalarioMinimoDiarioGeneral) / 30.4) * NumeroDeDiasPagados
-                'ElseIf datos.Rows(0)("tipo_descuento") = 3 Then
-                '    Valor = datos.Rows(0)("valor_descuento")
-                '    DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) * NumeroDeDiasPagados)
-                'End If
-
-                QuitarConcepto(64,NoEmpleado)
+                QuitarConcepto(64, NoEmpleado)
 
                 dt = New DataTable
 
@@ -1720,13 +1238,11 @@ Public Class ModificacionGeneralSemanal
                     ImporteDiario = dt.Rows(0)("CuotaDiaria")
                     ImportePeriodo = dt.Rows(0)("CuotaDiaria") * 7
                 End If
-                GuardarRegistro(NoEmpleado, 1, DescuentoInvonavit, 64, 1, IdContrato)
+                'GuardarRegistro(NoEmpleado, 1, DescuentoInvonavit, 64, 1, IdContrato)
+                Call GuardarRegistro(CuotaPeriodo, 1, DescuentoInvonavit, 1, IdContrato, NoEmpleado, 64)
             End If
-            ''''''
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
         Catch oExcep As Exception
             MsgBox(oExcep.Message)
-
         End Try
     End Sub
     Private Sub QuitarConcepto(ByVal NumeroConcepto As Int32, ByVal NoEmpleado As Int32)
@@ -1735,9 +1251,7 @@ Public Class ModificacionGeneralSemanal
             Call CargarVariablesGenerales()
 
             Dim cNomina As New Nomina()
-
-            If NumeroConcepto <= 50 Then
-                'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=85 AND TIPOCONCEPTO='P'"
+            If NumeroConcepto <= 51 Or NumeroConcepto = 54 Or NumeroConcepto = 82 Or NumeroConcepto = 165 Or NumeroConcepto = 167 Or NumeroConcepto = 168 Or NumeroConcepto = 169 Or NumeroConcepto = 170 Or NumeroConcepto = 171 Then
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
@@ -1746,7 +1260,7 @@ Public Class ModificacionGeneralSemanal
                 cNomina.CvoConcepto = NumeroConcepto
                 cNomina.TipoConcepto = "P"
                 cNomina.EliminaConceptoEmpleado()
-            ElseIf NumeroConcepto >= 61 And NumeroConcepto <= 87 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Then
+            ElseIf NumeroConcepto >= 61 And NumeroConcepto <= 87 Or NumeroConcepto = 52 Or NumeroConcepto = 56 Or NumeroConcepto = 57 Or NumeroConcepto = 58 Or NumeroConcepto = 59 Or NumeroConcepto = 161 Or NumeroConcepto = 162 Then
                 'Deducciones
                 'cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
@@ -1761,7 +1275,7 @@ Public Class ModificacionGeneralSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub GuardarExentoYGravado(ByVal CvoConcepto, ByVal ImporteGravado, ByVal ImporteExento, ByVal NoEmpleado)
+    Private Sub GuardarExentoYGravado(ByVal CvoConcepto, ByVal ImporteGravado, ByVal ImporteExento, ByVal NoEmpleado, Optional ByVal TipoHorasExtra = 0)
         Call CargarVariablesGenerales()
 
         Dim dt As New DataTable()
@@ -1774,6 +1288,9 @@ Public Class ModificacionGeneralSemanal
         cNomina.CvoConcepto = CvoConcepto
         cNomina.ImporteGravado = ImporteGravado
         cNomina.ImporteExento = ImporteExento
+        If CvoConcepto = 10 Then
+            cNomina.TipoHorasExtra = TipoHorasExtra
+        End If
         cNomina.ActualizarExentoYGravado()
         cNomina = Nothing
     End Sub
@@ -1781,7 +1298,7 @@ Public Class ModificacionGeneralSemanal
         Try
             Impuesto = 0
             Dim ImporteSemanal As Decimal
-            ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+            ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasComision + DiasPagoPorHoras + DiasDestajo + DiasHonorarioAsimilado - DiasFaltasPermisosIncapacidades)
             Dim dt As New DataTable()
             Dim TarifaSemanal As New TarifaSemanal()
             TarifaSemanal.ImporteSemanal = ImporteSemanal
@@ -1823,9 +1340,6 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Private Sub CalcularImss()
         Imss = 0
-        ''''''''' Pendiente leer '''''''''
-        'SalarioMinimoDiarioGeneral = 73.04
-
         If ImporteDiario <= SalarioMinimoDiarioGeneral Then
             Imss = 0
         ElseIf ImporteDiario > SalarioMinimoDiarioGeneral And ImporteDiario < (SalarioMinimoDiarioGeneral * 3) Then
@@ -1838,7 +1352,7 @@ Public Class ModificacionGeneralSemanal
             Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 22)) * 0.004)
         End If
     End Sub
-    Private Sub GuardarRegistro(ByVal NoEmpleado As Int64, ByVal ConImpuesto As Int32, ByVal ImporteIncidencia As Decimal, ByVal CvoConcepto As Int32, ByVal UnidadIncidencia As Decimal, ByVal IdContrato As Integer)
+    Private Sub GuardarRegistro2(ByVal NoEmpleado As Int64, ByVal ConImpuesto As Int32, ByVal ImporteIncidencia As Decimal, ByVal CvoConcepto As Int32, ByVal UnidadIncidencia As Decimal, ByVal IdContrato As Integer)
         Try
             Call CargarVariablesGenerales()
 
@@ -1849,7 +1363,7 @@ Public Class ModificacionGeneralSemanal
 
             If ConImpuesto = 1 Then
                 If CvoConcepto <= 50 Then
-                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + cmbConcepto.SelectedValue.ToString + "', 'P', '" + txtUnidadIncidencia.Text + "', " + txtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, 0)"
+                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CvoConcepto.ToString + "', 'P', '" + txtUnidadIncidencia.Text + "', " + txtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, 0)"
                     cNomina = New Nomina()
                     'cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
@@ -2108,99 +1622,92 @@ Public Class ModificacionGeneralSemanal
 
     End Sub
     Private Sub AgregaConcepto(ByVal ImporteIncidencia, ByVal UnidadIncidencia, ByVal CuotaPeriodo, ByVal IntegradoIMSS, ByVal NoEmpleado, ByVal CvoConcepto, ByVal IdContrato)
-
         Try
-            ImporteIncidencia = Convert.ToDecimal(ImporteIncidencia)
-        Catch ex As Exception
-            ImporteIncidencia = 0
-        End Try
-        Try
-            UnidadIncidencia = Convert.ToDecimal(UnidadIncidencia)
-        Catch ex As Exception
-            UnidadIncidencia = 0
-        End Try
+            Dim Importe As Decimal = 0
+            Dim Unidad As Decimal = 0
 
-        Try
-            CuotaPeriodo = Convert.ToDecimal(CuotaPeriodo)
-        Catch ex As Exception
-            CuotaPeriodo = 0
-        End Try
+            Try
+                Importe = Convert.ToDecimal(ImporteIncidencia)
+            Catch ex As Exception
+                Importe = 0
+            End Try
+            Try
+                Unidad = Convert.ToDecimal(UnidadIncidencia)
+            Catch ex As Exception
+                Unidad = 0
+            End Try
+            Try
+                CuotaPeriodo = Convert.ToDecimal(CuotaPeriodo)
+            Catch ex As Exception
+                CuotaPeriodo = 0
+            End Try
 
-        Try
-            IntegradoIMSS = Convert.ToDecimal(IntegradoIMSS)
-        Catch ex As Exception
-            IntegradoIMSS = 0
-        End Try
-
-        If CvoConcepto = 57 Then 'Faltas
-            ImporteIncidencia = CuotaPeriodo * UnidadIncidencia
-        End If
-
-        If ImporteIncidencia <= 0 Then
-            rwAlerta.RadAlert("Favor de digitar un importe!!", 330, 180, "Alerta", "", "")
-            Exit Sub
-        ElseIf UnidadIncidencia <= 0 Then
-            rwAlerta.RadAlert("Favor de digitar un unidad!!", 330, 180, "Alerta", "", "")
-            Exit Sub
-        End If
-
-        Dim ClaveRegimenContratacion As Integer = 0
-
-        Dim cEmpleado As New Entities.Empleado
-        cEmpleado.IdEmpleado = NoEmpleado
-        cEmpleado.ConsultarEmpleadoID()
-        If cEmpleado.IdEmpleado > 0 Then
-            ClaveRegimenContratacion = cEmpleado.IdRegimencontratacion
-        End If
-
-        If CvoConcepto.ToString = "5" And ClaveRegimenContratacion <> 9 Then
-            rwAlerta.RadAlert("El regimen de contratacion de este trabajador no es honorarios asimilado a salarios!!", 330, 180, "Alerta", "", "")
-            Exit Sub
-        ElseIf CvoConcepto < 51 Or CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
-            If ClaveRegimenContratacion = 9 Then
-                rwAlerta.RadAlert("El régimen de contratación de este trabajador es asimilado a salarios, por lo mismo no se le debe agregar ningún otro tipo de percepción ni hacerle deducciones por faltas, dichas deducciones solo pueden ser por un aduedo distinto!!", 330, 180, "Alerta", "", "")
+            If Importe <= 0 Then
+                rwAlerta.RadAlert("Favor de digitar un importe!!", 330, 180, "Alerta", "", "")
+                Exit Sub
+            ElseIf Unidad <= 0 Then
+                rwAlerta.RadAlert("Favor de digitar un unidad!!", 330, 180, "Alerta", "", "")
                 Exit Sub
             End If
-        End If
 
-        If CvoConcepto.ToString = "6" Then
-            If UnidadIncidencia > 9 Then
-                rwAlerta.RadAlert("Las horas extras no pueden ser mas de 9!!", 330, 180, "Alerta", "", "")
-                Exit Sub
+            Dim ClaveRegimenContratacion As Integer = 0
+
+            Dim cEmpleado As New Entities.Empleado
+            cEmpleado.IdEmpleado = NoEmpleado
+            cEmpleado.ConsultarEmpleadoID()
+
+            If cEmpleado.IdEmpleado > 0 Then
+                ClaveRegimenContratacion = cEmpleado.IdRegimenContratacion
+                SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
             End If
-        End If
 
-        If UnidadIncidencia > 0 Then
-
-            If ChecarSiExiste(NoEmpleado, CvoConcepto) = True Then
-                rwAlerta.RadAlert("Esa percepción/deducción ya existe!!", 330, 180, "Alerta", "", "")
+            If CvoConcepto.ToString = "5" And ClaveRegimenContratacion <> 9 Then
+                rwAlerta.RadAlert("El regimen de contratacion de este trabajador no es honorarios asimilado a salarios!!", 330, 180, "Alerta", "", "")
                 Exit Sub
-            End If
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            'pasos para agregar faltas y permisos
-            'checar que exista la cuota del periodo, es decir el sueldo y que la deduccion sea menor al importe existente
-            'checar si ya existen mas deducciones agregadas anteriormente por faltas, permisos o incapacidades
-            'restarle al sueldo la cantidad correspondiente a las faltas, permisos o incapacidades y a los 7 dias del periodo, los dias correspondientes a las faltas
-            'proceder normalmente para el recalculo del impuesto y guardado de la clave de la deduccion
-            'deducciones
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            If CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
-                'si es descuento ya sea por falta, permiso o incapacidad checar si existe el concepto de cuota del periodo ya que de el se debe descontar estas deducciones
-                If ChecarQueExistaLaCuotaPeriodo(NoEmpleado, ImporteIncidencia, UnidadIncidencia) = False Then
-                    rwAlerta.RadAlert("No existe la cuota del periodo o el importe del mismo es menor al importe de la deduccion o los dias a descontar son menores a los existentes, no se puede agregar esta deduccion!!", 330, 180, "Alerta", "", "")
+            ElseIf CvoConcepto.ToString < 52 Or CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
+                If ClaveRegimenContratacion = 9 Then
+                    rwAlerta.RadAlert("El régimen de contratación de este trabajador es asimilado a salarios, por lo mismo no se le debe agregar ningún otro tipo de percepción ni hacerle deducciones por faltas, dichas deducciones solo pueden ser por un aduedo distinto!!", 330, 180, "Alerta", "", "")
                     Exit Sub
                 End If
             End If
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+            'If CvoConcepto.ToString = "10" Then
+            '    If cmbTipoHorasExtra.SelectedValue = "01" Then
+            '        If txtUnidadIncidencia.Text > 9 Then
+            '            rwAlerta.RadAlert("Las horas extras no pueden ser mas de 9!!", 330, 180, "Alerta", "", "")
+            '            Exit Sub
+            '        End If
+            '    End If
+            'End If
+
+            If ChecarSiExiste(NoEmpleado, CvoConcepto) = True Then
+                rwAlerta.RadAlert("Esa percepcion/deduccion ya existe.", 330, 180, "Alerta", "", "")
+                Exit Sub
+            End If
+
+            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            If CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
+                'si es descuento ya sea por falta, permiso o incapacidad checar si existe el concepto de cuota del periodo ya que de el se debe descontar estas deducciones
+                If ChecarQueExistaLaCuotaPeriodo(NoEmpleado, Importe, Unidad) = False Then
+                    rwAlerta.RadAlert("No existe la cuota del periodo o el importe del mismo es menor al importe de la deduccion o los dias a descontar son menores a los existentes, no se puede agregar esta deduccion!!", 330, 180, "Alerta", "", "")
+                    Exit Sub
+                    'Dim Respuesta As Integer
+                    'Respuesta = MsgBox("No existe la cuota del periodo o el importe del mismo es menor al importe de la deduccion o los dias a descontar son menores a los existentes, no se puede agregar esta deduccion a menos que desee dejar el sobre en ceros, No=SALIR Y RECTIFICAR, Si=DEJAR SOBRE EN CEROS", vbYesNo + vbExclamation + vbDefaultButton2, "Alerta")
+                    'If Respuesta = vbNo Then
+                    '    Exit Sub
+                    'End If
+                End If
+            End If
+            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
             ImporteDiario = 0
             ImportePeriodo = 0
             ImporteExento = 0
             ImporteGravado = 0
-            SubsidioAplicado = 0
-            SubsidioEfectivo = 0
             Agregar = 1
-            'IMSS
-            SalarioDiarioIntegradoTrabajador = IntegradoIMSS
+
             'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             'Pasos para agregar una percepcion
             'Checar si la incidencia es exenta o gravada para ver si procede el calculo O se guarda el registro directo sin pasar por el calculo
@@ -2209,54 +1716,161 @@ Public Class ModificacionGeneralSemanal
             'hacer el calculo del ispt
             'guardar las nuevas deducciones
             'cargar las nuevas percepciones y deducciones
-            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            ChecarSiExistenDiasEnPercepciones(NoEmpleado, CvoConcepto, ImporteIncidencia, UnidadIncidencia)
+
+            ChecarSiExistenDiasEnPercepciones(NoEmpleado, CvoConcepto, Importe, Unidad)
             If DiasCuotaPeriodo = 0 And DiasVacaciones = 0 And DiasComision = 0 And DiasPagoPorHoras = 0 And DiasDestajo = 0 And DiasHonorarioAsimilado = 0 Then
-                'En este caso, si se pagan conceptos tales como comisiones, en teoria estas se generan posterior a que el trabajador tiene un sueldo, es decir una cuaota del periodo actual, ese es el motivo del mensaje.
-                'rwAlerta.RadAlert("Esta percepcion no puede agregarse sin que exista alguna de las siguientes:" + vbCrLf + "CuotaPeriodo" + vbCrLf + "Vacaciones" + vbCrLf + "HonorarioAsimilado" + vbCrLf + "PagoPorHoras" + vbCrLf + "Comision" + vbCrLf + "Destajo" + vbCrLf + "pues estas van acompañadas implicitamente por los 7 dias correspondientes al periodo semanal lo cual es base necesaria para el calculo del impuesto,  lo que si puede hacer es cambiar el numero de dias o eliminar completamente el empleado en este periodo!!!", 330, 180, "Alerta", "", "")
+                'en este caso, si se pagan conceptos tales como comisiones, en teoria estas se generan posterior a que el trabajador tiene un sueldo, es decir una cuaota del periodo actual, ese es el motivo del mensaje.
+                '    MsgBox("Esta percepcion no puede agregarse sin que exista alguna de las siguientes:" + vbCrLf + "CuotaPeriodo" + vbCrLf + "Vacaciones" + vbCrLf + "HonorarioAsimilado" + vbCrLf + "PagoPorHoras" + vbCrLf + "Comision" + vbCrLf + "Destajo" + vbCrLf + "pues estas van acompañadas implicitamente por los 7 dias correspondientes al periodo semanal lo cual es base necesaria para el calculo del impuesto,  lo que si puede hacer es cambiar el numero de dias o eliminar completamente el empleado en este periodo!!!")
+                '    Exit Sub
+                'End If
                 BorrarDeducciones(NoEmpleado)
-            End If
-            If CvoConcepto.ToString < 51 Or CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
-                'En este bloque no entran las deducciones por adeudos que no cambian la base del impuesto y por lo tanto no lo calculan, ejemplos de esto serian, adeudos por credito infonavit, cuotas sindicales, adeudos fonacot, adeudos con el patron, etc, (conceptos del 61 al 86)
-                BorrarDeducciones(NoEmpleado)
-                ChecarPercepcionesGravadas(NoEmpleado, CvoConcepto, ImporteIncidencia, UnidadIncidencia)
-                CalcularImpuesto()
-                CalcularSubsidio()
+            Else
+                If CvoConcepto.ToString < 52 Or CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Or CvoConcepto.ToString = "167" Or CvoConcepto.ToString = "168" Or CvoConcepto.ToString = "169" Or CvoConcepto.ToString = "170" Or CvoConcepto.ToString = "171" Then
+                    'En este bloque no entran las deducciones por adeudos que no cambian la base del impuesto y por lo tanto no lo calculan, ejemplos de esto serian, adeudos por credito infonavit, cuotas sindicales, adeudos fonacot, adeudos con el patron, etc, (conceptos del 61 al 86)
+                    Call BorrarDeducciones(NoEmpleado)
+                    Call GuardarRegistro(CuotaDiaria, 1, Importe, Unidad, IdContrato, NoEmpleado, CvoConcepto)
 
-                CalcularImss()
-                Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                Imss = Math.Round(Imss, 6)
-                'Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                'Subsidio = Subsidio * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
-                If Impuesto > Subsidio Then
-                    SubsidioEfectivo = 0
-                    Impuesto = Impuesto - Subsidio
-                ElseIf Impuesto < Subsidio Then
+                    Call QuitarConcepto(52, NoEmpleado) 'IMPUESTO
+                    Call QuitarConcepto(54, NoEmpleado) 'SUBSIDIO
+                    Call QuitarConcepto(56, NoEmpleado) 'CUOTA IMSS
+
+                    Call ChecarPercepcionesGravadas(NoEmpleado, CvoConcepto, Importe, Unidad, CuotaDiaria)
+                    Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato)
+
+                    Call CalcularImss()
+
+                    Imss = Imss * NumeroDeDiasPagados
+                    Imss = Math.Round(Imss, 6)
+
+                    Dim cPeriodo As New Entities.Periodo()
+                    cPeriodo.IdPeriodo = periodoId.Value
+                    cPeriodo.ConsultarPeriodoID()
+
+                    If Imss > 0 Then
+                        Dim cNomina = New Nomina()
+                        cNomina.Cliente = empresaId.Value
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = NoEmpleado
+                        cNomina.CvoConcepto = 56
+                        cNomina.IdContrato = IdContrato
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = Imss
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = Imss
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = nominaID.Value
+                        cNomina.GuadarNominaPeriodo()
+                    End If
+
+                    Call CalcularImpuesto()
+
+                    Impuesto = Math.Round(Impuesto, 6)
+
                     SubsidioAplicado = 0
-                    SubsidioEfectivo = Subsidio - Impuesto
-                    Impuesto = 0
+                    ImporteDiarioGravado = 0
+                    BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+                    ImporteDiarioGravado = PercepcionesGravadas / NumeroDeDiasPagados
+
+                    If ImporteDiarioGravado <= BaseGravableMensualSubsidioDiario Then
+                        UMAMensual = UMA * FactorDiarioPromedio
+                        SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
+                        SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
+
+                        If (Impuesto > 0 And (Impuesto < (SubsidioDiario * NumeroDeDiasPagados))) Then
+                            SubsidioAplicado = Impuesto
+                        Else
+                            SubsidioAplicado = (SubsidioDiario * NumeroDeDiasPagados)
+                        End If
+
+                        If Impuesto > SubsidioAplicado Then
+                            Impuesto = Impuesto - SubsidioAplicado
+                        ElseIf Impuesto < SubsidioAplicado Then
+                            SubsidioAplicado = SubsidioAplicado - Impuesto
+                            Impuesto = 0
+                        End If
+
+                    End If
+
+                    If Impuesto > 0 Then
+                        Dim cNomina = New Nomina()
+                        cNomina.Cliente = empresaId.Value
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = NoEmpleado
+                        cNomina.CvoConcepto = 52
+                        cNomina.IdContrato = IdContrato
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = Impuesto
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = Impuesto
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = nominaID.Value
+                        cNomina.GuadarNominaPeriodo()
+                    End If
+
+                    If SubsidioAplicado > 0 Then
+                        Dim cNomina = New Nomina()
+                        cNomina.Cliente = empresaId.Value
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = NoEmpleado
+                        cNomina.CvoConcepto = 54
+                        cNomina.IdContrato = IdContrato
+                        cNomina.TipoConcepto = "P"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = SubsidioAplicado
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = SubsidioAplicado
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = nominaID.Value
+                        cNomina.GuadarNominaPeriodo()
+                    End If
+                Else
+                    Call GuardarRegistro(CuotaDiaria, 1, Importe, Unidad, IdContrato, NoEmpleado, CvoConcepto)
                 End If
-                Impuesto = Math.Round(Impuesto, 6)
-                SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
-                SubsidioEfectivo = Math.Round(SubsidioEfectivo, 6)
             End If
 
-            'Impuesto = Math.Round(Impuesto, 2)
-            'SubsidioAplicado = Math.Round(SubsidioAplicado, 2)
-            'SubsidioEfectivo = Math.Round(SubsidioEfectivo, 2)
-            GuardarRegistro(NoEmpleado, 1, ImporteIncidencia, CvoConcepto, UnidadIncidencia, IdContrato)
-            'Catalogo fusionado
             '*******************************************************************************************************
             '*******************************************************************************************************
-            ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato)
+            Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, 0)
             '*******************************************************************************************************
             '*******************************************************************************************************
-            SolicitarGeneracionXml(NoEmpleado, "")
 
-            'ChecarPercepcionesExentasYGravadas()
+            Call SolicitarGeneracionXml(NoEmpleado, "")
 
-
-        End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message, 330, 180, "Alerta", "", "")
+        End Try
     End Sub
     Sub txtComisiones_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
@@ -2278,9 +1892,109 @@ Public Class ModificacionGeneralSemanal
 
         Dim txtFaltas As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
 
-        AgregaConcepto(0, txtFaltas.Text, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 57, IdContrato)
+        Dim UnidadIncidencia As Decimal = 0
+        Dim Importe As Decimal = 0
+
+        Try
+            UnidadIncidencia = Convert.ToDecimal(txtFaltas.Text)
+        Catch ex As Exception
+            UnidadIncidencia = 0
+        End Try
+
+        Importe = CuotaPeriodo * UnidadIncidencia
+
+        If UnidadIncidencia = 0 Then
+            Call EliminarConcepto(57, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+        Else
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 57, IdContrato)
+        End If
 
         Call CargarDatos()
+
+    End Sub
+    Sub txtIncapacidadEG_TextChanged(sender As Object, e As EventArgs)
+        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
+        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
+        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
+
+        Dim txtIncapacidadEG As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
+
+        Dim UnidadIncidencia As Decimal = 0
+        Dim Importe As Decimal = 0
+
+        Try
+            UnidadIncidencia = Convert.ToDecimal(txtIncapacidadEG.Text)
+        Catch ex As Exception
+            UnidadIncidencia = 0
+        End Try
+
+        Importe = CuotaPeriodo * UnidadIncidencia
+
+        If UnidadIncidencia = 0 Then
+            Call EliminarConcepto(59, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+        Else
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 59, IdContrato)
+        End If
+
+        Call CargarDatos()
+
+    End Sub
+    Sub txtIncapacidadRT_TextChanged(sender As Object, e As EventArgs)
+        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
+        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
+        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
+
+        Dim txtIncapacidadRT As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
+
+        Dim UnidadIncidencia As Decimal = 0
+        Dim Importe As Decimal = 0
+
+        Try
+            UnidadIncidencia = Convert.ToDecimal(txtIncapacidadRT.Text)
+        Catch ex As Exception
+            UnidadIncidencia = 0
+        End Try
+
+        Importe = CuotaPeriodo * UnidadIncidencia
+
+        If UnidadIncidencia = 0 Then
+            Call EliminarConcepto(162, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+        Else
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 162, IdContrato)
+        End If
+
+        Call CargarDatos()
+
+    End Sub
+    Sub IncapacidadMaterna_TextChanged(sender As Object, e As EventArgs)
+        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
+        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
+        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
+
+        Dim txtIncapacidadMaterna As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
+
+        Dim UnidadIncidencia As Decimal = 0
+        Dim Importe As Decimal = 0
+
+        Try
+            UnidadIncidencia = Convert.ToDecimal(txtIncapacidadMaterna.Text)
+        Catch ex As Exception
+            UnidadIncidencia = 0
+        End Try
+
+        Importe = CuotaPeriodo * UnidadIncidencia
+
+        If UnidadIncidencia = 0 Then
+            Call EliminarConcepto(161, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+        Else
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 161, IdContrato)
+        End If
+
+        Call CargarDatos()
+
     End Sub
     Sub txtHorasDobles_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
@@ -2385,6 +2099,1153 @@ Public Class ModificacionGeneralSemanal
         Else
             Response.Redirect("~/GeneracionDeNominaNormal.aspx", False)
         End If
+    End Sub
+    Private Function ChecarQueExistaLaCuotaPeriodo(ByVal NoEmpleado As Int64, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal) As Boolean
+        Try
+
+            Call CargarVariablesGenerales()
+
+            Dim dt As New DataTable()
+            Dim cNomina As New Nomina()
+            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 1 'Semanal
+            cNomina.Periodo = periodoId.Value
+            cNomina.NoEmpleado = NoEmpleado
+            cNomina.Tipo = "N"
+            dt = cNomina.ConsultarConceptosEmpleado()
+
+            If dt.Rows.Count = 0 Or dt.Compute("Sum(Importe)", "CvoConcepto=2") Is DBNull.Value Then
+                ChecarQueExistaLaCuotaPeriodo = False
+            ElseIf dt.Rows.Count >= 0 And dt.Compute("Sum(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                If dt.Compute("Sum(Importe)", "CvoConcepto=57 Or CvoConcepto=58 Or CvoConcepto=59 Or CvoConcepto=161 Or CvoConcepto=162") IsNot DBNull.Value Then
+                    If dt.Compute("Sum(Importe)", "CvoConcepto=2") < (dt.Compute("Sum(Importe)", "CvoConcepto=57 Or CvoConcepto=58 Or CvoConcepto=59 Or CvoConcepto=161 Or CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("Sum(Unidad)", "CvoConcepto=2") < (dt.Compute("Sum(Unidad)", "CvoConcepto=57 Or CvoConcepto=58 Or CvoConcepto=59 Or CvoConcepto=161 Or CvoConcepto=162") + UnidadIncidencia) Then
+                        ChecarQueExistaLaCuotaPeriodo = False
+                    ElseIf dt.Compute("Sum(Importe)", "CvoConcepto=2") > (dt.Compute("Sum(Importe)", "CvoConcepto=57 Or CvoConcepto=58 Or CvoConcepto=59 Or CvoConcepto=161 Or CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("Sum(Unidad)", "CvoConcepto=2") > (dt.Compute("Sum(Unidad)", "CvoConcepto=57 Or CvoConcepto=58 Or CvoConcepto=59 Or CvoConcepto=161 Or CvoConcepto=162") + UnidadIncidencia) Then
+                        ChecarQueExistaLaCuotaPeriodo = True
+                    End If
+                ElseIf dt.Compute("Sum(Importe)", "CvoConcepto=57 Or CvoConcepto=58 Or CvoConcepto=59 Or CvoConcepto=161 Or CvoConcepto=162") Is DBNull.Value Then
+                    If dt.Compute("Sum(Importe)", "CvoConcepto=2") < ImporteIncidencia Or dt.Compute("Sum(Unidad)", "CvoConcepto=2") < UnidadIncidencia Then
+                        ChecarQueExistaLaCuotaPeriodo = False
+                    ElseIf dt.Compute("Sum(Importe)", "CvoConcepto=2") > ImporteIncidencia Or dt.Compute("Sum(Unidad)", "CvoConcepto=2") > UnidadIncidencia Then
+                        ChecarQueExistaLaCuotaPeriodo = True
+                    End If
+                End If
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Function
+    Private Sub ChecarSiExistenDiasEnPercepciones(ByVal NoEmpleado As Int64, ByVal CvoConcepto As Int32, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal)
+        Try
+            Dim CuotaPeriodo As Double = 0
+            Dim PrimaDominical As Double = 0
+            Dim PrimaVacacional As Double = 0
+            Dim Vacaciones As Double = 0
+            Dim Aguinaldo As Double = 0
+            Dim RepartoUtilidades As Double = 0
+            Dim FondoAhorro As Double = 0
+            Dim AyudaFuneral As Double = 0
+            Dim PrevisionSocial As Double = 0
+            Dim GrupoPercepcionesGravadasTotalmenteSinExentos As Double = 0
+            Dim PagoPorHoras As Double = 0
+            Dim Comisiones As Double = 0
+            Dim Destajo As Double = 0
+            HonorarioAsimilado = 0
+            DiasVacaciones = 0
+            DiasCuotaPeriodo = 0
+            DiasHonorarioAsimilado = 0
+            DiasPagoPorHoras = 0
+            DiasComision = 0
+            DiasDestajo = 0
+            TiempoExtraordinarioDentroDelMargenLegal = 0
+            'TiempoExtraordinarioFueraDelMargenLegal = 0
+
+            Call CargarVariablesGenerales()
+
+            Dim dt As New DataTable()
+            Dim cNomina As New Nomina()
+
+            If Agregar = 1 Then
+                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 1 'Semanal
+                cNomina.Periodo = periodoId.Value
+                cNomina.NoEmpleado = NoEmpleado
+                cNomina.TipoConcepto = "P"
+                cNomina.Tipo = "N"
+                dt = cNomina.ConsultarConceptosEmpleado()
+            ElseIf Agregar = 0 Then
+                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 1 'Semanal
+                cNomina.Periodo = periodoId.Value
+                cNomina.NoEmpleado = NoEmpleado
+                cNomina.TipoConcepto = "P"
+                cNomina.DiferenteDe = 1
+                cNomina.CvoConcepto = CvoConcepto
+                cNomina.Tipo = "N"
+                dt = cNomina.ConsultarConceptosEmpleado()
+            Else
+                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 1 'Semanal
+                cNomina.Periodo = periodoId.Value
+                cNomina.NoEmpleado = NoEmpleado
+                cNomina.TipoConcepto = "P"
+                cNomina.Tipo = "N"
+                dt = cNomina.ConsultarConceptosEmpleado()
+            End If
+
+            ' PercepcionesGravadas
+            If dt.Rows.Count > 0 Then
+                If dt.Compute("Sum(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=2")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=2")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
+                    DiasComision = 7
+                    Comisiones = dt.Compute("Sum(Importe)", "CvoConcepto=3")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=4") IsNot DBNull.Value Then
+                    DiasDestajo = 7
+                    Destajo = dt.Compute("Sum(Importe)", "CvoConcepto=4")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=5") IsNot DBNull.Value Then
+                    DiasHonorarioAsimilado = dt.Compute("Sum(Unidad)", "CvoConcepto=5") * 7
+                    HonorarioAsimilado = dt.Compute("Sum(Importe)", "CvoConcepto=5")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=6 OR CvoConcepto=9 OR CvoConcepto=10") IsNot DBNull.Value Then
+                    TiempoExtraordinarioDentroDelMargenLegal = dt.Compute("Sum(Importe)", "CvoConcepto=6 OR CvoConcepto=9 OR CvoConcepto=10")
+                End If
+                'If dt.Compute("Sum(Importe)", "CvoConcepto=7 OR CvoConcepto=8") IsNot DBNull.Value Then
+                '    TiempoExtraordinarioFueraDelMargenLegal = dt.Compute("Sum(Importe)", "CvoConcepto=7 OR CvoConcepto=8")
+                'End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=7") IsNot DBNull.Value Then
+                    HorasExtraTriples = dt.Compute("Sum(Importe)", "CvoConcepto=7")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=8") IsNot DBNull.Value Then
+                    DescansoTrabajado = dt.Compute("Sum(Importe)", "CvoConcepto=8")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=11") IsNot DBNull.Value Then
+                    DiasPagoPorHoras = 7
+                    PagoPorHoras = dt.Compute("Sum(Importe)", "CvoConcepto=11")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=13") IsNot DBNull.Value Then
+                    PrimaDominical = dt.Compute("Sum(Importe)", "CvoConcepto=13")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=14") IsNot DBNull.Value Then
+                    Aguinaldo = dt.Compute("Sum(Importe)", "CvoConcepto=14")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=16") IsNot DBNull.Value Then
+                    PrimaVacacional = dt.Compute("Sum(Importe)", "CvoConcepto=16")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=15") IsNot DBNull.Value Then
+                    DiasVacaciones = dt.Compute("Sum(Unidad)", "CvoConcepto=15")
+                    Vacaciones = dt.Compute("Sum(Importe)", "CvoConcepto=15")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=50") IsNot DBNull.Value Then
+                    RepartoUtilidades = dt.Compute("Sum(Importe)", "CvoConcepto=50")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=42") IsNot DBNull.Value Then
+                    FondoAhorro = dt.Compute("Sum(Importe)", "CvoConcepto=42")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=44") IsNot DBNull.Value Then
+                    AyudaFuneral = dt.Compute("Sum(Importe)", "CvoConcepto=44")
+                End If
+                '20,33,35,36,37,38,40,41,43,45,46,47,48
+                If dt.Compute("Sum(Importe)", "CvoConcepto=20 OR CvoConcepto=33 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48") IsNot DBNull.Value Then
+                    PrevisionSocial = dt.Compute("CvoConcepto=20 OR Sum(Importe)", "CvoConcepto=33 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48")
+                End If
+                '12,17,18,19,21,22,23,24,25,26,27,28,29,30,31,32,34,39,49
+                '167,168,169,170,171
+                If dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=167 OR CvoConcepto=168 OR CvoConcepto=169 OR CvoConcepto=170 OR CvoConcepto=171") IsNot DBNull.Value Then
+                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=167 OR CvoConcepto=168 OR CvoConcepto=169 OR CvoConcepto=170 OR CvoConcepto=171")
+                End If
+            End If
+
+            'Agregar es igual a uno cuando venimos del boton agregar
+            'Agregar es igual a cero cuando venimos del boton quitar
+            'Si viene del boton quitar no se agrega en ningun caso el contenido de ImporteIncidencia, solo se checa lo exento y gravado que ya esta dentro de la base de datos y se recalculan los impuestos
+            If Agregar = 1 Then
+
+                'Dim ImporteIncidencia As Decimal = 0
+                'Dim UnidadIncidencia As Decimal = 0
+                'Try
+                '    ImporteIncidencia = Convert.ToDecimal(txtImporteIncidencia.Text)
+                'Catch ex As Exception
+                '    ImporteIncidencia = 0
+                'End Try
+
+                'Try
+                '    UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
+                'Catch ex As Exception
+                '    UnidadIncidencia = 0
+                'End Try
+
+                If CvoConcepto.ToString = "6" Or CvoConcepto.ToString = "9" Or CvoConcepto.ToString = "10" Then
+                    '6=horas exrras dobles, 9=festivo trabajado y 10=doblete(cuando termina la jornada del trabajador y por x circunstancia cubre el siguiente turno)
+                    TiempoExtraordinarioDentroDelMargenLegal = TiempoExtraordinarioDentroDelMargenLegal + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "3" Then
+                    DiasComision = 7
+                    Comisiones = Comisiones + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "4" Then
+                    DiasDestajo = 7
+                    Destajo = Destajo + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "5" Then
+                    DiasHonorarioAsimilado = DiasCuotaPeriodo + (UnidadIncidencia * 7)
+                    HonorarioAsimilado = HonorarioAsimilado + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "7" Or CvoConcepto.ToString = "8" Then
+                    '7=horas extras triples y 8=festivo trabajado
+                    TiempoExtraordinarioFueraDelMargenLegal = TiempoExtraordinarioFueraDelMargenLegal + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "2" Then
+                    DiasCuotaPeriodo = DiasCuotaPeriodo + UnidadIncidencia
+                    CuotaPeriodo = CuotaPeriodo + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "11" Then
+                    DiasPagoPorHoras = 7
+                    PagoPorHoras = PagoPorHoras + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "13" Then
+                    PrimaDominical = PrimaDominical + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "14" Then
+                    Aguinaldo = Aguinaldo + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "16" Then
+                    PrimaVacacional = PrimaVacacional + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "15" Then
+                    DiasVacaciones = DiasVacaciones + UnidadIncidencia
+                    Vacaciones = Vacaciones + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "50" Then
+                    RepartoUtilidades = RepartoUtilidades + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "42" Then
+                    FondoAhorro = FondoAhorro + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "44" Then
+                    AyudaFuneral = AyudaFuneral + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "20" Or CvoConcepto.ToString = "33" Or CvoConcepto.ToString = "34" Or CvoConcepto.ToString = "35" Or CvoConcepto.ToString = "36" Or CvoConcepto.ToString = "37" Or CvoConcepto.ToString = "38" Or CvoConcepto.ToString = "40" Or CvoConcepto.ToString = "41" Or CvoConcepto.ToString = "43" Or CvoConcepto.ToString = "45" Or CvoConcepto.ToString = "46" Or CvoConcepto.ToString = "47" Or CvoConcepto.ToString = "48" Then
+                    PrevisionSocial = PrevisionSocial + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "12" Or CvoConcepto.ToString = "17" Or CvoConcepto.ToString = "18" Or CvoConcepto.ToString = "19" Or CvoConcepto.ToString = "20" Or CvoConcepto.ToString = "21" Or CvoConcepto.ToString = "22" Or CvoConcepto.ToString = "23" Or CvoConcepto.ToString = "24" Or CvoConcepto.ToString = "25" Or CvoConcepto.ToString = "26" Or CvoConcepto.ToString = "27" Or CvoConcepto.ToString = "28" Or CvoConcepto.ToString = "29" Or CvoConcepto.ToString = "30" Or CvoConcepto.ToString = "31" Or CvoConcepto.ToString = "32" Or CvoConcepto.ToString = "39" Or CvoConcepto.ToString = "49" Then
+                    '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49
+                    GrupoPercepcionesGravadasTotalmenteSinExentos = GrupoPercepcionesGravadasTotalmenteSinExentos + ImporteIncidencia
+                End If
+            End If
+
+            'Estos tipos de percepcion son independientes unos de otros, en teoria no deberian ir juntos nunca, como conllevan implicitamente 7 dias del periodo actual, si estan juntos solo se toman en cuenta 7 dias para todos
+            'El enfoque de que no deberian ir juntos nunca es que a un trabajador de sueldo no se le paga por horas, ni por comision, ni por destajo, si se hace se procede con los dias como se explica en el renglon anterior
+            If DiasCuotaPeriodo > 0 Then
+                DiasPagoPorHoras = 0
+                DiasComision = 0
+                DiasDestajo = 0
+            ElseIf DiasPagoPorHoras > 0 Then
+                DiasCuotaPeriodo = 0
+                DiasComision = 0
+                DiasDestajo = 0
+            ElseIf DiasComision > 0 Then
+                DiasPagoPorHoras = 0
+                DiasCuotaPeriodo = 0
+                DiasDestajo = 0
+            ElseIf DiasDestajo > 0 Then
+                DiasComision = 0
+                DiasPagoPorHoras = 0
+                DiasCuotaPeriodo = 0
+            End If
+            If ImporteGravado > 0 And (DiasCuotaPeriodo + DiasVacaciones + DiasComision + DiasPagoPorHoras + DiasDestajo + DiasHonorarioAsimilado > 0) Then
+                ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+            Else
+                ImporteDiario = 0
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub ChecarPercepcionesGravadas(ByVal NoEmpleado As Int64, ByVal CvoConcepto As Int32, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal, ByVal CuotaDiaria As Decimal)
+        Try
+            Dim CuotaPeriodo As Double = 0
+            Dim PrimaDominical As Double = 0
+            Dim PrimaVacacional As Double = 0
+            Dim Vacaciones As Double = 0
+            Dim Aguinaldo As Double = 0
+            Dim Telecomunicaciones As Double = 0
+            Dim RepartoUtilidades As Double = 0
+            Dim FondoAhorro As Double = 0
+            Dim AyudaFuneral As Double = 0
+            Dim PrevisionSocial As Double = 0
+            Dim GrupoPercepcionesGravadasTotalmenteSinExentos As Double = 0
+            Dim PagoPorHoras As Double = 0
+            Dim Comisiones As Double = 0
+            Dim Destajo As Double = 0
+            Dim FaltasPermisosIncapacidades As Double = 0
+            HonorarioAsimilado = 0
+            DiasVacaciones = 0
+            DiasCuotaPeriodo = 0
+            DiasHonorarioAsimilado = 0
+            DiasPagoPorHoras = 0
+            DiasComision = 0
+            DiasDestajo = 0
+            DiasFaltasPermisosIncapacidades = 0
+
+            DescansoTrabajado = 0
+            DescansoTrabajadoGravado = 0
+            DescansoTrabajadoExento = 0
+            FestivoTrabajado = 0
+            FestivoTrabajadoGravado = 0
+            FestivoTrabajadoExento = 0
+            HorasExtraDobles = 0
+            HorasExtraDoblesGravadas = 0
+            HorasExtraDoblesExentas = 0
+            HorasExtraTriples = 0
+            ExentoHorasExtra = 0
+            ExentoDescansoTrabajado = 0
+            ExentoFestivoTrabajado = 0
+            'TiempoExtraordinarioFueraDelMargenLegal = 0
+            ImporteGravado = 0
+            ImporteDiario = 0
+
+            'Dim ImporteIncidencia As Decimal = 0
+            'Dim UnidadIncidencia As Decimal = 0
+            'Try
+            '    ImporteIncidencia = Convert.ToDecimal(txtImporteIncidencia.Text)
+            'Catch ex As Exception
+            '    ImporteIncidencia = 0
+            'End Try
+
+            'Try
+            '    UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
+            'Catch ex As Exception
+            '    UnidadIncidencia = 0
+            'End Try
+
+            'Try
+            '    CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
+            'Catch ex As Exception
+            '    CuotaDiaria = 0
+            'End Try
+
+            Call CargarVariablesGenerales()
+
+            Dim dt As New DataTable()
+            Dim cNomina As New Nomina()
+            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 1 'Semanal
+            cNomina.Periodo = periodoId.Value
+            cNomina.NoEmpleado = NoEmpleado
+            cNomina.Tipo = "N"
+            dt = cNomina.ConsultarConceptosEmpleado()
+
+            'PercepcionesGravadas
+            If dt.Rows.Count > 0 Then
+                If dt.Compute("Sum(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=2")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=2")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
+                    DiasComision = 7
+                    Comisiones = dt.Compute("Sum(Importe)", "CvoConcepto=3")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=4") IsNot DBNull.Value Then
+                    DiasDestajo = 7
+                    Destajo = dt.Compute("Sum(Importe)", "CvoConcepto=4")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=5") IsNot DBNull.Value Then
+                    DiasHonorarioAsimilado = dt.Compute("Sum(UNIDAD)", "CvoConcepto=5") * 7
+                    HonorarioAsimilado = dt.Compute("Sum(Importe)", "CvoConcepto=5")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=8") IsNot DBNull.Value Then
+                    DescansoTrabajado = dt.Compute("Sum(Importe)", "CvoConcepto=8")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=9") IsNot DBNull.Value Then
+                    FestivoTrabajado = dt.Compute("Sum(Importe)", "CvoConcepto=9")
+                End If
+                '****************** Modificacion HORAS EXTRA 17/05/2017 '******************
+                If dt.Compute("Sum(Importe)", "CvoConcepto=10") IsNot DBNull.Value Then
+                    If dt.Compute("Sum(Importe)", "CvoConcepto=10 AND TipoHorasExtra='01'") IsNot DBNull.Value Then
+                        HorasExtraDobles = dt.Compute("Sum(Importe)", "CvoConcepto=10 AND TipoHorasExtra='01'")
+                    End If
+                    If dt.Compute("Sum(Importe)", "CvoConcepto=10 AND TipoHorasExtra='02'") IsNot DBNull.Value Then
+                        HorasExtraTriples = dt.Compute("Sum(Importe)", "CvoConcepto=10 AND TipoHorasExtra='02'")
+                    End If
+                End If
+                '****************** Modificacion HORAS EXTRA 17/05/2017 '******************
+                If dt.Compute("Sum(Importe)", "CvoConcepto=11") IsNot DBNull.Value Then
+                    DiasPagoPorHoras = 7
+                    PagoPorHoras = dt.Compute("Sum(Importe)", "CvoConcepto=11")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=13") IsNot DBNull.Value Then
+                    PrimaDominical = dt.Compute("Sum(Importe)", "CvoConcepto=13")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=14") IsNot DBNull.Value Then
+                    Aguinaldo = dt.Compute("Sum(Importe)", "CvoConcepto=14")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=16") IsNot DBNull.Value Then
+                    PrimaVacacional = dt.Compute("Sum(Importe)", "CvoConcepto=16")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=20") IsNot DBNull.Value Then
+                    Telecomunicaciones = dt.Compute("Sum(Importe)", "CvoConcepto=20")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=15") IsNot DBNull.Value Then
+                    DiasVacaciones = dt.Compute("Sum(UNIDAD)", "CvoConcepto=15")
+                    Vacaciones = dt.Compute("Sum(Importe)", "CvoConcepto=15")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=50") IsNot DBNull.Value Then
+                    RepartoUtilidades = dt.Compute("Sum(Importe)", "CvoConcepto=50")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=42") IsNot DBNull.Value Then
+                    FondoAhorro = dt.Compute("Sum(Importe)", "CvoConcepto=42")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=44") IsNot DBNull.Value Then
+                    AyudaFuneral = dt.Compute("Sum(Importe)", "CvoConcepto=44")
+                End If
+                '18,20,28,33,35,36,37,38,40,41,43,45,46,47,48
+                If dt.Compute("Sum(Importe)", "CvoConcepto=18 OR CvoConcepto=20 OR CvoConcepto=28 OR CvoConcepto=33 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48") IsNot DBNull.Value Then
+                    PrevisionSocial = dt.Compute("Sum(Importe)", "CvoConcepto=18 OR CvoConcepto=20 OR CvoConcepto=28 OR CvoConcepto=33 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48")
+                End If
+                '12,17,19,21,22,23,24,25,26,27,29,30,31,34,39,49,51
+                '167,168,169,170,171
+                If dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=19 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=34 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=51 OR CvoConcepto=167 OR CvoConcepto=168 OR CvoConcepto=169 OR CvoConcepto=170 OR CvoConcepto=171") IsNot DBNull.Value Then
+                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=19 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=34 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=51 OR CvoConcepto=167 OR CvoConcepto=168 OR CvoConcepto=169 OR CvoConcepto=170 OR CvoConcepto=171")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") IsNot DBNull.Value Then
+                    DiasFaltasPermisosIncapacidades = dt.Compute("Sum(UNIDAD)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162")
+                    FaltasPermisosIncapacidades = dt.Compute("Sum(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=54") IsNot DBNull.Value Then
+                    SubsidioAplicado = dt.Compute("Sum(Importe)", "CvoConcepto=54")
+                End If
+                'If dt.Compute("Sum(Importe)", "CvoConcepto=55") IsNot DBNull.Value Then
+                '    SubsidioEfectivo = dt.Compute("Sum(Importe)", "CvoConcepto=55")
+                'End If
+            End If
+            'Agregar es igual a uno cuando venimos del boton agregar
+            'Agregar es igual a cero cuando venimos del boton quitar
+            'Si viene del boton quitar no se agrega en ningun caso el contenido de ImporteIncidencia, solo se checa lo exento y gravado que ya esta dentro de la base de datos y se recalculan los impuestos
+            'If Agregar = 1 Then
+            '    If CvoConcepto.ToString = "10" Then
+            '        '6=horas exrras dobles, 9=festivo trabajado y 10=doblete(cuando termina la jornada del trabajador y por x circunstancia cubre el siguiente turno)
+            '        'TiempoExtraordinarioDentroDelMargenLegal = TiempoExtraordinarioDentroDelMargenLegal + ImporteIncidencia
+            '        'TiempoExtraordinarioDentroDelMargenLegal = ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "3" Then
+            '        DiasComision = 7
+            '        Comisiones = Comisiones + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "4" Then
+            '        DiasDestajo = 7
+            '        Destajo = Destajo + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "5" Then
+            '        DiasHonorarioAsimilado = DiasCuotaPeriodo + (UnidadIncidencia * 7)
+            '        HonorarioAsimilado = HonorarioAsimilado + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "7" Or CvoConcepto.ToString = "8" Then
+            '        '7=horas extras triples y 8=festivo trabajado
+            '        'TiempoExtraordinarioFueraDelMargenLegal = TiempoExtraordinarioFueraDelMargenLegal + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "2" Then
+            '        DiasCuotaPeriodo = DiasCuotaPeriodo + UnidadIncidencia
+            '        CuotaPeriodo = CuotaPeriodo + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "11" Then
+            '        DiasPagoPorHoras = 7
+            '        PagoPorHoras = PagoPorHoras + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "13" Then
+            '        PrimaDominical = PrimaDominical + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "14" Then
+            '        Aguinaldo = Aguinaldo + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "16" Then
+            '        PrimaVacacional = PrimaVacacional + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "15" Then
+            '        DiasVacaciones = DiasVacaciones + UnidadIncidencia
+            '        Vacaciones = Vacaciones + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "50" Then
+            '        RepartoUtilidades = RepartoUtilidades + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "42" Then
+            '        FondoAhorro = FondoAhorro + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "44" Then
+            '        AyudaFuneral = AyudaFuneral + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "33" Or CvoConcepto.ToString = "35" Or CvoConcepto.ToString = "36" Or CvoConcepto.ToString = "37" Or CvoConcepto.ToString = "38" Or CvoConcepto.ToString = "40" Or CvoConcepto.ToString = "41" Or CvoConcepto.ToString = "43" Or CvoConcepto.ToString = "45" Or CvoConcepto.ToString = "46" Or CvoConcepto.ToString = "47" Or CvoConcepto.ToString = "48" Then
+            '        PrevisionSocial = PrevisionSocial + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "12" Or CvoConcepto.ToString = "17" Or CvoConcepto.ToString = "18" Or CvoConcepto.ToString = "19" Or CvoConcepto.ToString = "20" Or CvoConcepto.ToString = "21" Or CvoConcepto.ToString = "22" Or CvoConcepto.ToString = "23" Or CvoConcepto.ToString = "24" Or CvoConcepto.ToString = "25" Or CvoConcepto.ToString = "26" Or CvoConcepto.ToString = "27" Or CvoConcepto.ToString = "28" Or CvoConcepto.ToString = "29" Or CvoConcepto.ToString = "30" Or CvoConcepto.ToString = "31" Or CvoConcepto.ToString = "32" Or CvoConcepto.ToString = "39" Or CvoConcepto.ToString = "49" Or CvoConcepto.ToString = "51" Or CvoConcepto.ToString = "167" Or CvoConcepto.ToString = "168" Or CvoConcepto.ToString = "169" Or CvoConcepto.ToString = "170" Or CvoConcepto.ToString = "171" Then
+            '        '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49,51
+            '        '167,168,169,170,171
+            '        GrupoPercepcionesGravadasTotalmenteSinExentos = GrupoPercepcionesGravadasTotalmenteSinExentos + ImporteIncidencia
+            '    ElseIf CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
+            '        'deducciones
+            '        'ooooooooooooooooooooooooooooooooooooooooooooooo
+            '        ' aqui se descuenta de la cuota periodo el Importe de las faltas, permisos e incapacidades
+            '        DiasFaltasPermisosIncapacidades = DiasFaltasPermisosIncapacidades + UnidadIncidencia
+            '        FaltasPermisosIncapacidades = FaltasPermisosIncapacidades + ImporteIncidencia
+            '        'ooooooooooooooooooooooooooooooooooooooooooooooo
+            '    End If
+            'End If
+
+            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            DiasCuotaPeriodo = DiasCuotaPeriodo - DiasFaltasPermisosIncapacidades
+            CuotaPeriodo = CuotaPeriodo - FaltasPermisosIncapacidades
+            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+
+            If DescansoTrabajado > 0 Then
+                '****************** Modificacion DESCANSO TRABAJADO 17/06/2021 '******************
+                ExentoDescansoTrabajado = UMA * 5
+                If CuotaDiaria > SalarioMinimoDiarioGeneral Then
+                    If (DescansoTrabajado / 2) < ExentoDescansoTrabajado Then
+                        ImporteExento = DescansoTrabajado / 2
+                        ImporteGravado = DescansoTrabajado / 2
+                        DescansoTrabajadoExento = DescansoTrabajado / 2
+                        DescansoTrabajadoGravado = DescansoTrabajado / 2
+                    ElseIf (DescansoTrabajado / 2) >= ExentoDescansoTrabajado Then
+                        ImporteExento = ExentoDescansoTrabajado
+                        ImporteGravado = DescansoTrabajado - ExentoDescansoTrabajado
+                        DescansoTrabajadoExento = ExentoDescansoTrabajado
+                        DescansoTrabajadoGravado = DescansoTrabajado - ExentoDescansoTrabajado
+                    End If
+                Else
+                    ImporteExento = DescansoTrabajado
+                    ImporteGravado = 0
+                    DescansoTrabajadoExento = DescansoTrabajado
+                    DescansoTrabajadoGravado = 0
+                End If
+                'If (DescansoTrabajado / 2) < (SalarioMinimoDiarioGeneral * 5) Then
+                '    ImporteExento = DescansoTrabajado / 2
+                '    ImporteGravado = DescansoTrabajado / 2
+                '    DescansoTrabajadoExento = DescansoTrabajado / 2
+                '    DescansoTrabajadoGravado = DescansoTrabajado / 2
+                'Else
+                '    ImporteExento = SalarioMinimoDiarioGeneral * 5
+                '    ImporteGravado = DescansoTrabajado - (SalarioMinimoDiarioGeneral * 5)
+                '    DescansoTrabajadoExento = SalarioMinimoDiarioGeneral * 5
+                '    DescansoTrabajadoGravado = DescansoTrabajado - (SalarioMinimoDiarioGeneral * 5)
+                'End If
+                GuardarExentoYGravado(8, DescansoTrabajadoGravado, DescansoTrabajadoExento, NoEmpleado, 0)
+            End If
+
+            If FestivoTrabajado > 0 Then
+                '****************** Modificacion DESCANSO TRABAJADO 17/06/2021 '******************
+                ExentoFestivoTrabajado = UMA * 5
+                If CuotaDiaria > SalarioMinimoDiarioGeneral Then
+                    If (FestivoTrabajado / 2) < ExentoFestivoTrabajado Then
+                        ImporteExento = FestivoTrabajado / 2
+                        ImporteGravado = FestivoTrabajado / 2
+                        FestivoTrabajadoExento = FestivoTrabajado / 2
+                        FestivoTrabajadoGravado = FestivoTrabajado / 2
+                    ElseIf (FestivoTrabajado / 2) >= ExentoFestivoTrabajado Then
+                        ImporteExento = ExentoFestivoTrabajado
+                        ImporteGravado = FestivoTrabajado - ExentoFestivoTrabajado
+                        FestivoTrabajadoExento = ExentoFestivoTrabajado
+                        FestivoTrabajadoGravado = FestivoTrabajado - ExentoFestivoTrabajado
+                    End If
+                Else
+                    ImporteExento = FestivoTrabajado
+                    ImporteGravado = 0
+                    FestivoTrabajadoExento = FestivoTrabajado
+                    FestivoTrabajadoGravado = 0
+                End If
+                'If (FestivoTrabajado / 2) < (SalarioMinimoDiarioGeneral * 5) Then
+                '    ImporteExento = FestivoTrabajado / 2
+                '    ImporteGravado = FestivoTrabajado / 2
+                '    FestivoTrabajadoExento = FestivoTrabajado / 2
+                '    FestivoTrabajadoGravado = FestivoTrabajado / 2
+                'Else
+                '    ImporteExento = SalarioMinimoDiarioGeneral * 5
+                '    ImporteGravado = FestivoTrabajado - (SalarioMinimoDiarioGeneral * 5)
+                '    FestivoTrabajadoExento = SalarioMinimoDiarioGeneral * 5
+                '    FestivoTrabajadoGravado = FestivoTrabajado - (SalarioMinimoDiarioGeneral * 5)
+                'End If
+                GuardarExentoYGravado(9, FestivoTrabajadoGravado, FestivoTrabajadoExento, NoEmpleado, 0)
+            End If
+
+            If HorasExtraDobles > 0 Then
+                '****************** Modificacion HORAS EXTRA 17/06/2021 '******************
+                ExentoHorasExtra = UMA * 5
+                If CuotaDiaria > SalarioMinimoDiarioGeneral Then
+                    If (HorasExtraDobles / 2) < ExentoHorasExtra Then
+                        ImporteExento = HorasExtraDobles / 2
+                        ImporteGravado = HorasExtraDobles / 2
+                        HorasExtraDoblesExentas = HorasExtraDobles / 2
+                        HorasExtraDoblesGravadas = HorasExtraDobles / 2
+                    ElseIf (HorasExtraDobles / 2) >= ExentoHorasExtra Then
+                        ImporteExento = ExentoHorasExtra
+                        ImporteGravado = HorasExtraDobles - ExentoHorasExtra
+                        HorasExtraDoblesExentas = ExentoHorasExtra
+                        HorasExtraDoblesGravadas = HorasExtraDobles - ExentoHorasExtra
+                    End If
+                Else
+                    ImporteExento = HorasExtraDobles
+                    ImporteGravado = 0
+                    HorasExtraDoblesExentas = HorasExtraDobles
+                    HorasExtraDoblesGravadas = 0
+                End If
+                'If (HorasExtraDobles / 2) < (SalarioMinimoDiarioGeneral * 5) Then
+                '    ImporteExento = HorasExtraDobles / 2
+                '    ImporteGravado = HorasExtraDobles / 2
+                '    HorasExtraDoblesExentas = HorasExtraDobles / 2
+                '    HorasExtraDoblesGravadas = HorasExtraDobles / 2
+                'Else
+                '    ImporteExento = SalarioMinimoDiarioGeneral * 5
+                '    ImporteGravado = HorasExtraDobles - (SalarioMinimoDiarioGeneral * 5)
+                '    HorasExtraDoblesExentas = SalarioMinimoDiarioGeneral * 5
+                '    HorasExtraDoblesGravadas = HorasExtraDobles - (SalarioMinimoDiarioGeneral * 5)
+                'End If
+                GuardarExentoYGravado(10, HorasExtraDoblesGravadas, HorasExtraDoblesExentas, NoEmpleado, "01")
+            End If
+
+            If HorasExtraTriples > 0 Then
+                'ImporteGravado = ImporteGravado + HorasExtraTriples
+                GuardarExentoYGravado(10, HorasExtraTriples, 0, NoEmpleado, "02")
+            End If
+
+            If PrimaDominical > 0 And Agregar = 0 Then
+                Dim Dias As Integer
+                Dias = dt.Compute("Sum(UNIDAD)", "CvoConcepto=13")
+                If PrimaDominical < (SalarioMinimoDiarioGeneral * Dias) Then
+                    ImporteExento = ImporteExento + PrimaDominical
+                Else
+                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * Dias)
+                    ImporteGravado = ImporteGravado + (PrimaDominical - (SalarioMinimoDiarioGeneral * Dias))
+                End If
+            ElseIf PrimaDominical > 0 And Agregar = 1 Then
+                If CvoConcepto.ToString = "13" And ImporteIncidencia <= SalarioMinimoDiarioGeneral Then
+                    ImporteExento = ImporteExento + PrimaDominical
+                ElseIf CvoConcepto.ToString = "13" And ImporteIncidencia > SalarioMinimoDiarioGeneral Then
+                    ImporteExento = ImporteExento + SalarioMinimoDiarioGeneral
+                    ImporteGravado = ImporteGravado + (ImporteIncidencia - SalarioMinimoDiarioGeneral)
+                End If
+            End If
+
+            If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+                ImporteExento = ImporteExento + Aguinaldo
+            ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
+                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
+                ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
+            End If
+
+            If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
+                ImporteExento = ImporteExento + PrimaVacacional
+            ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
+                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
+                ImporteGravado = ImporteGravado + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
+            End If
+
+            If RepartoUtilidades > 0 And RepartoUtilidades < (SalarioMinimoDiarioGeneral * 15) Then
+                ImporteExento = ImporteExento + RepartoUtilidades
+            ElseIf RepartoUtilidades > 0 And RepartoUtilidades > (SalarioMinimoDiarioGeneral * 15) Then
+                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
+                ImporteGravado = ImporteGravado + (RepartoUtilidades - (SalarioMinimoDiarioGeneral * 15))
+            End If
+            'Las horas extra triples son gravado al 100%, no tiene nada exento igual que las vacaciones y la Cuota del periodo
+            ImporteGravado = ImporteGravado + HorasExtraTriples + Vacaciones + CuotaPeriodo
+            'El fondo de ahorro y ayuda para funeral son exentos total siempre asi que se van directo a ImporteExento sin ningun chequeo mas
+            ImporteExento = ImporteExento + FondoAhorro + AyudaFuneral
+
+            If GrupoPercepcionesGravadasTotalmenteSinExentos > 0 Then
+                ImporteGravado = ImporteGravado + GrupoPercepcionesGravadasTotalmenteSinExentos
+            End If
+            If HonorarioAsimilado > 0 Then
+                ImporteGravado = ImporteGravado + HonorarioAsimilado
+            End If
+            If PagoPorHoras > 0 Then
+                ImporteGravado = ImporteGravado + PagoPorHoras
+            End If
+            If Comisiones > 0 Then
+                ImporteGravado = ImporteGravado + Comisiones
+            End If
+            If Destajo > 0 Then
+                ImporteGravado = ImporteGravado + Destajo
+            End If
+            'checar
+            'If PrevisionSocial > 0 Then
+            '    If ImporteGravado + ImporteExento + PrevisionSocial < (SalarioMinimoDiarioGeneral * 7) Then
+            '        ImporteExento = ImporteExento + PrevisionSocial
+            '    ElseIf ImporteGravado + ImporteExento + PrevisionSocial > (SalarioMinimoDiarioGeneral * 7) And ImporteGravado + ImporteExento > (SalarioMinimoDiarioGeneral * 7) Then
+            '        ImporteExento = ImporteExento + SalarioMinimoDiarioGeneral
+            '        ImporteGravado = ImporteGravado + (PrevisionSocial - SalarioMinimoDiarioGeneral)
+            '    ElseIf ImporteGravado + ImporteExento + PrevisionSocial > (SalarioMinimoDiarioGeneral * 7) And ImporteGravado + ImporteExento + SalarioMinimoDiarioGeneral < (SalarioMinimoDiarioGeneral * 7) Then
+            '        ImporteExento = ImporteExento + ((SalarioMinimoDiarioGeneral * 7) - (ImporteGravado + ImporteExento))
+            '        ImporteGravado = ImporteGravado + (PrevisionSocial - ((SalarioMinimoDiarioGeneral * 7) - (ImporteGravado + ImporteExento)))
+            '    ElseIf ImporteGravado + ImporteExento + PrevisionSocial > (SalarioMinimoDiarioGeneral * 7) And ((SalarioMinimoDiarioGeneral * 7) - (ImporteGravado + ImporteExento) < SalarioMinimoDiarioGeneral) Then
+            '        ImporteExento = ImporteExento + SalarioMinimoDiarioGeneral
+            '    End If
+            'End If
+            If PrevisionSocial > 0 Then
+                If PrevisionSocial < (SalarioMinimoDiarioGeneral * 7) Then
+                    ImporteExento = ImporteExento + PrevisionSocial
+                ElseIf ImporteGravado + ImporteExento + PrevisionSocial < ((SalarioMinimoDiarioGeneral * 7) * 7) Then
+                    ImporteExento = ImporteExento + PrevisionSocial
+                ElseIf ImporteGravado + ImporteExento + PrevisionSocial > ((SalarioMinimoDiarioGeneral * 7) * 7) And ImporteGravado + ImporteExento > ((SalarioMinimoDiarioGeneral * 7) * 7) Then
+                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 7)
+                    ImporteGravado = ImporteGravado + (PrevisionSocial - (SalarioMinimoDiarioGeneral * 7))
+                ElseIf ImporteGravado + ImporteExento + PrevisionSocial > ((SalarioMinimoDiarioGeneral * 7) * 7) And ImporteGravado + ImporteExento + (SalarioMinimoDiarioGeneral * 7) < ((SalarioMinimoDiarioGeneral * 7) * 7) Then
+                    ImporteExento = ImporteExento + (((SalarioMinimoDiarioGeneral * 7) * 7) - (ImporteGravado + ImporteExento))
+                    ImporteGravado = ImporteGravado + (PrevisionSocial - (((SalarioMinimoDiarioGeneral * 7) * 7) - (ImporteGravado + ImporteExento)))
+                ElseIf ImporteGravado + ImporteExento + PrevisionSocial > ((SalarioMinimoDiarioGeneral * 7) * 7) And (((SalarioMinimoDiarioGeneral * 7) * 7) - (ImporteGravado + ImporteExento) < SalarioMinimoDiarioGeneral * 7) Then
+                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 7)
+                    ImporteGravado = ImporteGravado + (PrevisionSocial - (SalarioMinimoDiarioGeneral * 7))
+                End If
+            End If
+            'Estos tipos de percepcion son independientes unos de otros, en teoria no deberian ir juntos nunca, como conllevan implicitamente 7 dias del periodo actual, si estan juntos solo se toman en cuenta 7 dias para todos
+            'El enfoque de que no deberian ir juntos nunca es que a un trabajador de sueldo no se le paga por horas, ni por comision, ni por destajo, si se hace se procede con los dias como se explica en el renglon anterior
+            If DiasCuotaPeriodo > 0 Then
+                DiasPagoPorHoras = 0
+                DiasComision = 0
+                DiasDestajo = 0
+            ElseIf DiasPagoPorHoras > 0 Then
+                DiasCuotaPeriodo = 0
+                DiasComision = 0
+                DiasDestajo = 0
+            ElseIf DiasComision > 0 Then
+                DiasPagoPorHoras = 0
+                DiasCuotaPeriodo = 0
+                DiasDestajo = 0
+            ElseIf DiasDestajo > 0 Then
+                DiasComision = 0
+                DiasPagoPorHoras = 0
+                DiasCuotaPeriodo = 0
+            End If
+            If ImporteGravado > 0 And (DiasCuotaPeriodo + DiasVacaciones + DiasComision + DiasPagoPorHoras + DiasDestajo + DiasHonorarioAsimilado > 0) Then
+                ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+            Else
+                ImporteDiario = 0
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub GuardarRegistro(ByVal CuotaDiaria As Decimal, ByVal ConImpuesto As Integer, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal, ByVal IdContrato As Integer, ByVal NoEmpleado As Integer, ByVal CvoConcepto As Integer, Optional ByVal DiasHorasExtra As Integer = 0, Optional ByVal TipoHorasExtra As String = "")
+
+        Try
+
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = periodoId.Value
+            cPeriodo.ConsultarPeriodoID()
+
+            Call CargarVariablesGenerales()
+
+            'Dim ImporteIncidencia As Decimal = 0
+            'Dim UnidadIncidencia As Decimal = 0
+
+            'Try
+            '    ImporteIncidencia = Math.Round(Convert.ToDecimal(txtImporteIncidencia.Text), 6)
+            'Catch ex As Exception
+            '    ImporteIncidencia = 0
+            'End Try
+
+            'Try
+            '    UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
+            'Catch ex As Exception
+            '    UnidadIncidencia = 0
+            'End Try
+
+            'ConImpuesto = 1 cuando viene de agregar una percepcion y calcular impuestos guardando ambos
+            'ConImpuesto = 2 cuando viene de quitar una percepcion y solo se procede a guardar los impuesto modificados sin esa percepcion
+
+            Dim cNomina As New Nomina()
+            cNomina = New Nomina()
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 1 'Semanal
+            cNomina.Periodo = Periodo
+            cNomina.NoEmpleado = NoEmpleado
+            cNomina.CvoConcepto = 87
+            cNomina.TipoConcepto = "DE"
+            cNomina.EliminaConceptoEmpleado()
+
+            cNomina = New Nomina()
+            cNomina.Cliente = empresaId.Value
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 1 'Semanal
+            cNomina.Periodo = Periodo
+            cNomina.NoEmpleado = NoEmpleado
+            cNomina.CvoConcepto = 87
+            cNomina.IdContrato = IdContrato
+            cNomina.TipoConcepto = "DE"
+            cNomina.Unidad = 1
+            cNomina.Importe = CuotaDiaria
+            cNomina.Generado = ""
+            cNomina.Timbrado = ""
+            cNomina.Enviado = ""
+            cNomina.Situacion = "A"
+            cNomina.EsEspecial = False
+            cNomina.FechaIni = cPeriodo.FechaInicialDate
+            cNomina.FechaFin = cPeriodo.FechaFinalDate
+            cNomina.FechaPago = cPeriodo.FechaPago
+            cNomina.DiasPagados = cPeriodo.Dias
+            cNomina.IdNomina = nominaID.Value
+            cNomina.GuadarNominaPeriodo()
+
+            If ConImpuesto = 1 Then
+                If CvoConcepto <= 51 Or CvoConcepto = 165 Or CvoConcepto = 166 Or CvoConcepto = 167 Or CvoConcepto = 168 Or CvoConcepto = 169 Or CvoConcepto = 170 Or CvoConcepto = 171 Then
+                    cNomina = New Nomina()
+                    cNomina.Cliente = empresaId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.Periodo = Periodo
+                    cNomina.NoEmpleado = NoEmpleado
+                    cNomina.CvoConcepto = CvoConcepto.ToString
+                    cNomina.IdContrato = IdContrato
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Unidad = UnidadIncidencia
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteGravado = 0
+                    If CvoConcepto = 32 Or CvoConcepto = 165 Or CvoConcepto = 166 Then
+                        cNomina.ImporteExento = ImporteIncidencia
+                    Else
+                        cNomina.ImporteExento = 0
+                    End If
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    If CvoConcepto = 10 Then
+                        cNomina.DiasHorasExtra = DiasHorasExtra
+                        cNomina.TipoHorasExtra = TipoHorasExtra
+                    End If
+                    cNomina.EsEspecial = False
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.IdNomina = nominaID.Value
+                    cNomina.GuadarNominaPeriodo()
+                ElseIf CvoConcepto = 82 Then
+                    cNomina = New Nomina()
+                    cNomina.Cliente = empresaId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.Periodo = Periodo
+                    cNomina.NoEmpleado = NoEmpleado
+                    cNomina.CvoConcepto = CvoConcepto.ToString
+                    cNomina.IdContrato = IdContrato
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.IdNomina = nominaID.Value
+                    cNomina.GuadarNominaPeriodo()
+                    cNomina = Nothing
+                ElseIf CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
+                    cNomina = New Nomina()
+                    cNomina.Cliente = empresaId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.Periodo = Periodo
+                    cNomina.NoEmpleado = NoEmpleado
+                    cNomina.CvoConcepto = CvoConcepto.ToString
+                    cNomina.IdContrato = IdContrato
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Unidad = UnidadIncidencia
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.IdNomina = nominaID.Value
+                    cNomina.GuadarNominaPeriodo()
+                ElseIf CvoConcepto.ToString >= 61 Then
+                    cNomina = New Nomina()
+                    cNomina.Cliente = empresaId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.Periodo = Periodo
+                    cNomina.NoEmpleado = NoEmpleado
+                    cNomina.CvoConcepto = CvoConcepto.ToString
+                    cNomina.IdContrato = IdContrato
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Unidad = UnidadIncidencia
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.IdNomina = nominaID.Value
+                    cNomina.GuadarNominaPeriodo()
+                End If
+            End If
+
+            'Aqui se guarda el impuesto, el total Gravado y el total exento, tanto cuando viene de agregar un concepto como cuando viene de quitar un concepto ya que de ambas maneras se recalcula
+            'solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
+            If ConImpuesto = 1 Then
+                If CvoConcepto < 52 Or CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Or CvoConcepto.ToString = "167" Or CvoConcepto.ToString = "168" Or CvoConcepto.ToString = "169" Or CvoConcepto.ToString = "170" Or CvoConcepto.ToString = "171" Then
+                    If Impuesto > 0 Then
+                        cNomina = New Nomina()
+                        cNomina.Cliente = empresaId.Value
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = NoEmpleado
+                        cNomina.CvoConcepto = 52
+                        cNomina.IdContrato = IdContrato
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = Impuesto
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = Impuesto
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = nominaID.Value
+                        cNomina.GuadarNominaPeriodo()
+                    End If
+
+                    If Imss > 0 Then
+                        cNomina = New Nomina()
+                        cNomina.Cliente = empresaId.Value
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = NoEmpleado
+                        cNomina.CvoConcepto = 56
+                        cNomina.IdContrato = IdContrato
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = Imss
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = Imss
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = nominaID.Value
+                        cNomina.GuadarNominaPeriodo()
+                    End If
+                End If
+            ElseIf ConImpuesto = 2 Then
+                'If cmbConcepto.SelectedValue = "82" Then
+                'cNomina = New Nomina()
+                'cNomina.Cliente = empresaId.Value
+                'cNomina.Ejercicio = IdEjercicio
+                'cNomina.TipoNomina = 1 'Semanal
+                'cNomina.Periodo = Periodo
+                'cNomina.NoEmpleado = empleadoId.Value
+                'cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                'cNomina.IdContrato = contratoId.Value
+                'cNomina.TipoConcepto = "P"
+                'cNomina.Unidad = 1
+                'cNomina.Importe = ImporteIncidencia
+                'cNomina.ImporteExento = ImporteIncidencia
+                'cNomina.Generado = ""
+                'cNomina.Timbrado = ""
+                'cNomina.Enviado = ""
+                'cNomina.Situacion = "A"
+                'cNomina.EsEspecial = False
+                'cNomina.FechaIni = cPeriodo.FechaInicialDate
+                'cNomina.FechaFin = cPeriodo.FechaFinalDate
+                'cNomina.FechaPago = cPeriodo.FechaPago
+                'cNomina.DiasPagados = cPeriodo.Dias
+                'cNomina.IdNomina = nominaId.Value
+                'cNomina.GuadarNominaPeriodo()
+                'cNomina = Nothing
+                'ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
+                'cNomina = New Nomina()
+                'cNomina.Cliente = empresaId.Value
+                'cNomina.Ejercicio = IdEjercicio
+                'cNomina.TipoNomina = 1 'Semanal
+                'cNomina.Periodo = Periodo
+                'cNomina.NoEmpleado = empleadoId.Value
+                'cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                'cNomina.IdContrato = contratoId.Value
+                'cNomina.TipoConcepto = "D"
+                'cNomina.Unidad = UnidadIncidencia
+                'cNomina.Importe = ImporteIncidencia
+                'cNomina.ImporteGravado = 0
+                'cNomina.ImporteExento = ImporteIncidencia
+                'cNomina.Generado = ""
+                'cNomina.Timbrado = ""
+                'cNomina.Enviado = ""
+                'cNomina.Situacion = "A"
+                'cNomina.EsEspecial = False
+                'cNomina.FechaIni = cPeriodo.FechaInicialDate
+                'cNomina.FechaFin = cPeriodo.FechaFinalDate
+                'cNomina.FechaPago = cPeriodo.FechaPago
+                'cNomina.DiasPagados = cPeriodo.Dias
+                'cNomina.IdNomina = nominaId.Value
+                'cNomina.GuadarNominaPeriodo()
+                'End If
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub EliminarConcepto(ByVal NumeroConcepto As Int32, ByVal TipoHorasExtra As String, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal, ByVal CuotaPeriodo As Decimal, ByVal IntegradoIMSS As Decimal, ByVal NoEmpleado As Int32, ByVal IdContrato As Int32)
+        ImporteDiario = 0
+        ImportePeriodo = 0
+        ImporteExento = 0
+        ImporteGravado = 0
+        Agregar = 0
+        SalarioDiarioIntegradoTrabajador = 0
+        SalarioDiarioIntegradoTrabajador = IntegradoIMSS
+        'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+        ChecarSiExistenDiasEnPercepciones(NoEmpleado, NumeroConcepto, ImporteIncidencia, UnidadIncidencia)
+        'en este caso, si se pagan conceptos tales como comisiones, en teoria estas se generan posterior a que el trabajador tiene un sueldo, es decir una cuaota del periodo actual, ese es el motivo del mensaje.
+        If DiasCuotaPeriodo = 0 And DiasVacaciones = 0 And DiasComision = 0 And DiasPagoPorHoras = 0 And DiasDestajo = 0 And DiasHonorarioAsimilado = 0 Then
+            rwAlerta.RadAlert("Esta percepcion no puede quitarse sin que exista alguna de las siguientes: 1.- CuotaPeriodo. 2.- Vacaciones. 3.- Honorario Asimilado. 4.- Pago Por Horas. 5.- Comisión. 6.- Destajo. Pues estas van acompañadas implicitamente por los 7 dias correspondientes al periodo semanal lo cual es base necesaria para el cálculo del impuesto, lo que si puede hacer es cambiar el número de dias o eliminar completamente el empleado en este periodo!!!", 490, 210, "Alerta", "", "")
+            Exit Sub
+        End If
+
+        'En esta parte se checa si el concepto que se esta agregando es percepcion(menor que 51) o es falta, permiso o incapacidad(57,58,59), siempre se borran los impuestos actuales y se recalculan, la demas deduccioen no entran aqui ya que no recalculan impuestos, simplemente se restan.
+        'If cmbConcepto.SelectedValue.ToString < 52 Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Then
+        If NumeroConcepto < 52 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Or NumeroConcepto = "167" Or NumeroConcepto = "168" Or NumeroConcepto = "169" Or NumeroConcepto = "170" Or NumeroConcepto = "171" Then
+            BorrarDeducciones(NoEmpleado)
+        End If
+
+        QuitarConcepto(NumeroConcepto, NoEmpleado)
+
+        If NumeroConcepto < 52 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Or NumeroConcepto = "167" Or NumeroConcepto = "168" Or NumeroConcepto = "169" Or NumeroConcepto = "170" Or NumeroConcepto = "171" Then
+
+            Call QuitarConcepto(52, NoEmpleado) 'IMPUESTO
+            Call QuitarConcepto(54, NoEmpleado) 'SUBSIDIO
+            Call QuitarConcepto(56, NoEmpleado) 'CUOTA IMSS
+
+            Call ChecarPercepcionesGravadas(NoEmpleado, NumeroConcepto, ImporteIncidencia, UnidadIncidencia, CuotaDiaria)
+            Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato)
+
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = periodoId.Value
+            cPeriodo.ConsultarPeriodoID()
+
+            Call CalcularImss()
+
+            Imss = Imss * NumeroDeDiasPagados
+            Imss = Math.Round(Imss, 6)
+
+            If Imss > 0 Then
+                Dim cNomina = New Nomina()
+                cNomina.Cliente = empresaId.Value
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 1 'Semanal
+                cNomina.Periodo = Periodo
+                cNomina.NoEmpleado = NoEmpleado
+                cNomina.CvoConcepto = 56
+                cNomina.IdContrato = IdContrato
+                cNomina.TipoConcepto = "D"
+                cNomina.Unidad = 1
+                cNomina.Importe = Imss
+                cNomina.ImporteGravado = 0
+                cNomina.ImporteExento = Imss
+                cNomina.Generado = ""
+                cNomina.Timbrado = ""
+                cNomina.Enviado = ""
+                cNomina.Situacion = "A"
+                cNomina.EsEspecial = False
+                cNomina.FechaIni = cPeriodo.FechaInicialDate
+                cNomina.FechaFin = cPeriodo.FechaFinalDate
+                cNomina.FechaPago = cPeriodo.FechaPago
+                cNomina.DiasPagados = cPeriodo.Dias
+                cNomina.IdNomina = nominaID.Value
+                cNomina.GuadarNominaPeriodo()
+            End If
+
+            Call CalcularImpuesto()
+
+            Impuesto = Math.Round(Impuesto, 6)
+
+            SubsidioAplicado = 0
+            ImporteDiarioGravado = 0
+            BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+            ImporteDiarioGravado = PercepcionesGravadas / NumeroDeDiasPagados
+
+            If ImporteDiarioGravado <= BaseGravableMensualSubsidioDiario Then
+                UMAMensual = UMA * FactorDiarioPromedio
+                SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
+                SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
+
+                If (Impuesto > 0 And (Impuesto < (SubsidioDiario * NumeroDeDiasPagados))) Then
+                    SubsidioAplicado = Impuesto
+                Else
+                    SubsidioAplicado = (SubsidioDiario * NumeroDeDiasPagados)
+                End If
+
+                If Impuesto > SubsidioAplicado Then
+                    Impuesto = Impuesto - SubsidioAplicado
+                ElseIf Impuesto < SubsidioAplicado Then
+                    SubsidioAplicado = SubsidioAplicado - Impuesto
+                    Impuesto = 0
+                End If
+
+            End If
+
+            If Impuesto > 0 Then
+                Dim cNomina = New Nomina()
+                cNomina.Cliente = empresaId.Value
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 1 'Semanal
+                cNomina.Periodo = Periodo
+                cNomina.NoEmpleado = NoEmpleado
+                cNomina.CvoConcepto = 52
+                cNomina.IdContrato = IdContrato
+                cNomina.TipoConcepto = "D"
+                cNomina.Unidad = 1
+                cNomina.Importe = Impuesto
+                cNomina.ImporteGravado = 0
+                cNomina.ImporteExento = Impuesto
+                cNomina.Generado = ""
+                cNomina.Timbrado = ""
+                cNomina.Enviado = ""
+                cNomina.Situacion = "A"
+                cNomina.EsEspecial = False
+                cNomina.FechaIni = cPeriodo.FechaInicialDate
+                cNomina.FechaFin = cPeriodo.FechaFinalDate
+                cNomina.FechaPago = cPeriodo.FechaPago
+                cNomina.DiasPagados = cPeriodo.Dias
+                cNomina.IdNomina = nominaID.Value
+                cNomina.GuadarNominaPeriodo()
+            End If
+
+            If SubsidioAplicado > 0 Then
+                Dim cNomina = New Nomina()
+                cNomina.Cliente = empresaId.Value
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 1 'Semanal
+                cNomina.Periodo = Periodo
+                cNomina.NoEmpleado = NoEmpleado
+                cNomina.CvoConcepto = 54
+                cNomina.IdContrato = IdContrato
+                cNomina.TipoConcepto = "P"
+                cNomina.Unidad = 1
+                cNomina.Importe = SubsidioAplicado
+                cNomina.ImporteGravado = 0
+                cNomina.ImporteExento = SubsidioAplicado
+                cNomina.Generado = ""
+                cNomina.Timbrado = ""
+                cNomina.Enviado = ""
+                cNomina.Situacion = "A"
+                cNomina.EsEspecial = False
+                cNomina.FechaIni = cPeriodo.FechaInicialDate
+                cNomina.FechaFin = cPeriodo.FechaFinalDate
+                cNomina.FechaPago = cPeriodo.FechaPago
+                cNomina.DiasPagados = cPeriodo.Dias
+                cNomina.IdNomina = nominaID.Value
+                cNomina.GuadarNominaPeriodo()
+            End If
+        End If
+
+        Call GuardarRegistro(CuotaPeriodo, 2, ImporteIncidencia, UnidadIncidencia, IdContrato, NoEmpleado, NumeroConcepto)
+        Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, NumeroConcepto)
+        Call SolicitarGeneracionXml(NoEmpleado, "")
+
     End Sub
 
 End Class

@@ -587,7 +587,7 @@ Partial Public Class GeneracionDeNominaExtraordinaria
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtMontoIndividual As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtMontoIndividual As Global.Telerik.Web.UI.RadNumericTextBox
 
     '''<summary>
     '''Control HiddenField2.

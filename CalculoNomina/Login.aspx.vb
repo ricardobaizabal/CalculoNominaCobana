@@ -39,6 +39,7 @@ Public Class Login
                         Session("usuarioid") = row("usuarioid")
                         Session("perfilid") = row("perfilid")
                         Session("nombre") = row("nombre")
+                        Session("email") = row("email")
 
                         ClienteValido = True
 

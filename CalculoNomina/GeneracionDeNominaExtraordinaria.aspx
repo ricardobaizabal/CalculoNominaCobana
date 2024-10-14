@@ -2,6 +2,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <link href="styles.css" rel="stylesheet" />
+    <script src="js/FixFocus.js"></script>
     <script type="text/javascript">
         function confirmCallbackFnGenerarNomina(arg) {
             if (arg) {
@@ -59,6 +60,12 @@
                 eventArgs.set_cancel(true);
             }
         }
+        function OnClientShow(sender, args) {
+            setTimeout(function () {
+                var pnum = $find('<%= WinImportarMontoIndividual.ContentContainer.FindControl("txtMontoIndividual").ClientID%>');
+                pnum.focus();
+            }, 0);
+        }
     </script>
     <style type="text/css">
         .ruFileProgress {
@@ -114,7 +121,7 @@
                                     <label class="control-label">Seleccionar Periodo</label>
                                 </td>
                                 <td>
-                                    <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="false" Width="300px"></telerik:RadComboBox>
+                                    <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
                                 </td>
                             </tr>
                             <tr>
@@ -370,7 +377,7 @@
 
     <!-- Start Modal Agregar Periodo -->
     <telerik:RadWindow ID="WinPeriodoSave" Title="" runat="server" Modal="true" CenterIfModal="true"
-        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400" Height="250">
+        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400px" Height="260px">
         <ContentTemplate>
             <table style="width: 98%; border-collapse: separate; border-spacing: 10px;">
                 <tr>
@@ -394,8 +401,8 @@
             </table>
             <div style="width: 100%; text-align: end; margin-top: 10px;">
                 <asp:HiddenField ID="periodicidadid" Value="0" runat="server" />
-                <telerik:RadButton ID="btnCancelarPeriodo" runat="server" Text="Salir"></telerik:RadButton>
-                <telerik:RadButton ID="btnCrearPeriodoEspecial" runat="server" Text="Crear"></telerik:RadButton>
+                <telerik:RadButton ID="btnCancelarPeriodo" runat="server" Text="Salir" Skin="Bootstrap" RenderMode="Lightweight" CssClass="rbPrimaryButton" Width="85px"></telerik:RadButton>
+                <telerik:RadButton ID="btnCrearPeriodoEspecial" runat="server" Text="Crear" Skin="Bootstrap" RenderMode="Lightweight" CssClass="rbPrimaryButton" Width="85px"></telerik:RadButton>
             </div>
             </div>
         </ContentTemplate>
@@ -405,7 +412,7 @@
 
     <!-- Start Modal Importar -->
     <telerik:RadWindow ID="WinImportarMonto" Title="" runat="server" Modal="true" CenterIfModal="true"
-        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400" Height="200">
+        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="410px" Height="260px">
         <ContentTemplate>
             <table style="width: 98%; border-collapse: separate; border-spacing: 10px;">
                 <tr>
@@ -419,8 +426,8 @@
             </table>
             <div style="width: 100%; text-align: center; margin-top: 10px;">
                 <asp:HiddenField ID="HiddenField1" Value="0" runat="server" />
-                <telerik:RadButton ID="btnEImportarCSV" runat="server" Text="Importar" Width="85px"></telerik:RadButton>
-                <telerik:RadButton ID="btnSalirImportar" runat="server" Text="Salir"></telerik:RadButton>
+                <telerik:RadButton ID="btnEImportarCSV" runat="server" Text="Importar" Skin="Bootstrap" RenderMode="Lightweight" CssClass="rbPrimaryButton"></telerik:RadButton>
+                <telerik:RadButton ID="btnSalirImportar" runat="server" Text="Salir" Skin="Bootstrap" RenderMode="Lightweight" CssClass="rbPrimaryButton"></telerik:RadButton>
             </div>
             </div>
         </ContentTemplate>
@@ -430,7 +437,7 @@
 
     <!-- Start Modal Importar Individual-->
     <telerik:RadWindow ID="WinImportarMontoIndividual" Title="" runat="server" Modal="true" CenterIfModal="true"
-        AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400" Height="300">
+        AutoSize="false" Behaviors="Close" OnClientShow="OnClientShow" VisibleOnPageLoad="False" Width="400px" Height="300px">
         <ContentTemplate>
             <table style="width: 100%; border-collapse: separate; border-spacing: 10px;">
                 <tr>
@@ -438,7 +445,8 @@
                         <asp:Label ID="Label4" runat="server">Monto:</asp:Label>
                     </td>
                     <td>
-                        <asp:TextBox ID="txtMontoIndividual" runat="server" Skin="Bootstrap"></asp:TextBox>
+                        <%--<asp:TextBox ID="txtMontoIndividual" runat="server" Skin="Bootstrap"></asp:TextBox>--%>
+                        <telerik:RadNumericTextBox RenderMode="Lightweight" runat="server" Skin="Bootstrap" ID="txtMontoIndividual" EmptyMessage="0.00" MinValue="0" NumberFormat-DecimalDigits="2"></telerik:RadNumericTextBox>
                     </td>
                 </tr>
             </table>

@@ -220,8 +220,8 @@ Public Class GeneracionDeNominaExtraordinaria
                 'cmbPeriodo.SelectedValue = Session("PeriodoIDNomina")
 
                 ' Eliminar el folio de la sesión después de haberlo utilizado
-                Session.Remove("Folio")
-                Session("Folio") = Nothing
+                'Session.Remove("Folio")
+                'Session("Folio") = Nothing
             ElseIf Not String.IsNullOrEmpty(Request("id")) And Not String.IsNullOrEmpty(Request("nid")) Then
                 periodoID.Value = Request("id")
                 nominaID.Value = Request("nid")
@@ -466,7 +466,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cmbPeriodicidad.SelectedValue = dtFolio.Rows(0)("TipoNomina").ToString()
             cmbCliente.SelectedValue = dtFolio.Rows(0)("idEmpresa").ToString()
             CargaPeriodos(cmbPeriodicidad.SelectedValue, dtFolio.Rows(0)("Periodo"))
-            'cmbPeriodo.SelectedValue = dtFolio.Rows(0)("Periodo").ToString()
+            cmbPeriodo.SelectedValue = dtFolio.Rows(0)("Periodo").ToString()
             CargarDatos()
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
             btnGeneraNomina.Enabled = False
@@ -583,16 +583,16 @@ Public Class GeneracionDeNominaExtraordinaria
         grdEmpleadosSemanal.DataSource = dtEmpleados
         grdEmpleadosSemanal.DataBind()
 
-        ' Ordena el DataTable por la columna fechaPago
-        Dim dv As New DataView(dtEmpleados)
-        dv.Sort = "FechaPago ASC"
+        '' Ordena el DataTable por la columna fechaPago
+        'Dim dv As New DataView(dtEmpleados)
+        'dv.Sort = "FechaPago ASC"
 
-        ' Obtén el primer valor de la columna fechaPago
-        Dim firstFechaPago As DateTime = CType(dv(0)("FechaPago"), DateTime)
+        '' Obtén el primer valor de la columna fechaPago
+        'Dim firstFechaPago As DateTime = CType(dv(0)("FechaPago"), DateTime)
 
-        ' Guarda el primer valor en una variable
-        fchPago.SelectedDate = firstFechaPago
-        fchPago.Enabled = False
+        '' Guarda el primer valor en una variable
+        'fchPago.SelectedDate = firstFechaPago
+        'fchPago.Enabled = False
 
         cNomina = Nothing
     End Sub
@@ -622,6 +622,16 @@ Public Class GeneracionDeNominaExtraordinaria
         If IsNothing(fchPago.SelectedDate) Then
             rwAlerta.RadAlert("Seleccione una fecha de pago.", 330, 180, "Alerta", "", "")
             Return
+        Else
+            Session("FechaPago") = fchPago.SelectedDate
+
+            Dim cPeriodo As New Entities.Periodo
+            cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+            If Not fchPago.SelectedDate Is Nothing Then
+                cPeriodo.FechaPago = String.Format("{0:MM/dd/yyyy}", fchPago.SelectedDate)
+            End If
+            cPeriodo.ActualizaFechaPagoPeriodo()
+            cPeriodo = Nothing
         End If
 
         Dim dt As New DataTable
@@ -629,9 +639,20 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.FechaPago = fchPago.SelectedDate
-        'cNomina.EsEspecial = True
 
-        Dim idNomina As DataTable = cNomina.InsertaCampoNomina(cmbCliente.SelectedValue)
+        Dim _Nominaid As Integer = 0
+        If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+            _Nominaid = Integer.Parse(Session("Folio").ToString())
+        Else
+            Dim idNomina As DataTable = cNomina.InsertaCampoNomina(cmbCliente.SelectedValue)
+            For Each row As DataRow In idNomina.Rows
+                _Nominaid = Convert.ToInt32(row(0))
+                Session("Folio") = Convert.ToInt32(row(0))
+            Next
+        End If
+
+        nominaID.Value = _Nominaid
+
         dt = cNomina.ConsultarEmpleadosEspecial(cmbCliente.SelectedValue)
         cNomina = Nothing
 
@@ -653,8 +674,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 SalarioDiarioIntegradoTrabajador = 0
                 UMA = 0
 
-
-                GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), ImportePeriodo, oDataRow("ClaveRegimenContratacion"), idNomina.Rows(0)(0))
+                GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), ImportePeriodo, oDataRow("ClaveRegimenContratacion"), _Nominaid)
 
                 progress.SecondaryTotal = Total
                 progress.SecondaryValue = i
@@ -1713,8 +1733,9 @@ Public Class GeneracionDeNominaExtraordinaria
             cPeriodo.ConsultarPeriodoID()
 
             If cPeriodo.FechaPago.ToString.Length > 0 Then
-                If IsNothing(CDate(cPeriodo.FechaPago)) Then
+                If Not IsNothing(CDate(cPeriodo.FechaPago)) Then
                     fchPago.SelectedDate = CDate(cPeriodo.FechaPago)
+                    fchPago.Enabled = False
                 End If
             End If
         Else
@@ -1795,6 +1816,7 @@ Public Class GeneracionDeNominaExtraordinaria
                 End If
                 If (e.Item.DataItem("Enviado") = "S") Then
                     imgEnviar.ImageUrl = "~/images/envelopeok.jpg"
+                    imgEnviar.ToolTip = "Fecha de envío: " & e.Item.DataItem("FechaEnviado")
                 End If
                 If (CDbl(e.Item.DataItem("Neto")) <= 1) Then
                     imgAlert.Visible = False
@@ -2097,7 +2119,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Dim path As String = Server.MapPath("~/Certificado/") & CertificadoCliente() & ".cer"
             Response.Write(path)
             'Response.End()
-            FolioXml = RutaXML & "/" & serie.Value.ToString & folio.Value.ToString & ".xml"
+            FolioXml = RutaXML & "\" & serie.Value.ToString & folio.Value.ToString & ".xml"
             SellarCFD(Comprobante, path)
             m_xmlDOM.InnerXml = (Replace(m_xmlDOM.InnerXml, "schemaLocation", "xsi:schemaLocation", , , CompareMethod.Text))
             m_xmlDOM.Save(FolioXml)
@@ -3011,7 +3033,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     Dim largo = Len(CStr(Format(CDbl(Neto), "#,###.00")))
                     Dim decimales = Mid(CStr(Format(CDbl(Neto), "#,###.00")), largo - 2)
 
-                    FolioXml = Server.MapPath("~/XmlTimbrados/E/").ToString & IdEjercicio & "/" & cmbPeriodo.SelectedValue.ToString & "/" & UUID & ".xml"
+                    FolioXml = Server.MapPath("~/XmlTimbrados/E/").ToString & IdEjercicio & "\" & cmbPeriodo.SelectedValue.ToString & "\" & UUID & ".xml"
 
                     If Not File.Exists(FolioXml) Then
                         Dim cPeriodo As New Entities.Periodo()
@@ -3671,7 +3693,7 @@ Public Class GeneracionDeNominaExtraordinaria
             dt = cNomina.ConsultarEmpleadosNoGeneradosNominaExtraordinaria()
 
             Dim rutaEmpresa As String = ""
-            rutaEmpresa = Server.MapPath("~/XmlGenerados/E/").ToString & "/" & IdEjercicio.ToString
+            rutaEmpresa = Server.MapPath("~/XmlGenerados/E/").ToString & "\" & IdEjercicio.ToString
 
             If Not Directory.Exists(rutaEmpresa) Then
                 Directory.CreateDirectory(rutaEmpresa)
@@ -3824,7 +3846,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     serie.Value = oDataRow("Serie")
                     folio.Value = oDataRow("Folio")
 
-                    FolioXml = rutaEmpresa & "/" & oDataRow("Serie").ToString & oDataRow("Folio").ToString & ".xml"
+                    FolioXml = rutaEmpresa & "\" & oDataRow("Serie").ToString & oDataRow("Folio").ToString & ".xml"
 
                     If Not File.Exists(FolioXml) Then
                         '
@@ -3873,10 +3895,10 @@ Public Class GeneracionDeNominaExtraordinaria
                         System.Net.ServicePointManager.SecurityProtocol = DirectCast(3072, System.Net.SecurityProtocolType) Or DirectCast(768, System.Net.SecurityProtocolType) Or DirectCast(192, System.Net.SecurityProtocolType) Or DirectCast(48, System.Net.SecurityProtocolType)
 
                         'Pruebas
-                        'Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
+                        Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
 
                         'Producción
-                        Dim TimbreSifei As New SIFEI33.SIFEIService()
+                        'Dim TimbreSifei As New SIFEI33.SIFEIService()
                         Call Comprimir()
 
                         Dim bytes() As Byte
@@ -4295,7 +4317,7 @@ Public Class GeneracionDeNominaExtraordinaria
             Directory.CreateDirectory(rutaEmpresa)
         End If
 
-        Dim FilePath = rutaEmpresa & "/" & UUID & ".xml"
+        Dim FilePath = rutaEmpresa & "\" & UUID & ".xml"
         If File.Exists(FilePath) Then
             Dim FileName As String = Path.GetFileName(FilePath)
             Response.Clear()
@@ -4310,7 +4332,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
             cPeriodo.ConsultarPeriodoID()
 
-            FilePath = rutaEmpresa & "/" & RFC.ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & UUID & ".xml"
+            FilePath = rutaEmpresa & "\" & RFC.ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & UUID & ".xml"
             If File.Exists(FilePath) Then
                 Dim FileName As String = Path.GetFileName(FilePath)
                 Response.Clear()
@@ -4381,7 +4403,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
             cPeriodo.ConsultarPeriodoID()
 
-            FilePath = rutaEmpresa & "/" & RFC.ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & UUID & ".pdf"
+            FilePath = rutaEmpresa & "\" & RFC.ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & UUID & ".pdf"
             If Not File.Exists(FilePath) Then
                 Call GuardaPDF(GeneraPDF(NoEmpleado, UUID), FilePath)
                 Dim FileName As String = Path.GetFileName(FilePath)
@@ -4502,17 +4524,30 @@ Public Class GeneracionDeNominaExtraordinaria
                 For Each row In dt.Rows
                     i += 1
 
-                    Dim rutaEmpresa As String = Server.MapPath("~\PDF\E\ST\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+                    Dim rutaEmpresa As String = Server.MapPath("~\PDF\E\T\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
 
                     If Not Directory.Exists(rutaEmpresa) Then
                         Directory.CreateDirectory(rutaEmpresa)
                     End If
 
-                    Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & ".pdf"
+                    Dim cPeriodo As New Entities.Periodo()
+                    cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+                    cPeriodo.ConsultarPeriodoID()
+
+                    Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
 
                     If Not File.Exists(FilePathPDF) Then
-                        Call GuardaPDF(GeneraPDFNoTimbrado(row("NoEmpleado")), FilePathPDF)
+                        GuardaPDF(GeneraPDF(CInt(row("NoEmpleado")), row("UUID")), FilePathPDF)
                     End If
+
+                    rutaEmpresa = Server.MapPath("~\XmlTimbrados\E\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+
+                    If Not Directory.Exists(rutaEmpresa) Then
+                        Directory.CreateDirectory(rutaEmpresa)
+                    End If
+
+                    Dim FilePathXML = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
+
                     '
                     '   Obtiene datos de la persona
                     '
@@ -4568,7 +4603,6 @@ Public Class GeneracionDeNominaExtraordinaria
                     Next
 
                     'objMM.To.Add("gesquivel@linkium.mx")
-                    'objMM.To.Add("perla.lopez@humantop.mx")
 
                     If validos.Length > 0 Then
                         Dim SmtpMail As New SmtpClient
@@ -4579,10 +4613,11 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim fecha_final As String = CStr(row("FechaFinal"))
 
                             mensaje = "Estimado(a) " & nombre_empleado.ToString & vbCrLf & vbCrLf
-                            mensaje += "Adjunto a este correo estamos enviándole el Comprobante de Nómina correspondiente al periodo del " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & email_from & vbCrLf & vbCrLf
+                            mensaje += "Adjunto a este correo estamos enviándole el comprobante XML y PDF de nómina correspondiente al periodo de pago: " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & Session("email").ToString & vbCrLf & vbCrLf
                             mensaje += "Atentamente." & vbCrLf
                             mensaje += razonsocial.ToString.ToUpper & vbCrLf
 
+                            'objMM.From = New MailAddress(Session("email").ToString, razonsocial)
                             objMM.From = New MailAddress(email_from, razonsocial)
                             objMM.IsBodyHtml = False
                             objMM.Priority = MailPriority.Normal
@@ -4591,18 +4626,19 @@ Public Class GeneracionDeNominaExtraordinaria
                             '
                             '   Agrega anexos
                             '
-                            'Dim AttachXML As Net.Mail.Attachment
+                            Dim AttachXML As Net.Mail.Attachment
                             Dim AttachPDF As Net.Mail.Attachment
-
-                            'AttachXML = New Net.Mail.Attachment(Server.MapPath("~\cfd_storage\nomina\") & "link_" & serie.ToString & folio.ToString & "_timbrado.xml")
+                            AttachXML = New Net.Mail.Attachment(FilePathXML)
                             AttachPDF = New Net.Mail.Attachment(FilePathPDF)
-                            'objMM.Attachments.Add(AttachXML)
+                            objMM.Attachments.Add(AttachXML)
                             objMM.Attachments.Add(AttachPDF)
                             '
                             Dim SmtpUser As New Net.NetworkCredential
                             SmtpUser.UserName = email_smtp_username
                             SmtpUser.Password = email_smtp_password
-                            SmtpUser.Domain = email_smtp_server
+                            'SmtpUser.Domain = email_smtp_server
+                            'SmtpMail.EnableSsl = True
+                            'SmtpMail.Port = email_smtp_port
                             SmtpMail.UseDefaultCredentials = False
                             SmtpMail.Credentials = SmtpUser
                             SmtpMail.Host = email_smtp_server
@@ -4677,24 +4713,29 @@ Public Class GeneracionDeNominaExtraordinaria
             If dt.Rows.Count > 0 Then
                 For Each row In dt.Rows
 
-                    Dim rutaEmpresa As String = ""
-                    rutaEmpresa = Server.MapPath("~\PDF\E\T\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+                    Dim rutaEmpresa As String = Server.MapPath("~\PDF\E\T\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
 
                     If Not Directory.Exists(rutaEmpresa) Then
                         Directory.CreateDirectory(rutaEmpresa)
                     End If
 
-                    Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & ".pdf"
-
                     Dim cPeriodo As New Entities.Periodo()
                     cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
                     cPeriodo.ConsultarPeriodoID()
 
-                    FilePathPDF = rutaEmpresa & "/" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID") & ".pdf"
+                    Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
+
                     If Not File.Exists(FilePathPDF) Then
-                        Call GuardaPDF(GeneraPDF(NoEmpleado, row("UUID")), FilePathPDF)
-                        'Call GuardaPDF(GeneraPDFNoTimbrado(row("NoEmpleado")), FilePathPDF)
+                        GuardaPDF(GeneraPDF(CInt(row("NoEmpleado")), row("UUID")), FilePathPDF)
                     End If
+
+                    rutaEmpresa = Server.MapPath("~\XmlTimbrados\E\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+
+                    If Not Directory.Exists(rutaEmpresa) Then
+                        Directory.CreateDirectory(rutaEmpresa)
+                    End If
+
+                    Dim FilePathXML = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
                     '
                     '   Obtiene datos de la persona
                     '
@@ -4725,8 +4766,8 @@ Public Class GeneracionDeNominaExtraordinaria
                     dtEnvioEmail = Nothing
                     cConfiguracion = Nothing
 
-                    Dim correo As String = row("Email").ToString.Trim
-                    'Dim correo As String = "egraciano@linkium.mx"
+                    Dim correo As String = row("Email").ToString.ToLower.Trim
+
                     Dim delimit As Char() = New Char() {";"c, ","c}
 
                     Dim objMM As New MailMessage
@@ -4749,7 +4790,6 @@ Public Class GeneracionDeNominaExtraordinaria
                     Next
 
                     'objMM.To.Add("gesquivel@linkium.mx")
-                    'objMM.To.Add("perla.lopez@humantop.mx")
 
                     If validos.Length > 0 Then
                         Dim SmtpMail As New SmtpClient
@@ -4760,12 +4800,12 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim fecha_final As String = CStr(row("FechaFinal"))
 
                             mensaje = "Estimado(a) " & nombre_empleado.ToString & vbCrLf & vbCrLf
-                            mensaje += "Adjunto a este correo estamos enviándole el Comprobante de Nómina correspondiente al periodo del " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & email_from & vbCrLf & vbCrLf
+                            mensaje += "Adjunto a este correo estamos enviándole el comprobante XML y PDF de nómina correspondiente al periodo de pago: " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & Session("email").ToString & vbCrLf & vbCrLf
                             mensaje += "Atentamente." & vbCrLf
                             mensaje += razonsocial.ToString.ToUpper & vbCrLf
 
+                            'objMM.From = New MailAddress(Session("email").ToString, razonsocial)
                             objMM.From = New MailAddress(email_from, razonsocial)
-                            'objMM.From = New MailAddress("egraciano@linkium.mx", razonsocial)
                             objMM.IsBodyHtml = False
                             objMM.Priority = MailPriority.Normal
                             objMM.Subject = razonsocial & " - Recibo de Nómina"
@@ -4773,27 +4813,23 @@ Public Class GeneracionDeNominaExtraordinaria
                             '
                             '   Agrega anexos
                             '
-                            'Dim AttachXML As Net.Mail.Attachment
+                            Dim AttachXML As Net.Mail.Attachment
                             Dim AttachPDF As Net.Mail.Attachment
-
-                            'AttachXML = New Net.Mail.Attachment(Server.MapPath("~\cfd_storage\nomina\") & "link_" & serie.ToString & folio.ToString & "_timbrado.xml")
+                            AttachXML = New Net.Mail.Attachment(FilePathXML)
                             AttachPDF = New Net.Mail.Attachment(FilePathPDF)
-                            'objMM.Attachments.Add(AttachXML)
+                            objMM.Attachments.Add(AttachXML)
                             objMM.Attachments.Add(AttachPDF)
                             '
                             Dim SmtpUser As New Net.NetworkCredential
-                            'SmtpUser.UserName = "egraciano@linkium.mx"
-                            'SmtpUser.Password = "Link1005*"
-                            'SmtpUser.Domain = email_smtp_server
                             SmtpUser.UserName = email_smtp_username
                             SmtpUser.Password = email_smtp_password
+                            'SmtpUser.Domain = email_smtp_server
+                            'SmtpMail.EnableSsl = True
+                            'SmtpMail.Port = email_smtp_port
                             SmtpMail.UseDefaultCredentials = False
                             SmtpMail.Credentials = SmtpUser
                             SmtpMail.Host = email_smtp_server
-                            'SmtpMail.Host = "zimba.linkium.net"
-                            SmtpMail.Port = 587
                             SmtpMail.DeliveryMethod = SmtpDeliveryMethod.Network
-                            SmtpMail.EnableSsl = True
                             SmtpMail.Send(objMM)
                             '
                             '   Lo marca como enviado a nivel empleado
@@ -4903,8 +4939,8 @@ Public Class GeneracionDeNominaExtraordinaria
                     folio_banorte = cDispersionNomina.AgregaFolio()
                     cDispersionNomina = Nothing
 
-                    'ruta_banorte = Server.MapPath("~/TXT/BANORTE/S/").ToString & IdEmpresa.ToString & "/" & IdEjercicio.ToString & "/" & Periodo.ToString & "/"
-                    ruta_banorte = Server.MapPath("~/TXT/BANORTE/S/").ToString & IdEjercicio.ToString & "/" & cmbPeriodo.SelectedValue.ToString & "/"
+                    'ruta_banorte = Server.MapPath("~/TXT/BANORTE/S/").ToString & IdEmpresa.ToString & "\" & IdEjercicio.ToString & "\" & Periodo.ToString & "\"
+                    ruta_banorte = Server.MapPath("~/TXT/BANORTE/S/").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\"
 
                     If Not Directory.Exists(ruta_banorte) Then
                         Directory.CreateDirectory(ruta_banorte)
@@ -4929,8 +4965,8 @@ Public Class GeneracionDeNominaExtraordinaria
                     folio_banamex = cDispersionNomina.AgregaFolio()
                     cDispersionNomina = Nothing
 
-                    'ruta_banamex = Server.MapPath("~/TXT/BANAMEX/S/").ToString & IdEmpresa.ToString & "/" & IdEjercicio.ToString & "/" & Periodo.ToString & "/"
-                    ruta_banamex = Server.MapPath("~/TXT/BANAMEX/S/").ToString & IdEjercicio.ToString & "/" & cmbPeriodo.SelectedValue.ToString & "/"
+                    'ruta_banamex = Server.MapPath("~/TXT/BANAMEX/S/").ToString & IdEmpresa.ToString & "\" & IdEjercicio.ToString & "\" & Periodo.ToString & "\"
+                    ruta_banamex = Server.MapPath("~/TXT/BANAMEX/S/").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\"
 
                     If Not Directory.Exists(ruta_banamex) Then
                         Directory.CreateDirectory(ruta_banamex)
@@ -5202,7 +5238,7 @@ Public Class GeneracionDeNominaExtraordinaria
 
                         rutaEmpresa = Server.MapPath("~\XmlTimbrados\E\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
 
-                        Dim FilePathXML = rutaEmpresa & "/" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
+                        Dim FilePathXML = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
 
                         If File.Exists(FilePathXML) Then
                             zip.AddFile(FilePathXML, "XML")
@@ -5260,7 +5296,7 @@ Public Class GeneracionDeNominaExtraordinaria
                             Directory.CreateDirectory(rutaEmpresa)
                         End If
 
-                        Dim FilePathPDF = rutaEmpresa & "/" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
+                        Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
 
                         If Not File.Exists(FilePathPDF) Then
                             Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID")), FilePathPDF)
@@ -5269,7 +5305,7 @@ Public Class GeneracionDeNominaExtraordinaria
                         If File.Exists(FilePathPDF) Then
                             zip.AddFile(FilePathPDF, "PDF")
                         Else
-                            FilePathPDF = rutaEmpresa & "/" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
+                            FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(CDate(cPeriodo.FechaInicialDate), "dd-MM-yyyy").ToString & "_" & Format(CDate(cPeriodo.FechaFinalDate), "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
                             If File.Exists(FilePathPDF) Then
                                 zip.AddFile(FilePathPDF, "PDF")
                             End If

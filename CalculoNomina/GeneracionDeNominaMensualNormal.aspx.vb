@@ -718,22 +718,11 @@ Public Class GeneracionDeNominaMensualNormal
                     CalcularSubsidio()
 
                     Call CalcularImss()
-                    'Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                    Imss = Imss * DiasCuotaPeriodo
+                    Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
                     Imss = Math.Round(Imss, 6)
+
                     Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                    'Subsidio = Subsidio * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
-                    'If Impuesto > Subsidio Then
-                    '    SubsidioEfectivo = 0
-                    '    Impuesto = Impuesto - Subsidio
-                    'ElseIf Impuesto < Subsidio Then
-                    '    SubsidioAplicado = 0
-                    '    SubsidioEfectivo = Subsidio - Impuesto
-                    '    Impuesto = 0
-                    'End If
                     Impuesto = Math.Round(Impuesto, 6)
-                    'SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
-                    'SubsidioEfectivo = Math.Round(SubsidioEfectivo, 6)
                 End If
             End If
 
@@ -965,19 +954,19 @@ Public Class GeneracionDeNominaMensualNormal
             cNomina.NoEmpleado = NoEmpleado
             dt = cNomina.ConsultarConceptosEmpleado()
 
-            If dt.Rows.Count = 0 Or dt.Compute("SUM(Importe)", "CvoConcepto=85") Is DBNull.Value Then
+            If dt.Rows.Count = 0 Or dt.Compute("SUM(Importe)", "CvoConcepto=2") Is DBNull.Value Then
                 ChecarQueExistaLaCuotaPeriodo = False
-            ElseIf dt.Rows.Count >= 0 And dt.Compute("SUM(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
+            ElseIf dt.Rows.Count >= 0 And dt.Compute("SUM(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
                 If dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") IsNot DBNull.Value Then
-                    If dt.Compute("SUM(Importe)", "CvoConcepto=85") < (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") < (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
+                    If dt.Compute("SUM(Importe)", "CvoConcepto=2") < (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") < (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
                         ChecarQueExistaLaCuotaPeriodo = False
-                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=85") > (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") > (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
+                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=2") > (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") > (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
                         ChecarQueExistaLaCuotaPeriodo = True
                     End If
                 ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") Is DBNull.Value Then
-                    If dt.Compute("SUM(Importe)", "CvoConcepto=85") < ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") < UnidadIncidencia Then
+                    If dt.Compute("SUM(Importe)", "CvoConcepto=2") < ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") < UnidadIncidencia Then
                         ChecarQueExistaLaCuotaPeriodo = False
-                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=85") > ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") > UnidadIncidencia Then
+                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=2") > ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") > UnidadIncidencia Then
                         ChecarQueExistaLaCuotaPeriodo = True
                     End If
                 End If
@@ -1029,9 +1018,9 @@ Public Class GeneracionDeNominaMensualNormal
 
             'PercepcionesGravadas
             If dt.Rows.Count > 0 Then
-                If dt.Compute("SUM(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("SUM(UNIDAD)", "CvoConcepto=85")
-                    CuotaPeriodo = dt.Compute("SUM(Importe)", "CvoConcepto=85")
+                If dt.Compute("SUM(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=2")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=2")
                 End If
                 If dt.Compute("SUM(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -1410,15 +1399,9 @@ Public Class GeneracionDeNominaMensualNormal
 
             ' PercepcionesGravadas
             If dt.Rows.Count > 0 Then
-                If dt.Compute("SUM(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    If Agregar <> 3 Then
-                        DiasCuotaPeriodo = dt.Compute("SUM(Unidad)", "CvoConcepto=85")
-                        CuotaPeriodo = dt.Compute("SUM(Importe)", "CvoConcepto=85")
-                    ElseIf Agregar = 3 Then
-                        ''''''''''''''''''''''PENDIENTE'''''''''''''''''''''''''''''
-                        'DiasCuotaPeriodo = TextBox(0).Text
-                        'CuotaPeriodo = TextBoxV(0).Text
-                    End If
+                If dt.Compute("SUM(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=2")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=2")
                 End If
                 If dt.Compute("SUM(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7

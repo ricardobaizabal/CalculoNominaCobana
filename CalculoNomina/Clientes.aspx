@@ -25,7 +25,7 @@
                 <asp:Image ID="Image1" runat="server" ImageUrl="~/images/buscador_03.jpg" ImageAlign="AbsMiddle" />&nbsp;<asp:Label ID="lblFiltros" Text="Buscador" runat="server" Font-Bold="true" CssClass="item"></asp:Label>
             </legend>
             <asp:Panel runat="server" DefaultButton="btnSearch">
-                <span class="item" style="font-weight:bold;">Palabra clave:</span>
+                <span class="item" style="font-weight: bold;">Palabra clave:</span>
                 <telerik:RadTextBox ID="txtSearch" runat="server" EmptyMessage="Razón Social, RFC" Width="300px">
                 </telerik:RadTextBox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <telerik:RadButton ID="btnSearch" RenderMode="Lightweight" runat="server" Width="100px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Buscar"></telerik:RadButton>
@@ -65,6 +65,8 @@
                                         </telerik:GridTemplateColumn>
                                         <telerik:GridBoundColumn DataField="id" HeaderText="No. Cliente" UniqueName="id"></telerik:GridBoundColumn>
                                         <telerik:GridBoundColumn DataField="razonsocial" HeaderText="Razón Social" UniqueName="razonsocial">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn DataField="registro_patronal" HeaderText="Registro patronal" UniqueName="registro_patronal">
                                         </telerik:GridBoundColumn>
                                         <telerik:GridBoundColumn DataField="contacto" HeaderText="Contacto" UniqueName="contacto">
                                         </telerik:GridBoundColumn>
@@ -351,22 +353,28 @@
                                 <td width="33%">
                                     <asp:Label ID="lblRegimen" runat="server" CssClass="item" Font-Bold="true" Text="Régimen fiscal:"></asp:Label>
                                 </td>
-                                <td width="33%">&nbsp;</td>
+                                <td width="33%">&nbsp;
+                                    <asp:Label ID="lblRegistroPatronal" runat="server" CssClass="item" Text="Registro patronal:" Font-Bold="true"></asp:Label>
+                                </td>
                                 <td width="33%">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td width="33%">
-                                    <%--<asp:DropDownList ID="regimenid" CssClass="box" Width="85%" runat="server"></asp:DropDownList>--%>
                                     <telerik:RadComboBox ID="regimenid" runat="server" Width="85%"></telerik:RadComboBox>
                                 </td>
-                                <td width="33%">&nbsp;</td>
+                                <td style="width: 33%;">
+                                    <telerik:RadTextBox ID="txtRegistroPatronal" runat="server" Width="55%">
+                                    </telerik:RadTextBox>
+                                </td>
                                 <td width="33%">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td width="33%">
                                     <%--<asp:RequiredFieldValidator ID="valRegimen" runat="server" ValidationGroup="DGenerales" InitialValue="0" ControlToValidate="regimenid" CssClass="item" SetFocusOnError="true" ForeColor="Red" ErrorMessage="Requerido"></asp:RequiredFieldValidator>--%>
                                 </td>
-                                <td width="33%">&nbsp;</td>
+                                <td width="33%">
+                                    <asp:RequiredFieldValidator ID="valRegistroPatronal" runat="server" ValidationGroup="DGenerales" ControlToValidate="txtRegistroPatronal" CssClass="item" SetFocusOnError="true" ForeColor="Red" ErrorMessage="Requerido"></asp:RequiredFieldValidator>
+                                </td>
                                 <td width="33%">&nbsp;</td>
                             </tr>
                             <tr>

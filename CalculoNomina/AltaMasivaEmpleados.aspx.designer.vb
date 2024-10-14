@@ -59,42 +59,6 @@ Partial Public Class AltaMasivaEmpleados
     Protected WithEvents btnCargarEmpleados As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control lblInfo0.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblInfo0 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblInfo.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblInfo1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblInfo1 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblInfo2.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblInfo2 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''Control panelSuccess.
     '''</summary>
     '''<remarks>
@@ -174,6 +138,42 @@ Partial Public Class AltaMasivaEmpleados
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents litErroresCatalogo As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''Control lblInfo0.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo0 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblInfo.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblInfo1.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo1 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblInfo2.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblInfo2 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control Mensaje_Resultado.

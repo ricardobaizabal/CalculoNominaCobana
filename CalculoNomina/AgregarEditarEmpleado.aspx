@@ -106,6 +106,10 @@
         #ContentPlaceHolder1_rblSexo_1 {
             margin-left: 20px;
         }
+
+        .riDisabled {
+            background-color: #ccc !important;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -193,15 +197,9 @@
                         <table border="0" style="width: 100%" cellpadding="5" cellspacing="5">
                             <tr>
                                 <td colspan="4">
-                                    <asp:Label ID="lblNoEmpleado" runat="server" CssClass="item" Font-Bold="True" Text="No. de Empleado:"></asp:Label>
+                                    <asp:Label ID="lblNoEmpleado" runat="server" CssClass="item" Font-Bold="True" Text="No. de Empleado:"></asp:Label>&nbsp;&nbsp;&nbsp;
+                                    <asp:Label ID="lblNoEmpleadoValue" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;">
-                                    <telerik:RadNumericTextBox ID="txtNoEmpleado" NumberFormat-DecimalDigits="0" NumberFormat-GroupSeparator="" runat="server"></telerik:RadNumericTextBox>
-                                    <asp:RequiredFieldValidator ID="valNoEmpleado" runat="server" ControlToValidate="txtNoEmpleado" ValidationGroup="vDatosGenerales" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                </td>
-                                <td colspan="3">&nbsp;</td>
                             </tr>
                             <tr>
                                 <td style="width: 25%;">

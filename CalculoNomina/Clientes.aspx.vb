@@ -340,7 +340,7 @@ Public Class clientes
                 txtZipCode.Text = rs("fac_cp")
                 txtRFC.Text = rs("rfc")
                 txtNumCtaPago.Text = rs("numctapago")
-
+                txtRegistroPatronal.Text = rs("registro_patronal")
                 condicionesid.SelectedValue = rs("condicionesid")
                 tipoContribuyenteid.SelectedValue = rs("tipoContribuyenteid")
                 formapagoid.SelectedValue = rs("formapagoid")
@@ -413,6 +413,7 @@ Public Class clientes
         txtZipCode.Text = ""
         txtRFC.Text = ""
         txtDenominacionRazonSocial.Text = ""
+        txtRegistroPatronal.Text = ""
         regimenid.SelectedValue = 0
         condicionesid.SelectedValue = 0
         tipoContribuyenteid.SelectedValue = 0
@@ -456,7 +457,7 @@ Public Class clientes
 
                 InsertOrUpdate.Value = 1
 
-                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=4, @clienteUnionId='" & Session("clienteid").ToString & "', @razonsocial='" & txtDenominacionRazonSocial.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp.ToString & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "'", conn)
+                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=4, @clienteUnionId='" & Session("clienteid").ToString & "', @razonsocial='" & txtDenominacionRazonSocial.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp.ToString & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "', @registro_patronal='" & txtRegistroPatronal.Text & "'", conn)
 
                 conn.Open()
 
@@ -482,7 +483,7 @@ Public Class clientes
 
             Else
 
-                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=5, @clienteid='" & ClientsID.Value & "', @razonsocial='" & txtDenominacionRazonSocial.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "'", conn)
+                Dim cmd As New SqlCommand("EXEC pMisClientes @cmd=5, @clienteid='" & ClientsID.Value & "', @razonsocial='" & txtDenominacionRazonSocial.Text & "', @contacto='" & txtContact.Text & "', @email_contacto='" & txtContactEmail.Text & "', @telefono_contacto='" & txtContactPhone.Text & "', @fac_calle='" & txtStreet.Text & "', @fac_num_int='" & txtIntNumber.Text & "', @fac_num_ext='" & txtExtNumber.Text & "', @fac_colonia='" & txtColony.Text & "', @fac_municipio='" & txtTownship.Text & "', @fac_paisid='" & paisid.SelectedValue.ToString & "', @fac_estadoid='" & estadoid.SelectedValue.ToString & "', @fac_estado='" & txtStates.Text & "', @fac_cp='" & fac_cp & "', @fac_rfc='" & txtRFC.Text & "', @condicionesid='" & condicionesid.SelectedValue.ToString & "', @tipocontribuyenteid='" & tipoContribuyenteid.SelectedValue.ToString & "', @formapagoid='" & formapagoid.SelectedValue.ToString & "', @numctapago='" & txtNumCtaPago.Text & "', @regimenfiscalid='" & regimenid.SelectedValue.ToString & "', @denominacion_razon_social='" & txtDenominacionRazonSocial.Text & "', @registro_patronal='" & txtRegistroPatronal.Text & "'", conn)
 
                 conn.Open()
 

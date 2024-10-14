@@ -155,18 +155,42 @@
                                 </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="EstatusContrato" ItemStyle-HorizontalAlign="Left" HeaderText="Estatus" UniqueName="EstatusContrato" AllowFiltering="false">
                                 </telerik:GridBoundColumn>
-                                <telerik:GridTemplateColumn UniqueName="Comisiones" AllowFiltering="false">
-                                    <HeaderTemplate>Comisiones</HeaderTemplate>
+                                <telerik:GridTemplateColumn UniqueName="Faltas" AllowFiltering="false">
+                                    <HeaderTemplate>Faltas</HeaderTemplate>
                                     <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtComisiones" runat="server" MinValue="0" Value="0" Type="Currency" OnTextChanged="txtComisiones_TextChanged" AutoPostBack="true" Text='<%# Eval("Comisiones") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
+                                        <telerik:RadNumericTextBox ID="txtFaltas" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtFaltas_TextChanged" AutoPostBack="true" Text='<%# Eval("Faltas") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
                                             <NumberFormat DecimalDigits="2" GroupSeparator="," />
                                         </telerik:RadNumericTextBox>
                                     </ItemTemplate>
                                 </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="Faltas" AllowFiltering="false">
-                                    <HeaderTemplate>Faltas</HeaderTemplate>
+                                <telerik:GridTemplateColumn UniqueName="IncapacidadEG" AllowFiltering="false">
+                                    <HeaderTemplate>Incapacidad EG</HeaderTemplate>
                                     <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtFaltas" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtFaltas_TextChanged" AutoPostBack="true" Text='<%# Eval("Faltas") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
+                                        <telerik:RadNumericTextBox ID="txtIncapacidadEG" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadEG_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadEG") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn UniqueName="IncapacidadRT" AllowFiltering="false">
+                                    <HeaderTemplate>Incapacidad RT</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtIncapacidadRT" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadRT_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadRT") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn UniqueName="IncapacidadMaterna" AllowFiltering="false">
+                                    <HeaderTemplate>Incapacidad Materna</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtIncapacidadMaterna" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="IncapacidadMaterna_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadMaterna") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                </telerik:GridTemplateColumn>
+                                <%--<telerik:GridTemplateColumn UniqueName="Comisiones" AllowFiltering="false">
+                                    <HeaderTemplate>Comisiones</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtComisiones" runat="server" MinValue="0" Value="0" Type="Currency" OnTextChanged="txtComisiones_TextChanged" AutoPostBack="true" Text='<%# Eval("Comisiones") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
                                             <NumberFormat DecimalDigits="2" GroupSeparator="," />
                                         </telerik:RadNumericTextBox>
                                     </ItemTemplate>
@@ -210,7 +234,7 @@
                                             <NumberFormat DecimalDigits="2" GroupSeparator="," />
                                         </telerik:RadNumericTextBox>
                                     </ItemTemplate>
-                                </telerik:GridTemplateColumn>
+                                </telerik:GridTemplateColumn>--%>
                                 <%--<telerik:GridBoundColumn DataField="Generado" ItemStyle-HorizontalAlign="Left" HeaderText="Generado" UniqueName="Generado">
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn DataField="Timbrado" ItemStyle-HorizontalAlign="Left" HeaderText="Timbrado" UniqueName="Timbrado">

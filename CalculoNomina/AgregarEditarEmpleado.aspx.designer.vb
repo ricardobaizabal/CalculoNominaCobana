@@ -167,22 +167,13 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents lblNoEmpleado As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control txtNoEmpleado.
+    '''Control lblNoEmpleadoValue.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtNoEmpleado As Global.Telerik.Web.UI.RadNumericTextBox
-
-    '''<summary>
-    '''Control valNoEmpleado.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents valNoEmpleado As Global.System.Web.UI.WebControls.RequiredFieldValidator
+    Protected WithEvents lblNoEmpleadoValue As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblNombre.

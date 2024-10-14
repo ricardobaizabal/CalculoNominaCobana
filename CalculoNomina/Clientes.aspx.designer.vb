@@ -509,6 +509,15 @@ Partial Public Class clientes
     Protected WithEvents lblRegimen As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control lblRegistroPatronal.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblRegistroPatronal As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control regimenid.
     '''</summary>
     '''<remarks>
@@ -516,6 +525,24 @@ Partial Public Class clientes
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents regimenid As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control txtRegistroPatronal.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtRegistroPatronal As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''Control valRegistroPatronal.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents valRegistroPatronal As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control btnSaveClient.
