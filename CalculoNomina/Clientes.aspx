@@ -3,6 +3,13 @@
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+    <script type="text/javascript">
+        function OnRequestStart(target, arguments) {
+            if ((arguments.get_eventTarget().indexOf("clientslist") > -1)) {
+                arguments.set_enableAjax(false);
+            }
+        }
+    </script>
     <style type="text/css">
         .style4 {
             height: 17px;
@@ -19,7 +26,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <br />
-    <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1">
+    <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
         <fieldset>
             <legend style="padding-right: 6px; color: Black">
                 <asp:Image ID="Image1" runat="server" ImageUrl="~/images/buscador_03.jpg" ImageAlign="AbsMiddle" />&nbsp;<asp:Label ID="lblFiltros" Text="Buscador" runat="server" Font-Bold="true" CssClass="item"></asp:Label>
@@ -51,12 +58,16 @@
                         <td style="height: 5px">
                             <telerik:RadGrid ID="clientslist" runat="server" AllowPaging="True"
                                 AutoGenerateColumns="False" GridLines="None" AllowSorting="true"
-                                PageSize="20" ShowStatusBar="True"
+                                PageSize="20" ShowStatusBar="True" ExportSettings-ExportOnlyData="true"
                                 Skin="Bootstrap" Width="100%">
                                 <PagerStyle Mode="NextPrevAndNumeric" />
-                                <MasterTableView DataKeyNames="id" AllowMultiColumnSorting="false" AllowSorting="true" NoDetailRecordsText="No se encontraron registros." Name="Clients" Width="100%">
+                                <ExportSettings IgnorePaging="True" FileName="CatalogoClientes">
+                                    <Excel Format="ExcelML" />
+                                </ExportSettings>
+                                <MasterTableView DataKeyNames="id" AllowMultiColumnSorting="false" AllowSorting="true" NoDetailRecordsText="No se encontraron registros." Name="Clients" Width="100%" CommandItemDisplay="Top">
+                                    <CommandItemSettings ShowRefreshButton="false" ShowAddNewRecordButton="False" ShowExportToExcelButton="true" ShowExportToPdfButton="False" ExportToPdfText="Exportar a pdf" ExportToExcelText="Exportar a excel"></CommandItemSettings>
                                     <Columns>
-                                        <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                        <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Editar" Exportable="false">
                                             <ItemTemplate>
                                                 <asp:ImageButton ID="lnkEdit" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEdit" CausesValidation="false" ImageUrl="~/images/action_edit.png" />
                                             </ItemTemplate>
@@ -74,7 +85,7 @@
                                         </telerik:GridBoundColumn>
                                         <telerik:GridBoundColumn DataField="rfc" HeaderText="RFC" UniqueName="rfc">
                                         </telerik:GridBoundColumn>
-                                        <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                        <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete" Exportable="false">
                                             <ItemTemplate>
                                                 <asp:ImageButton ID="btnDelete" runat="server" CausesValidation="false" CommandArgument='<%# Eval("id") %>' CommandName="cmdDelete" ImageUrl="~/images/action_delete.gif" />
                                             </ItemTemplate>

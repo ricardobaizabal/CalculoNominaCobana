@@ -208,14 +208,11 @@ Public Class IncidenciasWindow
                     txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
                     txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
                 End If
-
-                Call LlenaCmbConcepto(0, "P")
-                'Call LlenaCmbTipoHorasExtra(0)
                 cEmpleado = Nothing
 
+                Call LlenaCmbConcepto(0, "P")
                 Call MostrarDiasLaborados()
                 Call MostrarCuotasDiaria()
-                'Call MostrarSueldoDiarioIntegrado()
 
                 Page.SetFocus(cmbConcepto)
 
@@ -2298,8 +2295,6 @@ Public Class IncidenciasWindow
             ExentoHorasExtra = 0
             ExentoDescansoTrabajado = 0
             ExentoFestivoTrabajado = 0
-
-            '/* Ajuste 07/04/2020*/
             ImporteGravado = 0
 
             Dim ImporteIncidencia As Decimal = 0
@@ -3086,7 +3081,7 @@ Public Class IncidenciasWindow
         cPeriodo.ConsultarPeriodoID()
 
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.Cliente = empresaId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = Periodo

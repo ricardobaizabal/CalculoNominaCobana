@@ -7,9 +7,8 @@ Public Class ModificacionGeneralSemanal
     Private IdEjercicio As Integer = 0
     Private Periodo As Integer = 0
 
-    Private CuotaPeriodo As Double
+    'Private CuotaPeriodo As Double
     Private HorasTriples As Double
-    'Private DescansoTrabajado As Double
     Private PrimaDominical As Double
     Private PrimaVacacional As Double
     Private Vacaciones As Double
@@ -91,8 +90,6 @@ Public Class ModificacionGeneralSemanal
 
     Private HorasDoblesGravadas As Double
     Private HorasDoblesExentas As Double
-    'Private FestivoTrabajadoGravado As Double
-    'Private FestivoTrabajadoExento As Double
     Private DobleteGravado As Double
     Private DobleteExento As Double
 
@@ -153,6 +150,8 @@ Public Class ModificacionGeneralSemanal
     Private ImporteDiarioGravado As Double
     Private FactorDiarioPromedio As Double
 
+    Private dtEmpleados As New DataTable
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             If Not String.IsNullOrEmpty(Request("id")) Then
@@ -165,24 +164,9 @@ Public Class ModificacionGeneralSemanal
                 End If
 
                 Call CargarDatos()
-                Call LlenaConceptosComunes(0)
 
-                'grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-                'grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-                'grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-                'grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-                'grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-                'grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-                'grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
             End If
         End If
-    End Sub
-    Private Sub LlenaConceptosComunes(ByVal sel As Integer)
-        Dim cConcepto As New Entities.Concepto
-        Dim ObjData As New DataControl()
-        objData.Catalogo(cmbIncidencias, sel, cConcepto.ConsultarConceptosComunes())
-        cConcepto = Nothing
-        objData = Nothing
     End Sub
     Private Sub CargarDatos()
         Try
@@ -255,6 +239,7 @@ Public Class ModificacionGeneralSemanal
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
         cNomina.EsEspecial = False
+        dtEmpleados = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosSemanal.DataBind()
         cNomina = Nothing
@@ -277,6 +262,36 @@ Public Class ModificacionGeneralSemanal
             End If
 
         End If
+        Select Case e.Item.ItemType
+            Case Telerik.Web.UI.GridItemType.Footer
+                If dtEmpleados.Rows.Count > 0 Then
+                    If Not IsDBNull(dtEmpleados.Compute("sum(INFONAVIT)", "")) Then
+                        e.Item.Cells(5).Text = FormatCurrency(dtEmpleados.Compute("sum(INFONAVIT)", ""), 2).ToString
+                        e.Item.Cells(5).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(5).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(Faltas)", "")) Then
+                        e.Item.Cells(6).Text = FormatNumber(dtEmpleados.Compute("sum(Faltas)", ""), 2).ToString
+                        e.Item.Cells(6).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(6).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(IncapacidadEG)", "")) Then
+                        e.Item.Cells(7).Text = FormatNumber(dtEmpleados.Compute("sum(IncapacidadEG)", ""), 2).ToString
+                        e.Item.Cells(7).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(7).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(IncapacidadRT)", "")) Then
+                        e.Item.Cells(8).Text = FormatNumber(dtEmpleados.Compute("sum(IncapacidadRT)", ""), 2).ToString
+                        e.Item.Cells(8).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(8).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(IncapacidadMaterna)", "")) Then
+                        e.Item.Cells(9).Text = FormatNumber(dtEmpleados.Compute("sum(IncapacidadMaterna)", ""), 2).ToString
+                        e.Item.Cells(9).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(9).Font.Bold = True
+                    End If
+                End If
+        End Select
     End Sub
     Private Sub grdEmpleadosSemanal_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdEmpleadosSemanal.NeedDataSource
 
@@ -289,75 +304,9 @@ Public Class ModificacionGeneralSemanal
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
         cNomina.EsEspecial = False
+        dtEmpleados = cNomina.ConsultarDetalleNominaExtraordinaria()
         grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
         cNomina = Nothing
-    End Sub
-    Private Sub cmbIncidencias_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbIncidencias.SelectedIndexChanged
-        If cmbIncidencias.SelectedValue = 0 Then
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
-        ElseIf cmbIncidencias.SelectedValue = 3 Then    'COMISION
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = True
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
-        ElseIf cmbIncidencias.SelectedValue = 6 Then    'HORAS DOBLES
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = True
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
-        ElseIf cmbIncidencias.SelectedValue = 7 Then    'HORAS TRIPLES
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = True
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
-        ElseIf cmbIncidencias.SelectedValue = 13 Then    'PRIMA DOMINICAL
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = True
-        ElseIf cmbIncidencias.SelectedValue = 23 Then    'PREMIO ASISTENCIA
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = True
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
-        ElseIf cmbIncidencias.SelectedValue = 24 Then    'PREMIO PUNTUALIDAD
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = True
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
-        ElseIf cmbIncidencias.SelectedValue = 57 Then    'FALTAS
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Comisiones").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("Faltas").Display = True
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasDobles").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("HorasTriples").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioAsistencia").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PremioPuntualidad").Display = False
-            grdEmpleadosSemanal.MasterTableView.GetColumn("PrimaDominical").Display = False
-        End If
     End Sub
     Private Function ChecarSiExiste(ByVal NoEmpleado As Integer, ByVal CvoConcepto As Int32) As Boolean
         Try
@@ -457,7 +406,8 @@ Public Class ModificacionGeneralSemanal
             MsgBox(oExcep.Message)
         End Try
     End Sub
-    Private Sub ChecarYGrabarPercepcionesExentasYGravadas(ByVal NoEmpleado As Integer, ByVal IdContrato As Integer)
+    Private Sub ChecarYGrabarPercepcionesExentasYGravadas(ByVal NoEmpleado As Integer, ByVal IdContrato As Integer, ByVal CuotaDiaria As Decimal)
+        Dim CuotaPeriodo As Double
         Try
             CuotaPeriodo = 0
             HorasTriples = 0
@@ -562,10 +512,6 @@ Public Class ModificacionGeneralSemanal
             DobleteGravado = 0
             DobleteExento = 0
 
-            ''''''''' Pendiente leer '''''''''
-            'SalarioMinimoDiarioGeneral = 73.04
-
-            'Me.oDataAdapterChecarPercepcionesGravadas = New OleDbDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + oDataRow("NOEMPLEADO").ToString + "", oConexion)
             Call CargarVariablesGenerales()
 
             Dim dt As New DataTable()
@@ -757,7 +703,6 @@ Public Class ModificacionGeneralSemanal
                 ImporteGravadoAyudaFuneral = 0
                 GuardarExentoYGravado(44, ImporteGravadoAyudaFuneral, ImporteExentoAyudaFuneral, NoEmpleado)
             End If
-
 
             'El tiempo extraordinario2 es gravado al 100%, no tiene nada exento igual que las vacaciones y la Cuota del periodo
             ImporteGravado = ImporteGravado + TiempoExtraordinarioFueraDelMargenLegal + Vacaciones + CuotaPeriodo
@@ -1223,23 +1168,10 @@ Public Class ModificacionGeneralSemanal
                     DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / FactorDiarioPromedio)) * NumeroDeDiasPagados
                 End If
 
-                QuitarConcepto(64, NoEmpleado)
+                Call QuitarConcepto(64, NoEmpleado)
 
-                dt = New DataTable
+                Call GuardarRegistro(CuotaDiaria, 1, DescuentoInvonavit, 1, IdContrato, NoEmpleado, 64)
 
-                Dim Nomina As New Entities.Nomina()
-                'Nomina.IdEmpresa = Session("clienteid")
-                Nomina.TipoNomina = 1 'Semanal
-                Nomina.Periodo = periodoId.Value
-                dt = Nomina.ConsultarEmpleadosSemanal()
-                Nomina = Nothing
-
-                If dt.Rows.Count > 0 Then
-                    ImporteDiario = dt.Rows(0)("CuotaDiaria")
-                    ImportePeriodo = dt.Rows(0)("CuotaDiaria") * 7
-                End If
-                'GuardarRegistro(NoEmpleado, 1, DescuentoInvonavit, 64, 1, IdContrato)
-                Call GuardarRegistro(CuotaPeriodo, 1, DescuentoInvonavit, 1, IdContrato, NoEmpleado, 64)
             End If
         Catch oExcep As Exception
             MsgBox(oExcep.Message)
@@ -1311,33 +1243,6 @@ Public Class ModificacionGeneralSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub CalcularSubsidio()
-        Try
-            If HonorarioAsimilado > 0 And ImporteGravado < HonorarioAsimilado Then
-                ImporteGravado = ImporteGravado - HonorarioAsimilado
-                ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
-            End If
-
-            Subsidio = 0
-            Dim ImporteSemanal As Decimal
-            ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-            Dim dt As New DataTable()
-            Dim TablaSubsidioSemanal As New TablaSubsidioSemanal()
-            TablaSubsidioSemanal.ImporteSemanal = ImporteSemanal
-            dt = TablaSubsidioSemanal.ConsultarSubsidio()
-
-            If dt.Rows.Count > 0 Then
-                Subsidio = dt.Rows(0).Item("Subsidio")
-            End If
-            If HonorarioAsimilado > 0 Then
-                ImporteGravado = ImporteGravado + HonorarioAsimilado
-                ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-            End If
-
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        End Try
-    End Sub
     Private Sub CalcularImss()
         Imss = 0
         If ImporteDiario <= SalarioMinimoDiarioGeneral Then
@@ -1351,259 +1256,6 @@ Public Class ModificacionGeneralSemanal
             Imss = (SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 25)) * 0.02375
             Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 22)) * 0.004)
         End If
-    End Sub
-    Private Sub GuardarRegistro2(ByVal NoEmpleado As Int64, ByVal ConImpuesto As Int32, ByVal ImporteIncidencia As Decimal, ByVal CvoConcepto As Int32, ByVal UnidadIncidencia As Decimal, ByVal IdContrato As Integer)
-        Try
-            Call CargarVariablesGenerales()
-
-            'ConImpuesto = 1 cuando viene de agregar una percepcion y calcular impuestos guardando ambos
-            'ConImpuesto = 2 cuando viene de quitar una percepcion y solo se procede a guardar los impuesto modificados sin esa percepcion
-
-            Dim cNomina As New Nomina()
-
-            If ConImpuesto = 1 Then
-                If CvoConcepto <= 50 Then
-                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CvoConcepto.ToString + "', 'P', '" + txtUnidadIncidencia.Text + "', " + txtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, 0)"
-                    cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 1 'Semanal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = NoEmpleado
-                    cNomina.CvoConcepto = CvoConcepto
-                    cNomina.IdContrato = IdContrato
-                    cNomina.TipoConcepto = "P"
-                    cNomina.Unidad = UnidadIncidencia
-                    cNomina.Importe = ImporteIncidencia
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = 0
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.GuadarNomina()
-                ElseIf CvoConcepto = 57 Or CvoConcepto = 58 Or CvoConcepto = 59 Or CvoConcepto = 161 Or CvoConcepto = 162 Then
-                    'Deducciones por faltas, permisos o incapacidades
-                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CboConceptos.SelectedValue.ToString + "', 'D', '" + TxtUnidadIncidencia.Text + "', " + TxtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, " + TxtImporteIncidencia.Text + ")"
-                    cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 1 'Semanal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = NoEmpleado
-                    cNomina.CvoConcepto = CvoConcepto
-                    cNomina.IdContrato = IdContrato
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = UnidadIncidencia
-                    cNomina.Importe = ImporteIncidencia
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = ImporteIncidencia
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.GuadarNomina()
-                ElseIf CvoConcepto >= 61 Then
-                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CboConceptos.SelectedValue.ToString + "', 'D', '" + TxtUnidadIncidencia.Text + "', " + TxtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, " + TxtImporteIncidencia.Text + ")"
-                    cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 1 'Semanal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = NoEmpleado
-                    cNomina.CvoConcepto = CvoConcepto
-                    cNomina.IdContrato = IdContrato
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = UnidadIncidencia
-                    cNomina.Importe = ImporteIncidencia
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = ImporteIncidencia
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.GuadarNomina()
-                End If
-            End If
-
-            'Aqui se guarda el impuesto, el total Gravado y el total exento, tanto cuando viene de agregar un concepto como cuando viene de quitar un concepto ya que de ambas maneras se recalcula
-            'solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
-            If ConImpuesto = 1 Then
-                If CvoConcepto < 51 Or CvoConcepto = 57 Or CvoConcepto = 58 Or CvoConcepto = 59 Or CvoConcepto = 161 Or CvoConcepto = 162 Then
-                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 52, 'D', 1, " + Impuesto.ToString + ", 'N', 'N', 'N', 'A', 0, " + Impuesto.ToString + ")"
-                    cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 1 'Semanal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = NoEmpleado
-                    cNomina.CvoConcepto = 86
-                    cNomina.IdContrato = IdContrato
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = Impuesto
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = Impuesto
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.GuadarNomina()
-
-                    If SubsidioAplicado > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 54, 'P', 1, " + SubsidioAplicado.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioAplicado.ToString + ")"
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 1 'Semanal
-                        cNomina.Periodo = Periodo
-                        cNomina.NoEmpleado = NoEmpleado
-                        cNomina.CvoConcepto = 54
-                        cNomina.IdContrato = IdContrato
-                        cNomina.TipoConcepto = "P"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = SubsidioAplicado
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = SubsidioAplicado
-                        cNomina.Generado = ""
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = "A"
-                        cNomina.GuadarNomina()
-                    End If
-                    If SubsidioEfectivo > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 55, 'P', 1, " + SubsidioEfectivo.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioEfectivo.ToString + ")"
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 1 'Semanal
-                        cNomina.Periodo = Periodo
-                        cNomina.NoEmpleado = NoEmpleado
-                        cNomina.CvoConcepto = 55
-                        cNomina.IdContrato = IdContrato
-                        cNomina.TipoConcepto = "P"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = SubsidioEfectivo
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = SubsidioEfectivo
-                        cNomina.Generado = ""
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = "A"
-                        cNomina.GuadarNomina()
-                    End If
-                    If Imss > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 56, 'D', 1, " + Imss.ToString + ", 'N', 'N', 'N', 'A', 0, " + Imss.ToString + ")"
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 1 'Semanal
-                        cNomina.Periodo = Periodo
-                        cNomina.NoEmpleado = NoEmpleado
-                        cNomina.CvoConcepto = 56
-                        cNomina.IdContrato = IdContrato
-                        cNomina.TipoConcepto = "D"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = Imss
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = Imss
-                        cNomina.Generado = ""
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = "A"
-                        cNomina.GuadarNomina()
-                    End If
-                End If
-            ElseIf ConImpuesto = 2 Then
-                If CvoConcepto < 51 Or CvoConcepto = 57 Or CvoConcepto = 58 Or CvoConcepto = 59 Or CvoConcepto = 58 Or CvoConcepto = 59 Or CvoConcepto = 161 Or CvoConcepto = 162 Then
-                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 52, 'D', 1, " + Impuesto.ToString + ", 'N', 'N', 'N', 'A', 0, " + Impuesto.ToString + ")"
-                    cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 1 'Semanal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = NoEmpleado
-                    cNomina.CvoConcepto = 86
-                    cNomina.IdContrato = IdContrato
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = Impuesto
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = Impuesto
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.GuadarNomina()
-                    If SubsidioAplicado > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 54, 'P', 1, " + SubsidioAplicado.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioAplicado.ToString + ")"
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 1 'Semanal
-                        cNomina.Periodo = Periodo
-                        cNomina.NoEmpleado = NoEmpleado
-                        cNomina.CvoConcepto = 54
-                        cNomina.IdContrato = IdContrato
-                        cNomina.TipoConcepto = "P"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = SubsidioAplicado
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = SubsidioAplicado
-                        cNomina.Generado = ""
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = "A"
-                        cNomina.GuadarNomina()
-                    End If
-                    If SubsidioEfectivo > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 55, 'P', 1, " + SubsidioEfectivo.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioEfectivo.ToString + ")"
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 1 'Semanal
-                        cNomina.Periodo = Periodo
-                        cNomina.NoEmpleado = NoEmpleado
-                        cNomina.CvoConcepto = 55
-                        cNomina.IdContrato = IdContrato
-                        cNomina.TipoConcepto = "P"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = SubsidioEfectivo
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = SubsidioEfectivo
-                        cNomina.Generado = ""
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = "A"
-                        cNomina.GuadarNomina()
-                    End If
-                    If Imss > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CvoConcepto, TIPOCONCEPTO, UNIDAD, Importe, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 56, 'D', 1, " + Imss.ToString + ", 'N', 'N', 'N', 'A', 0, " + Imss.ToString + ")"
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 1 'Semanal
-                        cNomina.Periodo = Periodo
-                        cNomina.NoEmpleado = NoEmpleado
-                        cNomina.CvoConcepto = 56
-                        cNomina.IdContrato = IdContrato
-                        cNomina.TipoConcepto = "D"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = Imss
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = Imss
-                        cNomina.Generado = ""
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = "A"
-                        cNomina.GuadarNomina()
-                    End If
-                End If
-            End If
-
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        End Try
     End Sub
     Private Sub SolicitarGeneracionXml(ByVal NoEmpleado As Int64, ByVal Generado As String)
 
@@ -1621,7 +1273,7 @@ Public Class ModificacionGeneralSemanal
         cNomina = Nothing
 
     End Sub
-    Private Sub AgregaConcepto(ByVal ImporteIncidencia, ByVal UnidadIncidencia, ByVal CuotaPeriodo, ByVal IntegradoIMSS, ByVal NoEmpleado, ByVal CvoConcepto, ByVal IdContrato)
+    Private Sub AgregaConcepto(ByVal ImporteIncidencia, ByVal UnidadIncidencia, ByVal CuotaDiaria, ByVal IntegradoIMSS, ByVal NoEmpleado, ByVal CvoConcepto, ByVal IdContrato)
         Try
             Dim Importe As Decimal = 0
             Dim Unidad As Decimal = 0
@@ -1637,9 +1289,9 @@ Public Class ModificacionGeneralSemanal
                 Unidad = 0
             End Try
             Try
-                CuotaPeriodo = Convert.ToDecimal(CuotaPeriodo)
+                CuotaDiaria = Convert.ToDecimal(CuotaDiaria)
             Catch ex As Exception
-                CuotaPeriodo = 0
+                CuotaDiaria = 0
             End Try
 
             If Importe <= 0 Then
@@ -1735,7 +1387,7 @@ Public Class ModificacionGeneralSemanal
                     Call QuitarConcepto(56, NoEmpleado) 'CUOTA IMSS
 
                     Call ChecarPercepcionesGravadas(NoEmpleado, CvoConcepto, Importe, Unidad, CuotaDiaria)
-                    Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato)
+                    Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
 
                     Call CalcularImss()
 
@@ -1862,7 +1514,7 @@ Public Class ModificacionGeneralSemanal
 
             '*******************************************************************************************************
             '*******************************************************************************************************
-            Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, 0)
+            Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
             '*******************************************************************************************************
             '*******************************************************************************************************
 
@@ -1872,21 +1524,38 @@ Public Class ModificacionGeneralSemanal
             rwAlerta.RadAlert(oExcep.Message, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Sub txtComisiones_TextChanged(sender As Object, e As EventArgs)
+    Sub txtINFONAVIT_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
-        Dim txtComisiones As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
+        Dim txtINFONAVIT As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
 
-        AgregaConcepto(txtComisiones.Text, 1, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 3, IdContrato)
+        Dim UnidadIncidencia As Decimal = 1
+        Dim Importe As Decimal = 0
+
+        Try
+            Importe = Convert.ToDecimal(txtINFONAVIT.Text)
+        Catch ex As Exception
+            Importe = 0
+        End Try
+
+        If ChecarSiExiste(NoEmpleado, 64) = True Then
+            Call EliminarConcepto(64, "", Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, IdContrato)
+            If Importe > 0 Then
+                Call AgregaConcepto(Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, 64, IdContrato)
+            End If
+        Else
+            Call AgregaConcepto(Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, 64, IdContrato)
+        End If
 
         Call CargarDatos()
+
     End Sub
     Sub txtFaltas_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1901,12 +1570,12 @@ Public Class ModificacionGeneralSemanal
             UnidadIncidencia = 0
         End Try
 
-        Importe = CuotaPeriodo * UnidadIncidencia
+        Importe = CuotaDiaria * UnidadIncidencia
 
         If UnidadIncidencia = 0 Then
-            Call EliminarConcepto(57, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+            Call EliminarConcepto(57, "", Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, IdContrato)
         Else
-            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 57, IdContrato)
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, 57, IdContrato)
         End If
 
         Call CargarDatos()
@@ -1914,7 +1583,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub txtIncapacidadEG_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1929,12 +1598,12 @@ Public Class ModificacionGeneralSemanal
             UnidadIncidencia = 0
         End Try
 
-        Importe = CuotaPeriodo * UnidadIncidencia
+        Importe = CuotaDiaria * UnidadIncidencia
 
         If UnidadIncidencia = 0 Then
-            Call EliminarConcepto(59, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+            Call EliminarConcepto(59, "", Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, IdContrato)
         Else
-            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 59, IdContrato)
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, 59, IdContrato)
         End If
 
         Call CargarDatos()
@@ -1942,7 +1611,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub txtIncapacidadRT_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1957,12 +1626,12 @@ Public Class ModificacionGeneralSemanal
             UnidadIncidencia = 0
         End Try
 
-        Importe = CuotaPeriodo * UnidadIncidencia
+        Importe = CuotaDiaria * UnidadIncidencia
 
         If UnidadIncidencia = 0 Then
-            Call EliminarConcepto(162, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+            Call EliminarConcepto(162, "", Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, IdContrato)
         Else
-            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 162, IdContrato)
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, 162, IdContrato)
         End If
 
         Call CargarDatos()
@@ -1970,7 +1639,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub IncapacidadMaterna_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1985,85 +1654,16 @@ Public Class ModificacionGeneralSemanal
             UnidadIncidencia = 0
         End Try
 
-        Importe = CuotaPeriodo * UnidadIncidencia
+        Importe = CuotaDiaria * UnidadIncidencia
 
         If UnidadIncidencia = 0 Then
-            Call EliminarConcepto(161, "", Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, IdContrato)
+            Call EliminarConcepto(161, "", Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, IdContrato)
         Else
-            AgregaConcepto(Importe, UnidadIncidencia, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 161, IdContrato)
+            AgregaConcepto(Importe, UnidadIncidencia, CuotaDiaria, IntegradoIMSS, NoEmpleado, 161, IdContrato)
         End If
 
         Call CargarDatos()
 
-    End Sub
-    Sub txtHorasDobles_TextChanged(sender As Object, e As EventArgs)
-        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
-        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
-        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
-
-        Dim txtHorasDobles As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
-
-        Dim Importe As Decimal = 0
-        Importe = ((CuotaPeriodo / 8) * 2) * txtHorasDobles.Text
-
-        AgregaConcepto(Importe, txtHorasDobles.Text, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 6, IdContrato)
-
-        Call CargarDatos()
-    End Sub
-    Sub txtHorasTriples_TextChanged(sender As Object, e As EventArgs)
-        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
-        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
-        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
-
-        Dim txtHorasTriples As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
-
-        Dim Importe As Decimal = 0
-        Importe = ((CuotaPeriodo / 8) * 3) * txtHorasTriples.Text
-
-        AgregaConcepto(Importe, txtHorasTriples.Text, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 7, IdContrato)
-
-        Call CargarDatos()
-    End Sub
-    Sub txtPremioAsistencia_TextChanged(sender As Object, e As EventArgs)
-        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
-        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
-        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
-
-        Dim txtPremioAsistencia As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
-
-        AgregaConcepto(txtPremioAsistencia.Text, 1, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 23, IdContrato)
-
-        Call CargarDatos()
-    End Sub
-    Sub txtPremioPuntualidad_TextChanged(sender As Object, e As EventArgs)
-        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
-        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
-        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
-
-        Dim txtPremioPuntualidad As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
-
-        AgregaConcepto(txtPremioPuntualidad.Text, 1, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 24, IdContrato)
-
-        Call CargarDatos()
-    End Sub
-    Sub txtPrimaDominical_TextChanged(sender As Object, e As EventArgs)
-        Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaPeriodo = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
-        Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
-        Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
-
-        Dim txtPrimaDominical As RadNumericTextBox = DirectCast(sender, RadNumericTextBox)
-
-        Dim Importe As Decimal = 0
-        Importe = (CuotaPeriodo / 4) * txtPrimaDominical.Text
-
-        AgregaConcepto(Importe, txtPrimaDominical.Text, CuotaPeriodo, IntegradoIMSS, NoEmpleado, 13, IdContrato)
-
-        Call CargarDatos()
     End Sub
     Private Sub grdEmpleadosSemanal_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles grdEmpleadosSemanal.ItemCommand
         Select Case e.CommandName
@@ -2811,21 +2411,6 @@ Public Class ModificacionGeneralSemanal
 
             Call CargarVariablesGenerales()
 
-            'Dim ImporteIncidencia As Decimal = 0
-            'Dim UnidadIncidencia As Decimal = 0
-
-            'Try
-            '    ImporteIncidencia = Math.Round(Convert.ToDecimal(txtImporteIncidencia.Text), 6)
-            'Catch ex As Exception
-            '    ImporteIncidencia = 0
-            'End Try
-
-            'Try
-            '    UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
-            'Catch ex As Exception
-            '    UnidadIncidencia = 0
-            'End Try
-
             'ConImpuesto = 1 cuando viene de agregar una percepcion y calcular impuestos guardando ambos
             'ConImpuesto = 2 cuando viene de quitar una percepcion y solo se procede a guardar los impuesto modificados sin esa percepcion
 
@@ -3089,7 +2674,7 @@ Public Class ModificacionGeneralSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub EliminarConcepto(ByVal NumeroConcepto As Int32, ByVal TipoHorasExtra As String, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal, ByVal CuotaPeriodo As Decimal, ByVal IntegradoIMSS As Decimal, ByVal NoEmpleado As Int32, ByVal IdContrato As Int32)
+    Private Sub EliminarConcepto(ByVal NumeroConcepto As Int32, ByVal TipoHorasExtra As String, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal, ByVal CuotaDiaria As Decimal, ByVal IntegradoIMSS As Decimal, ByVal NoEmpleado As Int32, ByVal IdContrato As Int32)
         ImporteDiario = 0
         ImportePeriodo = 0
         ImporteExento = 0
@@ -3120,7 +2705,7 @@ Public Class ModificacionGeneralSemanal
             Call QuitarConcepto(56, NoEmpleado) 'CUOTA IMSS
 
             Call ChecarPercepcionesGravadas(NoEmpleado, NumeroConcepto, ImporteIncidencia, UnidadIncidencia, CuotaDiaria)
-            Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato)
+            Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
 
             Dim cPeriodo As New Entities.Periodo()
             cPeriodo.IdPeriodo = periodoId.Value
@@ -3242,8 +2827,8 @@ Public Class ModificacionGeneralSemanal
             End If
         End If
 
-        Call GuardarRegistro(CuotaPeriodo, 2, ImporteIncidencia, UnidadIncidencia, IdContrato, NoEmpleado, NumeroConcepto)
-        Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, NumeroConcepto)
+        Call GuardarRegistro(CuotaDiaria, 2, ImporteIncidencia, UnidadIncidencia, IdContrato, NoEmpleado, NumeroConcepto)
+        Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
         Call SolicitarGeneracionXml(NoEmpleado, "")
 
     End Sub

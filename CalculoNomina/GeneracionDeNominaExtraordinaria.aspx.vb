@@ -4006,10 +4006,10 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim SIFEIIdEquipo As String = System.Configuration.ConfigurationManager.AppSettings("SIFEIIdEquipo")
 
                             'Pruebas
-                            'Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
+                            Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
 
                             'Producción
-                            Dim TimbreSifei As New SIFEI33.SIFEIService()
+                            'Dim TimbreSifei As New SIFEI33.SIFEIService()
                             Call Comprimir()
 
                             Dim bytes() As Byte
@@ -4613,15 +4613,16 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim fecha_final As String = CStr(row("FechaFinal"))
 
                             mensaje = "Estimado(a) " & nombre_empleado.ToString & vbCrLf & vbCrLf
-                            mensaje += "Adjunto a este correo estamos enviándole el comprobante XML y PDF de nómina correspondiente al periodo de pago: " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & Session("email").ToString & vbCrLf & vbCrLf
+                            mensaje += "Adjunto a este correo estamos enviándole el comprobante XML y PDF de nómina correspondiente al periodo de pago: " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & email_from.ToString & vbCrLf & vbCrLf
                             mensaje += "Atentamente." & vbCrLf
-                            mensaje += razonsocial.ToString.ToUpper & vbCrLf
+                            mensaje += "Departamento Nóminas" & vbCrLf
+                            'mensaje += razonsocial.ToString.ToUpper & vbCrLf
 
                             'objMM.From = New MailAddress(Session("email").ToString, razonsocial)
-                            objMM.From = New MailAddress(email_from, razonsocial)
+                            objMM.From = New MailAddress(email_from, "Departamento Nóminas")
                             objMM.IsBodyHtml = False
                             objMM.Priority = MailPriority.Normal
-                            objMM.Subject = razonsocial & " - Recibo de Nómina"
+                            objMM.Subject = "Recibo de Nómina"
                             objMM.Body = mensaje
                             '
                             '   Agrega anexos
@@ -4637,8 +4638,8 @@ Public Class GeneracionDeNominaExtraordinaria
                             SmtpUser.UserName = email_smtp_username
                             SmtpUser.Password = email_smtp_password
                             'SmtpUser.Domain = email_smtp_server
-                            'SmtpMail.EnableSsl = True
-                            'SmtpMail.Port = email_smtp_port
+                            SmtpMail.EnableSsl = True
+                            SmtpMail.Port = email_smtp_port
                             SmtpMail.UseDefaultCredentials = False
                             SmtpMail.Credentials = SmtpUser
                             SmtpMail.Host = email_smtp_server
@@ -4793,56 +4794,57 @@ Public Class GeneracionDeNominaExtraordinaria
 
                     If validos.Length > 0 Then
                         Dim SmtpMail As New SmtpClient
-                        Try
+                        'Try
 
-                            Dim nombre_empleado As String = CStr(row("Nombre"))
-                            Dim fecha_inicial As String = CStr(row("FechaInicial"))
-                            Dim fecha_final As String = CStr(row("FechaFinal"))
+                        Dim nombre_empleado As String = CStr(row("Nombre"))
+                        Dim fecha_inicial As String = CStr(row("FechaInicial"))
+                        Dim fecha_final As String = CStr(row("FechaFinal"))
 
-                            mensaje = "Estimado(a) " & nombre_empleado.ToString & vbCrLf & vbCrLf
-                            mensaje += "Adjunto a este correo estamos enviándole el comprobante XML y PDF de nómina correspondiente al periodo de pago: " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & Session("email").ToString & vbCrLf & vbCrLf
-                            mensaje += "Atentamente." & vbCrLf
-                            mensaje += razonsocial.ToString.ToUpper & vbCrLf
+                        mensaje = "Estimado(a) " & nombre_empleado.ToString & vbCrLf & vbCrLf
+                        mensaje += "Adjunto a este correo estamos enviándole el comprobante XML y PDF de nómina correspondiente al periodo de pago: " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & email_from.ToString & vbCrLf & vbCrLf
+                        mensaje += "Atentamente." & vbCrLf
+                        'mensaje += razonsocial.ToString.ToUpper & vbCrLf
+                        mensaje += "Departamento Nóminas" & vbCrLf
 
-                            'objMM.From = New MailAddress(Session("email").ToString, razonsocial)
-                            objMM.From = New MailAddress(email_from, razonsocial)
-                            objMM.IsBodyHtml = False
-                            objMM.Priority = MailPriority.Normal
-                            objMM.Subject = razonsocial & " - Recibo de Nómina"
-                            objMM.Body = mensaje
-                            '
-                            '   Agrega anexos
-                            '
-                            Dim AttachXML As Net.Mail.Attachment
-                            Dim AttachPDF As Net.Mail.Attachment
-                            AttachXML = New Net.Mail.Attachment(FilePathXML)
-                            AttachPDF = New Net.Mail.Attachment(FilePathPDF)
-                            objMM.Attachments.Add(AttachXML)
-                            objMM.Attachments.Add(AttachPDF)
-                            '
-                            Dim SmtpUser As New Net.NetworkCredential
-                            SmtpUser.UserName = email_smtp_username
-                            SmtpUser.Password = email_smtp_password
-                            'SmtpUser.Domain = email_smtp_server
-                            'SmtpMail.EnableSsl = True
-                            'SmtpMail.Port = email_smtp_port
-                            SmtpMail.UseDefaultCredentials = False
-                            SmtpMail.Credentials = SmtpUser
-                            SmtpMail.Host = email_smtp_server
-                            SmtpMail.DeliveryMethod = SmtpDeliveryMethod.Network
-                            SmtpMail.Send(objMM)
-                            '
-                            '   Lo marca como enviado a nivel empleado
-                            '
-                            Call GrabarEnviado(row("NoEmpleado"), "S")
-                            '
-                            rwAlerta.RadAlert("Correo enviado.", 330, 180, "Alerta", "", "")
-                            '
-                        Catch ex As Exception
-                            Call GrabarEnviado(row("NoEmpleado"), "N")
-                        Finally
-                            SmtpMail = Nothing
-                        End Try
+                        'objMM.From = New MailAddress(Session("email").ToString, razonsocial)
+                        objMM.From = New MailAddress(email_from, "Departamento Nóminas")
+                        objMM.IsBodyHtml = False
+                        objMM.Priority = MailPriority.Normal
+                        objMM.Subject = "Recibo de Nómina"
+                        objMM.Body = mensaje
+                        '
+                        '   Agrega anexos
+                        '
+                        Dim AttachXML As Net.Mail.Attachment
+                        Dim AttachPDF As Net.Mail.Attachment
+                        AttachXML = New Net.Mail.Attachment(FilePathXML)
+                        AttachPDF = New Net.Mail.Attachment(FilePathPDF)
+                        objMM.Attachments.Add(AttachXML)
+                        objMM.Attachments.Add(AttachPDF)
+                        '
+                        Dim SmtpUser As New Net.NetworkCredential
+                        SmtpUser.UserName = email_smtp_username
+                        SmtpUser.Password = email_smtp_password
+                        'SmtpUser.Domain = email_smtp_server
+                        SmtpMail.EnableSsl = True
+                        SmtpMail.Port = email_smtp_port
+                        SmtpMail.UseDefaultCredentials = False
+                        SmtpMail.Credentials = SmtpUser
+                        SmtpMail.Host = email_smtp_server
+                        SmtpMail.DeliveryMethod = SmtpDeliveryMethod.Network
+                        SmtpMail.Send(objMM)
+                        '
+                        '   Lo marca como enviado a nivel empleado
+                        '
+                        Call GrabarEnviado(row("NoEmpleado"), "S")
+                        '
+                        rwAlerta.RadAlert("Correo enviado.", 330, 180, "Alerta", "", "")
+                        '
+                        'Catch ex As Exception
+                        '    Call GrabarEnviado(row("NoEmpleado"), "N")
+                        'Finally
+                        '    SmtpMail = Nothing
+                        'End Try
                         objMM = Nothing
                     Else
                         Call GrabarEnviado(row("NoEmpleado"), "N")

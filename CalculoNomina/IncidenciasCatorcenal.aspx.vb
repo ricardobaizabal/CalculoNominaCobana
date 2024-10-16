@@ -1510,23 +1510,6 @@ Public Class IncidenciasCatorcenal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    'Private Sub CalcularImpuesto()
-    '    Try
-    '        Impuesto = 0
-    '        Dim ImporteSemanal As Decimal
-    '        ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-    '        Dim dt As New DataTable()
-    '        Dim TarifaSemanal As New TarifaSemanal()
-    '        TarifaSemanal.ImporteSemanal = ImporteSemanal
-    '        dt = TarifaSemanal.ConsultarTarifa()
-
-    '        If dt.Rows.Count > 0 Then
-    '            Impuesto = ((ImporteSemanal - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
-    '        End If
-    '    Catch oExcep As Exception
-    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-    '    End Try
-    'End Sub
     Private Sub CalcularImpuesto()
         Try
             Impuesto = 0
@@ -1543,32 +1526,6 @@ Public Class IncidenciasCatorcenal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    'Private Sub CalcularSubsidio()
-    '    Try
-    '        If HonorarioAsimilado > 0 And ImporteGravado < HonorarioAsimilado Then
-    '            ImporteGravado = ImporteGravado - HonorarioAsimilado
-    '            ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
-    '        End If
-
-    '        Subsidio = 0
-    '        Dim ImporteSemanal As Decimal
-    '        ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-    '        Dim dt As New DataTable()
-    '        Dim TablaSubsidioSemanal As New TablaSubsidioSemanal()
-    '        TablaSubsidioSemanal.ImporteSemanal = ImporteSemanal
-    '        dt = TablaSubsidioSemanal.ConsultarSubsidio()
-
-    '        If dt.Rows.Count > 0 Then
-    '            Subsidio = dt.Rows(0).Item("Subsidio")
-    '        End If
-    '        If HonorarioAsimilado > 0 Then
-    '            ImporteGravado = ImporteGravado + HonorarioAsimilado
-    '            ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-    '        End If
-    '    Catch oExcep As Exception
-    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-    '    End Try
-    'End Sub
     Private Sub CalcularSubsidio()
         Try
             Subsidio = 0

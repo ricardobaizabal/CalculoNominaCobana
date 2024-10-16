@@ -29,23 +29,10 @@
             return oWindow;
         }
         function CloseModal(page) {
-            //alert('HI');
             setTimeout(function () {
                 GetRadWindow().close();
                 window.top.location = page;
             }, 0);
-        }
-        //function closeWindow(c) {
-        //    if (c == 2) {
-        //        top.location.href = top.location.href;
-        //    }
-        //    getRadWindow().close();
-        //}
-        function OnClientCloseHandler(sender, args) {
-            var data = args.get_argument();
-            if (data) {
-                alert(data);
-            }
         }
         function OnRequestStart(target, arguments) {
             if ((arguments.get_eventTarget().indexOf("grdEmpleadosSemanal") > -1)) {
@@ -114,23 +101,17 @@
                                 <asp:Label ID="lblDias" runat="server"></asp:Label>
                             </td>
                         </tr>
-                        <tr style="height: 30px;">
-                            <td style="width: 10%;">
-                                <label class="control-label" style="display: none;">Incidencias:</label>
-                            </td>
-                            <td colspan="2">
-                                <asp:DropDownList ID="cmbIncidencias" runat="server" AutoPostBack="true" Visible="false" Width="100%"></asp:DropDownList>
-                            </td>
-                            <td colspan="3">&nbsp;</td>
-                        </tr>
                     </table>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">&nbsp;</div>
             </div>
             <div class="row">
                 <div class="col-md-12">
                     <telerik:RadGrid ID="grdEmpleadosSemanal" runat="server" AutoGenerateColumns="false" AllowPaging="false" AllowSorting="true" ShowFooter="true" ExportSettings-ExportOnlyData="false" ShowStatusBar="true" PageSize="20" CellSpacing="0" GridLines="None" Skin="Bootstrap" AllowFilteringByColumn="true">
                         <GroupingSettings CaseSensitive="false" />
-                        <MasterTableView AllowMultiColumnSorting="true" AllowFilteringByColumn="true" NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado, IdContrato, CuotaPeriodo, IntegradoIMSS, IdContrato, idNomina">
+                        <MasterTableView AllowMultiColumnSorting="true" AllowFilteringByColumn="true" NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado, IdContrato, CuotaDiaria, IntegradoIMSS, IdContrato, idNomina">
                             <Columns>
                                 <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" HeaderText="Editar">
                                     <ItemTemplate>
@@ -143,104 +124,64 @@
                                 </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="Empleado" ItemStyle-HorizontalAlign="Left" HeaderText="Empleado" UniqueName="Empleado" AllowFiltering="true" AutoPostBackOnFilter="true" CurrentFilterFunction="Contains" ShowFilterIcon="false">
                                 </telerik:GridBoundColumn>
+                                <telerik:GridTemplateColumn UniqueName="INFONAVIT" AllowFiltering="false">
+                                    <HeaderTemplate>INFONAVIT</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtINFONAVIT" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtINFONAVIT_TextChanged" AutoPostBack="true" Text='<%# Eval("INFONAVIT") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," PositivePattern="$n" />
+                                            <EnabledStyle HorizontalAlign="Right" />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                    <ItemStyle HorizontalAlign="Right" />
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn UniqueName="Faltas" AllowFiltering="false">
+                                    <HeaderTemplate>Faltas</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtFaltas" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtFaltas_TextChanged" AutoPostBack="true" Text='<%# Eval("Faltas") %>' Skin="Default" Width="80px" TabIndex="1" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
+                                            <EnabledStyle HorizontalAlign="Right" />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                    <ItemStyle HorizontalAlign="Right" />
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn UniqueName="IncapacidadEG" AllowFiltering="false">
+                                    <HeaderTemplate>Incapacidad EG</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtIncapacidadEG" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadEG_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadEG") %>' Skin="Default" Width="80px" TabIndex="2" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
+                                            <EnabledStyle HorizontalAlign="Right" />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                    <ItemStyle HorizontalAlign="Right" />
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn UniqueName="IncapacidadRT" AllowFiltering="false">
+                                    <HeaderTemplate>Incapacidad RT</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtIncapacidadRT" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadRT_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadRT") %>' Skin="Default" Width="80px" TabIndex="3" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
+                                            <EnabledStyle HorizontalAlign="Right" />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                    <ItemStyle HorizontalAlign="Right" />
+                                </telerik:GridTemplateColumn>
+                                <telerik:GridTemplateColumn UniqueName="IncapacidadMaterna" AllowFiltering="false">
+                                    <HeaderTemplate>Incapacidad Materna</HeaderTemplate>
+                                    <ItemTemplate>
+                                        <telerik:RadNumericTextBox ID="txtIncapacidadMaterna" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="IncapacidadMaterna_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadMaterna") %>' Skin="Default" Width="80px" TabIndex="4" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
+                                            <EnabledStyle HorizontalAlign="Right" />
+                                        </telerik:RadNumericTextBox>
+                                    </ItemTemplate>
+                                    <ItemStyle HorizontalAlign="Right" />
+                                </telerik:GridTemplateColumn>
                                 <telerik:GridBoundColumn DataField="TotalPercepciones" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Percepciones" UniqueName="TotalPercepciones" AllowFiltering="false" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
                                 </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="TotalDucciones" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Ducciones" UniqueName="TotalDucciones" AllowFiltering="false" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
                                 </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="Neto" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Neto" UniqueName="Neto" AllowFiltering="false" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
                                 </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="MetodoPago" ItemStyle-HorizontalAlign="Left" HeaderText="Método Pago" UniqueName="MetodoPago" AllowFiltering="false">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="Banco" ItemStyle-HorizontalAlign="Left" HeaderText="Banco" UniqueName="Banco" AllowFiltering="false">
-                                </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="EstatusContrato" ItemStyle-HorizontalAlign="Left" HeaderText="Estatus" UniqueName="EstatusContrato" AllowFiltering="false">
                                 </telerik:GridBoundColumn>
-                                <telerik:GridTemplateColumn UniqueName="Faltas" AllowFiltering="false">
-                                    <HeaderTemplate>Faltas</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtFaltas" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtFaltas_TextChanged" AutoPostBack="true" Text='<%# Eval("Faltas") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="IncapacidadEG" AllowFiltering="false">
-                                    <HeaderTemplate>Incapacidad EG</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtIncapacidadEG" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadEG_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadEG") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="IncapacidadRT" AllowFiltering="false">
-                                    <HeaderTemplate>Incapacidad RT</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtIncapacidadRT" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadRT_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadRT") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="IncapacidadMaterna" AllowFiltering="false">
-                                    <HeaderTemplate>Incapacidad Materna</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtIncapacidadMaterna" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="IncapacidadMaterna_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadMaterna") %>' Skin="Default" Width="80px" TabIndex="0" MaxLength="7" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <%--<telerik:GridTemplateColumn UniqueName="Comisiones" AllowFiltering="false">
-                                    <HeaderTemplate>Comisiones</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtComisiones" runat="server" MinValue="0" Value="0" Type="Currency" OnTextChanged="txtComisiones_TextChanged" AutoPostBack="true" Text='<%# Eval("Comisiones") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="HorasDobles" AllowFiltering="false">
-                                    <HeaderTemplate>Horas Dobles</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtHorasDobles" runat="server" MinValue="0" Value="0" Type="Number" OnTextChanged="txtHorasDobles_TextChanged" AutoPostBack="true" Text='<%# Eval("HorasDobles") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="HorasTriples" AllowFiltering="false">
-                                    <HeaderTemplate>Horas Triples</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtHorasTriples" runat="server" MinValue="0" Value="0" Type="Number" OnTextChanged="txtHorasTriples_TextChanged" AutoPostBack="true" Text='<%# Eval("HorasTriples") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="PremioAsistencia" AllowFiltering="false">
-                                    <HeaderTemplate>Premio Asistencia</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtPremioAsistencia" runat="server" MinValue="0" Value="0" Type="Currency" OnTextChanged="txtPremioAsistencia_TextChanged" AutoPostBack="true" Text='<%# Eval("PremioAsistencia") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="PremioPuntualidad" AllowFiltering="false">
-                                    <HeaderTemplate>Premio Puntualidad</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtPremioPuntualidad" runat="server" MinValue="0" Value="0" Type="Currency" OnTextChanged="txtPremioPuntualidad_TextChanged" AutoPostBack="true" Text='<%# Eval("PremioPuntualidad") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn UniqueName="PrimaDominical" AllowFiltering="false">
-                                    <HeaderTemplate>Prima Dominical</HeaderTemplate>
-                                    <ItemTemplate>
-                                        <telerik:RadNumericTextBox ID="txtPrimaDominical" runat="server" MinValue="0" Value="0" Type="Number" OnTextChanged="txtPrimaDominical_TextChanged" AutoPostBack="true" Text='<%# Eval("PrimaDominical") %>' Skin="Default" Width="80px" TabIndex="0" AllowFiltering="false">
-                                            <NumberFormat DecimalDigits="2" GroupSeparator="," />
-                                        </telerik:RadNumericTextBox>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>--%>
-                                <%--<telerik:GridBoundColumn DataField="Generado" ItemStyle-HorizontalAlign="Left" HeaderText="Generado" UniqueName="Generado">
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn DataField="Timbrado" ItemStyle-HorizontalAlign="Left" HeaderText="Timbrado" UniqueName="Timbrado">
-                                    </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn DataField="Situacion" ItemStyle-HorizontalAlign="Left" HeaderText="Situacion" UniqueName="Situacion">
-                                    </telerik:GridBoundColumn>--%>
                                 <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="Eliminar" UniqueName="Eliminar">
                                     <ItemTemplate>
                                         <asp:ImageButton ID="btnEliminar" runat="server" CausesValidation="false" CommandArgument='<% #Eval("NoEmpleado")%>' CommandName="cmdDelete" BorderStyle="None" ImageUrl="~/images/action_delete.gif" />
@@ -252,7 +193,9 @@
                     </telerik:RadGrid>
                 </div>
             </div>
-            <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="col-md-12">&nbsp;</div>
+            </div>
             <div class="row">
                 <div class="col-md-12 text-right">
                     <telerik:RadButton ID="btnRegresar" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Regresar"></telerik:RadButton>

@@ -2,7 +2,6 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <link href="styles.css" rel="stylesheet" />
-    <script src="js/FixFocus.js"></script>
     <script type="text/javascript">
         function confirmCallbackFnGenerarNomina(arg) {
             if (arg) {

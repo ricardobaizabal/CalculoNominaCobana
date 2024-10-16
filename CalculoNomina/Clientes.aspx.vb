@@ -389,7 +389,7 @@ Public Class clientes
             Throw New Exception(ex.Message)
         Finally
             conn.Close()
-            conn.Dispose()
+        conn.Dispose()
         End Try
     End Sub
 

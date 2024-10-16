@@ -15,8 +15,6 @@
     <!-- Gritter -->
     <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet" />
 
-    <%--<script src="js/FixFocus.js"></script>--%>
-
     <link href="css/animate.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
     <link href="styles.css" rel="stylesheet" />

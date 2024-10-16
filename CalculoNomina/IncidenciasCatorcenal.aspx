@@ -6,19 +6,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
 
     <!-- Toastr style -->
-    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet" />
 
     <!-- Gritter -->
-    <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet" />
 
-
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
     <link href="styles.css" rel="stylesheet" />
+
     <script type="text/javascript">
         function GetRadWindow() {
             var oWindow = null;
@@ -215,7 +215,7 @@
                 <div class="row">
                     <div class="col-md-6" style="border: solid 0px;">
                         <label class="control-label">P E R C E P C I O N E S</label>
-                        <telerik:RadGrid ID="GridPercepciones" runat="server" AutoGenerateColumns="False" AllowPaging="True" PageSize="50" CellSpacing="0" GridLines="None" Skin="Bootstrap">
+                        <telerik:RadGrid ID="GridPercepciones" runat="server" AutoGenerateColumns="False" ShowFooter="True" AllowPaging="False" CellSpacing="0" GridLines="None" Skin="Bootstrap">
                             <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
                             </ClientSettings>
                             <MasterTableView DataKeyNames="CvoConcepto,TipoHorasExtra" NoMasterRecordsText="No hay registros para mostrar.">
@@ -224,7 +224,7 @@
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn DataField="Concepto" ItemStyle-HorizontalAlign="Left" HeaderText="Concepto" UniqueName="Concepto">
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn DataField="Importe" ItemStyle-HorizontalAlign="Right" DataFormatString="{0:C}" HeaderText="Importe" UniqueName="Importe">
+                                    <telerik:GridBoundColumn DataField="Importe" ItemStyle-HorizontalAlign="Right" DataFormatString="{0:C}" HeaderText="Importe" UniqueName="Importe" Aggregate="Sum" FooterStyle-HorizontalAlign="Right" FooterStyle-Font-Bold="true">
                                     </telerik:GridBoundColumn>
                                     <telerik:GridTemplateColumn HeaderText="Eliminar" UniqueName="Eliminar">
                                         <ItemTemplate>
@@ -240,7 +240,7 @@
                     </div>
                     <div class="col-md-6" style="border: solid 0px;">
                         <label class="control-label">D E D U C C I O N E S</label>
-                        <telerik:RadGrid ID="GridDeduciones" runat="server" AutoGenerateColumns="False" AllowPaging="True" PageSize="50" CellSpacing="0" GridLines="None" Skin="Bootstrap">
+                        <telerik:RadGrid ID="GridDeduciones" runat="server" AutoGenerateColumns="False" ShowFooter="True" AllowPaging="False" CellSpacing="0" GridLines="None" Skin="Bootstrap">
                             <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
                             </ClientSettings>
                             <MasterTableView DataKeyNames="CvoConcepto" NoMasterRecordsText="No hay registros para mostrar.">
@@ -249,7 +249,7 @@
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn DataField="Concepto" ItemStyle-HorizontalAlign="Left" HeaderText="Concepto" UniqueName="Concepto">
                                     </telerik:GridBoundColumn>
-                                    <telerik:GridBoundColumn DataField="Importe" ItemStyle-HorizontalAlign="Right" DataFormatString="{0:C}" HeaderText="Importe" UniqueName="Importe">
+                                    <telerik:GridBoundColumn DataField="Importe" ItemStyle-HorizontalAlign="Right" DataFormatString="{0:C}" HeaderText="Importe" UniqueName="Importe" Aggregate="Sum" FooterStyle-HorizontalAlign="Right" FooterStyle-Font-Bold="true">
                                     </telerik:GridBoundColumn>
                                     <telerik:GridTemplateColumn HeaderText="Eliminar" UniqueName="Eliminar">
                                         <ItemTemplate>
