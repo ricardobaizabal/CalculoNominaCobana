@@ -122,15 +122,6 @@ Partial Public Class ModificacionGeneralQuincenal
     Protected WithEvents lblDias As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control cmbIncidencias.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents cmbIncidencias As Global.System.Web.UI.WebControls.DropDownList
-
-    '''<summary>
     '''Control grdEmpleadosQuincenal.
     '''</summary>
     '''<remarks>

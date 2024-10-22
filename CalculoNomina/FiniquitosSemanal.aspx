@@ -33,7 +33,7 @@
                                                 <telerik:RadButton ID="btnSearch" RenderMode="Lightweight" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Buscar"></telerik:RadButton>
                                             </div>
                                             <div class="col-lg-7">
-                                                <telerik:RadButton ID="btnAll" RenderMode="Lightweight" runat="server" Skin="Bootstrap" Text="Ver todo"></telerik:RadButton>
+                                                <telerik:RadButton ID="btnAll" RenderMode="Lightweight" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Ver todo"></telerik:RadButton>
                                             </div>
                                         </div>
                                     </div>

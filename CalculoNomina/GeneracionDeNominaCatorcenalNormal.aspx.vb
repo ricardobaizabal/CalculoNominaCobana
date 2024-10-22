@@ -521,8 +521,9 @@ Public Class GeneracionDeNominaCatorcenal
                 Dim DescuentoInvonavit As Decimal
                 Dim datos As New DataTable
                 Dim Infonavit As New Entities.Infonavit()
-                Infonavit.IdEmpresa = Session("clienteid")
+                'Infonavit.IdEmpresa = IdEmpresa
                 Infonavit.IdEmpleado = oDataRow("NoEmpleado")
+                Infonavit.IdPeriodo = cmbPeriodo.SelectedValue
                 datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
                 Infonavit = Nothing
 

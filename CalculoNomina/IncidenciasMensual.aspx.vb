@@ -566,15 +566,14 @@ Public Class IncidenciasMensual
             Call ChecarPercepcionesGravadas(empleadoId.Value, NumeroConcepto)
             Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
             Call ChecarPercepcionesExentasYGravadas()
-
-            Dim cPeriodo As New Entities.Periodo()
-            cPeriodo.IdPeriodo = periodoId.Value
-            cPeriodo.ConsultarPeriodoID()
-
             Call CalcularImss()
 
             Imss = Imss * NumeroDeDiasPagados
             Imss = Math.Round(Imss, 6)
+
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = periodoId.Value
+            cPeriodo.ConsultarPeriodoID()
 
             If Imss > 0 Then
                 Dim cNomina = New Nomina()
@@ -1497,13 +1496,15 @@ Public Class IncidenciasMensual
     Private Sub CalcularImpuesto()
         Try
             Impuesto = 0
+            Dim ImporteMensual As Decimal
+            ImporteMensual = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasComision + DiasPagoPorHoras + DiasDestajo + DiasHonorarioAsimilado - DiasFaltasPermisosIncapacidades)
             Dim dt As New DataTable()
             Dim TarifaMensual As New TarifaMensual()
-            TarifaMensual.ImporteMensual = ImportePeriodo
+            TarifaMensual.ImporteMensual = ImporteMensual
             dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
-                Impuesto = ((ImportePeriodo - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = ((ImporteMensual - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
             End If
 
         Catch oExcep As Exception
@@ -1516,52 +1517,33 @@ Public Class IncidenciasMensual
         UMA = 0
         Call CargarVariablesGenerales()
 
-        Dim OtrosIngresosSalario As Decimal = 0
-        Dim OtrosIngresosSalarioIntegrado As Decimal = 0
-        Dim OtrosIngresosSalarioDiario As Decimal = 0
-
-        'Dim dt As New DataTable()
-        'Dim cNomina As New Nomina()
-        ''cNomina.IdEmpresa = IdEmpresa
-        'cNomina.Ejercicio = IdEjercicio
-        'cNomina.TipoNomina = 4 'Mensual
-        'cNomina.Periodo = periodoId.Value
-        'cNomina.NoEmpleado = empleadoId.Value
-        'cNomina.Tipo = "N"
-        'dt = cNomina.ConsultarConceptosEmpleado()
-
-        'If dt.Rows.Count > 0 Then
-        '    If dt.Compute("Sum(Importe)", "CvoConcepto=168") IsNot DBNull.Value Then
-        '        OtrosIngresosSalario = dt.Compute("Sum(Importe)", "CvoConcepto=168")
-        '        If OtrosIngresosSalario > 0 Then
-        '            cNomina = New Nomina()
-        '            cNomina.NoEmpleado = empleadoId.Value
-        '            cNomina.IdContrato = contratoId.Value
-        '            cNomina.OtrosIngresosSalario = OtrosIngresosSalario
-        '            dt = cNomina.OtrosIngresosDiarioIntegrado()
-        '            If dt.Rows.Count > 0 Then
-        '                For Each row As DataRow In dt.Rows
-
-        '                    OtrosIngresosSalarioIntegrado = CDbl(row("OtrosIngresosSalarioIntegrado"))
-
-        '                Next
-        '            End If
-        '            OtrosIngresosSalarioDiario = Math.Round((OtrosIngresosSalarioIntegrado / 7), 2)
-        '        End If
-        '    End If
-        'End If
-
-        If (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) <= SalarioMinimoDiarioGeneral Then
+        If ImporteDiario <= SalarioMinimoDiarioGeneral Then
             Imss = 0
-        ElseIf (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) > SalarioMinimoDiarioGeneral And (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) < (UMA * 3) Then
-            Imss = (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) * 0.02375
-        ElseIf (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) > (UMA * 3) And (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) < (UMA * 25) Then
-            Imss = (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) * 0.02375
-            Imss = Imss + (((SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) - (UMA * 3)) * 0.004)
-        ElseIf (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) > (UMA * 25) Then
-            Imss = ((SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) - (UMA * 25)) * 0.02375
-            Imss = Imss + (((SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) - (UMA * 22)) * 0.004)
+        ElseIf ImporteDiario > SalarioMinimoDiarioGeneral And ImporteDiario < (SalarioMinimoDiarioGeneral * 3) Then
+            Imss = SalarioDiarioIntegradoTrabajador * 0.02375
+        ElseIf ImporteDiario > (SalarioMinimoDiarioGeneral * 3) And ImporteDiario < (SalarioMinimoDiarioGeneral * 25) Then
+            Imss = SalarioDiarioIntegradoTrabajador * 0.02375
+            Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 3)) * 0.004)
+        ElseIf ImporteDiario > (SalarioMinimoDiarioGeneral * 25) Then
+            Imss = (SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 25)) * 0.02375
+            Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 22)) * 0.004)
         End If
+
+        'Dim OtrosIngresosSalario As Decimal = 0
+        'Dim OtrosIngresosSalarioIntegrado As Decimal = 0
+        'Dim OtrosIngresosSalarioDiario As Decimal = 0
+
+        'If (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) <= SalarioMinimoDiarioGeneral Then
+        '    Imss = 0
+        'ElseIf (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) > SalarioMinimoDiarioGeneral And (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) < (UMA * 3) Then
+        '    Imss = (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) * 0.02375
+        'ElseIf (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) > (UMA * 3) And (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) < (UMA * 25) Then
+        '    Imss = (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) * 0.02375
+        '    Imss = Imss + (((SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) - (UMA * 3)) * 0.004)
+        'ElseIf (SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) > (UMA * 25) Then
+        '    Imss = ((SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) - (UMA * 25)) * 0.02375
+        '    Imss = Imss + (((SalarioDiarioIntegradoTrabajador + OtrosIngresosSalarioDiario) - (UMA * 22)) * 0.004)
+        'End If
 
     End Sub
     Private Sub GuardarRegistro(ByVal CuotaDiaria, ByVal ConImpuesto)

@@ -239,7 +239,8 @@ Public Class ModificacionGeneralCatorcenal
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = periodoId.Value
         cNomina.EsEspecial = False
-        grdEmpleadosCatorcenal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
+        dtEmpleados = cNomina.ConsultarDetalleNominaExtraordinaria()
+        grdEmpleadosCatorcenal.DataSource = dtEmpleados
         grdEmpleadosCatorcenal.DataBind()
         cNomina = Nothing
     End Sub
@@ -261,6 +262,36 @@ Public Class ModificacionGeneralCatorcenal
             End If
 
         End If
+        Select Case e.Item.ItemType
+            Case Telerik.Web.UI.GridItemType.Footer
+                If dtEmpleados.Rows.Count > 0 Then
+                    If Not IsDBNull(dtEmpleados.Compute("sum(INFONAVIT)", "")) Then
+                        e.Item.Cells(5).Text = FormatCurrency(dtEmpleados.Compute("sum(INFONAVIT)", ""), 2).ToString
+                        e.Item.Cells(5).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(5).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(Faltas)", "")) Then
+                        e.Item.Cells(6).Text = FormatNumber(dtEmpleados.Compute("sum(Faltas)", ""), 2).ToString
+                        e.Item.Cells(6).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(6).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(IncapacidadEG)", "")) Then
+                        e.Item.Cells(7).Text = FormatNumber(dtEmpleados.Compute("sum(IncapacidadEG)", ""), 2).ToString
+                        e.Item.Cells(7).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(7).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(IncapacidadRT)", "")) Then
+                        e.Item.Cells(8).Text = FormatNumber(dtEmpleados.Compute("sum(IncapacidadRT)", ""), 2).ToString
+                        e.Item.Cells(8).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(8).Font.Bold = True
+                    End If
+                    If Not IsDBNull(dtEmpleados.Compute("sum(IncapacidadMaterna)", "")) Then
+                        e.Item.Cells(9).Text = FormatNumber(dtEmpleados.Compute("sum(IncapacidadMaterna)", ""), 2).ToString
+                        e.Item.Cells(9).HorizontalAlign = HorizontalAlign.Right
+                        e.Item.Cells(9).Font.Bold = True
+                    End If
+                End If
+        End Select
     End Sub
     Private Sub grdEmpleadosCatorcenal_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdEmpleadosCatorcenal.NeedDataSource
 
@@ -273,7 +304,8 @@ Public Class ModificacionGeneralCatorcenal
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = periodoId.Value
         cNomina.EsEspecial = False
-        grdEmpleadosCatorcenal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
+        dtEmpleados = cNomina.ConsultarDetalleNominaExtraordinaria()
+        grdEmpleadosCatorcenal.DataSource = dtEmpleados
         cNomina = Nothing
     End Sub
     Private Function ChecarSiExiste(ByVal NoEmpleado As Integer, ByVal CvoConcepto As Int32) As Boolean
@@ -1371,8 +1403,9 @@ Public Class ModificacionGeneralCatorcenal
             Dim DescuentoInvonavit As Decimal
             Dim datos As New DataTable
             Dim Infonavit As New Entities.Infonavit()
-            Infonavit.IdEmpresa = Session("clienteid")
+            'Infonavit.IdEmpresa = IdEmpresa
             Infonavit.IdEmpleado = NoEmpleado
+            Infonavit.IdPeriodo = periodoId.Value
             datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
             Infonavit = Nothing
 
@@ -1874,7 +1907,7 @@ Public Class ModificacionGeneralCatorcenal
 
                     Call ChecarPercepcionesGravadas(NoEmpleado, CvoConcepto, Importe, Unidad, CuotaDiaria)
                     Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
-
+                    Call ChecarPercepcionesExentasYGravadas(NoEmpleado)
                     Call CalcularImss()
 
                     Imss = Imss * NumeroDeDiasPagados
@@ -2179,13 +2212,6 @@ Public Class ModificacionGeneralCatorcenal
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
-    End Sub
-    Private Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
-        If Not String.IsNullOrEmpty(Request("id")) Then
-            Response.Redirect("~/GeneracionDeNominaCatorcenalNormal.aspx?id=" & periodoId.Value.ToString, False)
-        Else
-            Response.Redirect("~/GeneracionDeNominaCatorcenalNormal.aspx", False)
-        End If
     End Sub
     Private Sub GuardarRegistro(ByVal CuotaDiaria As Decimal, ByVal ConImpuesto As Integer, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal, ByVal IdContrato As Integer, ByVal NoEmpleado As Integer, ByVal CvoConcepto As Integer, Optional ByVal DiasHorasExtra As Integer = 0, Optional ByVal TipoHorasExtra As String = "")
 
@@ -2492,15 +2518,15 @@ Public Class ModificacionGeneralCatorcenal
 
             Call ChecarPercepcionesGravadas(NoEmpleado, NumeroConcepto, ImporteIncidencia, UnidadIncidencia, CuotaDiaria)
             Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
-
-            Dim cPeriodo As New Entities.Periodo()
-            cPeriodo.IdPeriodo = periodoId.Value
-            cPeriodo.ConsultarPeriodoID()
-
+            Call ChecarPercepcionesExentasYGravadas(NoEmpleado)
             Call CalcularImss()
 
             Imss = Imss * NumeroDeDiasPagados
             Imss = Math.Round(Imss, 6)
+
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = periodoId.Value
+            cPeriodo.ConsultarPeriodoID()
 
             If Imss > 0 Then
                 Dim cNomina = New Nomina()
@@ -2618,6 +2644,37 @@ Public Class ModificacionGeneralCatorcenal
         Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
         Call SolicitarGeneracionXml(NoEmpleado, "")
 
+    End Sub
+    Private Sub ChecarPercepcionesExentasYGravadas(ByVal NoEmpleado As Int32)
+        Try
+            Call CargarVariablesGenerales()
+
+            Dim dt As New DataTable()
+            Dim cNomina As New Nomina()
+            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 2 'Catorcenal
+            cNomina.Periodo = periodoId.Value
+            cNomina.NoEmpleado = NoEmpleado
+            cNomina.TipoConcepto = "P"
+            cNomina.Tipo = "N"
+            dt = cNomina.ConsultarConceptosEmpleado()
+
+            If dt.Rows.Count > 0 Then
+                PercepcionesGravadas = dt.Compute("Sum(ImporteGravado)", "")
+                PercepcionesExentas = dt.Compute("Sum(ImporteExento)", "")
+            End If
+
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
+        If Not String.IsNullOrEmpty(Request("id")) Then
+            Response.Redirect("~/GeneracionDeNominaCatorcenalNormal.aspx?id=" & periodoId.Value.ToString, False)
+        Else
+            Response.Redirect("~/GeneracionDeNominaCatorcenalNormal.aspx", False)
+        End If
     End Sub
 
 End Class

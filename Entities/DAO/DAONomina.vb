@@ -545,7 +545,7 @@ Partial Public Class Nomina
     Public Sub GuardarExentoYGravadoFiniquito()
         Try
             p.Clear()
-            'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdEmpresa", Cliente))
             p.Add(New SqlParameter("@pEjercicio", Ejercicio))
             p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
             p.Add(New SqlParameter("@pPeriodo", Periodo))
@@ -560,7 +560,9 @@ Partial Public Class Nomina
             p.Add(New SqlParameter("@pImporteExento", ImporteExento))
             p.Add(New SqlParameter("@pGenerado", Generado))
             p.Add(New SqlParameter("@pIdMovimiento", IdMovimiento))
-
+            p.Add(New SqlParameter("@pFechaInicialPago", FechaIni))
+            p.Add(New SqlParameter("@pFechaFinalPago", FechaFin))
+            p.Add(New SqlParameter("@pFechaPago", FechaPago))
             db.ExecuteSPWithParams("pGuardarExentoYGravadoFiniquito", p)
 
         Catch ex As Exception
@@ -598,9 +600,9 @@ Partial Public Class Nomina
             p.Add(New SqlParameter("@pImporteGravado", ImporteGravado))
             p.Add(New SqlParameter("@pImporteExento", ImporteExento))
             p.Add(New SqlParameter("@pIdMovimiento", IdMovimiento))
-
+            p.Add(New SqlParameter("@pPeriodo", Periodo))
+            p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
             db.ExecuteSP("pActualizarExentoYGravadoFiniquito", p)
-
         Catch ex As Exception
             Throw ex
         End Try

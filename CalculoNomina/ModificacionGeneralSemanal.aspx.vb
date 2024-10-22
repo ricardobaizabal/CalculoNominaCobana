@@ -240,7 +240,7 @@ Public Class ModificacionGeneralSemanal
         cNomina.Periodo = periodoId.Value
         cNomina.EsEspecial = False
         dtEmpleados = cNomina.ConsultarDetalleNominaExtraordinaria()
-        grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNominaExtraordinaria()
+        grdEmpleadosSemanal.DataSource = dtEmpleados
         grdEmpleadosSemanal.DataBind()
         cNomina = Nothing
     End Sub
@@ -1149,8 +1149,9 @@ Public Class ModificacionGeneralSemanal
             Dim DescuentoInvonavit As Decimal
             Dim datos As New DataTable
             Dim Infonavit As New Entities.Infonavit()
-            Infonavit.IdEmpresa = Session("clienteid")
+            'Infonavit.IdEmpresa = IdEmpresa
             Infonavit.IdEmpleado = NoEmpleado
+            Infonavit.IdPeriodo = periodoId.Value
             datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
             Infonavit = Nothing
 
@@ -1323,15 +1324,6 @@ Public Class ModificacionGeneralSemanal
                 End If
             End If
 
-            'If CvoConcepto.ToString = "10" Then
-            '    If cmbTipoHorasExtra.SelectedValue = "01" Then
-            '        If txtUnidadIncidencia.Text > 9 Then
-            '            rwAlerta.RadAlert("Las horas extras no pueden ser mas de 9!!", 330, 180, "Alerta", "", "")
-            '            Exit Sub
-            '        End If
-            '    End If
-            'End If
-
             If ChecarSiExiste(NoEmpleado, CvoConcepto) = True Then
                 rwAlerta.RadAlert("Esa percepcion/deduccion ya existe.", 330, 180, "Alerta", "", "")
                 Exit Sub
@@ -1388,7 +1380,7 @@ Public Class ModificacionGeneralSemanal
 
                     Call ChecarPercepcionesGravadas(NoEmpleado, CvoConcepto, Importe, Unidad, CuotaDiaria)
                     Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
-
+                    Call ChecarPercepcionesExentasYGravadas(NoEmpleado)
                     Call CalcularImss()
 
                     Imss = Imss * NumeroDeDiasPagados
@@ -1526,7 +1518,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub txtINFONAVIT_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaDiaria")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1555,7 +1547,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub txtFaltas_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaDiaria")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1583,7 +1575,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub txtIncapacidadEG_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaDiaria")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1611,7 +1603,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub txtIncapacidadRT_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaDiaria")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1639,7 +1631,7 @@ Public Class ModificacionGeneralSemanal
     End Sub
     Sub IncapacidadMaterna_TextChanged(sender As Object, e As EventArgs)
         Dim NoEmpleado = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("NoEmpleado")
-        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaPeriodo")
+        Dim CuotaDiaria = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("CuotaDiaria")
         Dim IntegradoIMSS = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IntegradoIMSS")
         Dim IdContrato = DirectCast(DirectCast(DirectCast(sender, System.Web.UI.Control).Parent, Telerik.Web.UI.GridTableCell).Item, Telerik.Web.UI.GridEditableItem).GetDataKeyValue("IdContrato")
 
@@ -1692,13 +1684,6 @@ Public Class ModificacionGeneralSemanal
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
-    End Sub
-    Private Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
-        If Not String.IsNullOrEmpty(Request("id")) Then
-            Response.Redirect("~/GeneracionDeNominaNormal.aspx?id=" & periodoId.Value.ToString, False)
-        Else
-            Response.Redirect("~/GeneracionDeNominaNormal.aspx", False)
-        End If
     End Sub
     Private Function ChecarQueExistaLaCuotaPeriodo(ByVal NoEmpleado As Int64, ByVal ImporteIncidencia As Decimal, ByVal UnidadIncidencia As Decimal) As Boolean
         Try
@@ -1997,26 +1982,6 @@ Public Class ModificacionGeneralSemanal
             'TiempoExtraordinarioFueraDelMargenLegal = 0
             ImporteGravado = 0
             ImporteDiario = 0
-
-            'Dim ImporteIncidencia As Decimal = 0
-            'Dim UnidadIncidencia As Decimal = 0
-            'Try
-            '    ImporteIncidencia = Convert.ToDecimal(txtImporteIncidencia.Text)
-            'Catch ex As Exception
-            '    ImporteIncidencia = 0
-            'End Try
-
-            'Try
-            '    UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
-            'Catch ex As Exception
-            '    UnidadIncidencia = 0
-            'End Try
-
-            'Try
-            '    CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-            'Catch ex As Exception
-            '    CuotaDiaria = 0
-            'End Try
 
             Call CargarVariablesGenerales()
 
@@ -2706,15 +2671,15 @@ Public Class ModificacionGeneralSemanal
 
             Call ChecarPercepcionesGravadas(NoEmpleado, NumeroConcepto, ImporteIncidencia, UnidadIncidencia, CuotaDiaria)
             Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
-
-            Dim cPeriodo As New Entities.Periodo()
-            cPeriodo.IdPeriodo = periodoId.Value
-            cPeriodo.ConsultarPeriodoID()
-
+            Call ChecarPercepcionesExentasYGravadas(NoEmpleado)
             Call CalcularImss()
 
             Imss = Imss * NumeroDeDiasPagados
             Imss = Math.Round(Imss, 6)
+
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = periodoId.Value
+            cPeriodo.ConsultarPeriodoID()
 
             If Imss > 0 Then
                 Dim cNomina = New Nomina()
@@ -2831,6 +2796,37 @@ Public Class ModificacionGeneralSemanal
         Call ChecarYGrabarPercepcionesExentasYGravadas(NoEmpleado, IdContrato, CuotaDiaria)
         Call SolicitarGeneracionXml(NoEmpleado, "")
 
+    End Sub
+    Private Sub ChecarPercepcionesExentasYGravadas(ByVal NoEmpleado As Int32)
+        Try
+            Call CargarVariablesGenerales()
+
+            Dim dt As New DataTable()
+            Dim cNomina As New Nomina()
+            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 1 'Semanal
+            cNomina.Periodo = periodoId.Value
+            cNomina.NoEmpleado = NoEmpleado
+            cNomina.TipoConcepto = "P"
+            cNomina.Tipo = "N"
+            dt = cNomina.ConsultarConceptosEmpleado()
+
+            If dt.Rows.Count > 0 Then
+                PercepcionesGravadas = dt.Compute("Sum(ImporteGravado)", "")
+                PercepcionesExentas = dt.Compute("Sum(ImporteExento)", "")
+            End If
+
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
+        If Not String.IsNullOrEmpty(Request("id")) Then
+            Response.Redirect("~/GeneracionDeNominaNormal.aspx?id=" & periodoId.Value.ToString, False)
+        Else
+            Response.Redirect("~/GeneracionDeNominaNormal.aspx", False)
+        End If
     End Sub
 
 End Class
