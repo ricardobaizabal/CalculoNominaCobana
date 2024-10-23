@@ -13,6 +13,8 @@
     Private _ExtraordinarioBit As Boolean
     Private _FechaInicialDate As Date
     Private _FechaFinalDate As Date
+    Private _cmd As Integer
+    Private _IdEmpresa As Integer
 
     Public Sub New()
         _IdPeriodo = 0
@@ -138,6 +140,23 @@
         End Get
         Set(value As Date)
             _FechaFinalDate = value
+        End Set
+    End Property
+    Public Property cmd As Integer
+        Get
+            Return _cmd
+        End Get
+        Set(value As Integer)
+            _cmd = value
+        End Set
+    End Property
+
+    Public Property IdEmpresa As Integer
+        Get
+            Return _IdEmpresa
+        End Get
+        Set(value As Integer)
+            _IdEmpresa = value
         End Set
     End Property
 

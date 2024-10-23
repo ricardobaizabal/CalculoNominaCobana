@@ -98,6 +98,9 @@
                                             <li>
                                                 <a href="FiniquitosGeneradosSemanal.aspx">Finiquitos generados</a>
                                             </li>
+                                            <li>
+                                                <a href="ResumenNominaSemanal.aspx">Resumen de nómina</a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li>
@@ -114,6 +117,9 @@
                                             </li>
                                             <li>
                                                 <a href="FiniquitosGeneradosCatorcenal.aspx">Finiquitos generados</a>
+                                            </li>
+                                            <li>
+                                                <a href="ResumenNominaCatorcenal.aspx">Resumen de nómina</a>
                                             </li>
                                         </ul>
                                     </li>
@@ -132,6 +138,9 @@
                                             <li>
                                                 <a href="FiniquitosGeneradosQuincenal.aspx">Finiquitos generados</a>
                                             </li>
+                                            <li>
+                                                <a href="ResumenNominaQuincenal.aspx">Resumen de nómina</a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li>
@@ -148,6 +157,9 @@
                                             </li>
                                             <li>
                                                 <a href="FiniquitosGeneradosMensual.aspx">Finiquitos generados</a>
+                                            </li>
+                                            <li>
+                                                <a href="ResumenNominaMensual.aspx">Resumen de nómina</a>
                                             </li>
                                         </ul>
                                     </li>

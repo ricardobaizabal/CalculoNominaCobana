@@ -3764,6 +3764,10 @@
     <Content Include="Reportes\scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Reportes\scripts\jquery.js" />
     <Content Include="Reportes\scripts\Master.js" />
+    <Content Include="ResumenNominaCatorcenal.aspx" />
+    <Content Include="ResumenNominaMensual.aspx" />
+    <Content Include="ResumenNominaQuincenal.aspx" />
+    <Content Include="ResumenNominaSemanal.aspx" />
     <Content Include="RiespoPuesto.aspx" />
     <Content Include="RptNominaCatorcenal.aspx" />
     <Content Include="RptNominaEspecial.aspx" />
@@ -4187,6 +4191,34 @@
     <Compile Include="ReportePercepciones.aspx.vb">
       <DependentUpon>ReportePercepciones.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ResumenNominaCatorcenal.aspx.designer.vb">
+      <DependentUpon>ResumenNominaCatorcenal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResumenNominaCatorcenal.aspx.vb">
+      <DependentUpon>ResumenNominaCatorcenal.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ResumenNominaMensual.aspx.designer.vb">
+      <DependentUpon>ResumenNominaMensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResumenNominaMensual.aspx.vb">
+      <DependentUpon>ResumenNominaMensual.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ResumenNominaQuincenal.aspx.designer.vb">
+      <DependentUpon>ResumenNominaQuincenal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResumenNominaQuincenal.aspx.vb">
+      <DependentUpon>ResumenNominaQuincenal.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ResumenNominaSemanal.aspx.designer.vb">
+      <DependentUpon>ResumenNominaSemanal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ResumenNominaSemanal.aspx.vb">
+      <DependentUpon>ResumenNominaSemanal.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="RptNominaCatorcenal.aspx.designer.vb">
       <DependentUpon>RptNominaCatorcenal.aspx</DependentUpon>
@@ -4844,7 +4876,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
+      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
