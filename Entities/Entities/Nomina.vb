@@ -1,6 +1,6 @@
 ﻿Public Class Nomina
     Private _Id As Long
-    'Private _IdEmpresa As Integer
+    Private _IdEmpresa As Integer
     Private _Ejercicio As Integer
     Private _Cliente As Integer
     Private _TipoNomina As Integer
@@ -39,10 +39,11 @@
     Private _DiasPagados As Integer
     Private _idNomina As Integer
     Private _OtroPagoBit As Integer
+    Private _cmd As Integer
 
     Public Sub New()
         _Id = 0
-        '_IdEmpresa = 0
+        _IdEmpresa = 0
         _Ejercicio = 0
         _TipoNomina = 0
         _Periodo = 0
@@ -95,14 +96,14 @@
             _Id = value
         End Set
     End Property
-    'Public Property IdEmpresa() As Int32
-    '    Get
-    '        Return _IdEmpresa
-    '    End Get
-    '    Set(ByVal value As Int32)
-    '        _IdEmpresa = value
-    '    End Set
-    'End Property
+    Public Property IdEmpresa() As Int32
+        Get
+            Return _IdEmpresa
+        End Get
+        Set(ByVal value As Int32)
+            _IdEmpresa = value
+        End Set
+    End Property
     Public Property Ejercicio() As Int32
         Get
             Return _Ejercicio
@@ -397,6 +398,14 @@
         End Get
         Set(ByVal value As Integer)
             _OtroPagoBit = value
+        End Set
+    End Property
+    Public Property cmd() As Integer
+        Get
+            Return _cmd
+        End Get
+        Set(ByVal value As Integer)
+            _cmd = value
         End Set
     End Property
 

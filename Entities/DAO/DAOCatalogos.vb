@@ -254,4 +254,14 @@ Partial Public Class Catalogos
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
+
+    Public Function ConsultarFolioNomina(cliente As Integer, tipoNomina As Integer) As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@cmd", 95))
+        p.Add(New SqlParameter("@clienteid", cliente))
+        p.Add(New SqlParameter("@tipoNomina", tipoNomina))
+
+        dt = db.ExecuteSP("pCatalogo", p)
+        Return dt
+    End Function
 End Class
