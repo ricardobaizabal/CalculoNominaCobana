@@ -442,6 +442,7 @@ Public Class clientes
     Protected Sub btnSaveClient_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btnSaveClient.Click
 
         Dim fac_cp As String = ""
+        fac_cp = txtZipCode.Text.Trim.ToString
 
         'If paisid.SelectedValue <> 1 Then
         '    fac_cp = txtZipCode.Text.Trim.ToString

@@ -74,7 +74,7 @@
     <div class="ibox-content" style="border: solid 0px">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="m-t-none m-b">Finiquitos semanal generados</h1>
+                <h1 class="m-t-none m-b">Finiquitos generados nómina semanal</h1>
                 <hr class="demo-separator" />
                 <br />
             </div>

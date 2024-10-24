@@ -39,7 +39,7 @@
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 b-r">
-                <h1 class="m-t-none m-b">Datos del Finiquito</h1>
+                <h1 class="m-t-none m-b">Datos del finiquito</h1>
             </div>
         </div>
         <div class="form-group row">

@@ -4794,9 +4794,9 @@ Public Class GeneracionDeNominaExtraordinaria
 
                     If validos.Length > 0 Then
                         Dim SmtpMail As New SmtpClient
-                        'Try
+                        Try
 
-                        Dim nombre_empleado As String = CStr(row("Nombre"))
+                            Dim nombre_empleado As String = CStr(row("Nombre"))
                         Dim fecha_inicial As String = CStr(row("FechaInicial"))
                         Dim fecha_final As String = CStr(row("FechaFinal"))
 
@@ -4839,12 +4839,12 @@ Public Class GeneracionDeNominaExtraordinaria
                         Call GrabarEnviado(row("NoEmpleado"), "S")
                         '
                         rwAlerta.RadAlert("Correo enviado.", 330, 180, "Alerta", "", "")
-                        '
-                        'Catch ex As Exception
-                        '    Call GrabarEnviado(row("NoEmpleado"), "N")
-                        'Finally
-                        '    SmtpMail = Nothing
-                        'End Try
+                            '
+                        Catch ex As Exception
+                            Call GrabarEnviado(row("NoEmpleado"), "N")
+                        Finally
+                            SmtpMail = Nothing
+                        End Try
                         objMM = Nothing
                     Else
                         Call GrabarEnviado(row("NoEmpleado"), "N")

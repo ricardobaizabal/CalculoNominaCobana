@@ -172,12 +172,10 @@ Public Class GeneracionDeFiniquitosCatorcenal
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             If Not String.IsNullOrEmpty(Request("id")) Then
+
                 Call LlenaComboPeriodos(0)
                 Call MostrarDatosFiniquito()
-                cmbConcepto.Items.Add(New ListItem("--Seleccione--", 0))
-                cmbConcepto.Items.Add(New ListItem("DIAS PENDIENTES DE PAGO", 51)) '51
-                cmbConcepto.Items.Add(New ListItem("GRATIFICACIÓN", 17)) '51
-                cmbConcepto.DataBind()
+                Call LlenaCmbConcepto(0, "P")
 
                 Dim cConfiguracion As New Entities.Configuracion
                 'cConfiguracion.IdEmpresa = Session("clienteid")
@@ -195,12 +193,14 @@ Public Class GeneracionDeFiniquitosCatorcenal
             End If
 
             Dim ObjData As New DataControl()
-            objData.Catalogo(cmbConcepto, sel, cConcepto.ConsultarConcepto)
+            If Tipo = "P" Then
+                ObjData.CatalogoRad(cmbConcepto, cConcepto.ConsultarConceptoPercepcionesFiniquito, True, False)
+            Else
+                ObjData.CatalogoRad(cmbConcepto, cConcepto.ConsultarConceptoDeduccionesFiniquito, True, False)
+            End If
             cConcepto = Nothing
         Catch oExcep As Exception
-            Response.Write(oExcep.Message.ToString)
-            Response.End()
-            'rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
     Private Sub CargarVariablesGenerales()
@@ -250,13 +250,14 @@ Public Class GeneracionDeFiniquitosCatorcenal
             For Each oDataRow In dt.Rows
                 empleadoId.Value = oDataRow("NoEmpleado")
                 contratoId.Value = oDataRow("IdContrato")
+                clienteId.Value = oDataRow("IdCliente")
                 lblNoEmpleado.Text = oDataRow("NoEmpleado").ToString
                 lblNombreEmpleado.Text = oDataRow("NombreEmpleado").ToString
                 lblFechaIngreso.Text = oDataRow("FechaIngreso").ToString
                 lblFechaBaja.Text = oDataRow("FechaBaja").ToString
                 lblSueldoDiario.Text = FormatCurrency(oDataRow("CuotaDiaria"), 2).ToString
                 lblSueldoDiarioIntegrado.Text = FormatCurrency(oDataRow("IntegradoIMSS"), 2).ToString
-                'txtUltimoSueldomensual.Text = oDataRow("CuotaDiaria") * 30.4
+                'txtUltimoSueldomensual.Text = oDataRow("CuotaDiaria") * FactorDiarioPromedio
                 SalarioDiarioIntegradoTrabajador = oDataRow("IntegradoIMSS")
             Next
         End If
@@ -316,7 +317,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 lblVacacionesProporcionales.Text = FormatCurrency(oDataRow("ProporcionalVacaciones"), 2).ToString
                 lblPorcentajePrimaVacacional.Text = oDataRow("PorcentajePrimaVacacional").ToString
                 lblPrimaVacacionalProporcional.Text = FormatCurrency(oDataRow("PrimaVacaciones"), 2).ToString
-                lblDiasAguinaldoAnio.Text = oDataRow("DiasAguinaldoAnio").ToString
+                lblDiasAguinaldoProporcionales.Text = oDataRow("DiasAguinaldoProporcionales").ToString
                 lblAguinaldoProporcional.Text = FormatCurrency(oDataRow("ProporcionalAguinaldo"), 2).ToString
             Next
         End If
@@ -329,8 +330,9 @@ Public Class GeneracionDeFiniquitosCatorcenal
         'cPeriodo.IdEmpresa = IdEmpresa
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 2 'Catorcenal
-        cPeriodo.ExtraordinarioBit = 0
-        ObjData.Catalogo(cmbPeriodo, sel, cPeriodo.ConsultarPeriodos())
+        cPeriodo.ExtraordinarioBit = False
+        ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
+        cmbPeriodo.SelectedValue = sel
         cPeriodo = Nothing
     End Sub
     Private Sub btnAceptar_Click(sender As Object, e As EventArgs) Handles btnAceptar.Click
@@ -380,6 +382,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         Dim Aguinaldo As Decimal = 0
         Dim Vacaciones As Decimal = 0
         Dim DiasProporcionalVacaciones As Decimal = 0
+        Dim DiasAguinaldoProporcionales As Decimal = 0
         Dim PrimaVacacional As Decimal = 0
         Dim ImporteExentoAguinaldo As Decimal = 0
         Dim ImporteGravadoAguinaldo As Decimal = 0
@@ -409,11 +412,17 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 Vacaciones = oDataRow("ProporcionalVacaciones")
                 PrimaVacacional = oDataRow("PrimaVacaciones")
                 DiasProporcionalVacaciones = Math.Round(oDataRow("DiasProporcionalVacaciones"), 2)
+                DiasAguinaldoProporcionales = Math.Round(oDataRow("DiasAguinaldoProporcionales"), 2)
             Next
         End If
 
+        Dim cPeriodo As New Entities.Periodo()
+        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+        cPeriodo.ConsultarPeriodoID()
+
         cNomina = New Nomina()
         'cNomina.IdEmpresa = IdEmpresa
+        cNomina.Cliente = clienteId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -424,11 +433,15 @@ Public Class GeneracionDeFiniquitosCatorcenal
         cNomina.TipoConcepto = "DE"
         cNomina.Unidad = 1
         cNomina.Importe = ImporteDiario
-        cNomina.Generado = "S"
+        cNomina.Generado = ""
         cNomina.Timbrado = ""
         cNomina.Enviado = ""
         cNomina.Situacion = ""
         cNomina.IdMovimiento = Request("id")
+        cNomina.FechaIni = cPeriodo.FechaInicialDate
+        cNomina.FechaFin = cPeriodo.FechaFinalDate
+        cNomina.FechaPago = cPeriodo.FechaPago
+        cNomina.DiasPagados = cPeriodo.Dias
         cNomina.GuadarNomina()
 
         If Aguinaldo > 0 Then
@@ -590,11 +603,15 @@ Public Class GeneracionDeFiniquitosCatorcenal
             cNomina.Importe = Impuesto
             cNomina.ImporteGravado = 0
             cNomina.ImporteExento = Impuesto
-            cNomina.Generado = "S"
+            cNomina.Generado = ""
             cNomina.Timbrado = ""
             cNomina.Enviado = ""
             cNomina.Situacion = ""
             cNomina.IdMovimiento = Request("id")
+            cNomina.FechaIni = cPeriodo.FechaInicialDate
+            cNomina.FechaFin = cPeriodo.FechaFinalDate
+            cNomina.FechaPago = cPeriodo.FechaPago
+            cNomina.DiasPagados = cPeriodo.Dias
             cNomina.GuadarNomina()
         End If
         If SubsidioEfectivo > 0 Then
@@ -612,11 +629,15 @@ Public Class GeneracionDeFiniquitosCatorcenal
             cNomina.Importe = SubsidioEfectivo
             cNomina.ImporteGravado = 0
             cNomina.ImporteExento = SubsidioEfectivo
-            cNomina.Generado = "S"
+            cNomina.Generado = ""
             cNomina.Timbrado = ""
             cNomina.Enviado = ""
             cNomina.Situacion = ""
             cNomina.IdMovimiento = Request("id")
+            cNomina.FechaIni = cPeriodo.FechaInicialDate
+            cNomina.FechaFin = cPeriodo.FechaFinalDate
+            cNomina.FechaPago = cPeriodo.FechaPago
+            cNomina.DiasPagados = cPeriodo.Dias
             cNomina.GuadarNomina()
         End If
 
@@ -633,8 +654,12 @@ Public Class GeneracionDeFiniquitosCatorcenal
         Try
             Call CargarVariablesGenerales()
 
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+            cPeriodo.ConsultarPeriodoID()
+
             Dim cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.Cliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -647,8 +672,12 @@ Public Class GeneracionDeFiniquitosCatorcenal
             cNomina.Importe = Importe
             cNomina.ImporteGravado = ImporteGravado
             cNomina.ImporteExento = ImporteExento
-            cNomina.Generado = "S"
+            cNomina.Generado = ""
             cNomina.IdMovimiento = Request("id")
+            cNomina.FechaIni = cPeriodo.FechaInicialDate
+            cNomina.FechaFin = cPeriodo.FechaFinalDate
+            cNomina.FechaPago = cPeriodo.FechaPago
+            cNomina.DiasPagados = cPeriodo.Dias
             cNomina.GuardarExentoYGravadoFiniquito()
 
         Catch oExcep As Exception
@@ -657,20 +686,64 @@ Public Class GeneracionDeFiniquitosCatorcenal
             'rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub cmbTipoFiniquito_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbTipoFiniquito.SelectedIndexChanged
-        If cmbTipoFiniquito.SelectedValue = 0 Then
+    Private Sub cmbPeriodo_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles cmbPeriodo.SelectedIndexChanged
+        If cmbPeriodo.SelectedValue > 0 Then
+            If cmbTipoFiniquito.SelectedValue = 0 Then
+                lblAntiguedadDias.Text = ""
+                lblDiasLaboradosAnio.Text = ""
+                lblDiasVacacionesProporcionales.Text = ""
+                lblVacacionesProporcionales.Text = ""
+                lblPorcentajePrimaVacacional.Text = ""
+                lblPrimaVacacionalProporcional.Text = ""
+                lblDiasAguinaldoProporcionales.Text = ""
+                lblAguinaldoProporcional.Text = ""
+            ElseIf cmbTipoFiniquito.SelectedValue = 1 Then
+                Call MostrarDesgloceFiniquito()
+            ElseIf cmbTipoFiniquito.SelectedValue = 2 Then
+            End If
+        Else
             lblAntiguedadDias.Text = ""
             lblDiasLaboradosAnio.Text = ""
             lblDiasVacacionesProporcionales.Text = ""
             lblVacacionesProporcionales.Text = ""
             lblPorcentajePrimaVacacional.Text = ""
             lblPrimaVacacionalProporcional.Text = ""
-            lblDiasAguinaldoAnio.Text = ""
+            lblDiasAguinaldoProporcionales.Text = ""
             lblAguinaldoProporcional.Text = ""
-        ElseIf cmbTipoFiniquito.SelectedValue = 1 Then
-            Call MostrarDesgloceFiniquito()
-        ElseIf cmbTipoFiniquito.SelectedValue = 2 Then
-
+        End If
+    End Sub
+    Private Sub cmbTipoFiniquito_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbTipoFiniquito.SelectedIndexChanged
+        If cmbPeriodo.SelectedValue > 0 Then
+            If cmbTipoFiniquito.SelectedValue = 0 Then
+                lblAntiguedadDias.Text = ""
+                lblDiasLaboradosAnio.Text = ""
+                lblDiasVacacionesProporcionales.Text = ""
+                lblVacacionesProporcionales.Text = ""
+                lblPorcentajePrimaVacacional.Text = ""
+                lblPrimaVacacionalProporcional.Text = ""
+                lblDiasAguinaldoProporcionales.Text = ""
+                lblAguinaldoProporcional.Text = ""
+            ElseIf cmbTipoFiniquito.SelectedValue = 1 Then
+                Call MostrarDesgloceFiniquito()
+            ElseIf cmbTipoFiniquito.SelectedValue = 2 Then
+                lblAntiguedadDias.Text = ""
+                lblDiasLaboradosAnio.Text = ""
+                lblDiasVacacionesProporcionales.Text = ""
+                lblVacacionesProporcionales.Text = ""
+                lblPorcentajePrimaVacacional.Text = ""
+                lblPrimaVacacionalProporcional.Text = ""
+                lblDiasAguinaldoProporcionales.Text = ""
+                lblAguinaldoProporcional.Text = ""
+            End If
+        Else
+            lblAntiguedadDias.Text = ""
+            lblDiasLaboradosAnio.Text = ""
+            lblDiasVacacionesProporcionales.Text = ""
+            lblVacacionesProporcionales.Text = ""
+            lblPorcentajePrimaVacacional.Text = ""
+            lblPrimaVacacionalProporcional.Text = ""
+            lblDiasAguinaldoProporcionales.Text = ""
+            lblAguinaldoProporcional.Text = ""
         End If
     End Sub
     Private Sub ConsultarProporcionalesVacaciones()
@@ -1171,11 +1244,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         End If
     End Sub
     Private Sub rdoPercepcion_CheckedChanged(sender As Object, e As EventArgs) Handles rdoPercepcion.CheckedChanged
-        cmbConcepto.Items.Clear()
-        cmbConcepto.Items.Add(New ListItem("--Seleccione--", 0))
-        cmbConcepto.Items.Add(New ListItem("DIAS PENDIENTES DE PAGO", 51)) '51
-        cmbConcepto.Items.Add(New ListItem("GRATIFICACIÓN", 17)) '51
-        cmbConcepto.DataBind()
+        Call LlenaCmbConcepto(0, "P")
     End Sub
     Private Sub rdoDeducción_CheckedChanged(sender As Object, e As EventArgs) Handles rdoDeducción.CheckedChanged
         LlenaCmbConcepto(0, "D")
@@ -1603,7 +1672,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 Impuesto = 0
             End If
 
-            Call GuardarRegistro(1)
+            Call GuardarRegistro(ImporteDiario, 1)
             Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
             Call MostrarPercepciones()
             Call MostrarDeducciones()
@@ -1681,8 +1750,13 @@ Public Class GeneracionDeFiniquitosCatorcenal
             'rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Function
-    Private Sub GuardarRegistro(ByVal ConImpuesto)
+    Private Sub GuardarRegistro(ByVal CuotaDiaria, ByVal ConImpuesto)
         Try
+
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+            cPeriodo.ConsultarPeriodoID()
+
             Call CargarVariablesGenerales()
 
             Dim ImporteIncidencia As Decimal = 0
@@ -1691,7 +1765,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             Try
                 ImporteIncidencia = Math.Round(Convert.ToDecimal(txtImporteIncidencia.Text), 6)
             Catch ex As Exception
-                UnidadIncidencia = 0
+                ImporteIncidencia = 0
             End Try
 
             Try
@@ -1703,36 +1777,174 @@ Public Class GeneracionDeFiniquitosCatorcenal
             'ConImpuesto = 1 cuando viene de agregar una percepcion y calcular impuestos guardando ambos
             'ConImpuesto = 2 cuando viene de quitar una percepcion y solo se procede a guardar los impuesto modificados sin esa percepcion
 
-            'Percepciones
+            Dim cNomina As New Nomina()
+            cNomina = New Nomina()
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 2 'Catorcenal
+            cNomina.Periodo = cmbPeriodo.SelectedValue
+            cNomina.NoEmpleado = empleadoId.Value
+            cNomina.CvoConcepto = 87
+            cNomina.TipoConcepto = "DE"
+            cNomina.EliminaConceptoEmpleado()
+
+            cNomina = New Nomina()
+            'cNomina.Cliente = empresaId.Value
+            cNomina.Cliente = clienteId.Value
+            cNomina.Ejercicio = IdEjercicio
+            cNomina.TipoNomina = 2 'Catorcenal
+            cNomina.Periodo = cmbPeriodo.SelectedValue
+            cNomina.NoEmpleado = empleadoId.Value
+            cNomina.CvoConcepto = 87
+            cNomina.IdContrato = contratoId.Value
+            cNomina.Tipo = "F"
+            cNomina.TipoConcepto = "DE"
+            cNomina.Unidad = 1
+            cNomina.Importe = CuotaDiaria
+            cNomina.Generado = ""
+            cNomina.Timbrado = ""
+            cNomina.Enviado = ""
+            cNomina.Situacion = "A"
+            cNomina.EsEspecial = False
+            cNomina.IdMovimiento = Request("id")
+            cNomina.FechaIni = cPeriodo.FechaInicialDate
+            cNomina.FechaFin = cPeriodo.FechaFinalDate
+            cNomina.FechaPago = cPeriodo.FechaPago
+            cNomina.DiasPagados = cPeriodo.Dias
+            cNomina.GuadarNominaPeriodo()
+
             If ConImpuesto = 1 Then
-                If cmbConcepto.SelectedValue < 52 Then
-                    GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, ImporteIncidencia, 0, "P")
+                If cmbConcepto.SelectedValue <= 51 Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Or cmbConcepto.SelectedValue = 167 Or cmbConcepto.SelectedValue = 168 Or cmbConcepto.SelectedValue = 169 Or cmbConcepto.SelectedValue = 170 Or cmbConcepto.SelectedValue = 171 Then
+                    cNomina = New Nomina()
+                    'cNomina.Cliente = empresaId.Value
+                    cNomina.Cliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 2 'Catorcenal
+                    cNomina.Periodo = cmbPeriodo.SelectedValue
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.Tipo = "F"
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Unidad = UnidadIncidencia
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteGravado = 0
+                    If cmbConcepto.SelectedValue = 32 Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Then
+                        cNomina.ImporteExento = ImporteIncidencia
+                    Else
+                        cNomina.ImporteExento = 0
+                    End If
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    'If cmbConcepto.SelectedValue = 10 Then
+                    '    cNomina.DiasHorasExtra = txtDiasHorasExtra.Text
+                    '    cNomina.TipoHorasExtra = cmbTipoHorasExtra.SelectedValue
+                    'End If
+                    cNomina.EsEspecial = False
+                    cNomina.IdMovimiento = Request("id")
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.GuadarNominaPeriodo()
+                ElseIf cmbConcepto.SelectedValue = 82 Then
+                    cNomina = New Nomina()
+                    'cNomina.Cliente = empresaId.Value
+                    cNomina.Cliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 2 'Catorcenal
+                    cNomina.Periodo = cmbPeriodo.SelectedValue
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.Tipo = "F"
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.IdMovimiento = Request("id")
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.GuadarNominaPeriodo()
+                    cNomina = Nothing
                 ElseIf cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
-                    'Deducciones por faltas, permisos o incapacidades
-                    GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, 0, ImporteIncidencia, "D")
+                    cNomina = New Nomina()
+                    'cNomina.Cliente = empresaId.Value
+                    cNomina.Cliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 2 'Catorcenal
+                    cNomina.Periodo = cmbPeriodo.SelectedValue
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.Tipo = "F"
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Unidad = UnidadIncidencia
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.IdMovimiento = Request("id")
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.GuadarNominaPeriodo()
                 ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
-                    'Deducciones
-                    GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, 0, ImporteIncidencia, "D")
+                    cNomina = New Nomina()
+                    'cNomina.Cliente = empresaId.Value
+                    cNomina.Cliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 2 'Catorcenal
+                    cNomina.Periodo = cmbPeriodo.SelectedValue
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.Tipo = "F"
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Unidad = UnidadIncidencia
+                    cNomina.Importe = ImporteIncidencia
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = ImporteIncidencia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.IdMovimiento = Request("id")
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.GuadarNominaPeriodo()
                 End If
             End If
 
             'Aqui se guarda el impuesto, el total Gravado y el total exento, tanto cuando viene de agregar un concepto como cuando viene de quitar un concepto ya que de ambas maneras se recalcula
-            'Solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
-
+            'solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
             If ConImpuesto = 1 Then
-                Dim cNomina As New Nomina()
-                If cmbConcepto.SelectedValue < 52 Then
-
-                    'GuardarExentoYGravado(cmbConcepto.SelectedValue, 1, Impuesto, 0, Impuesto, "P")
-
+                If cmbConcepto.SelectedValue < 52 Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Or cmbConcepto.SelectedValue.ToString = "167" Or cmbConcepto.SelectedValue.ToString = "168" Or cmbConcepto.SelectedValue.ToString = "169" Or cmbConcepto.SelectedValue.ToString = "170" Or cmbConcepto.SelectedValue.ToString = "171" Then
                     If Impuesto > 0 Then
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        'cNomina.Cliente = empresaId.Value
+                        cNomina.Cliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
                         cNomina.Periodo = cmbPeriodo.SelectedValue
                         cNomina.NoEmpleado = empleadoId.Value
-                        cNomina.CvoConcepto = 86
+                        cNomina.CvoConcepto = 52
                         cNomina.IdContrato = contratoId.Value
                         cNomina.Tipo = "F"
                         cNomina.TipoConcepto = "D"
@@ -1740,43 +1952,23 @@ Public Class GeneracionDeFiniquitosCatorcenal
                         cNomina.Importe = Impuesto
                         cNomina.ImporteGravado = 0
                         cNomina.ImporteExento = Impuesto
-                        cNomina.Generado = "S"
+                        cNomina.Generado = ""
                         cNomina.Timbrado = ""
                         cNomina.Enviado = ""
-                        cNomina.Situacion = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
                         cNomina.IdMovimiento = Request("id")
-                        cNomina.GuadarNomina()
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.GuadarNominaPeriodo()
                     End If
-                    If SubsidioEfectivo > 0 Then
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = cmbPeriodo.SelectedValue
-                        cNomina.NoEmpleado = empleadoId.Value
-                        cNomina.CvoConcepto = 55
-                        cNomina.IdContrato = contratoId.Value
-                        cNomina.Tipo = "F"
-                        cNomina.TipoConcepto = "P"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = SubsidioEfectivo
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = SubsidioEfectivo
-                        cNomina.Generado = "S"
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = ""
-                        cNomina.IdMovimiento = Request("id")
-                        cNomina.GuadarNomina()
-                    End If
-
-                    CalcularImss()
-                    Imss = Imss * DiasCuotaPeriodo
-                    Imss = Math.Round(Imss, 6)
 
                     If Imss > 0 Then
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        'cNomina.Cliente = empresaId.Value
+                        cNomina.Cliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
                         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1789,143 +1981,303 @@ Public Class GeneracionDeFiniquitosCatorcenal
                         cNomina.Importe = Imss
                         cNomina.ImporteGravado = 0
                         cNomina.ImporteExento = Imss
-                        cNomina.Generado = "S"
+                        cNomina.Generado = ""
                         cNomina.Timbrado = ""
                         cNomina.Enviado = ""
-                        cNomina.Situacion = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
                         cNomina.IdMovimiento = Request("id")
-                        cNomina.GuadarNomina()
-                    End If
-                    If cmbConcepto.SelectedValue = 2 Then
-                        ''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
-                        Dim Valor As Decimal
-                        Dim DescuentoInvonavit As Decimal
-                        Dim datos As New DataTable
-                        Dim Infonavit As New Entities.Infonavit()
-                        Infonavit.IdEmpresa = Session("clienteid")
-                        Infonavit.IdEmpleado = empleadoId.Value
-                        datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
-                        Infonavit = Nothing
-
-                        If datos.Rows.Count > 0 Then
-                            If datos.Rows(0)("tipo_descuento") = 1 Then
-                                Valor = datos.Rows(0)("valor_descuento")
-                                DescuentoInvonavit = ((Valor + ImporteSeguroVivienda) / 30.4) * UnidadIncidencia
-                            ElseIf datos.Rows(0)("tipo_descuento") = 2 Then
-                                Valor = datos.Rows(0)("valor_descuento")
-                                DescuentoInvonavit = (((Valor * SalarioMinimoDiarioGeneral) + ImporteSeguroVivienda) / 30.4) * UnidadIncidencia
-                            ElseIf datos.Rows(0)("tipo_descuento") = 3 Then
-                                Valor = datos.Rows(0)("valor_descuento")
-                                DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / 30.4)) * UnidadIncidencia
-                            End If
-
-                            If DescuentoInvonavit > 0 Then
-                                cNomina = New Nomina()
-                                'cNomina.IdEmpresa = IdEmpresa
-                                cNomina.Ejercicio = IdEjercicio
-                                cNomina.TipoNomina = 2 'Catorcenal
-                                cNomina.Periodo = cmbPeriodo.SelectedValue
-                                cNomina.NoEmpleado = empleadoId.Value
-                                cNomina.CvoConcepto = 64
-                                cNomina.IdContrato = contratoId.Value
-                                cNomina.Tipo = "F"
-                                cNomina.TipoConcepto = "D"
-                                cNomina.Unidad = 1
-                                cNomina.Importe = DescuentoInvonavit
-                                cNomina.ImporteGravado = 0
-                                cNomina.ImporteExento = DescuentoInvonavit
-                                cNomina.Generado = "S"
-                                cNomina.Timbrado = ""
-                                cNomina.Enviado = ""
-                                cNomina.Situacion = ""
-                                cNomina.IdMovimiento = Request("id")
-                                cNomina.GuadarNomina()
-                            End If
-                        End If
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.GuadarNominaPeriodo()
                     End If
                 End If
             ElseIf ConImpuesto = 2 Then
-                Dim cNomina As New Nomina()
-                If cmbConcepto.SelectedValue < 52 Then
-                    If Impuesto > 0 Then
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = cmbPeriodo.SelectedValue
-                        cNomina.NoEmpleado = empleadoId.Value
-                        cNomina.CvoConcepto = 86
-                        cNomina.IdContrato = contratoId.Value
-                        cNomina.Tipo = "F"
-                        cNomina.TipoConcepto = "D"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = Impuesto
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = Impuesto
-                        cNomina.Generado = "S"
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = ""
-                        cNomina.IdMovimiento = Request("id")
-                        cNomina.GuadarNomina()
-                    End If
-                    If SubsidioEfectivo > 0 Then
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = cmbPeriodo.SelectedValue
-                        cNomina.NoEmpleado = empleadoId.Value
-                        cNomina.CvoConcepto = 55
-                        cNomina.IdContrato = contratoId.Value
-                        cNomina.Tipo = "F"
-                        cNomina.TipoConcepto = "P"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = SubsidioEfectivo
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = SubsidioEfectivo
-                        cNomina.Generado = "S"
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = ""
-                        cNomina.IdMovimiento = Request("id")
-                        cNomina.GuadarNomina()
-                    End If
-
-                    CalcularImss()
-                    Imss = Imss * DiasCuotaPeriodo
-                    Imss = Math.Round(Imss, 6)
-
-                    If Imss > 0 Then
-                        cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = cmbPeriodo.SelectedValue
-                        cNomina.NoEmpleado = empleadoId.Value
-                        cNomina.CvoConcepto = 56
-                        cNomina.IdContrato = contratoId.Value
-                        cNomina.Tipo = "F"
-                        cNomina.TipoConcepto = "D"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = Imss
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = Imss
-                        cNomina.Generado = "S"
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = ""
-                        cNomina.IdMovimiento = Request("id")
-                        cNomina.GuadarNomina()
-                    End If
-                End If
             End If
         Catch oExcep As Exception
-            Response.Write(oExcep.Message.ToString)
-            Response.End()
-            'rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
+    'Private Sub GuardarRegistro(ByVal CuotaDiaria, ByVal ConImpuesto)
+    '    Try
+
+    '        Dim cPeriodo As New Entities.Periodo()
+    '        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+    '        cPeriodo.ConsultarPeriodoID()
+
+    '        Call CargarVariablesGenerales()
+
+    '        Dim ImporteIncidencia As Decimal = 0
+    '        Dim UnidadIncidencia As Decimal = 0
+
+    '        Try
+    '            ImporteIncidencia = Math.Round(Convert.ToDecimal(txtImporteIncidencia.Text), 6)
+    '        Catch ex As Exception
+    '            UnidadIncidencia = 0
+    '        End Try
+
+    '        Try
+    '            UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
+    '        Catch ex As Exception
+    '            UnidadIncidencia = 0
+    '        End Try
+
+    '        'ConImpuesto = 1 cuando viene de agregar una percepcion y calcular impuestos guardando ambos
+    '        'ConImpuesto = 2 cuando viene de quitar una percepcion y solo se procede a guardar los impuesto modificados sin esa percepcion
+
+    '        'Percepciones
+    '        If ConImpuesto = 1 Then
+    '            If cmbConcepto.SelectedValue < 52 Then
+    '                GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, ImporteIncidencia, 0, "P")
+    '            ElseIf cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
+    '                'Deducciones por faltas, permisos o incapacidades
+    '                GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, 0, ImporteIncidencia, "D")
+    '            ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
+    '                'Deducciones
+    '                GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, 0, ImporteIncidencia, "D")
+    '            End If
+    '        End If
+
+    '        'Aqui se guarda el impuesto, el total Gravado y el total exento, tanto cuando viene de agregar un concepto como cuando viene de quitar un concepto ya que de ambas maneras se recalcula
+    '        'Solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
+
+    '        If ConImpuesto = 1 Then
+    '            Dim cNomina As New Nomina()
+    '            If cmbConcepto.SelectedValue < 52 Then
+
+    '                'GuardarExentoYGravado(cmbConcepto.SelectedValue, 1, Impuesto, 0, Impuesto, "P")
+
+    '                If Impuesto > 0 Then
+    '                    cNomina = New Nomina()
+    '                    'cNomina.IdEmpresa = IdEmpresa
+    '                    cNomina.Ejercicio = IdEjercicio
+    '                    cNomina.TipoNomina = 2 'Catorcenal
+    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
+    '                    cNomina.NoEmpleado = empleadoId.Value
+    '                    cNomina.CvoConcepto = 86
+    '                    cNomina.IdContrato = contratoId.Value
+    '                    cNomina.Tipo = "F"
+    '                    cNomina.TipoConcepto = "D"
+    '                    cNomina.Unidad = 1
+    '                    cNomina.Importe = Impuesto
+    '                    cNomina.ImporteGravado = 0
+    '                    cNomina.ImporteExento = Impuesto
+    '                    cNomina.Generado = ""
+    '                    cNomina.Timbrado = ""
+    '                    cNomina.Enviado = ""
+    '                    cNomina.Situacion = ""
+    '                    cNomina.IdMovimiento = Request("id")
+    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+    '                    cNomina.FechaPago = cPeriodo.FechaPago
+    '                    cNomina.DiasPagados = cPeriodo.Dias
+    '                    cNomina.GuadarNomina()
+    '                End If
+    '                If SubsidioEfectivo > 0 Then
+    '                    cNomina = New Nomina()
+    '                    'cNomina.IdEmpresa = IdEmpresa
+    '                    cNomina.Ejercicio = IdEjercicio
+    '                    cNomina.TipoNomina = 2 'Catorcenal
+    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
+    '                    cNomina.NoEmpleado = empleadoId.Value
+    '                    cNomina.CvoConcepto = 55
+    '                    cNomina.IdContrato = contratoId.Value
+    '                    cNomina.Tipo = "F"
+    '                    cNomina.TipoConcepto = "P"
+    '                    cNomina.Unidad = 1
+    '                    cNomina.Importe = SubsidioEfectivo
+    '                    cNomina.ImporteGravado = 0
+    '                    cNomina.ImporteExento = SubsidioEfectivo
+    '                    cNomina.Generado = ""
+    '                    cNomina.Timbrado = ""
+    '                    cNomina.Enviado = ""
+    '                    cNomina.Situacion = ""
+    '                    cNomina.IdMovimiento = Request("id")
+    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+    '                    cNomina.FechaPago = cPeriodo.FechaPago
+    '                    cNomina.DiasPagados = cPeriodo.Dias
+    '                    cNomina.GuadarNomina()
+    '                End If
+
+    '                CalcularImss()
+    '                Imss = Imss * DiasCuotaPeriodo
+    '                Imss = Math.Round(Imss, 6)
+
+    '                If Imss > 0 Then
+    '                    cNomina = New Nomina()
+    '                    'cNomina.IdEmpresa = IdEmpresa
+    '                    cNomina.Ejercicio = IdEjercicio
+    '                    cNomina.TipoNomina = 2 'Catorcenal
+    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
+    '                    cNomina.NoEmpleado = empleadoId.Value
+    '                    cNomina.CvoConcepto = 56
+    '                    cNomina.IdContrato = contratoId.Value
+    '                    cNomina.Tipo = "F"
+    '                    cNomina.TipoConcepto = "D"
+    '                    cNomina.Unidad = 1
+    '                    cNomina.Importe = Imss
+    '                    cNomina.ImporteGravado = 0
+    '                    cNomina.ImporteExento = Imss
+    '                    cNomina.Generado = ""
+    '                    cNomina.Timbrado = ""
+    '                    cNomina.Enviado = ""
+    '                    cNomina.Situacion = ""
+    '                    cNomina.IdMovimiento = Request("id")
+    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+    '                    cNomina.FechaPago = cPeriodo.FechaPago
+    '                    cNomina.DiasPagados = cPeriodo.Dias
+    '                    cNomina.GuadarNomina()
+    '                End If
+    '                If cmbConcepto.SelectedValue = 2 Then
+    '                    ''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
+    '                    Dim Valor As Decimal
+    '                    Dim DescuentoInvonavit As Decimal
+    '                    Dim datos As New DataTable
+    '                    Dim Infonavit As New Entities.Infonavit()
+    '                    Infonavit.IdEmpresa = Session("clienteid")
+    '                    Infonavit.IdEmpleado = empleadoId.Value
+    '                    datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
+    '                    Infonavit = Nothing
+
+    '                    If datos.Rows.Count > 0 Then
+    '                        If datos.Rows(0)("tipo_descuento") = 1 Then
+    '                            Valor = datos.Rows(0)("valor_descuento")
+    '                            DescuentoInvonavit = ((Valor + ImporteSeguroVivienda) / 30.4) * UnidadIncidencia
+    '                        ElseIf datos.Rows(0)("tipo_descuento") = 2 Then
+    '                            Valor = datos.Rows(0)("valor_descuento")
+    '                            DescuentoInvonavit = (((Valor * SalarioMinimoDiarioGeneral) + ImporteSeguroVivienda) / 30.4) * UnidadIncidencia
+    '                        ElseIf datos.Rows(0)("tipo_descuento") = 3 Then
+    '                            Valor = datos.Rows(0)("valor_descuento")
+    '                            DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / 30.4)) * UnidadIncidencia
+    '                        End If
+
+    '                        If DescuentoInvonavit > 0 Then
+    '                            cNomina = New Nomina()
+    '                            'cNomina.IdEmpresa = IdEmpresa
+    '                            cNomina.Ejercicio = IdEjercicio
+    '                            cNomina.TipoNomina = 2 'Catorcenal
+    '                            cNomina.Periodo = cmbPeriodo.SelectedValue
+    '                            cNomina.NoEmpleado = empleadoId.Value
+    '                            cNomina.CvoConcepto = 64
+    '                            cNomina.IdContrato = contratoId.Value
+    '                            cNomina.Tipo = "F"
+    '                            cNomina.TipoConcepto = "D"
+    '                            cNomina.Unidad = 1
+    '                            cNomina.Importe = DescuentoInvonavit
+    '                            cNomina.ImporteGravado = 0
+    '                            cNomina.ImporteExento = DescuentoInvonavit
+    '                            cNomina.Generado = ""
+    '                            cNomina.Timbrado = ""
+    '                            cNomina.Enviado = ""
+    '                            cNomina.Situacion = ""
+    '                            cNomina.IdMovimiento = Request("id")
+    '                            cNomina.FechaIni = cPeriodo.FechaInicialDate
+    '                            cNomina.FechaFin = cPeriodo.FechaFinalDate
+    '                            cNomina.FechaPago = cPeriodo.FechaPago
+    '                            cNomina.DiasPagados = cPeriodo.Dias
+    '                            cNomina.GuadarNomina()
+    '                        End If
+    '                    End If
+    '                End If
+    '            End If
+    '        ElseIf ConImpuesto = 2 Then
+    '            Dim cNomina As New Nomina()
+    '            If cmbConcepto.SelectedValue < 52 Then
+    '                If Impuesto > 0 Then
+    '                    cNomina = New Nomina()
+    '                    'cNomina.IdEmpresa = IdEmpresa
+    '                    cNomina.Ejercicio = IdEjercicio
+    '                    cNomina.TipoNomina = 2 'Catorcenal
+    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
+    '                    cNomina.NoEmpleado = empleadoId.Value
+    '                    cNomina.CvoConcepto = 86
+    '                    cNomina.IdContrato = contratoId.Value
+    '                    cNomina.Tipo = "F"
+    '                    cNomina.TipoConcepto = "D"
+    '                    cNomina.Unidad = 1
+    '                    cNomina.Importe = Impuesto
+    '                    cNomina.ImporteGravado = 0
+    '                    cNomina.ImporteExento = Impuesto
+    '                    cNomina.Generado = ""
+    '                    cNomina.Timbrado = ""
+    '                    cNomina.Enviado = ""
+    '                    cNomina.Situacion = ""
+    '                    cNomina.IdMovimiento = Request("id")
+    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+    '                    cNomina.FechaPago = cPeriodo.FechaPago
+    '                    cNomina.DiasPagados = cPeriodo.Dias
+    '                    cNomina.GuadarNomina()
+    '                End If
+    '                If SubsidioEfectivo > 0 Then
+    '                    cNomina = New Nomina()
+    '                    'cNomina.IdEmpresa = IdEmpresa
+    '                    cNomina.Ejercicio = IdEjercicio
+    '                    cNomina.TipoNomina = 2 'Catorcenal
+    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
+    '                    cNomina.NoEmpleado = empleadoId.Value
+    '                    cNomina.CvoConcepto = 55
+    '                    cNomina.IdContrato = contratoId.Value
+    '                    cNomina.Tipo = "F"
+    '                    cNomina.TipoConcepto = "P"
+    '                    cNomina.Unidad = 1
+    '                    cNomina.Importe = SubsidioEfectivo
+    '                    cNomina.ImporteGravado = 0
+    '                    cNomina.ImporteExento = SubsidioEfectivo
+    '                    cNomina.Generado = ""
+    '                    cNomina.Timbrado = ""
+    '                    cNomina.Enviado = ""
+    '                    cNomina.Situacion = ""
+    '                    cNomina.IdMovimiento = Request("id")
+    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+    '                    cNomina.FechaPago = cPeriodo.FechaPago
+    '                    cNomina.DiasPagados = cPeriodo.Dias
+    '                    cNomina.GuadarNomina()
+    '                End If
+
+    '                CalcularImss()
+    '                Imss = Imss * DiasCuotaPeriodo
+    '                Imss = Math.Round(Imss, 6)
+
+    '                If Imss > 0 Then
+    '                    cNomina = New Nomina()
+    '                    'cNomina.IdEmpresa = IdEmpresa
+    '                    cNomina.Ejercicio = IdEjercicio
+    '                    cNomina.TipoNomina = 2 'Catorcenal
+    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
+    '                    cNomina.NoEmpleado = empleadoId.Value
+    '                    cNomina.CvoConcepto = 56
+    '                    cNomina.IdContrato = contratoId.Value
+    '                    cNomina.Tipo = "F"
+    '                    cNomina.TipoConcepto = "D"
+    '                    cNomina.Unidad = 1
+    '                    cNomina.Importe = Imss
+    '                    cNomina.ImporteGravado = 0
+    '                    cNomina.ImporteExento = Imss
+    '                    cNomina.Generado = ""
+    '                    cNomina.Timbrado = ""
+    '                    cNomina.Enviado = ""
+    '                    cNomina.Situacion = ""
+    '                    cNomina.IdMovimiento = Request("id")
+    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+    '                    cNomina.FechaPago = cPeriodo.FechaPago
+    '                    cNomina.DiasPagados = cPeriodo.Dias
+    '                    cNomina.GuadarNomina()
+    '                End If
+    '            End If
+    '        End If
+    '    Catch oExcep As Exception
+    '        Response.Write(oExcep.Message.ToString)
+    '        Response.End()
+    '        'rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+    '    End Try
+    'End Sub
     Private Sub BorrarDeduccionesFiniquito()
         Try
             Call CargarVariablesGenerales()
@@ -1990,9 +2342,9 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                 'DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=51")
 
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=85")
-                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=85")
+                If dt.Compute("Sum(Importe)", "CvoConcepto=51") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=51")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=51")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -2353,9 +2705,9 @@ Public Class GeneracionDeFiniquitosCatorcenal
             dt = cNomina.ConsultarConceptosFiniquito()
 
             If dt.Rows.Count > 0 Then
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=85")
-                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=85")
+                If dt.Compute("Sum(Importe)", "CvoConcepto=51") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=51")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=51")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -2976,54 +3328,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
                     If ImporteExentoPrevisionSocial <= 0 Then ImporteExentoPrevisionSocial = 0
                 End If
             End If
-            'If CvoConcepto <> 64 Then
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            '''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
-            'Dim Valor As Decimal
-            'Dim DescuentoInvonavit As Decimal
-            'Dim datos As New DataTable
-            'Dim Infonavit As New Entities.Infonavit()
-            'Infonavit.IdEmpresa = Session("clienteid")
-            'Infonavit.IdEmpleado = NoEmpleado
-            'datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
-            'Infonavit = Nothing
-
-            'If datos.Rows.Count > 0 Then
-
-            '    If datos.Rows(0)("tipo_descuento") = 1 Then
-            '        Valor = datos.Rows(0)("valor_descuento")
-            '        DescuentoInvonavit = ((Valor + ImporteSeguroVivienda) / 30.4) * NumeroDeDiasPagados
-            '    ElseIf datos.Rows(0)("tipo_descuento") = 2 Then
-            '        Valor = datos.Rows(0)("valor_descuento")
-            '        DescuentoInvonavit = (((Valor * SalarioMinimoDiarioGeneral) + ImporteSeguroVivienda) / 30.4) * NumeroDeDiasPagados
-            '    ElseIf datos.Rows(0)("tipo_descuento") = 3 Then
-            '        Valor = datos.Rows(0)("valor_descuento")
-            '        DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / 30.4)) * NumeroDeDiasPagados
-            '    End If
-
-            '    QuitarConcepto(64)
-
-            '    dt = New DataTable
-
-            '    Dim Nomina As New Entities.Nomina()
-            '    Nomina.IdEmpresa = Session("clienteid")
-            '    Nomina.TipoNomina = 1 'Semanal
-            '    Nomina.Periodo = periodoId.Value
-            '    dt = Nomina.ConsultarEmpleadosSemanal()
-            '    Nomina = Nothing
-
-            '    If dt.Rows.Count > 0 Then
-            '        ImporteDiario = dt.Rows(0)("CuotaDiaria")
-            '        ImportePeriodo = dt.Rows(0)("CuotaDiaria") * 7
-            '    End If
-            '    ActualizarInfonavit(NoEmpleado, DescuentoInvonavit, 64)
-            'End If
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            'End If
         Catch oExcep As Exception
-            Response.Write(oExcep.Message.ToString)
-            Response.End()
-            'rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
     Private Sub GuardarExentoYGravado(ByVal CvoConcepto, ByVal ImporteGravado, ByVal ImporteExento, ByVal NoEmpleado)
@@ -3363,7 +3669,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             Call EliminaConceptosFiniquito(Request("id"), 64) 'Infonavit
         End If
 
-        Call GuardarRegistro(2)
+        Call GuardarRegistro(ImporteDiario, 2)
         Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
         Call MostrarPercepciones()
         Call MostrarDeducciones()
@@ -3436,18 +3742,9 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             ' PercepcionesGravadas
             If dt.Rows.Count > 0 Then
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    If Agregar <> 3 Then
-                        DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=85")
-                        CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=85")
-                    ElseIf Agregar = 3 Then
-                        'Try
-                        '    DiasCuotaPeriodo = Convert.ToDecimal(txtDias.Text)
-                        'Catch ex As Exception
-                        '    DiasCuotaPeriodo = 0
-                        'End Try
-                        'CuotaPeriodo = DiasCuotaPeriodo * CuotaDiaria
-                    End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=51") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(Unidad)", "CvoConcepto=51")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=51")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -3614,7 +3911,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         End If
     End Sub
     Private Sub btnCancelar_Click(sender As Object, e As EventArgs) Handles btnCancelar.Click
-        Call EliminaConceptosFiniquito(Request("id"), 0)
+        'Call EliminaConceptosFiniquito(Request("id"), 0)
         Response.Redirect("~/FiniquitosCatorcenal.aspx", False)
     End Sub
     Private Sub btnGenerarFiniquito_Click(sender As Object, e As EventArgs) Handles btnGenerarFiniquito.Click
@@ -3629,16 +3926,50 @@ Public Class GeneracionDeFiniquitosCatorcenal
         End If
     End Sub
     Private Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
-        Call EliminaConceptosFiniquito(Request("id"), 0)
+        'Call EliminaConceptosFiniquito(Request("id"), 0)
         Response.Redirect("~/FiniquitosCatorcenal.aspx", False)
     End Sub
     Private Sub btnConfirmarTimbraFiniquito_Click(sender As Object, e As EventArgs) Handles btnConfirmarTimbraFiniquito.Click
         Try
-            'Call ChecarPercepcionesExentasYGravadasFiniquito()
             Call CargarVariablesGenerales()
-            Dim FilePath1 = Server.MapPath("~/PDF/F/ST/") & String.Format("{0:00}", IdEmpresa) & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+
+            Dim RfcEmisor As String = ""
+            Dim RfcCliente As String = ""
+
+            Dim dtEmisor As New DataTable
+            Dim cNomina = New Nomina()
+            cNomina = New Nomina()
+            cNomina.Id = Session("clienteid")
+            dtEmisor = cNomina.ConsultarDatosEmisor()
+
+            If dtEmisor.Rows.Count > 0 Then
+                For Each oDataRow In dtEmisor.Rows
+                    RfcEmisor = oDataRow("RFC")
+                Next
+            End If
+
+            Dim dtCliente As New DataTable
+            cNomina = New Nomina()
+            cNomina.Id = clienteId.Value
+            dtCliente = cNomina.ConsultarDatosCliente()
+
+            If dtCliente.Rows.Count > 0 Then
+                For Each oDataRow In dtCliente.Rows
+                    RfcCliente = oDataRow("RFC")
+                Next
+            End If
+
+            Dim DirectorioExtraccion As String = ""
+            DirectorioExtraccion = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString
+
+            If Not Directory.Exists(DirectorioExtraccion) Then
+                Directory.CreateDirectory(DirectorioExtraccion)
+            End If
+
+            Dim FilePath1 = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
             Call GuardaPDF(GeneraPDFFiniquito(), FilePath1)
-            Dim FilePath2 = Server.MapPath("~/PDF/F/ST/") & String.Format("{0:00}", IdEmpresa) & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+
+            Dim FilePath2 = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
             Call GuardaPDF(GeneraPDFRenuncia(), FilePath2)
 
             btnDescargarPDFFiniquito.Visible = True
@@ -4331,6 +4662,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         Dim PorcentajePrimaVacacional As String = ""
         Dim PrimaVacaciones As String = ""
         Dim DiasAguinaldoAnio As String = ""
+        Dim DiasAguinaldoProporcionales As String = ""
         Dim ProporcionalAguinaldo As String = ""
         Dim DiasPendientesPago As Decimal = 0
         Dim OtrasPercepcionesPendientes As Decimal = 0
@@ -4393,6 +4725,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 PorcentajePrimaVacacional = oDataRow("PorcentajePrimaVacacional").ToString
                 PrimaVacaciones = FormatCurrency(oDataRow("PrimaVacaciones"), 2).ToString
                 DiasAguinaldoAnio = oDataRow("DiasAguinaldoAnio").ToString
+                DiasAguinaldoProporcionales = oDataRow("DiasAguinaldoProporcionales").ToString
                 ProporcionalAguinaldo = FormatCurrency(oDataRow("ProporcionalAguinaldo"), 2).ToString
             Next
         End If
@@ -4407,8 +4740,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
         dt = cNomina.ConsultarPercepcionesDeduccionesFiniquito()
 
         If dt.Rows.Count > 0 Then
-            If dt.Compute("Sum(Unidad)", "CvoConcepto=85 OR CvoConcepto=51") IsNot DBNull.Value Then
-                DiasPendientesPago = dt.Compute("Sum(Unidad)", "CvoConcepto=85 OR CvoConcepto=51")
+            If dt.Compute("Sum(Unidad)", "CvoConcepto=51 OR CvoConcepto=51") IsNot DBNull.Value Then
+                DiasPendientesPago = dt.Compute("Sum(Unidad)", "CvoConcepto=51")
             End If
             If dt.Compute("Sum(Importe)", "CvoConcepto=55") IsNot DBNull.Value Then
                 SubsidioEmpleo = dt.Compute("Sum(Importe)", "CvoConcepto=55")
@@ -4461,7 +4794,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         reporte.ReportParameters("DiasPendientesPago").Value = DiasPendientesPago
         reporte.ReportParameters("OtrasPercepcionesPendientes").Value = FormatCurrency(OtrasPercepcionesPendientes, 2).ToString
         reporte.ReportParameters("DiasLaborados").Value = DiasLaboradosAnio
-        reporte.ReportParameters("AnosAntiguedadIndemnizacion").Value = 1
+        reporte.ReportParameters("DiasAguinaldoProporcionales").Value = DiasAguinaldoProporcionales
         reporte.ReportParameters("DiasVacacionesProporcionales").Value = DiasVacacionesProporcionales
         reporte.ReportParameters("VacacionesProporcionales").Value = ProporcionalVacaciones
         reporte.ReportParameters("PorcentajePrimaVacacional").Value = 25
@@ -4483,23 +4816,29 @@ Public Class GeneracionDeFiniquitosCatorcenal
     Private Function GeneraPDFRenuncia() As Telerik.Reporting.Report
         Dim reporte As New Formatos.formato_renuncia
         Dim FechaBaja As String = ""
+        Dim FechaAlta As String = ""
         Dim CantidadTexto As String = ""
         Dim RazonSocial As String = ""
         Dim Municipio As String = ""
         Dim Estado As String = ""
         Dim NombreEmpleado As String = ""
         Dim Puesto As String = ""
+        Dim Direccion1 As String = ""
+        Dim Direccion2 As String = ""
+        Dim SueldoDiario As Decimal = 0
 
         Dim dt As New DataTable()
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
-        dt = cNomina.ConsultarDatosEmisor()
+        cNomina.Id = clienteId.Value
+        dt = cNomina.ConsultarDatosCliente()
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
                 RazonSocial = oDataRow("RazonSocial")
                 Municipio = oDataRow("Municipio")
                 Estado = oDataRow("Estado")
+                Direccion1 = oDataRow("Direccion1")
+                Direccion2 = oDataRow("Direccion2")
             Next
         End If
 
@@ -4512,8 +4851,9 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         If dtEmpleado.Rows.Count > 0 Then
             For Each oDataRow In dtEmpleado.Rows
-                NombreEmpleado = oDataRow("nombre")
-                Puesto = oDataRow("puesto")
+                NombreEmpleado = oDataRow("NOMBRE")
+                Puesto = oDataRow("PUESTO")
+                SueldoDiario = oDataRow("CUOTADIARIA")
             Next
         End If
 
@@ -4526,17 +4866,26 @@ Public Class GeneracionDeFiniquitosCatorcenal
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
                 FechaBaja = oDataRow("FechaBaja").ToString
+                FechaAlta = oDataRow("FechaAlta").ToString
+                SueldoDiario = oDataRow("SueldoDiario")
             Next
         End If
 
-        'reporte.ReportParameters("LugarExpedicion").Value = Municipio.ToUpper & " " & Estado.ToUpper & ", " & "a " & CDate(FechaBaja).Day.ToString & " de " & MonthName(CDate(FechaBaja).Month).ToString & " de " & CDate(FechaBaja).Year.ToString
-        reporte.ReportParameters("LugarExpedicion").Value = Municipio.ToUpper & " " & Estado.ToUpper & ", " & "a " & CDate(FechaBaja).Day.ToString & " de " & MonthName(CDate(FechaBaja).Month).ToString & " de " & CDate(FechaBaja).Year.ToString
+        Dim largo = Len(CStr(Format(CDbl(SueldoDiario), "#,###.00")))
+        Dim decimales = Mid(CStr(Format(CDbl(SueldoDiario), "#,###.00")), largo - 2)
+        CantidadTexto = "(" + Num2Text(SueldoDiario - decimales) & " pesos " & Mid(decimales, Len(decimales) - 1) & "/100 M.N.)."
+
+        reporte.ReportParameters("LugarExpedicion").Value = Municipio.ToUpper & " " & Estado.ToUpper & ", " & "A " & CDate(FechaBaja).Day.ToString & " DE " & MonthName(CDate(FechaBaja).Month).ToUpper & " DE " & CDate(FechaBaja).Year.ToString
         reporte.ReportParameters("RazonSocial").Value = RazonSocial.ToUpper
-        reporte.ReportParameters("Texto1").Value = "Por medio de la presente manifiesto que por así convenir a mis intereses renuncio voluntariamente y de manera irrevocable al puesto de " & Puesto & " que venía desempeñandome en esta empresa; así mismo hago constar que no se me adeuda ninguna cantidad por concepto de salarios, horas extras, bonos, comisiones, premios, séptimos dias, vacaciones, prima vacacional, accidentes o enfermedades profesionales, prima de antigüedad, reparto de utilidades, aguinaldo, ni por otro concepto nacido de la Ley o de mi contrato de trabajo, motivo por el cual la libero de toda responsabilidad, otorgandole el mas amplio finiquito y manifiesto que no me reservo ninguna acción o derecho en contra de " & RazonSocial.ToUpper & " o quien resulte responsable o propietario de la fuente de trabajo."
-        reporte.ReportParameters("Texto2").Value = "Agradezco el apoyo y atención que siempre me brindo esta empresa."
+        reporte.ReportParameters("Direccion1").Value = Direccion1.ToUpper
+        reporte.ReportParameters("Direccion2").Value = Direccion2.ToUpper
+        reporte.ReportParameters("Texto1").Value = "Por medio de la presente, le estoy comunicando que con fecha " & CDate(FechaBaja).Day.ToString & " de " & MonthName(CDate(FechaBaja).Month).ToString & " de " & CDate(FechaBaja).Year.ToString & " con un salario diario de " & FormatCurrency(SueldoDiario, 2).ToString & ", he decidido presentar de manera voluntaria mi RENUNCIA IRREVOCABLE al puesto de " & Puesto & ", que venía desempeñando dentro de la empresa desde el día " & CDate(FechaAlta).Day.ToString & " de " & MonthName(CDate(FechaAlta).Month).ToString & " de " & CDate(FechaAlta).Year.ToString & " con un salario diario de " & FormatCurrency(SueldoDiario, 2).ToString & " " & CantidadTexto.ToUpper
+        reporte.ReportParameters("Texto2").Value = "Manifiesto que esta renuncia es voluntaria y obedece a razones de carácter personal, por lo que no me reservo acción alguna que ejercitar en contra de la empresa."
+        reporte.ReportParameters("Texto3").Value = "Asimismo, declaro que siempre se me pagaron los salarios y demás prestaciones que devengué por los servicios que presté, por lo que a esta fecha, no se me adeuda cantidad alguna por ningún concepto de prestación laboral a los que se haga referencia en la Ley Federal de Trabajo. No reservandome acción alguna en contra de cualquier otra persona física o moral que pudiera haberse beneficiado con los servicios prestados."
         reporte.ReportParameters("NombreEmpleado").Value = NombreEmpleado
 
         Return reporte
+
     End Function
     Private Sub GuardaPDF(ByVal report As Telerik.Reporting.Report, ByVal fileName As String)
         Dim reportProcessor As New Telerik.Reporting.Processing.ReportProcessor()
@@ -4563,7 +4912,40 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Call CargarVariablesGenerales()
 
-        Dim FilePath = Server.MapPath("~/PDF/F/ST/") & String.Format("{0:00}", IdEmpresa) & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+        Dim RfcEmisor As String = ""
+        Dim RfcCliente As String = ""
+
+        Dim dtEmisor As New DataTable
+        Dim cNomina = New Nomina()
+        cNomina = New Nomina()
+        cNomina.Id = Session("clienteid")
+        dtEmisor = cNomina.ConsultarDatosEmisor()
+
+        If dtEmisor.Rows.Count > 0 Then
+            For Each oDataRow In dtEmisor.Rows
+                RfcEmisor = oDataRow("RFC")
+            Next
+        End If
+
+        Dim dtCliente As New DataTable
+        cNomina = New Nomina()
+        cNomina.Id = clienteId.Value
+        dtCliente = cNomina.ConsultarDatosCliente()
+
+        If dtCliente.Rows.Count > 0 Then
+            For Each oDataRow In dtCliente.Rows
+                RfcCliente = oDataRow("RFC")
+            Next
+        End If
+
+        Dim DirectorioExtraccion As String = ""
+        DirectorioExtraccion = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString
+
+        If Not Directory.Exists(DirectorioExtraccion) Then
+            Directory.CreateDirectory(DirectorioExtraccion)
+        End If
+
+        Dim FilePath = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
         If File.Exists(FilePath) Then
             Dim FileName As String = Path.GetFileName(FilePath)
             Response.Clear()
@@ -4578,7 +4960,40 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Call CargarVariablesGenerales()
 
-        Dim FilePath = Server.MapPath("~/PDF/F/ST/") & String.Format("{0:00}", IdEmpresa) & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+        Dim RfcEmisor As String = ""
+        Dim RfcCliente As String = ""
+
+        Dim dtEmisor As New DataTable
+        Dim cNomina = New Nomina()
+        cNomina = New Nomina()
+        cNomina.Id = Session("clienteid")
+        dtEmisor = cNomina.ConsultarDatosEmisor()
+
+        If dtEmisor.Rows.Count > 0 Then
+            For Each oDataRow In dtEmisor.Rows
+                RfcEmisor = oDataRow("RFC")
+            Next
+        End If
+
+        Dim dtCliente As New DataTable
+        cNomina = New Nomina()
+        cNomina.Id = clienteId.Value
+        dtCliente = cNomina.ConsultarDatosCliente()
+
+        If dtCliente.Rows.Count > 0 Then
+            For Each oDataRow In dtCliente.Rows
+                RfcCliente = oDataRow("RFC")
+            Next
+        End If
+
+        Dim DirectorioExtraccion As String = ""
+        DirectorioExtraccion = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString
+
+        If Not Directory.Exists(DirectorioExtraccion) Then
+            Directory.CreateDirectory(DirectorioExtraccion)
+        End If
+
+        Dim FilePath = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
         If File.Exists(FilePath) Then
             Dim FileName As String = Path.GetFileName(FilePath)
             Response.Clear()

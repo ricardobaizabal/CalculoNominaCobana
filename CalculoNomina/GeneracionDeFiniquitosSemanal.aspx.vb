@@ -345,16 +345,6 @@ Public Class GeneracionDeFiniquitosSemanal
         ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
         cmbPeriodo.SelectedValue = sel
         cPeriodo = Nothing
-
-        'Call CargarVariablesGenerales()
-        'Dim ObjData As New DataControl()
-        'Dim cPeriodo As New Entities.Periodo
-        ''cPeriodo.IdEmpresa = IdEmpresa
-        'cPeriodo.IdEjercicio = IdEjercicio
-        'cPeriodo.IdTipoNomina = 1 'Semanal
-        'cPeriodo.ExtraordinarioBit = 0
-        'ObjData.Catalogo(cmbPeriodo, sel, cPeriodo.ConsultarPeriodos())
-        'cPeriodo = Nothing
     End Sub
     Private Sub btnAceptar_Click(sender As Object, e As EventArgs) Handles btnAceptar.Click
         If cmbPeriodo.SelectedValue > 0 Then
@@ -3036,50 +3026,6 @@ Public Class GeneracionDeFiniquitosSemanal
                     If ImporteExentoPrevisionSocial <= 0 Then ImporteExentoPrevisionSocial = 0
                 End If
             End If
-            'If CvoConcepto <> 64 Then
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            '''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
-            'Dim Valor As Decimal
-            'Dim DescuentoInvonavit As Decimal
-            'Dim datos As New DataTable
-            'Dim Infonavit As New Entities.Infonavit()
-            'Infonavit.IdEmpresa = Session("clienteid")
-            'Infonavit.IdEmpleado = NoEmpleado
-            'datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
-            'Infonavit = Nothing
-
-            'If datos.Rows.Count > 0 Then
-
-            '    If datos.Rows(0)("tipo_descuento") = 1 Then
-            '        Valor = datos.Rows(0)("valor_descuento")
-            '        DescuentoInvonavit = ((Valor + ImporteSeguroVivienda) / FactorDiarioPromedio) * NumeroDeDiasPagados
-            '    ElseIf datos.Rows(0)("tipo_descuento") = 2 Then
-            '        Valor = datos.Rows(0)("valor_descuento")
-            '        DescuentoInvonavit = (((Valor * SalarioMinimoDiarioGeneral) + ImporteSeguroVivienda) / FactorDiarioPromedio) * NumeroDeDiasPagados
-            '    ElseIf datos.Rows(0)("tipo_descuento") = 3 Then
-            '        Valor = datos.Rows(0)("valor_descuento")
-            '        DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / FactorDiarioPromedio)) * NumeroDeDiasPagados
-            '    End If
-
-            '    QuitarConcepto(64)
-
-            '    dt = New DataTable
-
-            '    Dim Nomina As New Entities.Nomina()
-            '    Nomina.IdEmpresa = Session("clienteid")
-            '    Nomina.TipoNomina = 1 'Semanal
-            '    Nomina.Periodo = periodoId.Value
-            '    dt = Nomina.ConsultarEmpleadosSemanal()
-            '    Nomina = Nothing
-
-            '    If dt.Rows.Count > 0 Then
-            '        ImporteDiario = dt.Rows(0)("CuotaDiaria")
-            '        ImportePeriodo = dt.Rows(0)("CuotaDiaria") * 7
-            '    End If
-            '    ActualizarInfonavit(NoEmpleado, DescuentoInvonavit, 64)
-            'End If
-            'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            'End If
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
@@ -3712,18 +3658,16 @@ Public Class GeneracionDeFiniquitosSemanal
             End If
 
             Dim DirectorioExtraccion As String = ""
-            DirectorioExtraccion = Server.MapPath("~\PDF\F\ST\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+            DirectorioExtraccion = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString
 
             If Not Directory.Exists(DirectorioExtraccion) Then
                 Directory.CreateDirectory(DirectorioExtraccion)
             End If
 
-            'Dim FilePath1 = Server.MapPath("~\PDF\F\ST\").ToString & "\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
-            Dim FilePath1 = Server.MapPath("~\PDF\F\ST\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+            Dim FilePath1 = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
             Call GuardaPDF(GeneraPDFFiniquito(), FilePath1)
 
-            'Dim FilePath2 = Server.MapPath("~\PDF\F\ST\").ToString & "\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
-            Dim FilePath2 = Server.MapPath("~\PDF\F\ST\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+            Dim FilePath2 = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
             Call GuardaPDF(GeneraPDFRenuncia(), FilePath2)
 
             btnDescargarPDFFiniquito.Visible = True
@@ -4414,6 +4358,7 @@ Public Class GeneracionDeFiniquitosSemanal
         Dim PorcentajePrimaVacacional As String = ""
         Dim PrimaVacaciones As String = ""
         Dim DiasAguinaldoAnio As String = ""
+        Dim DiasAguinaldoProporcionales As String = ""
         Dim ProporcionalAguinaldo As String = ""
         Dim DiasPendientesPago As Decimal = 0
         Dim OtrasPercepcionesPendientes As Decimal = 0
@@ -4423,8 +4368,8 @@ Public Class GeneracionDeFiniquitosSemanal
 
         Dim dt As New DataTable()
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
-        dt = cNomina.ConsultarDatosEmisor()
+        cNomina.Id = clienteId.Value
+        dt = cNomina.ConsultarDatosCliente()
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
@@ -4476,6 +4421,7 @@ Public Class GeneracionDeFiniquitosSemanal
                 PorcentajePrimaVacacional = oDataRow("PorcentajePrimaVacacional").ToString
                 PrimaVacaciones = FormatCurrency(oDataRow("PrimaVacaciones"), 2).ToString
                 DiasAguinaldoAnio = oDataRow("DiasAguinaldoAnio").ToString
+                DiasAguinaldoProporcionales = oDataRow("DiasAguinaldoProporcionales").ToString
                 ProporcionalAguinaldo = FormatCurrency(oDataRow("ProporcionalAguinaldo"), 2).ToString
             Next
         End If
@@ -4544,7 +4490,7 @@ Public Class GeneracionDeFiniquitosSemanal
         reporte.ReportParameters("DiasPendientesPago").Value = DiasPendientesPago
         reporte.ReportParameters("OtrasPercepcionesPendientes").Value = FormatCurrency(OtrasPercepcionesPendientes, 2).ToString
         reporte.ReportParameters("DiasLaborados").Value = DiasLaboradosAnio
-        reporte.ReportParameters("AnosAntiguedadIndemnizacion").Value = 1
+        reporte.ReportParameters("DiasAguinaldoProporcionales").Value = DiasAguinaldoProporcionales
         reporte.ReportParameters("DiasVacacionesProporcionales").Value = DiasVacacionesProporcionales
         reporte.ReportParameters("VacacionesProporcionales").Value = ProporcionalVacaciones
         reporte.ReportParameters("PorcentajePrimaVacacional").Value = 25
@@ -4566,23 +4512,29 @@ Public Class GeneracionDeFiniquitosSemanal
     Private Function GeneraPDFRenuncia() As Telerik.Reporting.Report
         Dim reporte As New Formatos.formato_renuncia
         Dim FechaBaja As String = ""
+        Dim FechaAlta As String = ""
         Dim CantidadTexto As String = ""
         Dim RazonSocial As String = ""
         Dim Municipio As String = ""
         Dim Estado As String = ""
         Dim NombreEmpleado As String = ""
         Dim Puesto As String = ""
+        Dim Direccion1 As String = ""
+        Dim Direccion2 As String = ""
+        Dim SueldoDiario As Decimal = 0
 
         Dim dt As New DataTable()
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
-        dt = cNomina.ConsultarDatosEmisor()
+        cNomina.Id = clienteId.Value
+        dt = cNomina.ConsultarDatosCliente()
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
                 RazonSocial = oDataRow("RazonSocial")
                 Municipio = oDataRow("Municipio")
                 Estado = oDataRow("Estado")
+                Direccion1 = oDataRow("Direccion1")
+                Direccion2 = oDataRow("Direccion2")
             Next
         End If
 
@@ -4595,8 +4547,9 @@ Public Class GeneracionDeFiniquitosSemanal
 
         If dtEmpleado.Rows.Count > 0 Then
             For Each oDataRow In dtEmpleado.Rows
-                NombreEmpleado = oDataRow("nombre")
-                Puesto = oDataRow("puesto")
+                NombreEmpleado = oDataRow("NOMBRE")
+                Puesto = oDataRow("PUESTO")
+                SueldoDiario = oDataRow("CUOTADIARIA")
             Next
         End If
 
@@ -4609,16 +4562,26 @@ Public Class GeneracionDeFiniquitosSemanal
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
                 FechaBaja = oDataRow("FechaBaja").ToString
+                FechaAlta = oDataRow("FechaAlta").ToString
+                SueldoDiario = oDataRow("SueldoDiario")
             Next
         End If
 
-        reporte.ReportParameters("LugarExpedicion").Value = Municipio.ToUpper & " " & Estado.ToUpper & ", " & "a " & CDate(FechaBaja).Day.ToString & " de " & MonthName(CDate(FechaBaja).Month).ToString & " de " & CDate(FechaBaja).Year.ToString
+        Dim largo = Len(CStr(Format(CDbl(SueldoDiario), "#,###.00")))
+        Dim decimales = Mid(CStr(Format(CDbl(SueldoDiario), "#,###.00")), largo - 2)
+        CantidadTexto = "(" + Num2Text(SueldoDiario - decimales) & " pesos " & Mid(decimales, Len(decimales) - 1) & "/100 M.N.)."
+
+        reporte.ReportParameters("LugarExpedicion").Value = Municipio.ToUpper & " " & Estado.ToUpper & ", " & "A " & CDate(FechaBaja).Day.ToString & " DE " & MonthName(CDate(FechaBaja).Month).ToUpper & " DE " & CDate(FechaBaja).Year.ToString
         reporte.ReportParameters("RazonSocial").Value = RazonSocial.ToUpper
-        reporte.ReportParameters("Texto1").Value = "Por medio de la presente manifiesto que por así convenir a mis intereses renuncio voluntariamente y de manera irrevocable al puesto de " & Puesto & " que venía desempeñandome en esta empresa; así mismo hago constar que no se me adeuda ninguna cantidad por concepto de salarios, horas extras, bonos, comisiones, premios, séptimos dias, vacaciones, prima vacacional, accidentes o enfermedades profesionales, prima de antigüedad, reparto de utilidades, aguinaldo, ni por otro concepto nacido de la Ley o de mi contrato de trabajo, motivo por el cual la libero de toda responsabilidad, otorgandole el mas amplio finiquito y manifiesto que no me reservo ninguna acción o derecho en contra de " & RazonSocial.ToUpper & " o quien resulte responsable o propietario de la fuente de trabajo."
-        reporte.ReportParameters("Texto2").Value = "Agradezco el apoyo y atención que siempre me brindo esta empresa."
+        reporte.ReportParameters("Direccion1").Value = Direccion1.ToUpper
+        reporte.ReportParameters("Direccion2").Value = Direccion2.ToUpper
+        reporte.ReportParameters("Texto1").Value = "Por medio de la presente, le estoy comunicando que con fecha " & CDate(FechaBaja).Day.ToString & " de " & MonthName(CDate(FechaBaja).Month).ToString & " de " & CDate(FechaBaja).Year.ToString & " con un salario diario de " & FormatCurrency(SueldoDiario, 2).ToString & ", he decidido presentar de manera voluntaria mi RENUNCIA IRREVOCABLE al puesto de " & Puesto & ", que venía desempeñando dentro de la empresa desde el día " & CDate(FechaAlta).Day.ToString & " de " & MonthName(CDate(FechaAlta).Month).ToString & " de " & CDate(FechaAlta).Year.ToString & " con un salario diario de " & FormatCurrency(SueldoDiario, 2).ToString & " " & CantidadTexto.ToUpper
+        reporte.ReportParameters("Texto2").Value = "Manifiesto que esta renuncia es voluntaria y obedece a razones de carácter personal, por lo que no me reservo acción alguna que ejercitar en contra de la empresa."
+        reporte.ReportParameters("Texto3").Value = "Asimismo, declaro que siempre se me pagaron los salarios y demás prestaciones que devengué por los servicios que presté, por lo que a esta fecha, no se me adeuda cantidad alguna por ningún concepto de prestación laboral a los que se haga referencia en la Ley Federal de Trabajo. No reservandome acción alguna en contra de cualquier otra persona física o moral que pudiera haberse beneficiado con los servicios prestados."
         reporte.ReportParameters("NombreEmpleado").Value = NombreEmpleado
 
         Return reporte
+
     End Function
     Private Sub GuardaPDF(ByVal report As Telerik.Reporting.Report, ByVal fileName As String)
         Dim reportProcessor As New Telerik.Reporting.Processing.ReportProcessor()
@@ -4672,14 +4635,13 @@ Public Class GeneracionDeFiniquitosSemanal
         End If
 
         Dim DirectorioExtraccion As String = ""
-        DirectorioExtraccion = Server.MapPath("~\PDF\F\ST\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+        DirectorioExtraccion = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString
 
         If Not Directory.Exists(DirectorioExtraccion) Then
             Directory.CreateDirectory(DirectorioExtraccion)
         End If
 
-        'Dim FilePath = rutaEmpresa & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
-        Dim FilePath = Server.MapPath("~\PDF\F\ST\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+        Dim FilePath = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "F" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
         If File.Exists(FilePath) Then
             Dim FileName As String = Path.GetFileName(FilePath)
             Response.Clear()
@@ -4721,13 +4683,13 @@ Public Class GeneracionDeFiniquitosSemanal
         End If
 
         Dim DirectorioExtraccion As String = ""
-        DirectorioExtraccion = Server.MapPath("~\PDF\F\ST\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+        DirectorioExtraccion = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString
 
         If Not Directory.Exists(DirectorioExtraccion) Then
             Directory.CreateDirectory(DirectorioExtraccion)
         End If
 
-        Dim FilePath = Server.MapPath("~\PDF\F\ST\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
+        Dim FilePath = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\F\" & cmbPeriodo.SelectedValue.ToString & "\" & "R" & String.Format("{0:00}", empleadoId.Value) & ".pdf"
         If File.Exists(FilePath) Then
             Dim FileName As String = Path.GetFileName(FilePath)
             Response.Clear()

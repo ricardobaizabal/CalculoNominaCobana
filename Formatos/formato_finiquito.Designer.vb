@@ -35,6 +35,7 @@ Partial Class formato_finiquito
         Dim ReportParameter29 As Telerik.Reporting.ReportParameter = New Telerik.Reporting.ReportParameter()
         Dim ReportParameter30 As Telerik.Reporting.ReportParameter = New Telerik.Reporting.ReportParameter()
         Dim ReportParameter31 As Telerik.Reporting.ReportParameter = New Telerik.Reporting.ReportParameter()
+        Dim ReportParameter32 As Telerik.Reporting.ReportParameter = New Telerik.Reporting.ReportParameter()
         Me.pageHeaderSection1 = New Telerik.Reporting.PageHeaderSection()
         Me.txtLugarExpedicion = New Telerik.Reporting.TextBox()
         Me.TextBox1 = New Telerik.Reporting.TextBox()
@@ -42,11 +43,9 @@ Partial Class formato_finiquito
         Me.txtTexto1 = New Telerik.Reporting.TextBox()
         Me.txtTexto2 = New Telerik.Reporting.TextBox()
         Me.TextBox2 = New Telerik.Reporting.TextBox()
-        Me.detail = New Telerik.Reporting.DetailSection()
         Me.TextBox3 = New Telerik.Reporting.TextBox()
         Me.TextBox4 = New Telerik.Reporting.TextBox()
         Me.TextBox5 = New Telerik.Reporting.TextBox()
-        Me.TextBox6 = New Telerik.Reporting.TextBox()
         Me.TextBox7 = New Telerik.Reporting.TextBox()
         Me.TextBox8 = New Telerik.Reporting.TextBox()
         Me.TextBox9 = New Telerik.Reporting.TextBox()
@@ -60,7 +59,6 @@ Partial Class formato_finiquito
         Me.txtFechaAlta = New Telerik.Reporting.TextBox()
         Me.txtFechaBaja = New Telerik.Reporting.TextBox()
         Me.txtDiasLaborados = New Telerik.Reporting.TextBox()
-        Me.txtAnosAntiguedadIndemnizacion = New Telerik.Reporting.TextBox()
         Me.txtSueldoDiario = New Telerik.Reporting.TextBox()
         Me.txtSueldoDiarioIntegrado = New Telerik.Reporting.TextBox()
         Me.txtDiasPendientesPago = New Telerik.Reporting.TextBox()
@@ -85,12 +83,13 @@ Partial Class formato_finiquito
         Me.TextBox30 = New Telerik.Reporting.TextBox()
         Me.TextBox31 = New Telerik.Reporting.TextBox()
         Me.txtFirma = New Telerik.Reporting.TextBox()
+        Me.detail = New Telerik.Reporting.DetailSection()
         CType(Me, System.ComponentModel.ISupportInitialize).BeginInit()
         '
         'pageHeaderSection1
         '
         Me.pageHeaderSection1.Height = New Telerik.Reporting.Drawing.Unit(10.0R, Telerik.Reporting.Drawing.UnitType.Inch)
-        Me.pageHeaderSection1.Items.AddRange(New Telerik.Reporting.ReportItemBase() {Me.txtLugarExpedicion, Me.TextBox1, Me.txtNeto, Me.txtTexto1, Me.txtTexto2, Me.TextBox2, Me.TextBox3, Me.TextBox4, Me.TextBox5, Me.TextBox6, Me.TextBox7, Me.TextBox8, Me.TextBox9, Me.TextBox10, Me.TextBox11, Me.TextBox12, Me.TextBox13, Me.TextBox14, Me.TextBox15, Me.TextBox16, Me.txtFechaAlta, Me.txtFechaBaja, Me.txtDiasLaborados, Me.txtAnosAntiguedadIndemnizacion, Me.txtSueldoDiario, Me.txtSueldoDiarioIntegrado, Me.txtDiasPendientesPago, Me.txtOtrasPercepcionesPendientes, Me.txtDiasVacacionesProporcionales, Me.txtVacacionesProporcionales, Me.txtPorcentajePrimaVacacional, Me.txtPrimaVacacional, Me.txtDiasAguinaldoAnio, Me.txtAguinaldoProporcional, Me.txtTotalPercepciones, Me.TextBox18, Me.TextBox23, Me.TextBox24, Me.TextBox25, Me.TextBox27, Me.TextBox28, Me.txtImpuestoRetener, Me.txtSubsidioEmpleo, Me.txtCuotasIMSS, Me.TextBox29, Me.TextBox30, Me.TextBox31, Me.txtFirma})
+        Me.pageHeaderSection1.Items.AddRange(New Telerik.Reporting.ReportItemBase() {Me.txtLugarExpedicion, Me.TextBox1, Me.txtNeto, Me.txtTexto1, Me.txtTexto2, Me.TextBox2, Me.TextBox3, Me.TextBox4, Me.TextBox5, Me.TextBox7, Me.TextBox8, Me.TextBox9, Me.TextBox10, Me.TextBox11, Me.TextBox12, Me.TextBox13, Me.TextBox14, Me.TextBox15, Me.TextBox16, Me.txtFechaAlta, Me.txtFechaBaja, Me.txtDiasLaborados, Me.txtSueldoDiario, Me.txtSueldoDiarioIntegrado, Me.txtDiasPendientesPago, Me.txtOtrasPercepcionesPendientes, Me.txtDiasVacacionesProporcionales, Me.txtVacacionesProporcionales, Me.txtPorcentajePrimaVacacional, Me.txtPrimaVacacional, Me.txtDiasAguinaldoAnio, Me.txtAguinaldoProporcional, Me.txtTotalPercepciones, Me.TextBox18, Me.TextBox23, Me.TextBox24, Me.TextBox25, Me.TextBox27, Me.TextBox28, Me.txtImpuestoRetener, Me.txtSubsidioEmpleo, Me.txtCuotasIMSS, Me.TextBox29, Me.TextBox30, Me.TextBox31, Me.txtFirma})
         Me.pageHeaderSection1.Name = "pageHeaderSection1"
         Me.pageHeaderSection1.Style.BorderWidth.Default = New Telerik.Reporting.Drawing.Unit(0.5R, Telerik.Reporting.Drawing.UnitType.Point)
         '
@@ -160,12 +159,6 @@ Partial Class formato_finiquito
         Me.TextBox2.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
         Me.TextBox2.Value = "Desgloce del importe del finiquito:"
         '
-        'detail
-        '
-        Me.detail.Height = New Telerik.Reporting.Drawing.Unit(0R, Telerik.Reporting.Drawing.UnitType.Inch)
-        Me.detail.Name = "detail"
-        Me.detail.Style.BackgroundColor = System.Drawing.Color.Empty
-        '
         'TextBox3
         '
         Me.TextBox3.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2999996542930603R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(2.2768716812133789R, Telerik.Reporting.Drawing.UnitType.Inch))
@@ -199,20 +192,9 @@ Partial Class formato_finiquito
         Me.TextBox5.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
         Me.TextBox5.Value = "Dias laborados en el año:" & Global.Microsoft.VisualBasic.ChrW(9)
         '
-        'TextBox6
-        '
-        Me.TextBox6.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(2.8771078586578369R, Telerik.Reporting.Drawing.UnitType.Inch))
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346431732177734R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
-        Me.TextBox6.Style.Font.Bold = False
-        Me.TextBox6.Style.Font.Size = New Telerik.Reporting.Drawing.Unit(8.0R, Telerik.Reporting.Drawing.UnitType.Point)
-        Me.TextBox6.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right
-        Me.TextBox6.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
-        Me.TextBox6.Value = "Años de antiguedad para la indemnización:"
-        '
         'TextBox7
         '
-        Me.TextBox7.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29166662693023682R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.0771865844726562R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox7.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(2.8771078586578369R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox7.Name = "TextBox7"
         Me.TextBox7.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346434116363525R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox7.Style.Font.Bold = False
@@ -223,7 +205,7 @@ Partial Class formato_finiquito
         '
         'TextBox8
         '
-        Me.TextBox8.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29166662693023682R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.2772653102874756R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox8.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.0771865844726562R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox8.Name = "TextBox8"
         Me.TextBox8.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5340282917022705R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox8.Style.Font.Bold = False
@@ -234,7 +216,7 @@ Partial Class formato_finiquito
         '
         'TextBox9
         '
-        Me.TextBox9.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.4773440361022949R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox9.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.2772653102874756R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox9.Name = "TextBox9"
         Me.TextBox9.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346438884735107R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox9.Style.Font.Bold = False
@@ -245,7 +227,7 @@ Partial Class formato_finiquito
         '
         'TextBox10
         '
-        Me.TextBox10.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.6774227619171143R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox10.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.477344274520874R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox10.Name = "TextBox10"
         Me.TextBox10.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346434116363525R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox10.Style.Font.Bold = False
@@ -256,7 +238,7 @@ Partial Class formato_finiquito
         '
         'TextBox11
         '
-        Me.TextBox11.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.8775014877319336R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox11.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.6774227619171143R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox11.Name = "TextBox11"
         Me.TextBox11.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346434116363525R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox11.Style.Font.Bold = False
@@ -267,7 +249,7 @@ Partial Class formato_finiquito
         '
         'TextBox12
         '
-        Me.TextBox12.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.077580451965332R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox12.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.8775017261505127R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox12.Name = "TextBox12"
         Me.TextBox12.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346434116363525R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox12.Style.Font.Bold = False
@@ -278,7 +260,7 @@ Partial Class formato_finiquito
         '
         'TextBox13
         '
-        Me.TextBox13.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.2776589393615723R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox13.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.077580451965332R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox13.Name = "TextBox13"
         Me.TextBox13.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346434116363525R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox13.Style.Font.Bold = False
@@ -289,7 +271,7 @@ Partial Class formato_finiquito
         '
         'TextBox14
         '
-        Me.TextBox14.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.4777379035949707R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox14.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.2776594161987305R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox14.Name = "TextBox14"
         Me.TextBox14.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346434116363525R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox14.Style.Font.Bold = False
@@ -300,18 +282,18 @@ Partial Class formato_finiquito
         '
         'TextBox15
         '
-        Me.TextBox15.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.6778163909912109R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox15.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.4777379035949707R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox15.Name = "TextBox15"
         Me.TextBox15.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.5346434116363525R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox15.Style.Font.Bold = False
         Me.TextBox15.Style.Font.Size = New Telerik.Reporting.Drawing.Unit(8.0R, Telerik.Reporting.Drawing.UnitType.Point)
         Me.TextBox15.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right
         Me.TextBox15.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
-        Me.TextBox15.Value = "Dias de aguinaldo en el año:"
+        Me.TextBox15.Value = "Dias de aguinaldo proporcionales:"
         '
         'TextBox16
         '
-        Me.TextBox16.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.2916666567325592R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.8778953552246094R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.TextBox16.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(0.29105153679847717R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.6778168678283691R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox16.Name = "TextBox16"
         Me.TextBox16.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(2.53464412689209R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.TextBox16.Style.Font.Bold = False
@@ -353,20 +335,9 @@ Partial Class formato_finiquito
         Me.txtDiasLaborados.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
         Me.txtDiasLaborados.Value = "= Parameters.DiasLaborados.Value"
         '
-        'txtAnosAntiguedadIndemnizacion
-        '
-        Me.txtAnosAntiguedadIndemnizacion.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(2.8771078586578369R, Telerik.Reporting.Drawing.UnitType.Inch))
-        Me.txtAnosAntiguedadIndemnizacion.Name = "txtAnosAntiguedadIndemnizacion"
-        Me.txtAnosAntiguedadIndemnizacion.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
-        Me.txtAnosAntiguedadIndemnizacion.Style.Font.Bold = True
-        Me.txtAnosAntiguedadIndemnizacion.Style.Font.Size = New Telerik.Reporting.Drawing.Unit(8.0R, Telerik.Reporting.Drawing.UnitType.Point)
-        Me.txtAnosAntiguedadIndemnizacion.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right
-        Me.txtAnosAntiguedadIndemnizacion.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
-        Me.txtAnosAntiguedadIndemnizacion.Value = "= Parameters.AnosAntiguedadIndemnizacion.Value"
-        '
         'txtSueldoDiario
         '
-        Me.txtSueldoDiario.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.0771865844726562R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtSueldoDiario.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(2.8771078586578369R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtSueldoDiario.Name = "txtSueldoDiario"
         Me.txtSueldoDiario.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtSueldoDiario.Style.Font.Bold = True
@@ -377,7 +348,7 @@ Partial Class formato_finiquito
         '
         'txtSueldoDiarioIntegrado
         '
-        Me.txtSueldoDiarioIntegrado.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.2772653102874756R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtSueldoDiarioIntegrado.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.0771865844726562R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtSueldoDiarioIntegrado.Name = "txtSueldoDiarioIntegrado"
         Me.txtSueldoDiarioIntegrado.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtSueldoDiarioIntegrado.Style.Font.Bold = True
@@ -388,7 +359,7 @@ Partial Class formato_finiquito
         '
         'txtDiasPendientesPago
         '
-        Me.txtDiasPendientesPago.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.4773440361022949R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtDiasPendientesPago.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.2772653102874756R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtDiasPendientesPago.Name = "txtDiasPendientesPago"
         Me.txtDiasPendientesPago.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtDiasPendientesPago.Style.Font.Bold = True
@@ -399,7 +370,7 @@ Partial Class formato_finiquito
         '
         'txtOtrasPercepcionesPendientes
         '
-        Me.txtOtrasPercepcionesPendientes.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.6774227619171143R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtOtrasPercepcionesPendientes.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.477344274520874R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtOtrasPercepcionesPendientes.Name = "txtOtrasPercepcionesPendientes"
         Me.txtOtrasPercepcionesPendientes.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtOtrasPercepcionesPendientes.Style.Font.Bold = True
@@ -410,7 +381,7 @@ Partial Class formato_finiquito
         '
         'txtDiasVacacionesProporcionales
         '
-        Me.txtDiasVacacionesProporcionales.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263890743255615R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.8775017261505127R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtDiasVacacionesProporcionales.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257739543914795R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.6774232387542725R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtDiasVacacionesProporcionales.Name = "txtDiasVacacionesProporcionales"
         Me.txtDiasVacacionesProporcionales.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtDiasVacacionesProporcionales.Style.Font.Bold = True
@@ -421,7 +392,7 @@ Partial Class formato_finiquito
         '
         'txtVacacionesProporcionales
         '
-        Me.txtVacacionesProporcionales.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.077580451965332R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtVacacionesProporcionales.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(3.8775017261505127R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtVacacionesProporcionales.Name = "txtVacacionesProporcionales"
         Me.txtVacacionesProporcionales.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtVacacionesProporcionales.Style.Font.Bold = True
@@ -432,7 +403,7 @@ Partial Class formato_finiquito
         '
         'txtPorcentajePrimaVacacional
         '
-        Me.txtPorcentajePrimaVacacional.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.2776589393615723R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtPorcentajePrimaVacacional.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.077580451965332R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtPorcentajePrimaVacacional.Name = "txtPorcentajePrimaVacacional"
         Me.txtPorcentajePrimaVacacional.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtPorcentajePrimaVacacional.Style.Font.Bold = True
@@ -443,7 +414,7 @@ Partial Class formato_finiquito
         '
         'txtPrimaVacacional
         '
-        Me.txtPrimaVacacional.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.4777379035949707R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtPrimaVacacional.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.2776594161987305R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtPrimaVacacional.Name = "txtPrimaVacacional"
         Me.txtPrimaVacacional.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtPrimaVacacional.Style.Font.Bold = True
@@ -454,18 +425,18 @@ Partial Class formato_finiquito
         '
         'txtDiasAguinaldoAnio
         '
-        Me.txtDiasAguinaldoAnio.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.6778168678283691R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtDiasAguinaldoAnio.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.4777383804321289R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtDiasAguinaldoAnio.Name = "txtDiasAguinaldoAnio"
         Me.txtDiasAguinaldoAnio.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtDiasAguinaldoAnio.Style.Font.Bold = True
         Me.txtDiasAguinaldoAnio.Style.Font.Size = New Telerik.Reporting.Drawing.Unit(8.0R, Telerik.Reporting.Drawing.UnitType.Point)
         Me.txtDiasAguinaldoAnio.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Right
         Me.txtDiasAguinaldoAnio.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
-        Me.txtDiasAguinaldoAnio.Value = "= Parameters.DiasAguinaldoAnio.Value"
+        Me.txtDiasAguinaldoAnio.Value = "= Parameters.DiasAguinaldoProporcionales.Value"
         '
         'txtAguinaldoProporcional
         '
-        Me.txtAguinaldoProporcional.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8263888359069824R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.8778953552246094R, Telerik.Reporting.Drawing.UnitType.Inch))
+        Me.txtAguinaldoProporcional.Location = New Telerik.Reporting.Drawing.PointU(New Telerik.Reporting.Drawing.Unit(2.8257734775543213R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(4.6778168678283691R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtAguinaldoProporcional.Name = "txtAguinaldoProporcional"
         Me.txtAguinaldoProporcional.Size = New Telerik.Reporting.Drawing.SizeU(New Telerik.Reporting.Drawing.Unit(0.933333694934845R, Telerik.Reporting.Drawing.UnitType.Inch), New Telerik.Reporting.Drawing.Unit(0.19999992847442627R, Telerik.Reporting.Drawing.UnitType.Inch))
         Me.txtAguinaldoProporcional.Style.Font.Bold = True
@@ -628,6 +599,12 @@ Partial Class formato_finiquito
         Me.txtFirma.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle
         Me.txtFirma.Value = "______________________________________________"
         '
+        'detail
+        '
+        Me.detail.Height = New Telerik.Reporting.Drawing.Unit(0R, Telerik.Reporting.Drawing.UnitType.Inch)
+        Me.detail.Name = "detail"
+        Me.detail.Style.BackgroundColor = System.Drawing.Color.Empty
+        '
         'formato_finiquito
         '
         Me.Items.AddRange(New Telerik.Reporting.ReportItemBase() {Me.pageHeaderSection1, Me.detail})
@@ -698,6 +675,8 @@ Partial Class formato_finiquito
         ReportParameter30.AllowNull = True
         ReportParameter30.Name = "NetoPagar"
         ReportParameter31.Name = "NombreEmpleado"
+        ReportParameter32.AllowNull = True
+        ReportParameter32.Name = "DiasAguinaldoProporcionales"
         Me.ReportParameters.Add(ReportParameter1)
         Me.ReportParameters.Add(ReportParameter2)
         Me.ReportParameters.Add(ReportParameter3)
@@ -729,6 +708,7 @@ Partial Class formato_finiquito
         Me.ReportParameters.Add(ReportParameter29)
         Me.ReportParameters.Add(ReportParameter30)
         Me.ReportParameters.Add(ReportParameter31)
+        Me.ReportParameters.Add(ReportParameter32)
         Me.Style.BackgroundColor = System.Drawing.Color.White
         Me.Style.BorderWidth.Default = New Telerik.Reporting.Drawing.Unit(0.5R, Telerik.Reporting.Drawing.UnitType.Point)
         Me.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Center
@@ -747,7 +727,6 @@ Partial Class formato_finiquito
     Friend WithEvents TextBox3 As Telerik.Reporting.TextBox
     Friend WithEvents TextBox4 As Telerik.Reporting.TextBox
     Friend WithEvents TextBox5 As Telerik.Reporting.TextBox
-    Friend WithEvents TextBox6 As Telerik.Reporting.TextBox
     Friend WithEvents TextBox7 As Telerik.Reporting.TextBox
     Friend WithEvents TextBox8 As Telerik.Reporting.TextBox
     Friend WithEvents TextBox9 As Telerik.Reporting.TextBox
@@ -761,7 +740,6 @@ Partial Class formato_finiquito
     Friend WithEvents txtFechaAlta As Telerik.Reporting.TextBox
     Friend WithEvents txtFechaBaja As Telerik.Reporting.TextBox
     Friend WithEvents txtDiasLaborados As Telerik.Reporting.TextBox
-    Friend WithEvents txtAnosAntiguedadIndemnizacion As Telerik.Reporting.TextBox
     Friend WithEvents txtSueldoDiario As Telerik.Reporting.TextBox
     Friend WithEvents txtSueldoDiarioIntegrado As Telerik.Reporting.TextBox
     Friend WithEvents txtDiasPendientesPago As Telerik.Reporting.TextBox
