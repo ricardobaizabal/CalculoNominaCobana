@@ -1024,7 +1024,6 @@ Public Class FiniquitosGeneradosCatorcenal
                     Emisor.SetAttribute("RegistroPatronal", oDataRow("RegistroPatronal"))
                 End If
                 'Emisor.SetAttribute("RfcPatronOrigen", oDataRow("RfcPatronOrigen"))
-
                 Nomina.AppendChild(Emisor)
 
                 Receptor = CrearNodo("nomina12:Receptor")

@@ -169,6 +169,12 @@ Public Class GeneracionDeFiniquitosCatorcenal
     Private DiasMes As Integer = 0
     Private ImporteGravadoFiniquito As Decimal = 0
     Private ImporteGravadoVacaciones As Decimal = 0
+
+    Private UMA As Double = 0
+    Private BaseGravableMensualSubsidio As Double = 0
+    Private FactorSubsidio As Double = 0
+    Private FactorDiarioPromedio As Double
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             If Not String.IsNullOrEmpty(Request("id")) Then
@@ -219,6 +225,10 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 IdPeriodo = oDataRow("IdPeriodo")
                 SalarioMinimoDiarioGeneral = oDataRow("SalarioMinimoDiarioGeneral")
                 ImporteSeguroVivienda = oDataRow("ImporteSeguroVivienda")
+                BaseGravableMensualSubsidio = oDataRow("BaseGravableMensualSubsidio")
+                FactorSubsidio = oDataRow("FactorSubsidio")
+                FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
+                UMA = oDataRow("UMA")
             Next
         End If
     End Sub
@@ -445,15 +455,15 @@ Public Class GeneracionDeFiniquitosCatorcenal
         cNomina.GuadarNomina()
 
         If Aguinaldo > 0 Then
-            If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+            If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
                 ImporteExento = ImporteExento + Aguinaldo
                 ImporteExentoAguinaldo = Aguinaldo
                 ImporteGravadoAguinaldo = 0
-            ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-                ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
-                ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * 30
-                ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * 30)
+            ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
+                ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
+                ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
             End If
             GuardarExentoYGravado(14, 1, Aguinaldo, ImporteGravadoAguinaldo, ImporteExentoAguinaldo, "P")
         End If
@@ -485,7 +495,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Call ConsultarDiasMes()
 
-        ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * 30.4
+        ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * FactorDiarioPromedio
         IngresoMensualOrdinario = (ImporteDiario * DiasMes)
         IngresoGravadoMes = ImporteProporcionalVacaciones + IngresoMensualOrdinario
 
@@ -543,7 +553,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Call ConsultarDiasMes()
 
-            ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * 30.4
+            ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
             IngresoMensualOrdinario = (ImporteDiario * DiasMes)
             IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
 
@@ -595,7 +605,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = empleadoId.Value
-            cNomina.CvoConcepto = 86
+            cNomina.CvoConcepto = 52
             cNomina.IdContrato = contratoId.Value
             cNomina.Tipo = "F"
             cNomina.TipoConcepto = "D"
@@ -819,7 +829,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             ImpuestoVacaciones = 0
             Dim dt As New DataTable()
             Dim TarifaMensual As New TarifaMensual()
-            TarifaMensual.CuotaFija = Importe
+            TarifaMensual.ImporteMensual = Importe
             dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
@@ -854,7 +864,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             ImpuestoSueldoMesAnterior = 0
             Dim dt As New DataTable()
             Dim TarifaMensual As New TarifaMensual()
-            TarifaMensual.CuotaFija = Importe
+            TarifaMensual.ImporteMensual = Importe
             dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
@@ -947,7 +957,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             ImpuestoAguinaldo = 0
             Dim dt As New DataTable()
             Dim TarifaMensual As New TarifaMensual()
-            TarifaMensual.CuotaFija = Importe
+            TarifaMensual.ImporteMensual = Importe
             dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
@@ -1388,15 +1398,15 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 End If
 
                 If Aguinaldo > 0 Then
-                    If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+                    If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
                         ImporteExento = ImporteExento + Aguinaldo
                         ImporteExentoAguinaldo = Aguinaldo
                         ImporteGravadoAguinaldo = 0
-                    ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-                        ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-                        ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
-                        ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * 30
-                        ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * 30)
+                    ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                        ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                        ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
+                        ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
+                        ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
                     End If
                 End If
 
@@ -1426,7 +1436,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                 Call ConsultarDiasMes()
 
-                ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * 30.4
+                ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * FactorDiarioPromedio
                 IngresoMensualOrdinario = (ImporteDiario * DiasMes)
                 IngresoGravadoMes = ImporteProporcionalVacaciones + IngresoMensualOrdinario
 
@@ -1485,7 +1495,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                 '    Call ConsultarDiasMes()
 
-                '    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * 30.4
+                '    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
                 '    IngresoMensualOrdinario = (ImporteDiario * DiasMes)
                 '    IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
 
@@ -1530,7 +1540,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                     Call ConsultarDiasMes()
 
-                    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * 30.4
+                    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
                     IngresoMensualOrdinario = (ImporteDiario * DiasMes)
                     IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
 
@@ -1610,7 +1620,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                     'Call ConsultarDiasMes()
 
-                    'ImporteProporcionalIncidencias = (ImporteGravado / 365) * 30.4
+                    'ImporteProporcionalIncidencias = (ImporteGravado / 365) * FactorDiarioPromedio
                     'IngresoMensualOrdinario = (ImporteDiario * DiasMes)
                     'IngresoGravadoMes = ImporteProporcionalIncidencias + IngresoMensualOrdinario
 
@@ -2000,284 +2010,6 @@ Public Class GeneracionDeFiniquitosCatorcenal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    'Private Sub GuardarRegistro(ByVal CuotaDiaria, ByVal ConImpuesto)
-    '    Try
-
-    '        Dim cPeriodo As New Entities.Periodo()
-    '        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
-    '        cPeriodo.ConsultarPeriodoID()
-
-    '        Call CargarVariablesGenerales()
-
-    '        Dim ImporteIncidencia As Decimal = 0
-    '        Dim UnidadIncidencia As Decimal = 0
-
-    '        Try
-    '            ImporteIncidencia = Math.Round(Convert.ToDecimal(txtImporteIncidencia.Text), 6)
-    '        Catch ex As Exception
-    '            UnidadIncidencia = 0
-    '        End Try
-
-    '        Try
-    '            UnidadIncidencia = Convert.ToDecimal(txtUnidadIncidencia.Text)
-    '        Catch ex As Exception
-    '            UnidadIncidencia = 0
-    '        End Try
-
-    '        'ConImpuesto = 1 cuando viene de agregar una percepcion y calcular impuestos guardando ambos
-    '        'ConImpuesto = 2 cuando viene de quitar una percepcion y solo se procede a guardar los impuesto modificados sin esa percepcion
-
-    '        'Percepciones
-    '        If ConImpuesto = 1 Then
-    '            If cmbConcepto.SelectedValue < 52 Then
-    '                GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, ImporteIncidencia, 0, "P")
-    '            ElseIf cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
-    '                'Deducciones por faltas, permisos o incapacidades
-    '                GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, 0, ImporteIncidencia, "D")
-    '            ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
-    '                'Deducciones
-    '                GuardarExentoYGravado(cmbConcepto.SelectedValue, UnidadIncidencia, ImporteIncidencia, 0, ImporteIncidencia, "D")
-    '            End If
-    '        End If
-
-    '        'Aqui se guarda el impuesto, el total Gravado y el total exento, tanto cuando viene de agregar un concepto como cuando viene de quitar un concepto ya que de ambas maneras se recalcula
-    '        'Solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
-
-    '        If ConImpuesto = 1 Then
-    '            Dim cNomina As New Nomina()
-    '            If cmbConcepto.SelectedValue < 52 Then
-
-    '                'GuardarExentoYGravado(cmbConcepto.SelectedValue, 1, Impuesto, 0, Impuesto, "P")
-
-    '                If Impuesto > 0 Then
-    '                    cNomina = New Nomina()
-    '                    'cNomina.IdEmpresa = IdEmpresa
-    '                    cNomina.Ejercicio = IdEjercicio
-    '                    cNomina.TipoNomina = 2 'Catorcenal
-    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
-    '                    cNomina.NoEmpleado = empleadoId.Value
-    '                    cNomina.CvoConcepto = 86
-    '                    cNomina.IdContrato = contratoId.Value
-    '                    cNomina.Tipo = "F"
-    '                    cNomina.TipoConcepto = "D"
-    '                    cNomina.Unidad = 1
-    '                    cNomina.Importe = Impuesto
-    '                    cNomina.ImporteGravado = 0
-    '                    cNomina.ImporteExento = Impuesto
-    '                    cNomina.Generado = ""
-    '                    cNomina.Timbrado = ""
-    '                    cNomina.Enviado = ""
-    '                    cNomina.Situacion = ""
-    '                    cNomina.IdMovimiento = Request("id")
-    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-    '                    cNomina.FechaPago = cPeriodo.FechaPago
-    '                    cNomina.DiasPagados = cPeriodo.Dias
-    '                    cNomina.GuadarNomina()
-    '                End If
-    '                If SubsidioEfectivo > 0 Then
-    '                    cNomina = New Nomina()
-    '                    'cNomina.IdEmpresa = IdEmpresa
-    '                    cNomina.Ejercicio = IdEjercicio
-    '                    cNomina.TipoNomina = 2 'Catorcenal
-    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
-    '                    cNomina.NoEmpleado = empleadoId.Value
-    '                    cNomina.CvoConcepto = 55
-    '                    cNomina.IdContrato = contratoId.Value
-    '                    cNomina.Tipo = "F"
-    '                    cNomina.TipoConcepto = "P"
-    '                    cNomina.Unidad = 1
-    '                    cNomina.Importe = SubsidioEfectivo
-    '                    cNomina.ImporteGravado = 0
-    '                    cNomina.ImporteExento = SubsidioEfectivo
-    '                    cNomina.Generado = ""
-    '                    cNomina.Timbrado = ""
-    '                    cNomina.Enviado = ""
-    '                    cNomina.Situacion = ""
-    '                    cNomina.IdMovimiento = Request("id")
-    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-    '                    cNomina.FechaPago = cPeriodo.FechaPago
-    '                    cNomina.DiasPagados = cPeriodo.Dias
-    '                    cNomina.GuadarNomina()
-    '                End If
-
-    '                CalcularImss()
-    '                Imss = Imss * DiasCuotaPeriodo
-    '                Imss = Math.Round(Imss, 6)
-
-    '                If Imss > 0 Then
-    '                    cNomina = New Nomina()
-    '                    'cNomina.IdEmpresa = IdEmpresa
-    '                    cNomina.Ejercicio = IdEjercicio
-    '                    cNomina.TipoNomina = 2 'Catorcenal
-    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
-    '                    cNomina.NoEmpleado = empleadoId.Value
-    '                    cNomina.CvoConcepto = 56
-    '                    cNomina.IdContrato = contratoId.Value
-    '                    cNomina.Tipo = "F"
-    '                    cNomina.TipoConcepto = "D"
-    '                    cNomina.Unidad = 1
-    '                    cNomina.Importe = Imss
-    '                    cNomina.ImporteGravado = 0
-    '                    cNomina.ImporteExento = Imss
-    '                    cNomina.Generado = ""
-    '                    cNomina.Timbrado = ""
-    '                    cNomina.Enviado = ""
-    '                    cNomina.Situacion = ""
-    '                    cNomina.IdMovimiento = Request("id")
-    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-    '                    cNomina.FechaPago = cPeriodo.FechaPago
-    '                    cNomina.DiasPagados = cPeriodo.Dias
-    '                    cNomina.GuadarNomina()
-    '                End If
-    '                If cmbConcepto.SelectedValue = 2 Then
-    '                    ''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
-    '                    Dim Valor As Decimal
-    '                    Dim DescuentoInvonavit As Decimal
-    '                    Dim datos As New DataTable
-    '                    Dim Infonavit As New Entities.Infonavit()
-    '                    Infonavit.IdEmpresa = Session("clienteid")
-    '                    Infonavit.IdEmpleado = empleadoId.Value
-    '                    datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
-    '                    Infonavit = Nothing
-
-    '                    If datos.Rows.Count > 0 Then
-    '                        If datos.Rows(0)("tipo_descuento") = 1 Then
-    '                            Valor = datos.Rows(0)("valor_descuento")
-    '                            DescuentoInvonavit = ((Valor + ImporteSeguroVivienda) / 30.4) * UnidadIncidencia
-    '                        ElseIf datos.Rows(0)("tipo_descuento") = 2 Then
-    '                            Valor = datos.Rows(0)("valor_descuento")
-    '                            DescuentoInvonavit = (((Valor * SalarioMinimoDiarioGeneral) + ImporteSeguroVivienda) / 30.4) * UnidadIncidencia
-    '                        ElseIf datos.Rows(0)("tipo_descuento") = 3 Then
-    '                            Valor = datos.Rows(0)("valor_descuento")
-    '                            DescuentoInvonavit = ((SalarioDiarioIntegradoTrabajador * (Valor / 100)) + (ImporteSeguroVivienda / 30.4)) * UnidadIncidencia
-    '                        End If
-
-    '                        If DescuentoInvonavit > 0 Then
-    '                            cNomina = New Nomina()
-    '                            'cNomina.IdEmpresa = IdEmpresa
-    '                            cNomina.Ejercicio = IdEjercicio
-    '                            cNomina.TipoNomina = 2 'Catorcenal
-    '                            cNomina.Periodo = cmbPeriodo.SelectedValue
-    '                            cNomina.NoEmpleado = empleadoId.Value
-    '                            cNomina.CvoConcepto = 64
-    '                            cNomina.IdContrato = contratoId.Value
-    '                            cNomina.Tipo = "F"
-    '                            cNomina.TipoConcepto = "D"
-    '                            cNomina.Unidad = 1
-    '                            cNomina.Importe = DescuentoInvonavit
-    '                            cNomina.ImporteGravado = 0
-    '                            cNomina.ImporteExento = DescuentoInvonavit
-    '                            cNomina.Generado = ""
-    '                            cNomina.Timbrado = ""
-    '                            cNomina.Enviado = ""
-    '                            cNomina.Situacion = ""
-    '                            cNomina.IdMovimiento = Request("id")
-    '                            cNomina.FechaIni = cPeriodo.FechaInicialDate
-    '                            cNomina.FechaFin = cPeriodo.FechaFinalDate
-    '                            cNomina.FechaPago = cPeriodo.FechaPago
-    '                            cNomina.DiasPagados = cPeriodo.Dias
-    '                            cNomina.GuadarNomina()
-    '                        End If
-    '                    End If
-    '                End If
-    '            End If
-    '        ElseIf ConImpuesto = 2 Then
-    '            Dim cNomina As New Nomina()
-    '            If cmbConcepto.SelectedValue < 52 Then
-    '                If Impuesto > 0 Then
-    '                    cNomina = New Nomina()
-    '                    'cNomina.IdEmpresa = IdEmpresa
-    '                    cNomina.Ejercicio = IdEjercicio
-    '                    cNomina.TipoNomina = 2 'Catorcenal
-    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
-    '                    cNomina.NoEmpleado = empleadoId.Value
-    '                    cNomina.CvoConcepto = 86
-    '                    cNomina.IdContrato = contratoId.Value
-    '                    cNomina.Tipo = "F"
-    '                    cNomina.TipoConcepto = "D"
-    '                    cNomina.Unidad = 1
-    '                    cNomina.Importe = Impuesto
-    '                    cNomina.ImporteGravado = 0
-    '                    cNomina.ImporteExento = Impuesto
-    '                    cNomina.Generado = ""
-    '                    cNomina.Timbrado = ""
-    '                    cNomina.Enviado = ""
-    '                    cNomina.Situacion = ""
-    '                    cNomina.IdMovimiento = Request("id")
-    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-    '                    cNomina.FechaPago = cPeriodo.FechaPago
-    '                    cNomina.DiasPagados = cPeriodo.Dias
-    '                    cNomina.GuadarNomina()
-    '                End If
-    '                If SubsidioEfectivo > 0 Then
-    '                    cNomina = New Nomina()
-    '                    'cNomina.IdEmpresa = IdEmpresa
-    '                    cNomina.Ejercicio = IdEjercicio
-    '                    cNomina.TipoNomina = 2 'Catorcenal
-    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
-    '                    cNomina.NoEmpleado = empleadoId.Value
-    '                    cNomina.CvoConcepto = 55
-    '                    cNomina.IdContrato = contratoId.Value
-    '                    cNomina.Tipo = "F"
-    '                    cNomina.TipoConcepto = "P"
-    '                    cNomina.Unidad = 1
-    '                    cNomina.Importe = SubsidioEfectivo
-    '                    cNomina.ImporteGravado = 0
-    '                    cNomina.ImporteExento = SubsidioEfectivo
-    '                    cNomina.Generado = ""
-    '                    cNomina.Timbrado = ""
-    '                    cNomina.Enviado = ""
-    '                    cNomina.Situacion = ""
-    '                    cNomina.IdMovimiento = Request("id")
-    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-    '                    cNomina.FechaPago = cPeriodo.FechaPago
-    '                    cNomina.DiasPagados = cPeriodo.Dias
-    '                    cNomina.GuadarNomina()
-    '                End If
-
-    '                CalcularImss()
-    '                Imss = Imss * DiasCuotaPeriodo
-    '                Imss = Math.Round(Imss, 6)
-
-    '                If Imss > 0 Then
-    '                    cNomina = New Nomina()
-    '                    'cNomina.IdEmpresa = IdEmpresa
-    '                    cNomina.Ejercicio = IdEjercicio
-    '                    cNomina.TipoNomina = 2 'Catorcenal
-    '                    cNomina.Periodo = cmbPeriodo.SelectedValue
-    '                    cNomina.NoEmpleado = empleadoId.Value
-    '                    cNomina.CvoConcepto = 56
-    '                    cNomina.IdContrato = contratoId.Value
-    '                    cNomina.Tipo = "F"
-    '                    cNomina.TipoConcepto = "D"
-    '                    cNomina.Unidad = 1
-    '                    cNomina.Importe = Imss
-    '                    cNomina.ImporteGravado = 0
-    '                    cNomina.ImporteExento = Imss
-    '                    cNomina.Generado = ""
-    '                    cNomina.Timbrado = ""
-    '                    cNomina.Enviado = ""
-    '                    cNomina.Situacion = ""
-    '                    cNomina.IdMovimiento = Request("id")
-    '                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-    '                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-    '                    cNomina.FechaPago = cPeriodo.FechaPago
-    '                    cNomina.DiasPagados = cPeriodo.Dias
-    '                    cNomina.GuadarNomina()
-    '                End If
-    '            End If
-    '        End If
-    '    Catch oExcep As Exception
-    '        Response.Write(oExcep.Message.ToString)
-    '        Response.End()
-    '        'rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-    '    End Try
-    'End Sub
     Private Sub BorrarDeduccionesFiniquito()
         Try
             Call CargarVariablesGenerales()
@@ -2523,11 +2255,11 @@ Public Class GeneracionDeFiniquitosCatorcenal
                     ImporteGravado = ImporteGravado + (ImporteIncidencia - SalarioMinimoDiarioGeneral)
                 End If
             End If
-            'If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+            'If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
             '    ImporteExento = ImporteExento + Aguinaldo
-            'ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-            '    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-            '    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
+            'ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+            '    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+            '    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
             'End If
             'If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
             '    ImporteExento = ImporteExento + PrimaVacacional
@@ -2805,9 +2537,9 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 End If
             End If
 
-            If CuotaPeriodo > 0 Then
-                GuardarExentoYGravado(2, CuotaPeriodo - FaltasPermisosIncapacidades, FaltasPermisosIncapacidades, NoEmpleado)
-            End If
+            'If CuotaPeriodo > 0 Then
+            '    GuardarExentoYGravado(2, CuotaPeriodo - FaltasPermisosIncapacidades, FaltasPermisosIncapacidades, NoEmpleado)
+            'End If
 
             If PrimaDominical > 0 Then
                 Dim Dias As Integer
@@ -2827,15 +2559,15 @@ Public Class GeneracionDeFiniquitosCatorcenal
             End If
 
             If Aguinaldo > 0 Then
-                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
                     ImporteExento = ImporteExento + Aguinaldo
                     ImporteExentoAguinaldo = Aguinaldo
                     ImporteGravadoAguinaldo = 0
-                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-                    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
-                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * 30
-                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * 30)
+                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
+                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
+                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
                 End If
                 GuardarExentoYGravado(14, ImporteGravadoAguinaldo, ImporteExentoAguinaldo, NoEmpleado)
             End If
@@ -3427,15 +3159,15 @@ Public Class GeneracionDeFiniquitosCatorcenal
             End If
 
             If Aguinaldo > 0 Then
-                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
                     ImporteExento = ImporteExento + Aguinaldo
                     ImporteExentoAguinaldo = Aguinaldo
                     ImporteGravadoAguinaldo = 0
-                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-                    ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
-                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * 30
-                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * 30)
+                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                    ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
+                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
+                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
                 End If
             End If
 
@@ -3465,7 +3197,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Call ConsultarDiasMes()
 
-            ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * 30.4
+            ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * FactorDiarioPromedio
             IngresoMensualOrdinario = (ImporteDiario * DiasMes)
             IngresoGravadoMes = ImporteProporcionalVacaciones + IngresoMensualOrdinario
 
@@ -3524,7 +3256,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             '    Call ConsultarDiasMes()
 
-            '    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * 30.4
+            '    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
             '    IngresoMensualOrdinario = (ImporteDiario * DiasMes)
             '    IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
 
@@ -3569,7 +3301,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                 Call ConsultarDiasMes()
 
-                ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * 30.4
+                ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
                 IngresoMensualOrdinario = (ImporteDiario * DiasMes)
                 IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
 
@@ -3623,7 +3355,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                 Call ConsultarDiasMes()
 
-                ImporteProporcionalIncidencias = (ImporteGravado / 365) * 30.4
+                ImporteProporcionalIncidencias = (ImporteGravado / 365) * FactorDiarioPromedio
                 IngresoMensualOrdinario = (ImporteDiario * DiasMes)
                 IngresoGravadoMes = ImporteProporcionalIncidencias + IngresoMensualOrdinario
 
@@ -4761,8 +4493,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
         dt = cNomina.ConsultarPercepcionesDeduccionesFiniquito()
 
         If dt.Rows.Count > 0 Then
-            If dt.Compute("Sum(Importe)", "CvoConcepto=86") IsNot DBNull.Value Then
-                ImpuestoISR = dt.Compute("Sum(Importe)", "CvoConcepto=86")
+            If dt.Compute("Sum(Importe)", "CvoConcepto=52") IsNot DBNull.Value Then
+                ImpuestoISR = dt.Compute("Sum(Importe)", "CvoConcepto=52")
             End If
             If dt.Compute("Sum(Importe)", "CvoConcepto=56") IsNot DBNull.Value Then
                 CuotasIMSS = dt.Compute("Sum(Importe)", "CvoConcepto=56")

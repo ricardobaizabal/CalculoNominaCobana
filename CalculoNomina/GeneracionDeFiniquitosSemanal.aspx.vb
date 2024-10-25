@@ -136,11 +136,7 @@ Public Class GeneracionDeFiniquitosSemanal
     Private PercepcionesExentas As Decimal = 0
     Private PercepcionesGravadas As Decimal = 0
     Private Imss As Decimal = 0
-    Public FolioXml As String
-
-    Const URI_SAT = "http://www.sat.gob.mx/cfd/3"
-    Private m_xmlDOM As New XmlDocument
-    Private urlnomina As String
+    Private FolioXml As String
     Private Unidad As String
 
     Private DiasProporcionalVacaciones As Decimal
@@ -609,7 +605,7 @@ Public Class GeneracionDeFiniquitosSemanal
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.NoEmpleado = empleadoId.Value
-            cNomina.CvoConcepto = 86
+            cNomina.CvoConcepto = 52
             cNomina.IdContrato = contratoId.Value
             cNomina.Tipo = "F"
             cNomina.TipoConcepto = "D"
@@ -2222,11 +2218,11 @@ Public Class GeneracionDeFiniquitosSemanal
                     ImporteGravado = ImporteGravado + (ImporteIncidencia - SalarioMinimoDiarioGeneral)
                 End If
             End If
-            'If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+            'If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
             '    ImporteExento = ImporteExento + Aguinaldo
-            'ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-            '    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-            '    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
+            'ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+            '    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+            '    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
             'End If
             'If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
             '    ImporteExento = ImporteExento + PrimaVacacional
@@ -2530,15 +2526,15 @@ Public Class GeneracionDeFiniquitosSemanal
             End If
 
             If Aguinaldo > 0 Then
-                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
                     ImporteExento = ImporteExento + Aguinaldo
                     ImporteExentoAguinaldo = Aguinaldo
                     ImporteGravadoAguinaldo = 0
-                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-                    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
-                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * 30
-                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * 30)
+                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
+                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
+                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
                 End If
                 GuardarExentoYGravado(14, ImporteGravadoAguinaldo, ImporteExentoAguinaldo, NoEmpleado)
             End If
@@ -3126,15 +3122,15 @@ Public Class GeneracionDeFiniquitosSemanal
             End If
 
             If Aguinaldo > 0 Then
-                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * 30) Then
+                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
                     ImporteExento = ImporteExento + Aguinaldo
                     ImporteExentoAguinaldo = Aguinaldo
                     ImporteGravadoAguinaldo = 0
-                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * 30) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 30)
-                    ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * 30))
-                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * 30
-                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * 30)
+                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                    ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
+                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
+                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
                 End If
             End If
 
@@ -3679,437 +3675,6 @@ Public Class GeneracionDeFiniquitosSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Public Sub CrearCFDNomina(ByVal NoEmpleado As Integer, ByVal RutaXML As String)
-        Dim Comprobante As XmlNode
-        urlnomina = 0
-
-        Call CargarVariablesGenerales()
-
-        Dim dt As New DataTable
-        Dim cEmpleado As New Entities.Empleado
-        cEmpleado.IdEmpleado = NoEmpleado
-        'cEmpleado.IdEmpresa = IdEmpresa
-        cEmpleado.IdMovimiento = Request("id")
-        dt = cEmpleado.ConsultarEmpleados()
-
-        Dim MetodoPago As String = ""
-        If dt.Rows.Count > 0 Then
-            MetodoPago = dt.Rows(0)("CLAVEMETODOPAGO").ToString
-        End If
-
-        m_xmlDOM = CrearDOM()
-        Comprobante = CrearNodoComprobante(MetodoPago)
-
-        m_xmlDOM.AppendChild(Comprobante)
-
-        IndentarNodo(Comprobante, 1)
-
-        CrearNodoEmisor(Comprobante)
-        IndentarNodo(Comprobante, 1)
-
-        CrearNodoReceptor(Comprobante, NoEmpleado)
-        IndentarNodo(Comprobante, 1)
-
-        '***** Conceptos del Recibo de Nomina  ***
-        CrearNodoConceptos(Comprobante)
-        IndentarNodo(Comprobante, 1)
-
-        '**** Atributos de los Impuestos  ****
-        CrearNodoImpuestos(Comprobante)
-        IndentarNodo(Comprobante, 1)
-
-        CrearNodoComplemento(Comprobante, NoEmpleado)
-        IndentarNodo(Comprobante, 0)
-
-        Dim path As String = Server.MapPath("~/Certificado/") & "CSD01_AAA010101AAA.cer"
-
-        SellarCFD(Comprobante, path)
-        m_xmlDOM.InnerXml = (Replace(m_xmlDOM.InnerXml, "schemaLocation", "xsi:schemaLocation", , , CompareMethod.Text))
-        m_xmlDOM.Save(RutaXML)
-    End Sub
-    Private Function CrearDOM() As XmlDocument
-        Dim oDOM As New XmlDocument
-        Dim Nodo As XmlNode
-        Nodo = oDOM.CreateProcessingInstruction("xml", "version=""1.0"" encoding=""utf-8""")
-        oDOM.AppendChild(Nodo)
-        Nodo = Nothing
-        CrearDOM = oDOM
-    End Function
-    Private Sub CrearAtributosComprobante(ByVal Nodo As XmlElement, ByVal metodoDePago As String)
-        Dim LugarExpedicion As String = ""
-        Dim dt As New DataTable
-        Dim cNomina = New Nomina()
-        dt = cNomina.ConsultarLugarExpedicion()
-
-        If dt.Rows.Count > 0 Then
-            For Each oDataRow In dt.Rows
-                LugarExpedicion = oDataRow("LugarExpedicion")
-            Next
-        End If
-        Nodo.SetAttribute("xmlns:nomina", "http://www.sat.gob.mx/nomina")
-        Nodo.SetAttribute("xmlns:cfdi", "http://www.sat.gob.mx/cfd/3")
-        Nodo.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
-        Nodo.SetAttribute("xsi:schemaLocation", "http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd http://www.sat.gob.mx/nomina http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina11.xsd")
-        Nodo.SetAttribute("certificado", "")
-        Nodo.SetAttribute("fecha", Format(Now(), "yyyy-MM-ddTHH:mm:ss"))
-        Nodo.SetAttribute("folio", FolioXml)
-        Nodo.SetAttribute("formaDePago", "PAGO EN UNA SOLA EXHIBICION")
-        'Nodo.SetAttribute("NumCtaPago", "Noaplica")
-        Nodo.SetAttribute("metodoDePago", metodoDePago)
-        Nodo.SetAttribute("noCertificado", "")
-        Nodo.SetAttribute("sello", "")
-        'Nodo.SetAttribute("subTotal", (TotalPercepciones + Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo))) 'suma grav y exento  de percepciones=======================================================
-        Nodo.SetAttribute("subTotal", TotalPercepciones)
-        'totalpercepciones + totaldeducciones - impuesto
-        'Nodo.SetAttribute("descuento", (CuotaImss + AdeudoPatron)) 'suma deducciones sin isr===================================================================
-        'Dim Descuento2 As Decimal = 0
-        'Descuento2 = TotalDeducciones - (Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo) + Impuesto)
-        'Nodo.SetAttribute("descuento", TotalDeducciones - (Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo) + Impuesto))
-        Nodo.SetAttribute("descuento", TotalDeducciones - Impuesto)
-        'Nodo.SetAttribute("descuento", Descuento2)
-        Nodo.SetAttribute("motivoDescuento", "DEDUCCIONES NOMINA")
-        Nodo.SetAttribute("tipoDeComprobante", "egreso")
-        'total deducciones = seguro social  + adeudos diversos+ impuesto
-        'Nodo.SetAttribute("total", ((TotalPercepciones + Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo))) - (CuotaImss + AdeudoPatron + Impuesto))  'gravado + exento de pércepciones -  gravado y exentos de deducciones, neto a recibir========
-        'Nodo.SetAttribute("total", ((TotalPercepciones + Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo))) - (TotalDeducciones - Math.Abs(SubsidioAplicado) - Math.Abs(SubsidioEfectivo)))
-        Nodo.SetAttribute("total", TotalPercepciones - TotalDeducciones)
-        'total de percepcines + subsidio aplic + subsidio efec - deducciones 
-        Nodo.SetAttribute("LugarExpedicion", LugarExpedicion)
-        Nodo.SetAttribute("Moneda", "M.N.")
-        'Nodo.setAttribute "serie", "1"
-        Nodo.SetAttribute("version", "3.2")
-    End Sub
-    Private Function CrearNodoComprobante(ByVal metodoDePago As String) As XmlNode
-        Dim Comprobante As XmlElement
-        Comprobante = m_xmlDOM.CreateElement("cfdi:Comprobante", URI_SAT)
-        CrearAtributosComprobante(Comprobante, metodoDePago)
-        CrearNodoComprobante = Comprobante
-    End Function
-    Private Sub IndentarNodo(ByVal Nodo As XmlNode, ByVal Nivel As Long)
-        Nodo.AppendChild(m_xmlDOM.CreateTextNode(vbNewLine & New String(ControlChars.Tab, Nivel)))
-    End Sub
-    Private Sub CrearNodoEmisor(ByVal Nodo As XmlNode)
-
-        Dim dtEmisor As New DataTable
-        Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
-        dtEmisor = cNomina.ConsultarDatosEmisor()
-
-        Dim Emisor As XmlElement
-        Dim DomFiscal As XmlElement
-        Dim ExpedidoEn As XmlElement
-        Dim RegimenFiscal As XmlElement
-
-        If dtEmisor.Rows.Count > 0 Then
-            For Each oDataRow In dtEmisor.Rows
-                Emisor = CrearNodo("cfdi:Emisor")
-                Emisor.SetAttribute("nombre", oDataRow("RazonSocial"))
-                'Emisor.SetAttribute("rfc", oDataRow("RFC"))
-                Emisor.SetAttribute("rfc", "AAA010101AAA")
-
-                IndentarNodo(Emisor, 2)
-
-                DomFiscal = CrearNodo("cfdi:DomicilioFiscal")
-                DomFiscal.SetAttribute("calle", oDataRow("Calle"))
-                If oDataRow("NoExterior").Length > 0 Then
-                    DomFiscal.SetAttribute("noExterior", oDataRow("NoExterior"))
-                End If
-                If oDataRow("NoInterior").Length > 0 Then
-                    DomFiscal.SetAttribute("noInterior", oDataRow("NoInterior"))
-                End If
-                DomFiscal.SetAttribute("colonia", oDataRow("Colonia"))
-                DomFiscal.SetAttribute("codigoPostal", oDataRow("CodigoPostal"))
-                DomFiscal.SetAttribute("estado", oDataRow("Estado"))
-                DomFiscal.SetAttribute("municipio", oDataRow("Municipio"))
-                DomFiscal.SetAttribute("pais", "México")
-                Emisor.AppendChild(DomFiscal)
-
-                ExpedidoEn = CrearNodo("cfdi:ExpedidoEn")
-                ExpedidoEn.SetAttribute("calle", oDataRow("Calle"))
-                If oDataRow("NoExterior").Length > 0 Then
-                    ExpedidoEn.SetAttribute("noExterior", oDataRow("NoExterior"))
-                End If
-                If oDataRow("NoInterior").Length > 0 Then
-                    ExpedidoEn.SetAttribute("noInterior", oDataRow("NoInterior"))
-                End If
-                ExpedidoEn.SetAttribute("colonia", oDataRow("Colonia"))
-                ExpedidoEn.SetAttribute("codigoPostal", oDataRow("CodigoPostal"))
-                ExpedidoEn.SetAttribute("estado", oDataRow("Estado"))
-                ExpedidoEn.SetAttribute("municipio", oDataRow("Municipio"))
-                ExpedidoEn.SetAttribute("pais", "México")
-                Emisor.AppendChild(ExpedidoEn)
-
-                IndentarNodo(Emisor, 1)
-
-                RegimenFiscal = CrearNodo("cfdi:RegimenFiscal")
-                RegimenFiscal.SetAttribute("Regimen", oDataRow("Regimen"))
-                Emisor.AppendChild(RegimenFiscal)
-            Next
-        End If
-
-        IndentarNodo(Emisor, 2)
-
-        Nodo.AppendChild(Emisor)
-
-    End Sub
-    Private Sub CrearNodoReceptor(ByVal Nodo As XmlNode, ByVal NoEmpleado As Integer)
-
-        Call CargarVariablesGenerales()
-
-        Dim dtReceptor As New DataTable
-        Dim cEmpleado As New Entities.Empleado
-        cEmpleado.IdEmpleado = NoEmpleado
-        'cEmpleado.IdEmpresa = IdEmpresa
-        cEmpleado.IdMovimiento = Request("id")
-        dtReceptor = cEmpleado.ConsultarEmpleados()
-
-        Dim Receptor As XmlElement
-        Dim Domicilio As XmlElement
-
-        If dtReceptor.Rows.Count > 0 Then
-            For Each oDataRow In dtReceptor.Rows
-                Receptor = CrearNodo("cfdi:Receptor")
-                Receptor.SetAttribute("nombre", oDataRow("NOMBRE"))
-                Receptor.SetAttribute("rfc", oDataRow("RFC"))
-                IndentarNodo(Receptor, 2)
-
-                Domicilio = CrearNodo("cfdi:Domicilio")
-                Domicilio.SetAttribute("calle", oDataRow("CALLE"))
-                If oDataRow("NOEXT").Length > 0 Then
-                    Domicilio.SetAttribute("noExterior", oDataRow("NOEXT"))
-                End If
-                If oDataRow("NOINT").Length > 0 Then
-                    Domicilio.SetAttribute("noInterior", oDataRow("NOINT"))
-                End If
-                Domicilio.SetAttribute("colonia", oDataRow("COLONIA"))
-                Domicilio.SetAttribute("codigoPostal", oDataRow("CP"))
-                Domicilio.SetAttribute("municipio", oDataRow("MUNICIPIO"))
-                Domicilio.SetAttribute("estado", oDataRow("ESTADO"))
-                Domicilio.SetAttribute("pais", oDataRow("PAIS"))
-                Receptor.AppendChild(Domicilio)
-            Next
-        End If
-
-        IndentarNodo(Receptor, 1)
-
-        Nodo.AppendChild(Receptor)
-    End Sub
-    Private Function CrearNodo(ByVal nombre As String)
-        If urlnomina = 0 Then
-            CrearNodo = m_xmlDOM.CreateNode(XmlNodeType.Element, nombre, URI_SAT)
-        ElseIf urlnomina = 1 Then
-            CrearNodo = m_xmlDOM.CreateNode(XmlNodeType.Element, nombre, "http://www.sat.gob.mx/nomina")
-        ElseIf urlnomina = 2 Then
-            CrearNodo = m_xmlDOM.CreateNode(XmlNodeType.Element, nombre, "")
-        End If
-    End Function
-    Private Sub CrearNodoConceptos(ByVal Nodo As XmlNode)
-        Dim Conceptos As XmlElement
-        Dim Concepto As XmlElement
-
-        Conceptos = CrearNodo("cfdi:Conceptos")
-        IndentarNodo(Conceptos, 2)
-
-        Concepto = CrearNodo("cfdi:Concepto")
-        'Concepto.SetAttribute("importe", TotalPercepciones + Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo))
-        Concepto.SetAttribute("importe", TotalPercepciones)
-        'aqui va el subtotal
-        'Concepto.SetAttribute("valorUnitario", TotalPercepciones + Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo))
-        Concepto.SetAttribute("valorUnitario", TotalPercepciones)
-        'aqui tambien va el subtotal
-        Concepto.SetAttribute("descripcion", "PAGO DE NOMINA")
-        'Concepto.SetAttribute("noIdentificacion", Mid(FolioXml, 4, 2)) '=====================================================================
-        Concepto.SetAttribute("unidad", "SERVICIO")
-        Concepto.SetAttribute("cantidad", "1")
-
-        Conceptos.AppendChild(Concepto)
-        IndentarNodo(Conceptos, 2)
-        Nodo.AppendChild(Conceptos)
-    End Sub
-    Private Sub CrearNodoImpuestos(ByVal Nodo As XmlNode)
-
-        Dim Impuestos As XmlElement
-        Dim Retenciones As XmlElement
-        Dim Retencion As XmlElement
-
-        Impuestos = CrearNodo("cfdi:Impuestos")
-        Impuestos.SetAttribute("totalImpuestosRetenidos", Impuesto)
-        IndentarNodo(Impuestos, 2)
-        Retenciones = CrearNodo("cfdi:Retenciones")
-        Retencion = CrearNodo("cfdi:Retencion")
-        Retencion.SetAttribute("importe", Impuesto) 'ISR GRAVADO=============================================================================
-        ' el impuesto - el subsidio es igual al retenido 
-        Retencion.SetAttribute("impuesto", "ISR")
-
-        Retenciones.AppendChild(Retencion)
-
-        Impuestos.AppendChild(Retenciones)
-        IndentarNodo(Impuestos, 2)
-        Nodo.AppendChild(Impuestos)
-    End Sub
-    Private Sub CrearNodoComplemento(ByVal Nodo As XmlNode, ByVal NoEmpleado As Integer)
-
-        Dim FechaPago As Date = Now.Date()
-        Call CargarVariablesGenerales()
-
-        Dim cPeriodo As New Entities.Periodo()
-        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
-        cPeriodo.ConsultarPeriodoID()
-
-        Dim dtEmpleado As New DataTable
-        Dim cEmpleado As New Entities.Empleado
-        cEmpleado.IdEmpleado = NoEmpleado
-        'cEmpleado.IdEmpresa = IdEmpresa
-        cEmpleado.IdMovimiento = Request("id")
-        dtEmpleado = cEmpleado.ConsultarEmpleados()
-
-        Dim complemento As XmlElement
-        Dim Nomina As XmlElement
-        Dim Percepciones As XmlElement
-        Dim Percepcion As XmlElement
-        Dim Deducciones As XmlElement
-        Dim Deduccion As XmlElement
-        Dim Incapacidades As XmlElement
-        Dim Incapacidad As XmlElement
-        Dim HorasExtras As XmlElement
-        Dim HorasExtra As XmlElement
-
-        If dtEmpleado.Rows.Count > 0 Then
-            For Each oDataRow In dtEmpleado.Rows
-                complemento = CrearNodo("cfdi:Complemento")
-                IndentarNodo(complemento, 2)
-
-                urlnomina = 1
-                Nomina = CrearNodo("nomina:Nomina")
-                IndentarNodo(Nomina, 2)
-
-                Nomina.SetAttribute("xsi:schemaLocation", "http://www.sat.gob.mx/nomina  http://www.sat.gob.mx/sitio_internet/cfd/nomina/nomina11.xsd")
-                Nomina.SetAttribute("Version", "1.1")
-                Nomina.SetAttribute("RegistroPatronal", oDataRow("REGISTROPATRONAL"))
-                Nomina.SetAttribute("NumEmpleado", oDataRow("NOEMPLEADO"))
-                Nomina.SetAttribute("CURP", oDataRow("CURP"))
-                Nomina.SetAttribute("TipoRegimen", oDataRow("CLAVEREGIMENCONTRATACION"))
-                Nomina.SetAttribute("NumSeguridadSocial", oDataRow("IMSS"))
-                Nomina.SetAttribute("FechaPago", Mid(FechaPago, 7, 4) + "-" + Mid(FechaPago, 4, 2) + "-" + Mid(FechaPago, 1, 2))
-                Nomina.SetAttribute("FechaInicialPago", Format(CDate(cPeriodo.FechaInicial), "yyyy-MM-dd"))
-                Nomina.SetAttribute("FechaFinalPago", Format(CDate(cPeriodo.FechaFinal), "yyyy-MM-dd"))
-                Nomina.SetAttribute("NumDiasPagados", NumeroDeDiasPagados)
-                'atributos opcionales
-                Nomina.SetAttribute("Departamento", oDataRow("DEPARTAMENTO"))
-                If oDataRow("CLAVEMETODOPAGO") <> "1" Then
-                    If oDataRow("CLABE").ToString.Length > 0 Then
-                        Nomina.SetAttribute("CLABE", oDataRow("CLABE"))
-                    End If
-                    'String.Format("{0:00}", oDataRow("NOEMPLEADO").ToString)
-                    'String.Format("{0:000000}", Convert.ToInt32(TxtFactura.Text))
-                    'Nomina.SetAttribute("Banco", String.Format("{0:000}", oDataRowTrabajador("NOBANCO").ToString))
-                    Nomina.SetAttribute("Banco", oDataRow("NOBANCO"))
-                End If
-                Nomina.SetAttribute("FechaInicioRelLaboral", Format(CDate(oDataRow("FECHAINGRESO")), "yyyy-MM-dd"))
-                Nomina.SetAttribute("Antiguedad", DateDiff("ww", CDate(oDataRow("FECHAINGRESO")), Now()))
-                Nomina.SetAttribute("Puesto", oDataRow("PUESTO"))
-                Nomina.SetAttribute("TipoContrato", oDataRow("TIPODECONTRATO"))
-                Nomina.SetAttribute("TipoJornada", oDataRow("TIPODEJORNADA"))
-                Nomina.SetAttribute("PeriodicidadPago", "Semanal")
-                Nomina.SetAttribute("SalarioBaseCotApor", oDataRow("CUOTADIARIA"))
-                Nomina.SetAttribute("RiesgoPuesto", oDataRow("CLAVERIESGO"))
-                Nomina.SetAttribute("SalarioDiarioIntegrado", oDataRow("INTEGRADOIMSS"))
-
-                Percepciones = CrearNodo("nomina:Percepciones")
-                Percepciones.SetAttribute("TotalGravado", PercepcionesGravadas)
-                'Es la suma de percepciones gravadas - faltas, incapacidades y permisos
-                'Percepciones.SetAttribute("TotalExento", PercepcionesExentas + Math.Abs(SubsidioAplicado) + Math.Abs(SubsidioEfectivo))
-                Percepciones.SetAttribute("TotalExento", PercepcionesExentas + Math.Abs(SubsidioEfectivo))
-                'Suma de percepciones exentas  + subsidio aplicado + subsidio efectivo
-                Nomina.AppendChild(Percepciones)
-                IndentarNodo(Percepciones, 1)
-
-                Dim dt As New DataTable
-                Dim cNomina As New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = 1 'Semanal
-                cNomina.Tipo = "F"
-                cNomina.TipoConcepto = "P"
-                cNomina.NoEmpleado = empleadoId.Value
-                cNomina.IdMovimiento = Request("id")
-                dt = cNomina.ConsultarPercepcionesDeduccionesFiniquito()
-                cNomina = Nothing
-
-                If dt.Rows.Count > 0 Then
-                    Dim oDataRowpercepciones As DataRow
-                    For Each oDataRowpercepciones In dt.Rows
-                        ObtenerUnidad(NoEmpleado, oDataRowpercepciones("CvoConcepto").ToString)
-                        Percepcion = CrearNodo("nomina:Percepcion")
-                        Percepcion.SetAttribute("Clave", String.Format("{0:000}", oDataRowpercepciones("CvoConcepto")) + Unidad.ToString)
-                        Percepcion.SetAttribute("Concepto", oDataRowpercepciones("Concepto").ToString)
-                        Percepcion.SetAttribute("ImporteGravado", oDataRowpercepciones("ImporteGravado").ToString)
-                        Percepcion.SetAttribute("ImporteExento", oDataRowpercepciones("ImporteExento").ToString)
-                        Percepcion.SetAttribute("TipoPercepcion", String.Format("{0:000}", Convert.ToInt32(oDataRowpercepciones("CvoSAT"))))
-                        Percepciones.AppendChild(Percepcion)
-                        IndentarNodo(Percepciones, 4)
-                        Percepcion = Nothing
-                    Next
-                End If
-
-                Nomina.AppendChild(Percepciones)
-                IndentarNodo(Nomina, 2)
-
-                'Nomina.appendChild percepciones
-                'Complemento.appendChild Nomina
-                'Nodo.appendChild Complemento
-
-                Deducciones = CrearNodo("nomina:Deducciones")
-                'Deducciones.SetAttribute("TotalExento", TotalDeducciones - Math.Abs(SubsidioAplicado) - Math.Abs(SubsidioEfectivo))
-                Deducciones.SetAttribute("TotalExento", Math.Round(TotalDeducciones, 6))
-                'Va el total de deducciones
-                Deducciones.SetAttribute("TotalGravado", "0.00")
-                Nomina.AppendChild(Deducciones)
-                IndentarNodo(Deducciones, 4)
-
-                dt = New DataTable
-                cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Ejercicio = IdEjercicio
-                cNomina.TipoNomina = 1 'Semanal
-                cNomina.Tipo = "F"
-                cNomina.TipoConcepto = "D"
-                cNomina.NoEmpleado = empleadoId.Value
-                cNomina.IdMovimiento = Request("id")
-                dt = cNomina.ConsultarPercepcionesDeduccionesFiniquito()
-                cNomina = Nothing
-
-                If dt.Rows.Count > 0 Then
-                    Dim oDataRowDeducciones As DataRow
-                    For Each oDataRowDeducciones In dt.Rows
-                        ObtenerUnidad(NoEmpleado, oDataRowDeducciones("CvoConcepto").ToString)
-                        Deduccion = CrearNodo("nomina:Deduccion")
-                        Deduccion.SetAttribute("Clave", String.Format("{0:000}", oDataRowDeducciones("CvoConcepto")) + Unidad.ToString)
-                        Deduccion.SetAttribute("Concepto", oDataRowDeducciones("Concepto").ToString)
-                        Deduccion.SetAttribute("ImporteGravado", oDataRowDeducciones("ImporteGravado").ToString)
-                        Deduccion.SetAttribute("ImporteExento", oDataRowDeducciones("ImporteExento").ToString)
-                        Deduccion.SetAttribute("TipoDeduccion", String.Format("{0:000}", Convert.ToInt32(oDataRowDeducciones("CvoSAT"))))
-                        Deducciones.AppendChild(Deduccion)
-                        IndentarNodo(Deducciones, 4)
-                        Deduccion = Nothing
-                    Next
-                End If
-
-                Nomina.AppendChild(Deducciones)
-
-                IndentarNodo(Nomina, 1)
-                Nodo.AppendChild(Nomina)
-
-                complemento.AppendChild(Nomina)
-                IndentarNodo(complemento, 1)
-                urlnomina = 0
-
-                IndentarNodo(complemento, 1)
-                Nodo.AppendChild(complemento)
-
-            Next
-        End If
-    End Sub
     Private Sub ObtenerUnidad(ByVal NoEmpleado As Integer, ByVal CvoConcepto As String)
         Try
 
@@ -4133,18 +3698,6 @@ Public Class GeneracionDeFiniquitosSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub SellarCFD(ByVal NodoComprobante As XmlElement, ByVal Certificado As String)
-        Dim objCert As New X509Certificate2()
-        'Pasarle el nombre y ruta del Cerfificado para obtener la información en bytes
-        Dim bRawData As Byte() = ReadFile(Certificado)
-        objCert.Import(bRawData)
-        Dim cadena As String = Convert.ToBase64String(bRawData)
-        'Comentando las dos lineas siguientes no agrega el certificado al comprobante xml
-        NodoComprobante.SetAttribute("noCertificado", FormatearSerieCert(objCert.SerialNumber))
-        NodoComprobante.SetAttribute("certificado", Convert.ToBase64String(bRawData))
-        'Comentando la siguiente linea no agregar el sello al comprobante xml
-        NodoComprobante.SetAttribute("sello", GenerarSello())
-    End Sub
     Function ReadFile(ByVal strArchivo As String) As Byte()
         Dim f As New FileStream(strArchivo, FileMode.Open, FileAccess.Read)
         Dim size As Integer = CInt(f.Length)
@@ -4152,42 +3705,6 @@ Public Class GeneracionDeFiniquitosSemanal
         size = f.Read(data, 0, size)
         f.Close()
         Return data
-    End Function
-    Public Function FormatearSerieCert(ByVal Serie As String) As String
-        Dim Resultado As String = ""
-        Dim I As Integer
-        For I = 2 To Len(Serie) Step 2
-            Resultado = Resultado & Mid(Serie, I, 1)
-        Next
-        FormatearSerieCert = Resultado
-    End Function
-    Private Function GenerarSello() As String
-        Dim ArchivoPFX As String = Server.MapPath("~/PKI/") & "CSD01_AAA010101AAA.pfx"
-        Dim objCertPfx As New X509Certificate2(ArchivoPFX, "12345678a")
-        Dim lRSA As RSACryptoServiceProvider = objCertPfx.PrivateKey
-        Dim lhasher As New SHA1CryptoServiceProvider()
-        Dim bytesFirmados As Byte() = lRSA.SignData(System.Text.Encoding.UTF8.GetBytes(GetCadenaOriginal(m_xmlDOM.InnerXml)), lhasher)
-        Return Convert.ToBase64String(bytesFirmados)
-    End Function
-    Public Function GetCadenaOriginal(ByVal xmlCFD As String) As String
-        Dim xslt As New Xsl.XslCompiledTransform
-        Dim xmldoc As New XmlDocument
-        Dim navigator As XPath.XPathNavigator
-        Dim output As New IO.StringWriter
-        xmldoc.LoadXml(xmlCFD)
-        navigator = xmldoc.CreateNavigator()
-        xslt.Load(Server.MapPath("~/SAT/") & "cadenaoriginal_3_2.xslt")
-        xslt.Transform(navigator, Nothing, output)
-        GetCadenaOriginal = output.ToString
-    End Function
-    Private Function FileToMemory(ByVal Filename As String) As IO.MemoryStream
-        Dim FS As New System.IO.FileStream(Filename, IO.FileMode.Open)
-        Dim MS As New System.IO.MemoryStream
-        Dim BA(FS.Length - 1) As Byte
-        FS.Read(BA, 0, BA.Length)
-        FS.Close()
-        MS.Write(BA, 0, BA.Length)
-        Return MS
     End Function
     Public Function Num2Text(ByVal nCifra As Object) As String
         ' Defino variables 
@@ -4457,8 +3974,8 @@ Public Class GeneracionDeFiniquitosSemanal
         dt = cNomina.ConsultarPercepcionesDeduccionesFiniquito()
 
         If dt.Rows.Count > 0 Then
-            If dt.Compute("Sum(Importe)", "CvoConcepto=86") IsNot DBNull.Value Then
-                ImpuestoISR = dt.Compute("Sum(Importe)", "CvoConcepto=86")
+            If dt.Compute("Sum(Importe)", "CvoConcepto=52") IsNot DBNull.Value Then
+                ImpuestoISR = dt.Compute("Sum(Importe)", "CvoConcepto=52")
             End If
             If dt.Compute("Sum(Importe)", "CvoConcepto=56") IsNot DBNull.Value Then
                 CuotasIMSS = dt.Compute("Sum(Importe)", "CvoConcepto=56")

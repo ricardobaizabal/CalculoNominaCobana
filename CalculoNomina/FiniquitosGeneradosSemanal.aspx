@@ -34,7 +34,7 @@
             oWnd.setSize(1024, 768);
             oWnd.set_behaviors(Telerik.Web.UI.WindowBehaviors.Close);
             oWnd.set_autoSize(false);
-            oWnd.set_title("Reporte Nómina Extraordinaria - Finiquitos")
+            oWnd.set_title("Reporte Nómina Semanal Extraordinaria - Finiquitos")
             oWnd.center();
             oWnd.show();
         }

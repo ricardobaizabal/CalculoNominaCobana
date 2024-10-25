@@ -1023,7 +1023,6 @@ Public Class FiniquitosGeneradosSemanal
                     Emisor.SetAttribute("RegistroPatronal", oDataRow("RegistroPatronal"))
                 End If
                 'Emisor.SetAttribute("RfcPatronOrigen", oDataRow("RfcPatronOrigen"))
-
                 Nomina.AppendChild(Emisor)
 
                 Receptor = CrearNodo("nomina12:Receptor")
@@ -1541,13 +1540,13 @@ Public Class FiniquitosGeneradosSemanal
                 End If
 
                 Dim DirectorioExtraccion As String = ""
-                DirectorioExtraccion = Server.MapPath("~/PDF/F/ST/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString
+                DirectorioExtraccion = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString
 
                 If Not Directory.Exists(DirectorioExtraccion) Then
                     Directory.CreateDirectory(DirectorioExtraccion)
                 End If
 
-                Dim FilePath = Server.MapPath("~/PDF/F/ST/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString & "/" & "F" & String.Format("{0:00}", NoEmpleado) & ".pdf"
+                Dim FilePath = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString & "/" & "F" & String.Format("{0:00}", NoEmpleado) & ".pdf"
 
                 If Not File.Exists(FilePath) Then
                     GuardaPDF(GeneraPDFFiniquito(NoEmpleado, IdMovimiento, IdCliente), FilePath)
@@ -1597,13 +1596,13 @@ Public Class FiniquitosGeneradosSemanal
                 End If
 
                 Dim DirectorioExtraccion As String = ""
-                DirectorioExtraccion = Server.MapPath("~/PDF/F/ST/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString
+                DirectorioExtraccion = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString
 
                 If Not Directory.Exists(DirectorioExtraccion) Then
                     Directory.CreateDirectory(DirectorioExtraccion)
                 End If
 
-                Dim FilePath = Server.MapPath("~/PDF/F/ST/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString & "/" & "R" & String.Format("{0:00}", NoEmpleado) & ".pdf"
+                Dim FilePath = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString & "/" & "R" & String.Format("{0:00}", NoEmpleado) & ".pdf"
 
                 If Not File.Exists(FilePath) Then
                     GuardaPDF(GeneraPDFRenuncia(NoEmpleado, IdMovimiento), FilePath)

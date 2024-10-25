@@ -17,7 +17,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <fieldset>
                             <legend style="padding-right: 6px; color: Black">
-                                <asp:Label ID="tblTitulo" Text="Generación de Finiquitos Semanal" runat="server" Font-Bold="True" CssClass="item"></asp:Label>
+                                <asp:Label ID="tblTitulo" Text="Generación de finiquitos catorcenal" runat="server" Font-Bold="True" CssClass="item"></asp:Label>
                             </legend>
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
