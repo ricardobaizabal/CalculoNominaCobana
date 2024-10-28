@@ -42,42 +42,13 @@ Public Class Login
                         Session("email") = row("email")
 
                         ClienteValido = True
-
                         Dim cConfiguracion As New Configuracion
                         cConfiguracion.IdUsuario = row("usuarioid")
                         cConfiguracion.GuadarConfiguracion()
                         cConfiguracion = Nothing
 
-                        'Dim DataControl As New DataControl(1)
-                        '    ds = New DataSet
-                        '    p.Clear()
-                        '    p.Add(New SqlParameter("@cmd", 1))
-                        '    p.Add(New SqlParameter("@email", txtEmail.Text))
-                        '    p.Add(New SqlParameter("@contrasena", txtContrasena.Text))
-                        '    ds = DataControl.FillDataSet("pConfiguracion", p)
-                        '    DataControl = Nothing
-
-                        '    If ds.Tables(0).Rows.Count > 0 Then
-                        '        For Each r As DataRow In ds.Tables(0).Rows
-                        '            ClienteValido = True
-                        '            Session("admin") = r("admin")
-                        '            Session("razonsocial") = r("razonsocial")
-                        '            Session("contacto") = r("contacto")
-                        '            Session("logo") = r("logo")
-                        '            Session("logo_formato") = r("logo_formato")
-                        '        Next
-                        'Response.Redirect("~/portalcfd/Home.aspx")
-                        '        If chkRemember.Checked = True Then
-                        '            CookieUtil.SetTripleDESEncryptedCookie("email", txtEmail.Text, Now.AddDays(30))
-                        '            CookieUtil.SetTripleDESEncryptedCookie("contrasena", txtContrasena.Text, Now.AddDays(30))
-                        '        Else
-                        '            CookieUtil.SetTripleDESEncryptedCookie("email", "", Now.AddDays(-1))
-                        '            CookieUtil.SetTripleDESEncryptedCookie("contrasena", "", Now.AddDays(-1))
-                        '        End If
-                        'End If
-
                     Else
-                        lblMensaje.Text = "Pongase en contacto con el administrador"
+                        lblMensaje.Text = "Pónganse en contacto con el administrador de sistema."
                         ClienteValido = False
                     End If
                 Next
@@ -91,11 +62,11 @@ Public Class Login
         If Session("usuarioid") > 0 Then
             Select Case Session("perfilid")
                 Case 1
-                    Response.Redirect("~/Empleado.aspx")
+                    Response.Redirect("~/Empresa.aspx")
                 Case 3, 23
-                    Response.Redirect("~/Empleado.aspx")
+                    Response.Redirect("~/Empresa.aspx")
                 Case Else
-                    Response.Redirect("~/Empleado.aspx")
+                    Response.Redirect("~/Empresa.aspx")
             End Select
         Else
             rwAlerta.RadAlert("Datos de acceso incorrectos.", 330, 180, "Alerta", "", "")

@@ -421,6 +421,7 @@
     <Content Include="font-awesome-4.7.0\HELP-US-OUT.txt" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="GeneracionDeFiniquitosCatorcenal.aspx" />
+    <Content Include="GeneracionDeFiniquitosMensual.aspx" />
     <Content Include="GeneracionDeFiniquitosQuincenal.aspx" />
     <Content Include="GeneracionDeFiniquitosSemanal.aspx" />
     <Content Include="GeneracionDeNominaCatorcenalNormal.aspx" />
@@ -3975,6 +3976,13 @@
       <DependentUpon>GeneracionDeFiniquitosCatorcenal.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="GeneracionDeFiniquitosMensual.aspx.designer.vb">
+      <DependentUpon>GeneracionDeFiniquitosMensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GeneracionDeFiniquitosMensual.aspx.vb">
+      <DependentUpon>GeneracionDeFiniquitosMensual.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="GeneracionDeFiniquitosQuincenal.aspx.designer.vb">
       <DependentUpon>GeneracionDeFiniquitosQuincenal.aspx</DependentUpon>
     </Compile>
@@ -4876,7 +4884,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
+      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

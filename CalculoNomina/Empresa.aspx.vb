@@ -26,9 +26,26 @@ Public Class Empresa
             objData = Nothing
             cConcepto = Nothing
 
-            Call CargarCliente()
+            If Request("id") Is Nothing Then
+                If Session("clienteid") Is Nothing Then
+                    rwAlerta.RadAlert("¡Seleccione una empresa!", 330, 180, "Alerta", "", "")
+                Else
+                    Dim cEmpresa As New Entities.Empresa
+                    cEmpresa.IdEmpresa = Session("clienteid")
+                    cEmpresa.ConsultarEmpresaID()
+                    rwAlerta.RadAlert("<span style=""font-weight: 500;"">SELECCIONASTE LA EMPRESA:</span> <span style=""font-weight: 700; text-transform: uppercase;"">" & cEmpresa.Nombre.ToString() & "</span>", 330, 180, "Alerta", "", "")
 
+                    Call CargarCliente()
+
+                End If
+            Else
+                If Session("clienteid") Is Nothing Then
+                    rwAlerta.RadAlert("¡Seleccione una empresa!", 330, 180, "Alerta", "", "")
+                Else
+                End If
+            End If
         End If
+
     End Sub
 
     Private Sub CargarCliente()

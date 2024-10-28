@@ -44,7 +44,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <telerik:RadGrid ID="grdEmpleadosCatorcenal" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="True" ShowHeader="True" PageSize="50" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False">
                                         <PagerStyle Mode="NumericPages" />
-                                        <ExportSettings IgnorePaging="True" FileName="ReporteBajasSemanal">
+                                        <ExportSettings IgnorePaging="True" FileName="ReporteBajasCatorcenal">
                                             <Excel Format="Biff" />
                                         </ExportSettings>
                                         <MasterTableView NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="id" CommandItemDisplay="Top">

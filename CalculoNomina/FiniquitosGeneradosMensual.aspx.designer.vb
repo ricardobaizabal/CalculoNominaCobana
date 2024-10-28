@@ -65,7 +65,7 @@ Partial Public Class FiniquitosGeneradosMensual
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents cmbPeriodo As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents cmbPeriodo As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control lnkReporte.
@@ -138,15 +138,6 @@ Partial Public Class FiniquitosGeneradosMensual
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents panelDatos As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
-    '''Control lblTitulo.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblTitulo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control grdEmpleados.
