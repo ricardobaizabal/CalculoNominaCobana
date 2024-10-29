@@ -277,6 +277,7 @@ Public Class GeneracionDeNominaExtraordinaria
     '    End If
     'End Sub
     Protected Sub btnRegresar_Click(sender As Object, e As EventArgs) Handles btnRegresar.Click
+        Session("Folio") = Nothing
         Response.Redirect("ListadoNominaExtraordinaria.aspx")
     End Sub
     Protected Sub btnExportar_Click(sender As Object, e As EventArgs) Handles btnExportar.Click
@@ -431,8 +432,8 @@ Public Class GeneracionDeNominaExtraordinaria
                 btnExportar.Enabled = True
                 btnImportar.Enabled = True
                 For Each oDataRow In dt.Rows
+                    Me.lblFolio.Text = oDataRow("Folio")
                     Me.lblEjercicio.Text = oDataRow("Ejercicio")
-                    Me.lblNoPeriodo.Text = oDataRow("Periodo")
                     Me.lblTipoNomina.Text = "Semanal"
                     Me.lblFechaInicial.Text = oDataRow("FechaInicial")
                     Me.lblFechaFinal.Text = oDataRow("FechaFinal")
@@ -442,9 +443,9 @@ Public Class GeneracionDeNominaExtraordinaria
                 Call CargarGridEmpleadosSemanal()
             Else
                 panelDatos.Visible = False
+                Me.lblFolio.Text = ""
                 Me.lblEjercicio.Text = ""
                 Me.lblRazonSocial.Text = ""
-                Me.lblNoPeriodo.Text = ""
                 Me.lblTipoNomina.Text = ""
                 Me.lblFechaInicial.Text = ""
                 Me.lblFechaFinal.Text = ""
@@ -467,6 +468,7 @@ Public Class GeneracionDeNominaExtraordinaria
             cmbCliente.SelectedValue = dtFolio.Rows(0)("idEmpresa").ToString()
             CargaPeriodos(cmbPeriodicidad.SelectedValue, dtFolio.Rows(0)("Periodo"))
             cmbPeriodo.SelectedValue = dtFolio.Rows(0)("Periodo").ToString()
+            txtObservaciones.Text = dtFolio.Rows(0)("Observaciones").ToString()
             CargarDatos()
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
             btnGeneraNomina.Enabled = False
@@ -639,6 +641,7 @@ Public Class GeneracionDeNominaExtraordinaria
         cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.FechaPago = fchPago.SelectedDate
+        cNomina.Observaciones = txtObservaciones.Text
 
         Dim _Nominaid As Integer = 0
         If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
@@ -3895,10 +3898,10 @@ Public Class GeneracionDeNominaExtraordinaria
                         System.Net.ServicePointManager.SecurityProtocol = DirectCast(3072, System.Net.SecurityProtocolType) Or DirectCast(768, System.Net.SecurityProtocolType) Or DirectCast(192, System.Net.SecurityProtocolType) Or DirectCast(48, System.Net.SecurityProtocolType)
 
                         'Pruebas
-                        Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
+                        'Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
 
                         'Producción
-                        'Dim TimbreSifei As New SIFEI33.SIFEIService()
+                        Dim TimbreSifei As New SIFEI33.SIFEIService()
                         Call Comprimir()
 
                         Dim bytes() As Byte
@@ -3998,7 +4001,6 @@ Public Class GeneracionDeNominaExtraordinaria
                             '
                             '   Vuelve a intentar timbrar el Comprobante Sellado
                             '
-
                             System.Net.ServicePointManager.ServerCertificateValidationCallback = Function(s As Object, certificate As X509Certificate, chain As X509Chain, sslPolicyErrors As SslPolicyErrors) True
 
                             Dim SIFEIUsuario As String = System.Configuration.ConfigurationManager.AppSettings("SIFEIUsuario")
@@ -4006,10 +4008,10 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim SIFEIIdEquipo As String = System.Configuration.ConfigurationManager.AppSettings("SIFEIIdEquipo")
 
                             'Pruebas
-                            Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
+                            'Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
 
                             'Producción
-                            'Dim TimbreSifei As New SIFEI33.SIFEIService()
+                            Dim TimbreSifei As New SIFEI33.SIFEIService()
                             Call Comprimir()
 
                             Dim bytes() As Byte
@@ -5381,6 +5383,20 @@ Public Class GeneracionDeNominaExtraordinaria
     End Sub
     Private Sub btnSalirImportar_Click(sender As Object, e As EventArgs) Handles btnSalirImportar.Click
         WinImportarMonto.VisibleOnPageLoad = False
+    End Sub
+    Private Sub txtObservaciones_TextChanged(sender As Object, e As EventArgs) Handles txtObservaciones.TextChanged
+        If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
+            Dim cNomina As New Entities.Nomina()
+            cNomina.IdNomina = Session("Folio")
+            cNomina.Observaciones = txtObservaciones.Text
+            cNomina.ActualizarObservacionesNomina()
+            cNomina = Nothing
+        End If
+
+    End Sub
+    Private Sub btnAgregarNominaE_Click(sender As Object, e As EventArgs) Handles btnAgregarNominaE.Click
+        Session("Folio") = Nothing
+        Response.Redirect("GeneracionDeNominaExtraordinaria.aspx")
     End Sub
 
 End Class

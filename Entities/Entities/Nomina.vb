@@ -1,4 +1,6 @@
 ﻿Public Class Nomina
+
+    Private _cmd As Integer
     Private _Id As Long
     Private _IdEmpresa As Integer
     Private _Ejercicio As Integer
@@ -39,8 +41,16 @@
     Private _DiasPagados As Integer
     Private _idNomina As Integer
     Private _OtroPagoBit As Integer
-    Private _cmd As Integer
+    Private _Observaciones As String
 
+    Public Property cmd() As Integer
+        Get
+            Return _cmd
+        End Get
+        Set(ByVal value As Integer)
+            _cmd = value
+        End Set
+    End Property
     Public Sub New()
         _Id = 0
         _IdEmpresa = 0
@@ -79,6 +89,7 @@
         _Mes2 = 0
         _idNomina = 0
         _OtroPagoBit = 0
+        _Observaciones = String.Empty
     End Sub
     Public Property IdNomina As Integer
         Get
@@ -400,12 +411,12 @@
             _OtroPagoBit = value
         End Set
     End Property
-    Public Property cmd() As Integer
+    Public Property Observaciones() As String
         Get
-            Return _cmd
+            Return _Observaciones
         End Get
-        Set(ByVal value As Integer)
-            _cmd = value
+        Set(ByVal value As String)
+            _Observaciones = value
         End Set
     End Property
 

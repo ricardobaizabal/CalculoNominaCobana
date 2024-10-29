@@ -122,6 +122,7 @@ Public Class ListadoNominaExtraordinaria
         End Select
     End Sub
     Private Sub btnAgregarNominaE_Click(sender As Object, e As EventArgs) Handles btnAgregarNominaE.Click
+        Session("Folio") = Nothing
         Response.Redirect("GeneracionDeNominaExtraordinaria.aspx")
     End Sub
     Private Sub btnBuscarNominas_Click(sender As Object, e As EventArgs) Handles btnBuscarNominas.Click

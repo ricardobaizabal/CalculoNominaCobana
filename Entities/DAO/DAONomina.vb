@@ -107,21 +107,24 @@ Partial Public Class Nomina
     End Function
     Public Function InsertaCampoNomina(ByVal mi_cliente_id As Integer) As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@mi_cliente_id", mi_cliente_id))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pFechaPago", FechaPago))
-        p.Add(New SqlParameter("@mi_cliente_id", mi_cliente_id))
+        p.Add(New SqlParameter("@pObservaciones", Observaciones))
         dt = db.ExecuteSP("pAgregarCampoNomina", p)
         Return dt
     End Function
+    Public Sub ActualizarObservacionesNomina()
+        p.Clear()
+        p.Add(New SqlParameter("@pIdNomina", IdNomina))
+        p.Add(New SqlParameter("@pObservaciones", Observaciones))
+        db.ExecuteSPWithParams("pActualizarObservacionesNomina", p)
+    End Sub
     Public Function ConsultarNominaPorFolio(ByVal folio As Integer) As DataTable
-        Dim p As New List(Of SqlParameter)()
+        p.Clear()
         p.Add(New SqlParameter("@ID", folio))
-
-        ' Convertir List(Of SqlParameter) a ArrayList
-        Dim parametros As New ArrayList(p.ToArray())
-
-        Dim dt As DataTable = db.ExecuteSP("pConsultarPorIdNominaExtraordinaria", parametros)
+        Dim dt As DataTable = db.ExecuteSP("pConsultarPorIdNominaExtraordinaria", p)
         Return dt
     End Function
     Public Function ConsultarEmpleadosCatorcenal() As DataTable

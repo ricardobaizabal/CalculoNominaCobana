@@ -113,6 +113,15 @@ Partial Public Class GeneracionDeNominaExtraordinaria
     Protected WithEvents fchPago As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
+    '''Control txtObservaciones.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtObservaciones As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
     '''Control btnRegresar.
     '''</summary>
     '''<remarks>
@@ -120,6 +129,15 @@ Partial Public Class GeneracionDeNominaExtraordinaria
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents btnRegresar As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control btnAgregarNominaE.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnAgregarNominaE As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnModificacionDeNomina.
@@ -266,13 +284,13 @@ Partial Public Class GeneracionDeNominaExtraordinaria
     Protected WithEvents lblTitulo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblEjercicio.
+    '''Control lblFolio.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblFolio As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblRazonSocial.
@@ -284,13 +302,13 @@ Partial Public Class GeneracionDeNominaExtraordinaria
     Protected WithEvents lblRazonSocial As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblNoPeriodo.
+    '''Control lblEjercicio.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblNoPeriodo As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblTipoNomina.
