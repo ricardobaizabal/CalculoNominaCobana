@@ -6,7 +6,7 @@ Partial Public Class Infonavit
 
     Public Function ConsultarEmpleadosConDescuentoInfonavit() As DataTable
         p.Clear()
-        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pIdEmpleado", IdEmpleado))
         p.Add(New SqlParameter("@pIdPeriodo", IdPeriodo))
         dt = db.ExecuteSP("pConsultarEmpleadosConDescuentoInfonavit", p)

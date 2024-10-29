@@ -15,7 +15,7 @@ Public Class AgregarEditarEmpleado
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         Dim cConcepto As New Entities.Catalogos
-        Dim objCat As New DataControl(1)
+        Dim objCat As New DataControl()
 
         If Not IsPostBack Then
             objCat.CatalogoRad(ddlEstado, cConcepto.ConsultarEstado, True)
@@ -65,7 +65,7 @@ Public Class AgregarEditarEmpleado
 
     End Sub
     Private Sub anexosList_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles anexosList.ItemCommand
-        Dim ObjData As New DataControl(1)
+        Dim ObjData As New DataControl()
         Select Case e.CommandName
             Case "cmdDelete"
                 ObjData.RunSQLQuery("exec pPersonalAdministrado @cmd=14, @anexoid='" & e.CommandArgument & "'")
@@ -226,7 +226,7 @@ Public Class AgregarEditarEmpleado
     End Sub
     Private Sub ddlEstado_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlEstado.SelectedIndexChanged
         Dim cConcepto As New Entities.Catalogos
-        Dim objCat As New DataControl(1)
+        Dim objCat As New DataControl()
         'objCat.Catalogo(ddlMunicipio, 0, cConcepto.ConsultaMunicipio(ddlEstado.SelectedValue), True)
         objCat.CatalogoRad(ddlMunicipio, cConcepto.ConsultaMunicipio(ddlEstado.SelectedValue), True, False)
         objCat = Nothing
@@ -250,9 +250,9 @@ Public Class AgregarEditarEmpleado
                 excedente_dinero = 0
             End Try
 
-            Dim objData As New DataControl(1)
+            Dim objData As New DataControl()
             If EmployeeID.Value = 0 Then
-                Dim conn As New SqlConnection(Session("conexion"))
+                Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
                 Try
                     Dim cmd As New SqlCommand("EXEC pPersonalAdministrado @cmd=20, @curp='" & LTrim(RTrim(txtCURP.Text)).ToString & "'", conn)
                     conn.Open()
@@ -308,7 +308,7 @@ Public Class AgregarEditarEmpleado
         Dim userid As String = Nothing
         userid = Session("usuarioid")
 
-        Dim conn As New SqlConnection(Session("conexion"))
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
 
@@ -399,7 +399,7 @@ Public Class AgregarEditarEmpleado
                 '
                 '   Datos Bancarios
                 '
-                Dim ObjData As New DataControl(1)
+                Dim ObjData As New DataControl()
                 Dim ds As New DataSet
                 ds = ObjData.FillDataSet("exec pBeneficiarios @cmd=2, @empleadoid='" & id.ToString & "'")
                 beneficiariosList.MasterTableView.NoMasterRecordsText = "No hay registros para mostrar."
@@ -428,7 +428,7 @@ Public Class AgregarEditarEmpleado
 
                 Dim cConcepto As New Entities.Catalogos
 
-                Dim ObjCat As New DataControl(1)
+                Dim ObjCat As New DataControl()
                 ObjCat.CatalogoRad(ddlTipoDescuento, "select id, nombre from tblTipoDescuentoInfonavit order by nombre asc", True)
                 ObjCat.CatalogoRad(ddlMunicipio, cConcepto.ConsultaMunicipio(ddlEstado.SelectedValue), True)
                 ObjCat = Nothing
@@ -502,7 +502,7 @@ Public Class AgregarEditarEmpleado
     End Sub
     Function muestraDocumentos() As DataSet
 
-        Dim conn As New SqlConnection(Session("conexion"))
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Dim cmd As New SqlDataAdapter("EXEC pPersonalAdministrado  @cmd=13, @empleadoid='" & EmployeeID.Value.ToString & "'", conn)
 
         Dim ds As DataSet = New DataSet
@@ -531,7 +531,7 @@ Public Class AgregarEditarEmpleado
     End Function
     Private Sub btnGuardarDIMSS_Click(sender As Object, e As EventArgs) Handles btnGuardarDIMSS.Click
         Try
-            Dim ObjData As New DataControl(1)
+            Dim ObjData As New DataControl()
             ObjData.RunSQLScalarQuery("EXEC pPersonalAdministrado @cmd=15, @empleadoid='" & EmployeeID.Value.ToString & "', @no_imss='" & txtNoSegSocial.Text & "', @delegacion='" & txtDelegacion.Text & "', @subdelegacion='" & txtSubDelegacion.Text & "', @unidad_medico_familiar='" & txtUnidadMedicoFamiliar.Text & "'")
             ObjData = Nothing
             rwAlerta.RadAlert("Datos guardados exitosamente.", 330, 180, "Alerta", "", "")
@@ -556,7 +556,7 @@ Public Class AgregarEditarEmpleado
             Case "cmdEdit"
                 EditaBeneficiario(e.CommandArgument)
             Case "cmdDelete"
-                Dim ObjData As New DataControl(1)
+                Dim ObjData As New DataControl()
                 ObjData.RunSQLQuery("exec pBeneficiarios @cmd=5, @beneficiarioid='" & e.CommandArgument.ToString & "'")
                 Dim ds As New DataSet
                 ds = ObjData.FillDataSet("exec pBeneficiarios @cmd=2, @empleadoid='" & EmployeeID.Value.ToString & "'")
@@ -568,7 +568,7 @@ Public Class AgregarEditarEmpleado
     End Sub
     Private Sub EditaBeneficiario(ByVal id As Integer)
 
-        Dim conn As New SqlConnection(Session("conexion"))
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
             Dim cmd As New SqlCommand("EXEC pBeneficiarios @cmd=3, @beneficiarioid ='" & id.ToString & "'", conn)
@@ -604,7 +604,7 @@ Public Class AgregarEditarEmpleado
 
             rs.Close()
 
-            Dim ObjData As New DataControl(1)
+            Dim ObjData As New DataControl()
             Dim ds As New DataSet
             ds = ObjData.FillDataSet("exec pBeneficiarios @cmd=2, @empleadoid='" & EmployeeID.Value.ToString & "'")
             beneficiariosList.MasterTableView.NoMasterRecordsText = "No hay registros para mostrar."
@@ -646,7 +646,7 @@ Public Class AgregarEditarEmpleado
         Try
             Dim FechaNacimiento As DateTime
             FechaNacimiento = calfechaNacimientoBeneficiario.SelectedDate
-            Dim ObjData As New DataControl(1)
+            Dim ObjData As New DataControl()
             If BeneficiarioID.Value = 0 Then
                 BeneficiarioID.Value = ObjData.RunSQLScalarQuery("EXEC pBeneficiarios @cmd=1, @empleadoid='" & EmployeeID.Value.ToString & "', @nombre='" & txtNombreBeneficiario.Text & "', @parentescoid='" & ddlParentescoBeneficiario.SelectedValue.ToString & "', @otro_parentesco='" & txtOtroParentesco.Text & "', @fecha_nacimiento='" & FechaNacimiento.ToString("yyyyMMdd") & "', @porcentaje='" & txtPorcentajeBeneficiario.Text & "', @calle='" & txtCalleBeneficiario.Text & "', @num_int='" & txtNoInteriorBeneficiario.Text & "', @num_ext='" & txtNoExteriorBeneficiario.Text & "', @colonia='" & txtColoniaBeneficiario.Text & "', @municipio='" & txtMunicipioBeneficiario.Text & "', @cp='" & txtCPBeneficiario.Text & "', @estadoid='" & ddlEstadoBeneficiario.SelectedValue.ToString & "', @pais='" & txtPaisBeneficiario.Text.ToString & "'")
             Else
@@ -680,7 +680,7 @@ Public Class AgregarEditarEmpleado
     Private Sub btnGuardarDInfonavit_Click(sender As Object, e As EventArgs) Handles btnGuardarDInfonavit.Click
 
         Dim empleadoid As Integer = 0
-        Dim ObjData As New DataControl(1)
+        Dim ObjData As New DataControl()
         Dim FechaInicio, FechaFin As DateTime
         Dim DescuentoBit As Integer = 0
 
@@ -730,7 +730,7 @@ Public Class AgregarEditarEmpleado
                 rwAlerta.RadAlert("Proporciona el No. de Cliente Fonacot", 330, 180, "Alerta", "", "")
             Else
                 Dim creditoid As Integer = 0
-                Dim ObjData As New DataControl(1)
+                Dim ObjData As New DataControl()
                 Dim ds As New DataSet
                 ds = ObjData.FillDataSet("EXEC pCreditoFonacot  @cmd=3, @empleadoid='" & EmployeeID.Value.ToString & "'")
 
@@ -776,7 +776,7 @@ Public Class AgregarEditarEmpleado
         End Select
     End Sub
     Private Sub EditaCreditoFonacot(ByVal creditoid As Integer)
-        Dim ObjData As New DataControl(1)
+        Dim ObjData As New DataControl()
         Dim ds As New DataSet
         ds = ObjData.FillDataSet("EXEC pCreditoFonacot @cmd=4, @id='" & creditoid.ToString & "'")
         If ds.Tables(0).Rows.Count > 0 Then
@@ -819,7 +819,7 @@ Public Class AgregarEditarEmpleado
         Thread.CurrentThread.CurrentUICulture = New CultureInfo("en-US")
         Try
 
-            Dim ObjData As New DataControl(1)
+            Dim ObjData As New DataControl()
 
             Dim activobit As Integer = 0
             If chkVigentePrestamo.Checked Then
@@ -854,7 +854,7 @@ Public Class AgregarEditarEmpleado
         End Select
     End Sub
     Private Sub EditaPrestamoPersonal(ByVal prestamoid As Integer)
-        Dim ObjData As New DataControl(1)
+        Dim ObjData As New DataControl()
         Dim ds As New DataSet
         ds = ObjData.FillDataSet("EXEC pPrestamoPersonal @cmd=3, @id='" & prestamoid.ToString & "'")
         If ds.Tables(0).Rows.Count > 0 Then
@@ -883,7 +883,7 @@ Public Class AgregarEditarEmpleado
     Private Sub btnGuardarContrato_Click(sender As Object, e As EventArgs) Handles btnGuardarContrato.Click
         If Page.IsValid Then
 
-            Dim conn As New SqlConnection(Session("conexion"))
+            Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
             Try
                 Dim cmd As New SqlCommand("EXEC pPersonalAdministrado @cmd=22, @empleadoid='" & EmployeeID.Value.ToString & "'", conn)
                 conn.Open()
@@ -922,7 +922,7 @@ Public Class AgregarEditarEmpleado
         'lblMensajeContrato.Text = ""
         lblValidaFechaBaja.Text = ""
 
-        Dim conn As New SqlConnection(Session("conexion"))
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
 
@@ -935,7 +935,7 @@ Public Class AgregarEditarEmpleado
             rs = cmd.ExecuteReader()
 
             If rs.Read Then
-                Dim ObjCat As New DataControl(1)
+                Dim ObjCat As New DataControl()
 
                 'ddlCliente.SelectedValue = rs("clienteid")
                 ddlEjecutivo.SelectedValue = rs("ejecutivoid")
@@ -1552,7 +1552,7 @@ Public Class AgregarEditarEmpleado
     End Sub
     Private Sub NuevosCatalogos()
         Dim cConcepto As New Entities.Catalogos
-        Dim ObjCat As New DataControl(1)
+        Dim ObjCat As New DataControl()
         ObjCat.CatalogoRad(ddlTipoContrato, cConcepto.ConsultaTipoContrato, True)
         ObjCat.CatalogoRad(ddlTipoJornada, cConcepto.ConsultarJornada, True)
         ObjCat.CatalogoRad(ddlRegimenContratacion, cConcepto.ConsultarRegimenContratacion, True)
@@ -1579,7 +1579,7 @@ Public Class AgregarEditarEmpleado
             NoRecomendableBit = 0
         End If
 
-        Dim ObjData As New DataControl(1)
+        Dim ObjData As New DataControl()
         Try
             If txtRelojChecadorId.Text.Length = 0 Then txtRelojChecadorId.Text = "0"
             Dim sql As String = ""
@@ -1719,7 +1719,7 @@ Public Class AgregarEditarEmpleado
                 strAnexo = newFileName
 
                 anexo.SaveAs(Server.MapPath("~\anexos\") & strAnexo)
-                Dim ObjData As New DataControl(1)
+                Dim ObjData As New DataControl()
                 ObjData.RunSQLQuery("exec pPersonalAdministrado @cmd=12, @empleadoid='" & EmployeeID.Value.ToString & "', @idtipoDocumento='" & cboAnexo.SelectedValue & "', @documento='" & strAnexo.ToString & "', @userid='" & Session("usuarioid").ToString & "'")
                 ObjData = Nothing
 

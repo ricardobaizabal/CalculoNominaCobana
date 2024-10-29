@@ -74,7 +74,7 @@ Partial Public Class Empresa
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents tipoContribuyenteid As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents tipoContribuyenteid As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control valNombreComercial.
@@ -353,7 +353,7 @@ Partial Public Class Empresa
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents estadoid As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents estadoid As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control txtTownship.
@@ -570,6 +570,51 @@ Partial Public Class Empresa
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents rwAlerta As Global.Telerik.Web.UI.RadWindowManager
+
+    '''<summary>
+    '''Control wndEmpresa.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents wndEmpresa As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''Control cmbEmpresa.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbEmpresa As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control ValidarFechaInicio.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents ValidarFechaInicio As Global.System.Web.UI.WebControls.RequiredFieldValidator
+
+    '''<summary>
+    '''Control btnGuardarEmpresa.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGuardarEmpresa As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control btnSalir.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnSalir As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control RadAjaxLoadingPanel1.

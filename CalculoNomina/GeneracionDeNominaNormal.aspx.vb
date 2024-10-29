@@ -29,7 +29,7 @@ Public Class GeneracionDeNominaNormal
     Private UMI As Double
     Private SalarioDiarioIntegradoTrabajador As Double
     Private SalarioMinimoDiarioGeneral As Double
-    Private Imss As Double
+    Private IMSS As Double
 
     Private Dias As Integer = 0
     Private DiasVacaciones As Integer
@@ -194,7 +194,7 @@ Public Class GeneracionDeNominaNormal
     Public IncapacidadPorAccidente As Double
     Public FolioXml As String
 
-    'Private IdEmpresa As Integer = 0
+    Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private Periodo As Integer = 0
     Private dtEmpleados As DataTable
@@ -230,10 +230,6 @@ Public Class GeneracionDeNominaNormal
                 cmbPeriodicidad.Enabled = False
                 cmbPeriodo.Enabled = False
                 cmbPeriodo_SelectedIndexChanged(cmbPeriodo, EventArgs.Empty)
-
-                ' Eliminar el folio de la sesión después de haberlo utilizado
-                'Session.Remove("Folio")
-                'Session("Folio") = Nothing
             ElseIf Not String.IsNullOrEmpty(Request("id")) Then
                 periodoID.Value = Request("id")
                 cmbPeriodicidad.SelectedValue = 1
@@ -276,21 +272,19 @@ Public Class GeneracionDeNominaNormal
 
         Call CargarVariablesGenerales()
 
-        Dim cEmpleado As New Entities.Empleado
-        ' Obtener los datos que quieres exportar, aquí se usa una tabla DataTable como ejemplo
-        Dim cNomina As New Entities.Nomina
-        cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
-        cNomina.Periodo = cmbPeriodo.SelectedValue
-        cNomina.Cliente = cmbCliente.SelectedValue
-        cNomina.EsEspecial = True
         Dim dt As New DataTable()
+        Dim cEmpleado As New Entities.Empleado
+        Dim cNomina As New Entities.Nomina
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.Periodo = cmbPeriodo.SelectedValue
+        cNomina.EsEspecial = True
         dt = cNomina.ConsultarDetalleNomina()
-
 
         ' Crear el contenido CSV
         Dim csvContent As New StringBuilder()
-
         csvContent.Append("Clave Empleado,")
         csvContent.Append("Nombre Empleado,")
         csvContent.Append("Monto,")
@@ -413,18 +407,19 @@ Public Class GeneracionDeNominaNormal
         Call CargarVariablesGenerales()
 
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdEmpresa = IdEmpresa
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.ExtraordinarioBit = False
         ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
         cmbPeriodo.SelectedValue = sel
         cPeriodo = Nothing
+
         If sel > 0 Then
             cmbPeriodo.SelectedValue = sel
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
             Dim cConfiguracion As New Entities.Configuracion
-            'cConfiguracion.IdEmpresa = Session("clienteid")
+            cConfiguracion.IdEmpresa = IdEmpresa
             cConfiguracion.IdUsuario = Session("usuarioid")
             cConfiguracion.IdPeriodo = cmbPeriodo.SelectedValue
             cConfiguracion.ActualizaPeriodoNomina()
@@ -456,14 +451,15 @@ Public Class GeneracionDeNominaNormal
         Dim Nomina As New Entities.Nomina()
         Nomina.TipoNomina = 1 'Semanal
         Nomina.Periodo = cmbPeriodo.SelectedValue
-        Nomina.Cliente = cmbCliente.SelectedValue
+        Nomina.IdEmpresa = IdEmpresa
+        Nomina.IdCliente = cmbCliente.SelectedValue
         Nomina.FechaPago = fchPago.SelectedDate
 
         Dim _Nominaid As Integer = 0
         If Session("Folio") IsNot Nothing AndAlso Not String.IsNullOrEmpty(Session("Folio").ToString()) Then
             _Nominaid = Integer.Parse(Session("Folio").ToString())
         Else
-            Dim idNomina As DataTable = Nomina.InsertaCampoNomina(cmbCliente.SelectedValue)
+            Dim idNomina As DataTable = Nomina.InsertaCampoNomina()
             For Each row As DataRow In idNomina.Rows
                 _Nominaid = Convert.ToInt32(row(0))
                 Session("Folio") = Convert.ToInt32(row(0))
@@ -513,8 +509,8 @@ Public Class GeneracionDeNominaNormal
                 If oDataRow("ClaveRegimenContratacion") = 2 Then 'Sueldos y salarios
                     SalarioDiarioIntegradoTrabajador = Math.Round(oDataRow("IntegradoIMSS"), 6)
                     Call CalcularImss()
-                    Imss = Imss * Dias
-                    Imss = Math.Round(Imss, 6)
+                    IMSS = IMSS * Dias
+                    IMSS = Math.Round(IMSS, 6)
                 End If
 
                 Impuesto = Math.Round(Impuesto, 6)
@@ -526,7 +522,7 @@ Public Class GeneracionDeNominaNormal
                 Dim DescuentoInvonavit As Decimal
                 Dim datos As New DataTable
                 Dim Infonavit As New Entities.Infonavit()
-                'Infonavit.IdEmpresa = IdEmpresa
+                Infonavit.IdCliente = cmbCliente.SelectedValue
                 Infonavit.IdEmpleado = oDataRow("NoEmpleado")
                 Infonavit.IdPeriodo = cmbPeriodo.SelectedValue
                 datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
@@ -552,7 +548,7 @@ Public Class GeneracionDeNominaNormal
                 ''''''// Consultar SI tiene CREDITO FONACOT //'''''''
                 datos = New DataTable
                 Dim Fonacot As New Entities.Fonacot()
-                'Fonacot.IdEmpresa = Session("clienteid")
+                Fonacot.IdEmpresa = Session("IdEmpresa")
                 Fonacot.NoEmpleado = oDataRow("NoEmpleado")
                 datos = Fonacot.ConsultarEmpleadosConCreditoFonacot()
                 Fonacot = Nothing
@@ -579,7 +575,7 @@ Public Class GeneracionDeNominaNormal
                 ''''''// Consultar SI tiene ADEUDO PERSONAL //'''''''
                 datos = New DataTable
                 Dim PrestamoPersonal As New Entities.PrestamoPersonal()
-                'PrestamoPersonal.IdEmpresa = Session("clienteid")
+                PrestamoPersonal.IdEmpresa = Session("IdEmpresa")
                 PrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
                 datos = PrestamoPersonal.ConsultarEmpleadosConPrestamoPersonal()
                 PrestamoPersonal = Nothing
@@ -601,7 +597,7 @@ Public Class GeneracionDeNominaNormal
 
                     Dim dts As New DataTable
                     PrestamoPersonal = New Entities.PrestamoPersonal()
-                    'PrestamoPersonal.IdEmpresa = Session("clienteid")
+                    PrestamoPersonal.IdEmpresa = Session("IdEmpresa")
                     PrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
                     dts = PrestamoPersonal.ConsultarPrestamosEmpleado()
                     PrestamoPersonal = Nothing
@@ -702,7 +698,7 @@ Public Class GeneracionDeNominaNormal
             SubsidioAplicado = 0
             SubsidioEfectivo = 0
             Agregar = 1
-            'Imss
+            'IMSS
             'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             'Pasos para agregar una percepcion
             'Checar si la incidencia es exenta o gravada para ver si procede el calculo O se guarda el registro directo sin pasar por el calculo
@@ -728,8 +724,8 @@ Public Class GeneracionDeNominaNormal
                     CalcularSubsidio()
 
                     Call CalcularImss()
-                    Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                    Imss = Math.Round(Imss, 6)
+                    IMSS = IMSS * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+                    IMSS = Math.Round(IMSS, 6)
 
                     Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
                     Impuesto = Math.Round(Impuesto, 6)
@@ -770,10 +766,9 @@ Public Class GeneracionDeNominaNormal
 
             Dim cNomina As New Nomina()
             If CvoConcepto <= 50 Then
-                'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + cmbConcepto.SelectedValue.ToString + "', 'P', '" + txtUnidadIncidencia.Text + "', " + txtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, 0)"
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -798,10 +793,9 @@ Public Class GeneracionDeNominaNormal
                 cNomina.GuadarNominaPeriodo()
             ElseIf CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
                 'Deducciones por faltas, permisos o incapacidades
-                'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CboConceptos.SelectedValue.ToString + "', 'D', '" + TxtUnidadIncidencia.Text + "', " + TxtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, " + TxtImporteIncidencia.Text + ")"
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -825,10 +819,9 @@ Public Class GeneracionDeNominaNormal
                 cNomina.IdNomina = IdNomina
                 cNomina.GuadarNominaPeriodo()
             ElseIf CvoConcepto >= 61 Then
-                'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CboConceptos.SelectedValue.ToString + "', 'D', '" + TxtUnidadIncidencia.Text + "', " + TxtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, " + TxtImporteIncidencia.Text + ")"
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -858,10 +851,9 @@ Public Class GeneracionDeNominaNormal
             'solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
 
             If CvoConcepto < 51 Or CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
-                'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 52, 'D', 1, " + Impuesto.ToString + ", 'N', 'N', 'N', 'A', 0, " + Impuesto.ToString + ")"
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -886,10 +878,9 @@ Public Class GeneracionDeNominaNormal
                 cNomina.GuadarNominaPeriodo()
 
                 'If SubsidioAplicado > 0 Then
-                '    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 54, 'P', 1, " + SubsidioAplicado.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioAplicado.ToString + ")"
                 '    cNomina = New Nomina()
-                '    'cNomina.IdEmpresa = IdEmpresa
-                '    cNomina.Cliente = cmbCliente.SelectedValue
+                '    cNomina.IdEmpresa = IdEmpresa
+                '    cNomina.IdCliente = cmbCliente.SelectedValue
                 '    cNomina.Ejercicio = IdEjercicio
                 '    cNomina.TipoNomina = 1 'Semanal
                 '    cNomina.Periodo = Periodo
@@ -914,11 +905,10 @@ Public Class GeneracionDeNominaNormal
                 '    cNomina.GuadarNominaPeriodo()
                 'End If
                 'If SubsidioEfectivo > 0 Then
-                '    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 55, 'P', 1, " + SubsidioEfectivo.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioEfectivo.ToString + ")"
                 '    cNomina = New Nomina()
-                '    'cNomina.IdEmpresa = IdEmpresa
+                '    cNomina.IdEmpresa = IdEmpresa
                 '    cNomina.Ejercicio = IdEjercicio
-                '    cNomina.Cliente = cmbCliente.SelectedValue
+                '    cNomina.IdCliente = cmbCliente.SelectedValue
                 '    cNomina.TipoNomina = 1 'Semanal
                 '    cNomina.Periodo = Periodo
                 '    cNomina.NoEmpleado = NoEmpleado
@@ -941,12 +931,11 @@ Public Class GeneracionDeNominaNormal
                 '    cNomina.DiasPagados = cPeriodo.Dias
                 '    cNomina.GuadarNominaPeriodo()
                 'End If
-                If Imss > 0 Then
-                    'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 56, 'D', 1, " + Imss.ToString + ", 'N', 'N', 'N', 'A', 0, " + Imss.ToString + ")"
+                If IMSS > 0 Then
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
-                    cNomina.Cliente = cmbCliente.SelectedValue
+                    cNomina.IdCliente = cmbCliente.SelectedValue
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = Periodo
                     cNomina.NoEmpleado = NoEmpleado
@@ -954,9 +943,9 @@ Public Class GeneracionDeNominaNormal
                     cNomina.IdContrato = IdContrato
                     cNomina.TipoConcepto = "D"
                     cNomina.Unidad = 1
-                    cNomina.Importe = Imss
+                    cNomina.Importe = IMSS
                     cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = Imss
+                    cNomina.ImporteExento = IMSS
                     cNomina.Generado = ""
                     cNomina.Timbrado = ""
                     cNomina.Enviado = ""
@@ -981,7 +970,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1018,7 +1007,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1073,14 +1062,11 @@ Public Class GeneracionDeNominaNormal
             TiempoExtraordinarioDentroDelMargenLegal = 0
             TiempoExtraordinarioFueraDelMargenLegal = 0
 
-            ''''''''' Pendiente leer '''''''''
-            'SalarioMinimoDiarioGeneral = 73.04
-
             Call CargarVariablesGenerales()
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1342,9 +1328,8 @@ Public Class GeneracionDeNominaNormal
     Public Sub BorrarDeducciones(ByVal NoEmpleado As Int64)
         Try
             Call CargarVariablesGenerales()
-            'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=86 AND TIPOCONCEPTO='D'"
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1353,9 +1338,8 @@ Public Class GeneracionDeNominaNormal
             cNomina.TipoConcepto = "D"
             cNomina.EliminaConceptoEmpleado()
 
-            'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=54 AND TIPOCONCEPTO='P'"
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1364,9 +1348,8 @@ Public Class GeneracionDeNominaNormal
             cNomina.TipoConcepto = "P"
             cNomina.EliminaConceptoEmpleado()
 
-            'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=55 AND TIPOCONCEPTO='P'"
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1375,9 +1358,8 @@ Public Class GeneracionDeNominaNormal
             cNomina.TipoConcepto = "P"
             cNomina.EliminaConceptoEmpleado()
 
-            'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=56 AND TIPOCONCEPTO='D'"
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1386,9 +1368,8 @@ Public Class GeneracionDeNominaNormal
             cNomina.TipoConcepto = "D"
             cNomina.EliminaConceptoEmpleado()
 
-            'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=108 AND TIPOCONCEPTO='DE'"
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1397,9 +1378,8 @@ Public Class GeneracionDeNominaNormal
             cNomina.TipoConcepto = "DE"
             cNomina.EliminaConceptoEmpleado()
 
-            'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=109 AND TIPOCONCEPTO='DE'"
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1443,8 +1423,7 @@ Public Class GeneracionDeNominaNormal
             Dim cNomina As New Nomina()
 
             If Agregar = 1 Then
-                'Me.oDataAdapterChecarPercepcionesGravadasSql = New SqlDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P'", oConexionSql)
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1452,9 +1431,7 @@ Public Class GeneracionDeNominaNormal
                 cNomina.TipoConcepto = "P"
                 dt = cNomina.ConsultarConceptosEmpleado()
             ElseIf Agregar = 0 Then
-                ''''''''''''''''''''''PENDIENTE'''''''''''''''''''''''''''''
-                'Me.oDataAdapterChecarPercepcionesGravadas = New OleDbDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P' AND CVOCONCEPTO<>" + NumeroConcepto.ToString + "", oConexion)
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1464,7 +1441,7 @@ Public Class GeneracionDeNominaNormal
                 cNomina.CvoConcepto = CvoConcepto
                 dt = cNomina.ConsultarConceptosEmpleado()
             Else
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1696,20 +1673,20 @@ Public Class GeneracionDeNominaNormal
     End Sub
     Private Sub CalcularImss()
 
-        Imss = 0
+        IMSS = 0
         UMA = 0
         Call CargarVariablesGenerales()
 
         If SalarioDiarioIntegradoTrabajador <= SalarioMinimoDiarioGeneral Then
-            Imss = 0
+            IMSS = 0
         ElseIf SalarioDiarioIntegradoTrabajador > SalarioMinimoDiarioGeneral And SalarioDiarioIntegradoTrabajador < (UMA * 3) Then
-            Imss = SalarioDiarioIntegradoTrabajador * 0.02375
+            IMSS = SalarioDiarioIntegradoTrabajador * 0.02375
         ElseIf SalarioDiarioIntegradoTrabajador > (UMA * 3) And SalarioDiarioIntegradoTrabajador < (UMA * 25) Then
-            Imss = SalarioDiarioIntegradoTrabajador * 0.02375
-            Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (UMA * 3)) * 0.004)
+            IMSS = SalarioDiarioIntegradoTrabajador * 0.02375
+            IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (UMA * 3)) * 0.004)
         ElseIf SalarioDiarioIntegradoTrabajador > (UMA * 25) Then
-            Imss = (SalarioDiarioIntegradoTrabajador - (UMA * 25)) * 0.02375
-            Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (UMA * 22)) * 0.004)
+            IMSS = (SalarioDiarioIntegradoTrabajador - (UMA * 25)) * 0.02375
+            IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (UMA * 22)) * 0.004)
         End If
 
     End Sub
@@ -1724,8 +1701,8 @@ Public Class GeneracionDeNominaNormal
             Dim cNomina = New Nomina()
             If RegimenContratacion = 2 Then 'Sueldos y salarios
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -1751,8 +1728,8 @@ Public Class GeneracionDeNominaNormal
                 cNomina.GuadarNominaPeriodo()
             ElseIf RegimenContratacion >= 5 Then 'Asimilados a salarios
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -1778,8 +1755,8 @@ Public Class GeneracionDeNominaNormal
             End If
 
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
-            cNomina.Cliente = cmbCliente.SelectedValue
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = Periodo
@@ -1827,7 +1804,7 @@ Public Class GeneracionDeNominaNormal
 
             If Impuesto > 0 Then
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1843,7 +1820,7 @@ Public Class GeneracionDeNominaNormal
                 cNomina.Timbrado = ""
                 cNomina.Enviado = ""
                 cNomina.Situacion = "A"
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.EsEspecial = False
                 cNomina.FechaIni = cPeriodo.FechaInicialDate
                 cNomina.FechaFin = cPeriodo.FechaFinalDate
@@ -1855,8 +1832,8 @@ Public Class GeneracionDeNominaNormal
 
             If SubsidioAplicado > 0 Then
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
-                cNomina.Cliente = cmbCliente.SelectedValue
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -1882,10 +1859,10 @@ Public Class GeneracionDeNominaNormal
             End If
 
             If RegimenContratacion = 2 Then 'Sueldos y salarios
-                If Imss > 0 Then
+                If IMSS > 0 Then
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
-                    cNomina.Cliente = cmbCliente.SelectedValue
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = Periodo
@@ -1894,9 +1871,9 @@ Public Class GeneracionDeNominaNormal
                     cNomina.IdContrato = IdContrato
                     cNomina.TipoConcepto = "D"
                     cNomina.Unidad = 1
-                    cNomina.Importe = Imss
+                    cNomina.Importe = IMSS
                     cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = Imss
+                    cNomina.ImporteExento = IMSS
                     cNomina.Generado = ""
                     cNomina.Timbrado = ""
                     cNomina.Enviado = ""
@@ -1917,6 +1894,8 @@ Public Class GeneracionDeNominaNormal
     End Sub
     Private Sub cmbCliente_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbCliente.SelectedIndexChanged
 
+        Call CargarVariablesGenerales()
+
         If cmbPeriodo.SelectedValue > 0 Then
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
         Else
@@ -1931,18 +1910,23 @@ Public Class GeneracionDeNominaNormal
             btnGeneraTxtDispersion.Enabled = False
         End If
 
-
         Dim cConfiguracion As New Entities.Configuracion
+        cConfiguracion.IdEmpresa = IdEmpresa
         cConfiguracion.IdUsuario = Session("usuarioid")
         cConfiguracion.IdPeriodo = cmbPeriodo.SelectedValue
         cConfiguracion.ActualizaPeriodoNomina()
         cConfiguracion.ActualizaSalarioMinimoDiarioGeneral()
         cConfiguracion = Nothing
+
         Call CargarDatos()
 
     End Sub
     Private Sub cmbPeriodo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPeriodo.SelectedIndexChanged
+
+        Call CargarVariablesGenerales()
+
         periodoID.Value = cmbPeriodo.SelectedValue
+
         If cmbPeriodo.SelectedValue > 0 Then
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
             Dim cPeriodo As New Entities.Periodo()
@@ -1968,6 +1952,7 @@ Public Class GeneracionDeNominaNormal
         End If
 
         Dim cConfiguracion As New Entities.Configuracion
+        cConfiguracion.IdEmpresa = IdEmpresa
         cConfiguracion.IdUsuario = Session("usuarioid")
         cConfiguracion.IdPeriodo = cmbPeriodo.SelectedValue
         cConfiguracion.ActualizaPeriodoNomina()
@@ -1990,17 +1975,21 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            cNomina.Cliente = cmbCliente.SelectedValue
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
+            cNomina.EsEspecial = False
             dt = cNomina.ConsultarDatosGeneralesNomina()
 
             Dim dt_Empleado As New DataTable()
+            cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = 1
+            cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
-            cNomina.Cliente = cmbCliente.SelectedValue
             cNomina.EsEspecial = False
             dt_Empleado = cNomina.ConsultarDetalleNomina()
             cNomina = Nothing
@@ -2048,14 +2037,14 @@ Public Class GeneracionDeNominaNormal
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
-        'cConfiguracion.IdEmpresa = Session("clienteid")
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
-                'IdEmpresa = oDataRow("IdEmpresa")
+                IdEmpresa = oDataRow("IdEmpresa")
                 IdEjercicio = oDataRow("IdEjercicio")
                 Periodo = oDataRow("IdPeriodo")
                 SalarioMinimoDiarioGeneral = oDataRow("SalarioMinimoDiarioGeneral")
@@ -2072,23 +2061,15 @@ Public Class GeneracionDeNominaNormal
         Call CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
-        cNomina.Cliente = cmbCliente.SelectedValue
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
+        cNomina.EsEspecial = False
         dtEmpleados = cNomina.ConsultarDetalleNomina()
         grdEmpleadosSemanal.DataSource = dtEmpleados
         grdEmpleadosSemanal.DataBind()
-        ' Ordena el DataTable por la columna fechaPago
-        'Dim dv As New DataView(dtEmpleados)
-        'dv.Sort = "FechaPago ASC"
-
-        ' Obtén el primer valor de la columna fechaPago
-        'Dim firstFechaPago As DateTime = CType(dv(0)("FechaPago"), DateTime)
-
-        ' Guarda el primer valor en una variable
-        'fchPago.SelectedDate = firstFechaPago
-        'fchPago.Enabled = False
         cNomina = Nothing
     End Sub
     Private Sub grdEmpleadosSemanal_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdEmpleadosSemanal.NeedDataSource
@@ -2096,10 +2077,12 @@ Public Class GeneracionDeNominaNormal
         Call CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
+        cNomina.EsEspecial = False
         grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNomina()
         cNomina = Nothing
     End Sub
@@ -2128,17 +2111,21 @@ Public Class GeneracionDeNominaNormal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        cNomina.Cliente = cmbCliente.SelectedValue
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
+        cNomina.EsEspecial = False
         dt = cNomina.ConsultarDatosGeneralesNomina()
 
         Dim dt_Empleado As New DataTable()
+        cNomina = New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = 1
+        cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
-        cNomina.Cliente = cmbCliente.SelectedValue
         cNomina.EsEspecial = False
         dt_Empleado = cNomina.ConsultarDetalleNomina()
 
@@ -2290,7 +2277,7 @@ Public Class GeneracionDeNominaNormal
             Call CargarVariablesGenerales()
 
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2311,7 +2298,7 @@ Public Class GeneracionDeNominaNormal
             Call CargarVariablesGenerales()
 
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2372,7 +2359,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2507,9 +2494,8 @@ Public Class GeneracionDeNominaNormal
             Call CargarVariablesGenerales()
 
             If NoConceptoGravado.ToString.Length > 0 Then
-                'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + oDataRowTrabajador("NOEMPLEADO").ToString + "', '" + NoConceptoGravado.ToString + "', 'G', 1, " + ImporteGravado.ToString + ", 'N', 'N', 'N', 'A')"
                 Dim cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -2520,9 +2506,8 @@ Public Class GeneracionDeNominaNormal
                 cNomina.Importe = ImporteGravado
             End If
             If NoConceptoExento.ToString.Length > 0 Then
-                'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + oDataRowTrabajador("NOEMPLEADO").ToString + "', '" + NoConceptoExento.ToString + "', 'E', 1, " + ImporteExento.ToString + ", 'N', 'N', 'N', 'A')"
                 Dim cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -2588,7 +2573,7 @@ Public Class GeneracionDeNominaNormal
         Dim LugarExpedicion As String = ""
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.Id = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -2603,7 +2588,7 @@ Public Class GeneracionDeNominaNormal
 
         dt = New DataTable
         cNomina = New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2650,7 +2635,7 @@ Public Class GeneracionDeNominaNormal
         '
         Dim dt As New DataTable()
         Dim cNomina = New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = Periodo
@@ -2670,7 +2655,7 @@ Public Class GeneracionDeNominaNormal
     Private Sub CrearNodoEmisor(ByVal Nodo As XmlNode)
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.Id = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim Emisor As XmlElement
@@ -2925,7 +2910,7 @@ Public Class GeneracionDeNominaNormal
                 Dim registro_patronal As String = ""
                 Dim fac_rfc As String = ""
 
-                ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+                ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("IdEmpresa") & "'")
 
                 If ds.Tables.Count > 0 Then
                     For Each row As DataRow In ds.Tables(0).Rows
@@ -3030,7 +3015,7 @@ Public Class GeneracionDeNominaNormal
 
                 dt = New DataTable
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -3081,7 +3066,7 @@ Public Class GeneracionDeNominaNormal
 
                 dt = New DataTable
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -3132,7 +3117,7 @@ Public Class GeneracionDeNominaNormal
 
                 dt = New DataTable
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -3301,7 +3286,7 @@ Public Class GeneracionDeNominaNormal
             Call CargarVariablesGenerales()
 
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -3366,7 +3351,7 @@ Public Class GeneracionDeNominaNormal
     Private Function CertificadoCliente() As String
         Dim Certificado As String = ""
         Dim ObjData As New DataControl(0)
-        Certificado = ObjData.RunSQLScalarQueryString("select top 1 isnull(certificado,'') as certificado from tblCliente where id='" & Session("clienteid").ToString & "'")
+        Certificado = ObjData.RunSQLScalarQueryString("select top 1 isnull(certificado,'') as certificado from tblCliente where id='" & Session("IdEmpresa").ToString & "'")
         Dim elements() As String = Certificado.Split(New Char() {"."c}, StringSplitOptions.RemoveEmptyEntries)
         ObjData = Nothing
 
@@ -3376,7 +3361,7 @@ Public Class GeneracionDeNominaNormal
     Private Function ContrasenaPfx() As String
         Dim contrasena_llave_privada As String = ""
         Dim ObjData As New DataControl(0)
-        contrasena_llave_privada = ObjData.RunSQLScalarQueryString("select top 1 isnull(contrasena,'') as contrasena from tblCliente where id='" & Session("clienteid").ToString & "'")
+        contrasena_llave_privada = ObjData.RunSQLScalarQueryString("select top 1 isnull(contrasena,'') as contrasena from tblCliente where id='" & Session("IdEmpresa").ToString & "'")
         ObjData = Nothing
 
         Return contrasena_llave_privada
@@ -3400,7 +3385,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "N"
@@ -3422,7 +3407,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal 
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -3472,7 +3457,7 @@ Public Class GeneracionDeNominaNormal
         Dim ObjData As New DataControl(0)
         Dim ds As New DataSet
 
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("IdEmpresa") & "'")
 
         If ds.Tables.Count > 0 Then
             For Each row As DataRow In ds.Tables(0).Rows
@@ -3500,7 +3485,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmisor As New DataTable
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.Id = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -3736,7 +3721,7 @@ Public Class GeneracionDeNominaNormal
         Dim ObjData As New DataControl(0)
         Dim ds As New DataSet
 
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("IdEmpresa") & "'")
 
         If ds.Tables.Count > 0 Then
             For Each row As DataRow In ds.Tables(0).Rows
@@ -3824,7 +3809,7 @@ Public Class GeneracionDeNominaNormal
 
                     CantidadTexto = "( " + Num2Text(total - decimales) & " pesos " & Mid(decimales, Len(decimales) - 1) & "/100 M.N. )"
 
-                    'reporte.ReportParameters("IdEmpresa").Value = IdEmpresa
+                    reporte.ReportParameters("IdEmpresa").Value = IdEmpresa
                     reporte.ReportParameters("conn").Value = Session("conexion").ToString
                     reporte.ReportParameters("txtNoNomina").Value = Serie.ToString & " - " & Folio.ToString
                     reporte.ReportParameters("NoEmpleado").Value = NoEmpleado
@@ -3972,7 +3957,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -4195,12 +4180,12 @@ Public Class GeneracionDeNominaNormal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Tipo = "N"
             cNomina.EsEspecial = False
-            cNomina.Cliente = cmbCliente.SelectedValue
+            cNomina.IdCliente = cmbCliente.SelectedValue
             dt = cNomina.ConsultarEmpleadosNoGenerados()
 
             Dim dtEmisor As New DataTable
             cNomina = New Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.Id = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4325,7 +4310,7 @@ Public Class GeneracionDeNominaNormal
     Private Sub CargarDeducciones(ByVal NoEmpleado As Integer)
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = Periodo
@@ -4361,14 +4346,14 @@ Public Class GeneracionDeNominaNormal
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Tipo = "N"
-            cNomina.Cliente = cmbCliente.SelectedValue
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.EsEspecial = False
             dt = cNomina.ConsultarEmpleadosTimbrar()
 
             Dim FolioXmlTimbrado As String = ""
             Dim dtEmisor As New DataTable
             cNomina = New Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.Id = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4704,7 +4689,7 @@ Public Class GeneracionDeNominaNormal
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.Id = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4781,7 +4766,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.Id = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4895,7 +4880,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.Id = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4942,7 +4927,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.Id = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4999,7 +4984,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.Id = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -5148,7 +5133,7 @@ Public Class GeneracionDeNominaNormal
 
                 Dim dtEmisor As New DataTable
                 cNomina = New Entities.Nomina()
-                cNomina.Id = Session("clienteid")
+                cNomina.Id = Session("IdEmpresa")
                 dtEmisor = cNomina.ConsultarDatosEmisor()
 
                 If dtEmisor.Rows.Count > 0 Then
@@ -5214,7 +5199,7 @@ Public Class GeneracionDeNominaNormal
                     '
                     Dim dtEnvioEmail As New DataTable
                     Dim cConfiguracion As New Entities.Configuracion
-                    cConfiguracion.IdCliente = Session("clienteid")
+                    cConfiguracion.IdEmpresa = Session("IdEmpresa")
                     dtEnvioEmail = cConfiguracion.ConsultarDatosEnvioEmail()
 
                     If dtEnvioEmail.Rows.Count > 0 Then
@@ -5333,9 +5318,12 @@ Public Class GeneracionDeNominaNormal
             Call CargarVariablesGenerales()
 
             cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
+            cNomina.EsEspecial = False
             grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNomina()
             cNomina = Nothing
 
@@ -5366,7 +5354,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.Id = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -5427,7 +5415,7 @@ Public Class GeneracionDeNominaNormal
                     '
                     Dim dtEnvioEmail As New DataTable
                     Dim cConfiguracion As New Entities.Configuracion
-                    cConfiguracion.IdCliente = Session("clienteid")
+                    cConfiguracion.IdEmpresa = Session("IdEmpresa")
                     dtEnvioEmail = cConfiguracion.ConsultarDatosEnvioEmail()
 
                     If dtEnvioEmail.Rows.Count > 0 Then
@@ -5551,7 +5539,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -5577,10 +5565,12 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
-            cNomina.Periodo = Periodo
+            cNomina.Periodo = cmbPeriodo.SelectedValue
+            cNomina.EsEspecial = False
             dt = cNomina.ConsultarDetalleNomina()
 
             Dim texto As String = ""
@@ -5914,7 +5904,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.Id = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -5991,7 +5981,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.Id = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -6067,7 +6057,7 @@ Public Class GeneracionDeNominaNormal
     Private Sub CargaPeriodos(Optional ByVal IdTipoNomina As Integer = 0)
         Call CargarVariablesGenerales()
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdEmpresa = IdEmpresa
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
         cPeriodo.ExtraordinarioBit = False
@@ -6084,27 +6074,25 @@ Public Class GeneracionDeNominaNormal
     '    validaBtnCrearNomina()
     'End Sub
     Private Sub btnCrearPeriodoEspecial_Click(sender As Object, e As EventArgs) Handles btnCrearPeriodoEspecial.Click
-        Dim cPeriodo As New Entities.Periodo
+
+        Call CargarVariablesGenerales()
 
         Dim cEmpresa As New Entities.Empresa
-        cEmpresa.IdEmpresa = Session("clienteid")
         cEmpresa.IdUsuario = Session("usuarioid")
         cEmpresa.ConsultarEjercicioID()
+
         If cEmpresa.IdUsuario > 0 Then
-            'cPeriodo.IdEmpresa = Session("clienteid")
+            Dim cPeriodo As New Entities.Periodo
+            cPeriodo.IdEmpresa = IdEmpresa
             cPeriodo.IdEjercicio = cEmpresa.IdEjercicio
             cPeriodo.IdTipoNomina = 1
             cPeriodo.FechaInicial = String.Format("{0:MM/dd/yyyy}", fchInicioPeriodo.SelectedDate)
             cPeriodo.GeneraPeriodos = 2
             cPeriodo.GuadarPeriodoSemanal()
+            cPeriodo = Nothing
             WinPeriodoSave.VisibleOnPageLoad = False
         End If
         cEmpresa = Nothing
-        cPeriodo = Nothing
-        '
-        '
-        cEmpresa = Nothing
-        cPeriodo = Nothing
         Call CargaPeriodos(cmbPeriodicidad.SelectedValue)
     End Sub
     Private Sub btnCancelarPeriodo_Click(sender As Object, e As EventArgs) Handles btnCancelarPeriodo.Click

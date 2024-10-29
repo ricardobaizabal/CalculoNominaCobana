@@ -87,7 +87,7 @@ Public Class RptNominaSemanal
     End Sub
     Sub MostrarPercepciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
         cNomina.Periodo = IdPeriodo.Value
@@ -98,7 +98,7 @@ Public Class RptNominaSemanal
     End Sub
     Sub MostrarDeducciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
         cNomina.Periodo = IdPeriodo.Value
@@ -114,7 +114,7 @@ Public Class RptNominaSemanal
     End Sub
     Private Sub grdPercepciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdPercepciones.NeedDataSource
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
         cNomina.Periodo = IdPeriodo.Value
@@ -124,7 +124,7 @@ Public Class RptNominaSemanal
     End Sub
     Private Sub grdDeducciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdDeducciones.NeedDataSource
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
         cNomina.Periodo = IdPeriodo.Value
@@ -134,7 +134,7 @@ Public Class RptNominaSemanal
     End Sub
     Private Sub ListarPercepciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
         cNomina.Periodo = IdPeriodo.Value
@@ -145,7 +145,7 @@ Public Class RptNominaSemanal
     End Sub
     Private Sub ListarDeducciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
         cNomina.Periodo = IdPeriodo.Value
@@ -196,7 +196,7 @@ Public Class RptNominaSemanal
 
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
         cNomina.Periodo = IdPeriodo.Value
@@ -245,7 +245,7 @@ Public Class RptNominaSemanal
                     lblNumEmpleado.Text = dataItem("NoEmpleado")
                     lblRFC.Text = cEmpleado.Rfc
                     lblNombreEmpleado.Text = cEmpleado.Nombre
-                    lblNumImss.Text = cEmpleado.Imss
+                    lblNumImss.Text = cEmpleado.IMSS
                     'lblRegContratacion.Text = cEmpleado.RegimenContratacion
                     lblPuesto.Text = cEmpleado.Puesto
 
@@ -261,7 +261,7 @@ Public Class RptNominaSemanal
 
                 dtGridPercepciones = New DataTable()
                 Dim cNomina As New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
                 cNomina.Periodo = IdPeriodo.Value
@@ -274,7 +274,7 @@ Public Class RptNominaSemanal
 
                 dtGridDeducciones = New DataTable()
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
                 cNomina.Periodo = IdPeriodo.Value
@@ -288,7 +288,7 @@ Public Class RptNominaSemanal
                 Dim dt As New DataTable()
                 cNomina = New Nomina()
 
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 'cNomina.Ejercicio = IdEjercicio.Value
                 'cNomina.TipoNomina = 1 'Semanal
                 'cNomina.Periodo = IdPeriodo.Value
@@ -303,7 +303,7 @@ Public Class RptNominaSemanal
 
                 dt = New DataTable()
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
                 cNomina.Periodo = IdPeriodo.Value
@@ -375,7 +375,7 @@ Public Class RptNominaSemanal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa.Value
+            cNomina.IdEmpresa = IdEmpresa.Value
             cNomina.Ejercicio = IdEjercicio.Value
             cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal
             cNomina.Periodo = IdPeriodo.Value
@@ -427,13 +427,11 @@ Public Class RptNominaSemanal
             MsgBox(oExcep.Message)
         End Try
     End Sub
-
-
     Private Sub gridReporte_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles gridReporte.NeedDataSource
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
-        cNomina.Cliente = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdCliente = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdPeriodicidad.Value 'Semanal = 1
         cNomina.Periodo = IdPeriodo.Value
@@ -461,7 +459,5 @@ Public Class RptNominaSemanal
         gridReporte.DataSource = dt
         cNomina = Nothing
     End Sub
-
-
 
 End Class

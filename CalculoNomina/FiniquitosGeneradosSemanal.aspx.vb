@@ -15,6 +15,7 @@ Public Class FiniquitosGeneradosSemanal
     Inherits System.Web.UI.Page
 
     Dim ObjData As New DataControl()
+    Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
 
     Private TotalPercepciones As Double
@@ -137,6 +138,7 @@ Public Class FiniquitosGeneradosSemanal
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
+                IdEmpresa = oDataRow("IdEmpresa")
                 IdEjercicio = oDataRow("IdEjercicio")
             Next
         End If
@@ -241,7 +243,7 @@ Public Class FiniquitosGeneradosSemanal
 
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Tipo = "F"
@@ -1170,7 +1172,7 @@ Public Class FiniquitosGeneradosSemanal
                 '
                 dt = New DataTable
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Tipo = "F"
@@ -1438,7 +1440,7 @@ Public Class FiniquitosGeneradosSemanal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2332,7 +2334,7 @@ Public Class FiniquitosGeneradosSemanal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2546,7 +2548,7 @@ Public Class FiniquitosGeneradosSemanal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2577,7 +2579,7 @@ Public Class FiniquitosGeneradosSemanal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.NoEmpleado = NoEmpleado
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
@@ -2802,7 +2804,7 @@ Public Class FiniquitosGeneradosSemanal
     '    End If
 
     '    cNomina = New Nomina()
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.TipoNomina = 1 'Semanal
     '    cNomina.Id = IdMovimiento
     '    dt = cNomina.ConsultarEmpleadosFiniquito()
@@ -2836,7 +2838,7 @@ Public Class FiniquitosGeneradosSemanal
     '    End If
 
     '    cNomina = New Nomina()
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.Ejercicio = IdEjercicio
     '    cNomina.TipoNomina = 1 'Semanal
     '    cNomina.Tipo = "F"
@@ -2857,7 +2859,7 @@ Public Class FiniquitosGeneradosSemanal
     '    End If
 
     '    cNomina = New Nomina()
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.Ejercicio = IdEjercicio
     '    cNomina.TipoNomina = 1 'Semanal
     '    cNomina.Tipo = "F"
@@ -2972,7 +2974,7 @@ Public Class FiniquitosGeneradosSemanal
             Next
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Id = IdMovimiento
         dt = cNomina.ConsultarEmpleadosFiniquito()
@@ -3005,7 +3007,7 @@ Public Class FiniquitosGeneradosSemanal
             Next
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
@@ -3026,7 +3028,7 @@ Public Class FiniquitosGeneradosSemanal
             End If
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
@@ -3152,7 +3154,7 @@ Public Class FiniquitosGeneradosSemanal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
@@ -3176,7 +3178,7 @@ Public Class FiniquitosGeneradosSemanal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"

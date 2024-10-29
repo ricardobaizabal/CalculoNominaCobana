@@ -13,6 +13,7 @@ Public Class FiniquitosGeneradosQuincenal
     Inherits System.Web.UI.Page
 
     Dim ObjData As New DataControl()
+    Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
 
     Private TotalPercepciones As Double
@@ -61,6 +62,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
+                IdEmpresa = oDataRow("IdEmpresa")
                 IdEjercicio = oDataRow("IdEjercicio")
             Next
         End If
@@ -71,7 +73,7 @@ Public Class FiniquitosGeneradosQuincenal
         Call CargarVariablesGenerales()
 
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdEmpresa = IdEmpresa
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 3 'Quincenal
         cPeriodo.ExtraordinarioBit = False
@@ -588,11 +590,12 @@ Public Class FiniquitosGeneradosQuincenal
     End Sub
 
     Private Sub GrabarTimbrado(ByVal NoEmpleado As Integer, ByVal Timbrado As String, ByVal UUID As String)
+
         Call CargarVariablesGenerales()
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1162,7 +1165,7 @@ Public Class FiniquitosGeneradosQuincenal
                 '
                 dt = New DataTable
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 3 'Quincenal
                 cNomina.Tipo = "F"
@@ -1806,7 +1809,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2292,7 +2295,7 @@ Public Class FiniquitosGeneradosQuincenal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.NoEmpleado = NoEmpleado
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 3 'Quincenal
@@ -2362,7 +2365,7 @@ Public Class FiniquitosGeneradosQuincenal
                     '
                     Dim dtEnvioEmail As New DataTable
                     Dim cConfiguracion As New Entities.Configuracion
-                    cConfiguracion.IdCliente = Session("clienteid")
+                    cConfiguracion.IdEmpresa = Session("clienteid")
                     dtEnvioEmail = cConfiguracion.ConsultarDatosEnvioEmail()
 
                     If dtEnvioEmail.Rows.Count > 0 Then
@@ -2468,7 +2471,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2533,7 +2536,7 @@ Public Class FiniquitosGeneradosQuincenal
     '    End If
 
     '    cNomina = New Nomina()
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.TipoNomina = 3 'Quincenal
     '    cNomina.Id = IdMovimiento
     '    dt = cNomina.ConsultarEmpleadosFiniquito()
@@ -2567,7 +2570,7 @@ Public Class FiniquitosGeneradosQuincenal
     '    End If
 
     '    cNomina = New Nomina()
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.Ejercicio = IdEjercicio
     '    cNomina.TipoNomina = 3 'Quincenal
     '    cNomina.Tipo = "F"
@@ -2588,7 +2591,7 @@ Public Class FiniquitosGeneradosQuincenal
     '    End If
 
     '    cNomina = New Nomina()
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.Ejercicio = IdEjercicio
     '    cNomina.TipoNomina = 3 'Quincenal
     '    cNomina.Tipo = "F"
@@ -2703,7 +2706,7 @@ Public Class FiniquitosGeneradosQuincenal
             Next
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Id = IdMovimiento
         dt = cNomina.ConsultarEmpleadosFiniquito()
@@ -2736,7 +2739,7 @@ Public Class FiniquitosGeneradosQuincenal
             Next
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Tipo = "F"
@@ -2757,7 +2760,7 @@ Public Class FiniquitosGeneradosQuincenal
             End If
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Tipo = "F"
@@ -2886,7 +2889,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Tipo = "F"
@@ -2911,7 +2914,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 3 'Quincenal
         cNomina.Tipo = "F"
@@ -2950,7 +2953,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.Tipo = "F"
@@ -3062,7 +3065,7 @@ Public Class FiniquitosGeneradosQuincenal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 3 'Quincenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -3138,7 +3141,7 @@ Public Class FiniquitosGeneradosQuincenal
                     '
                     Dim dtEnvioEmail As New DataTable
                     Dim cConfiguracion As New Entities.Configuracion
-                    cConfiguracion.IdCliente = Session("clienteid")
+                    cConfiguracion.IdEmpresa = Session("clienteid")
                     dtEnvioEmail = cConfiguracion.ConsultarDatosEnvioEmail()
 
                     If dtEnvioEmail.Rows.Count > 0 Then

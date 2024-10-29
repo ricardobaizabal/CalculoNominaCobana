@@ -1,7 +1,12 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/MasterPage.Master" CodeBehind="Empresa.aspx.vb" Inherits="CalculoNomina.Empresa" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script>
+    <style>
+        .RadWindow_Bootstrap li.rwListItem .rwCommandButton {
+            display: none !important;
+        }
+    </style>
+    <script type="text/javascript">
         $('.input-file').change(function () {
             $('.lblLlavesPrivadas').text($('.input-file').val());
         });
@@ -28,15 +33,15 @@
                         </telerik:RadTextBox>
                     </td>
                     <td style="width: 33%;">
-                        <asp:DropDownList ID="tipoContribuyenteid" runat="server" CssClass="box"></asp:DropDownList>
+                        <telerik:RadComboBox ID="tipoContribuyenteid" runat="server"></telerik:RadComboBox>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" style="width: 66%">
-                        <asp:RequiredFieldValidator ID="valNombreComercial" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtNombreComercial" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valNombreComercial" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtNombreComercial" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valTipoContribuyente" runat="server" InitialValue="0" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="tipoContribuyenteid" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valTipoContribuyente" runat="server" InitialValue="0" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="tipoContribuyenteid" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                 </tr>
                 <tr>
@@ -55,7 +60,7 @@
                 </tr>
                 <tr>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valSocialReason" runat="server" ForeColor="Red" Text="Requerido" SetFocusOnError="true" ControlToValidate="txtSocialReason" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valSocialReason" runat="server" ForeColor="Red" Text="Requerido" ValidationGroup="vgDatosEmpresa" SetFocusOnError="true" ControlToValidate="txtSocialReason" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                     <td style="width: 33%;">&nbsp;</td>
                     <td style="width: 33%;">&nbsp;</td>
@@ -76,7 +81,7 @@
                 </tr>
                 <tr>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valRepresentanteLegal" runat="server" ForeColor="Red" Text="Requerido" SetFocusOnError="true" ControlToValidate="txtRepresentanteLegal" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valRepresentanteLegal" runat="server" ForeColor="Red" Text="Requerido" ValidationGroup="vgDatosEmpresa" SetFocusOnError="true" ControlToValidate="txtRepresentanteLegal" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                     <td style="width: 33%;">&nbsp;</td>
                     <td style="width: 33%;">&nbsp;</td>
@@ -107,7 +112,7 @@
                         </telerik:RadTextBox>
                     </td>
                     <td style="width: 33%;">
-                        <telerik:RadTextBox ID="txtContactPhone" runat="server" Width="85%">
+                        <telerik:RadTextBox ID="txtContactPhone" runat="server" Width="85%" MaxLength="10">
                         </telerik:RadTextBox>
                     </td>
                 </tr>
@@ -128,9 +133,16 @@
                         <asp:Label ID="lblStreet" runat="server" CssClass="item" Font-Bold="True" Text="Calle:"></asp:Label>
                     </td>
                     <td style="width: 33%;">
-                        <asp:Label ID="lblExtNumber" runat="server" CssClass="item" Font-Bold="True" Text="No. Ext."></asp:Label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <asp:Label ID="lblIntNumber" runat="server" CssClass="item" Font-Bold="True" Text="No. Int."></asp:Label>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 50%;">
+                                    <asp:Label ID="lblExtNumber" runat="server" CssClass="item" Font-Bold="True" Text="No. Ext."></asp:Label>
+                                </td>
+                                <td style="width: 50%;">
+                                    <asp:Label ID="lblIntNumber" runat="server" CssClass="item" Font-Bold="True" Text="No. Int."></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td style="width: 33%;">
                         <asp:Label ID="lblColony" runat="server" CssClass="item" Font-Bold="True" Text="Colonia:"></asp:Label>
@@ -142,11 +154,18 @@
                         </telerik:RadTextBox>
                     </td>
                     <td style="width: 33%;">
-                        <telerik:RadTextBox ID="txtExtNumber" runat="server" Width="35%">
-                        </telerik:RadTextBox>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <telerik:RadTextBox ID="txtIntNumber" runat="server" Width="35%">
-                        </telerik:RadTextBox>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td style="width: 50%;">
+                                    <telerik:RadTextBox ID="txtExtNumber" runat="server" Width="35%">
+                                    </telerik:RadTextBox>
+                                </td>
+                                <td style="width: 50%;">
+                                    <telerik:RadTextBox ID="txtIntNumber" runat="server" Width="35%">
+                                    </telerik:RadTextBox>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                     <td style="width: 33%;">
                         <telerik:RadTextBox ID="txtColony" runat="server" Width="85%">
@@ -155,13 +174,13 @@
                 </tr>
                 <tr>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valStreet" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtStreet" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valStreet" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtStreet" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valExtNumber" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtExtNumber" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valExtNumber" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtExtNumber" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valColony" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtColony" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valColony" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtColony" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                 </tr>
                 <tr>
@@ -187,7 +206,7 @@
                         </telerik:RadTextBox>
                     </td>
                     <td style="width: 33%;">
-                        <asp:DropDownList ID="estadoid" runat="server" CssClass="item"></asp:DropDownList>
+                        <telerik:RadComboBox ID="estadoid" runat="server"></telerik:RadComboBox>
                     </td>
 
                     <td style="width: 33%;">
@@ -197,14 +216,14 @@
                 </tr>
                 <tr>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valCountry" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtCountry" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valCountry" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtCountry" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valEstado" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="estadoid" InitialValue="0" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valEstado" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="estadoid" InitialValue="0" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
 
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valTownship" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtTownship" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valTownship" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtTownship" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                 </tr>
                 <tr>
@@ -239,10 +258,10 @@
                 </tr>
                 <tr>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valZipCode" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtZipCode" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valZipCode" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtZipCode" CssClass="item"></asp:RequiredFieldValidator>
                     </td>
                     <td style="width: 33%;">
-                        <asp:RequiredFieldValidator ID="valRFCReq" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ControlToValidate="txtRFC" CssClass="item"></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="valRFCReq" runat="server" ForeColor="Red" SetFocusOnError="true" Text="Requerido" ValidationGroup="vgDatosEmpresa" ControlToValidate="txtRFC" CssClass="item"></asp:RequiredFieldValidator>
                         <asp:RegularExpressionValidator ID="valRFC" CssClass="item" runat="server" ForeColor="Red" ControlToValidate="txtRFC" SetFocusOnError="True" ValidationExpression="^([a-zA-Z]{3,4})\d{6}([a-zA-Z\w]{3})$"></asp:RegularExpressionValidator>
                     </td>
                     <td style="width: 33%;">&nbsp;</td>
@@ -284,9 +303,7 @@
                 </tr>
                 <tr>
                     <td valign="bottom" colspan="3" style="text-align: right">
-                        <%--<asp:Button ID="btnSaveClient" runat="server" CssClass="rbPrimaryButton" Text="Guardar" />&nbsp;
-                        <asp:Button ID="btnCancel" runat="server" CssClass="rbPrimaryButton" CausesValidation="False" Text="Cancelar" />--%>
-                        <telerik:RadButton ID="btnGuardar" runat="server" Text="Guardar" CssClass="rbPrimaryButton" CausesValidation="True"></telerik:RadButton>
+                        <telerik:RadButton ID="btnGuardar" runat="server" Text="Guardar" ValidationGroup="vgDatosEmpresa" CssClass="rbPrimaryButton" CausesValidation="True"></telerik:RadButton>
                         &nbsp;&nbsp;&nbsp;
                         <telerik:RadButton ID="btnCancelar" runat="server" Text="Cancelar" CausesValidation="False"></telerik:RadButton>
                     </td>
@@ -296,6 +313,32 @@
     </telerik:RadMultiPage>
     <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Metro" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight">
     </telerik:RadWindowManager>
+    <telerik:RadWindow ID="wndEmpresa" Title="Selecciona una empresa:" runat="server" Modal="true" CenterIfModal="true" AutoSize="false" Behaviors="Maximize" VisibleOnPageLoad="False" Width="400px" Height="280px">
+        <ContentTemplate>
+            <table style="width: 98%; border-collapse: separate; border-spacing: 10px;">
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>
+                        <telerik:RadComboBox ID="cmbEmpresa" runat="server" AutoPostBack="false" Width="100%"></telerik:RadComboBox>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <asp:RequiredFieldValidator ID="ValidarFechaInicio" runat="server" ControlToValidate="cmbEmpresa" InitialValue="--Seleccione--" ValidationGroup="vgEmpresa" CssClass="Text" ErrorMessage="Debes seleccionar una empresa" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <telerik:RadButton ID="btnGuardarEmpresa" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="true" ValidationGroup="vgEmpresa" RenderMode="Lightweight" Text="Aceptar"></telerik:RadButton>
+                        <telerik:RadButton ID="btnSalir" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Visible="false" CausesValidation="false" RenderMode="Lightweight" Text="Salir"></telerik:RadButton>
+                    </td>
+                </tr>
+            </table>
+        </ContentTemplate>
+        <Localization />
+    </telerik:RadWindow>
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Default" Width="100%">
     </telerik:RadAjaxLoadingPanel>
 </asp:Content>

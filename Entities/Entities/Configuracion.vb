@@ -1,5 +1,6 @@
 ﻿Public Class Configuracion
     Private _IdConfiguracion As Integer
+    Private _IdEmpresa As Integer
     Private _IdCliente As Integer
     Private _Fecha As DateTime
     Private _IdUsuario As Integer
@@ -10,7 +11,7 @@
 
     Public Sub New()
         _IdConfiguracion = 0
-        _IdCliente = 0
+        _IdEmpresa = 0
         _Fecha = Nothing
         _IdUsuario = 0
         _IdEjercicio = 0
@@ -25,6 +26,15 @@
         End Get
         Set(ByVal value As Int32)
             _IdConfiguracion = value
+        End Set
+    End Property
+
+    Public Property IdEmpresa() As Int32
+        Get
+            Return _IdEmpresa
+        End Get
+        Set(ByVal value As Int32)
+            _IdEmpresa = value
         End Set
     End Property
 

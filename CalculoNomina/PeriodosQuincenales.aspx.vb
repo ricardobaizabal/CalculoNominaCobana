@@ -14,7 +14,7 @@ Public Class PeriodosQuincenales
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
-        'cConfiguracion.IdEmpresa = Session("clienteid")
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
@@ -42,7 +42,7 @@ Public Class PeriodosQuincenales
     End Sub
     Private Sub GridPeriodosQuincenales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosQuincenales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = Session("clienteid")
+        cPeriodo.IdEmpresa = Session("IdEmpresa")
         cPeriodo.IdTipoNomina = 3 'Quincenal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosQuincenales.DataSource = cPeriodo.ConsultarPeriodo
@@ -54,7 +54,7 @@ Public Class PeriodosQuincenales
         cPeriodo.EliminaPeriodo()
 
         cPeriodo = New Entities.Periodo
-        'cPeriodo.IdEmpresa = Session("clienteid")
+        cPeriodo.IdEmpresa = Session("IdEmpresa")
         cPeriodo.IdTipoNomina = 3 'Quincenal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosQuincenales.DataSource = cPeriodo.ConsultarPeriodo()

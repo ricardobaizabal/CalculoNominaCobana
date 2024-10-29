@@ -1,6 +1,6 @@
 ﻿Public Class Infonavit
     Private _Id As Integer
-    Private _IdEmpresa As Integer
+    Private _IdCliente As Integer
     Private _IdEmpleado As Integer
     Private _NoCredito As String
     Private _InicioDescuento As DateTime
@@ -10,7 +10,7 @@
     Private _IdPeriodo As Integer
     Public Sub New()
         _Id = 0
-        _IdEmpresa = 0
+        _IdCliente = 0
         _IdEmpleado = 0
         _NoCredito = String.Empty
         _TipoDescuento = 0
@@ -25,20 +25,20 @@
             _Id = value
         End Set
     End Property
-    Public Property IdEmpresa() As Integer
+    Public Property IdCliente() As Integer
+        Get
+            Return _IdCliente
+        End Get
+        Set(ByVal value As Integer)
+            _IdCliente = value
+        End Set
+    End Property
+    Public Property IdEmpleado() As Integer
         Get
             Return _IdEmpleado
         End Get
         Set(ByVal value As Integer)
             _IdEmpleado = value
-        End Set
-    End Property
-    Public Property IdEmpleado() As Integer
-        Get
-            Return _IdEmpresa
-        End Get
-        Set(ByVal value As Integer)
-            _IdEmpresa = value
         End Set
     End Property
     Public Property NoCredito() As String

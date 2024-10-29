@@ -16,18 +16,17 @@
     End Sub
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            If Session("Cliente") = "" Then
+            If Session("Empresa") = "" Then
                 Empresa.Text = ""
             Else
                 Dim cEmpresa As New Entities.Empresa
                 cEmpresa.ConsultarEjercicioID()
                 If cEmpresa.IdEjercicio > 0 Then
-
                     cEmpresa.Ejercicio = cEmpresa.IdEjercicio
                     cEmpresa.GuadarEjercicio()
 
                     IdEjercicio.Value = cEmpresa.IdEjercicio
-                    Empresa.Text = Session("Cliente") & "  Ejercicio  " & cEmpresa.IdEjercicio
+                    Empresa.Text = Session("Empresa") & "  Ejercicio  " & cEmpresa.IdEjercicio
                 Else
                     cEmpresa.ConsultarEjercicioID()
                     If cEmpresa.IdEjercicio > 0 Then
@@ -36,16 +35,15 @@
                         cEmpresa.GuadarEjercicio()
 
                         IdEjercicio.Value = cEmpresa.IdEjercicio
-                        Empresa.Text = Session("Cliente") & "  Ejercicio  " & cEmpresa.IdEjercicio
+                        Empresa.Text = Session("Empresa") & "  Ejercicio  " & cEmpresa.IdEjercicio
                     End If
                 End If
 
                 Dim cConfiguracion As New Entities.Configuracion
-                'cConfiguracion.IdEmpresa = Session("clienteid")
+                cConfiguracion.IdEmpresa = Session("IdEmpresa")
                 cConfiguracion.IdUsuario = Session("usuarioid")
                 cConfiguracion.GuadarConfiguracion()
                 cConfiguracion = Nothing
-
                 cEmpresa = Nothing
             End If
         End If

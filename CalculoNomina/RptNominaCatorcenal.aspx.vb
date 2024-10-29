@@ -60,7 +60,7 @@ Public Class RptNominaCatorcenal
     End Sub
     Sub MostrarPercepciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
@@ -71,7 +71,7 @@ Public Class RptNominaCatorcenal
     End Sub
     Sub MostrarDeducciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
@@ -87,7 +87,7 @@ Public Class RptNominaCatorcenal
     End Sub
     Private Sub grdPercepciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdPercepciones.NeedDataSource
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
@@ -97,7 +97,7 @@ Public Class RptNominaCatorcenal
     End Sub
     Private Sub grdDeducciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdDeducciones.NeedDataSource
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
@@ -107,7 +107,7 @@ Public Class RptNominaCatorcenal
     End Sub
     Private Sub ListarPercepciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
@@ -118,7 +118,7 @@ Public Class RptNominaCatorcenal
     End Sub
     Private Sub ListarDeducciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
@@ -167,7 +167,7 @@ Public Class RptNominaCatorcenal
 
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
@@ -216,7 +216,7 @@ Public Class RptNominaCatorcenal
                     lblNumEmpleado.Text = dataItem("NoEmpleado")
                     lblRFC.Text = cEmpleado.Rfc
                     lblNombreEmpleado.Text = cEmpleado.Nombre
-                    lblNumImss.Text = cEmpleado.Imss
+                    lblNumImss.Text = cEmpleado.IMSS
                     'lblRegContratacion.Text = cEmpleado.RegimenContratacion
                     lblPuesto.Text = cEmpleado.Puesto
                     'lblCuotaDiaria.Text = FormatCurrency(cEmpleado.CuotaDiaria, 2)
@@ -227,7 +227,7 @@ Public Class RptNominaCatorcenal
 
                 dtGridPercepciones = New DataTable()
                 Dim cNomina As New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Periodo = IdPeriodo.Value
@@ -239,7 +239,7 @@ Public Class RptNominaCatorcenal
 
                 dtGridDeducciones = New DataTable()
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Periodo = IdPeriodo.Value
@@ -252,7 +252,7 @@ Public Class RptNominaCatorcenal
                 Dim dt As New DataTable()
                 cNomina = New Nomina()
 
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Periodo = IdPeriodo.Value
@@ -267,7 +267,7 @@ Public Class RptNominaCatorcenal
 
                 dt = New DataTable()
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Periodo = IdPeriodo.Value
@@ -338,7 +338,7 @@ Public Class RptNominaCatorcenal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa.Value
+            cNomina.IdEmpresa = IdEmpresa.Value
             cNomina.Ejercicio = IdEjercicio.Value
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = IdPeriodo.Value

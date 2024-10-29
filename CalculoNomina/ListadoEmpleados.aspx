@@ -203,7 +203,7 @@
                     <div class="col-md-3">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-lg-3 control-label">Imss</label>
+                                <label class="col-lg-3 control-label">IMSS</label>
 
                                 <div class="col-lg-9">
                                     <telerik:RadTextBox RenderMode="Lightweight" runat="server" ID="txtImssNom" Width="150px" class="form-control" Enabled="false"></telerik:RadTextBox>

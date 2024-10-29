@@ -164,7 +164,7 @@ Public Class CalculoUtilidades
         Try
 
             Dim cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = ConsultarEjercicio()
             cNomina.TipoNomina = TipoNomina
             cNomina.Periodo = 0
@@ -353,7 +353,7 @@ Public Class CalculoUtilidades
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = TipoNomina
         cNomina.Periodo = 0
@@ -366,7 +366,7 @@ Public Class CalculoUtilidades
 
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = TipoNomina
         cNomina.Periodo = 0
@@ -378,7 +378,7 @@ Public Class CalculoUtilidades
     Private Sub CargarPercepciones(ByVal IdEmpresa As Integer, ByVal Ejercicio As Integer, ByVal TipoNomina As String, ByVal NoEmpleado As Integer)
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = Ejercicio
         cNomina.TipoNomina = TipoNomina
         cNomina.Periodo = 0
@@ -403,7 +403,7 @@ Public Class CalculoUtilidades
     Private Sub CargarDeducciones(ByVal IdEmpresa As Integer, ByVal Ejercicio As Integer, ByVal TipoNomina As String, ByVal NoEmpleado As Integer)
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = Ejercicio
         cNomina.TipoNomina = TipoNomina
         cNomina.Periodo = 0
@@ -534,7 +534,7 @@ Public Class CalculoUtilidades
         Dim dt As DataTable = New DataTable()
 
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = Ejercicio
         cNomina.TipoNomina = TipoNomina
         cNomina.Periodo = 0
@@ -549,7 +549,7 @@ Public Class CalculoUtilidades
         End If
 
         cNomina = New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = Ejercicio
         cNomina.TipoNomina = TipoNomina
         cNomina.Periodo = 0
@@ -672,7 +672,7 @@ Public Class CalculoUtilidades
 
                     Dim datos As New DataTable()
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = Ejercicio
                     cNomina.TipoNomina = TipoNomina
                     cNomina.Periodo = 0
@@ -1480,7 +1480,7 @@ Public Class CalculoUtilidades
 
     '    Dim dt As New DataTable()
     '    Dim cNomina As New Nomina()
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.Ejercicio = IdEjercicio
     '    cNomina.TipoNomina = 1 'Semanal
     '    cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1520,7 +1520,7 @@ Public Class CalculoUtilidades
     '    Dim dtEmpleado As New DataTable
     '    Dim cNomina As New Nomina()
     '    cNomina.NoEmpleado = NoEmpleado
-    '    'cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdEmpresa = IdEmpresa
     '    cNomina.Ejercicio = IdEjercicio
     '    cNomina.TipoNomina = 1 'Semanal
     '    cNomina.Periodo = Periodo
@@ -1561,7 +1561,7 @@ Public Class CalculoUtilidades
 
     '            Dim dt As New DataTable
     '            cNomina = New Nomina()
-    '            'cNomina.IdEmpresa = IdEmpresa
+    '            cNomina.IdEmpresa = IdEmpresa
     '            cNomina.Ejercicio = IdEjercicio
     '            cNomina.TipoNomina = 1 'Semanal
     '            cNomina.Periodo = Periodo
@@ -1611,7 +1611,7 @@ Public Class CalculoUtilidades
 
     '            dt = New DataTable
     '            cNomina = New Nomina()
-    '            'cNomina.IdEmpresa = IdEmpresa
+    '            cNomina.IdEmpresa = IdEmpresa
     '            cNomina.Ejercicio = IdEjercicio
     '            cNomina.TipoNomina = 1 'Semanal
     '            cNomina.Periodo = Periodo
@@ -1730,7 +1730,7 @@ Public Class CalculoUtilidades
 
     '            dt = New DataTable
     '            cNomina = New Nomina()
-    '            'cNomina.IdEmpresa = IdEmpresa
+    '            cNomina.IdEmpresa = IdEmpresa
     '            cNomina.Ejercicio = IdEjercicio
     '            cNomina.TipoNomina = 1 'Semanal
     '            cNomina.Periodo = Periodo
@@ -1780,7 +1780,7 @@ Public Class CalculoUtilidades
 
     '            dt = New DataTable
     '            cNomina = New Nomina()
-    '            'cNomina.IdEmpresa = IdEmpresa
+    '            cNomina.IdEmpresa = IdEmpresa
     '            cNomina.Ejercicio = IdEjercicio
     '            cNomina.TipoNomina = 1 'Semanal
     '            cNomina.Periodo = Periodo
@@ -1827,7 +1827,7 @@ Public Class CalculoUtilidades
 
     '            dt = New DataTable
     '            cNomina = New Nomina()
-    '            'cNomina.IdEmpresa = IdEmpresa
+    '            cNomina.IdEmpresa = IdEmpresa
     '            cNomina.Ejercicio = IdEjercicio
     '            cNomina.TipoNomina = 1 'Semanal
     '            cNomina.Periodo = Periodo
@@ -1854,7 +1854,7 @@ Public Class CalculoUtilidades
     '            '
     '            dt = New DataTable
     '            cNomina = New Nomina()
-    '            'cNomina.IdEmpresa = IdEmpresa
+    '            cNomina.IdEmpresa = IdEmpresa
     '            cNomina.Ejercicio = IdEjercicio
     '            cNomina.TipoNomina = 1 'Semanal
     '            cNomina.Periodo = Periodo

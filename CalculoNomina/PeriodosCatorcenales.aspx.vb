@@ -14,7 +14,7 @@ Public Class PeriodosCatorcenales
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
-        'cConfiguracion.IdEmpresa = Session("clienteid")
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
@@ -42,7 +42,7 @@ Public Class PeriodosCatorcenales
     End Sub
     Private Sub GridPeriodosCatorcenales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosCatorcenales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = Session("clienteid")
+        cPeriodo.IdEmpresa = Session("IdEmpresa")
         cPeriodo.IdTipoNomina = 2 'Catorcenal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosCatorcenales.DataSource = cPeriodo.ConsultarPeriodo

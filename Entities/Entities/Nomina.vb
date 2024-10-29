@@ -1,8 +1,9 @@
 ﻿Public Class Nomina
     Private _Id As Long
     Private _IdEmpresa As Integer
+    Private _IdCliente As Integer
     Private _Ejercicio As Integer
-    Private _Cliente As Integer
+    'Private _Cliente As Integer
     Private _TipoNomina As Integer
     Private _Periodo As Integer
     Private _EsEspecial As Boolean
@@ -44,13 +45,14 @@
     Public Sub New()
         _Id = 0
         _IdEmpresa = 0
+        _IdCliente = 0
         _Ejercicio = 0
         _TipoNomina = 0
         _Periodo = 0
         _EsEspecial = False
         _NoEmpleado = 0
         _CvoConcepto = 0
-        _Cliente = 0
+        '_Cliente = 0
         _CvoSAT = String.Empty
         _Tipo = String.Empty
         _TipoConcepto = String.Empty
@@ -104,6 +106,14 @@
             _IdEmpresa = value
         End Set
     End Property
+    Public Property IdCliente() As Int32
+        Get
+            Return _IdCliente
+        End Get
+        Set(ByVal value As Int32)
+            _IdCliente = value
+        End Set
+    End Property
     Public Property Ejercicio() As Int32
         Get
             Return _Ejercicio
@@ -112,14 +122,14 @@
             _Ejercicio = value
         End Set
     End Property
-    Public Property Cliente() As Int32
-        Get
-            Return _Cliente
-        End Get
-        Set(ByVal value As Int32)
-            _Cliente = value
-        End Set
-    End Property
+    'Public Property Cliente() As Int32
+    '    Get
+    '        Return _Cliente
+    '    End Get
+    '    Set(ByVal value As Int32)
+    '        _Cliente = value
+    '    End Set
+    'End Property
     Public Property TipoNomina() As Integer
         Get
             Return _TipoNomina

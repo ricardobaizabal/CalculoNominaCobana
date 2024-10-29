@@ -45,7 +45,7 @@ Public Class ListadoEmpleados
                     txtNumEmpleado.Text = registroId.Value
                     txtRrc.Text = cEmpleado.Rfc
                     txtNombre.Text = cEmpleado.Nombre
-                    txtImssNom.Text = cEmpleado.Imss
+                    txtImssNom.Text = cEmpleado.IMSS
                     txtRegimencontrat.Text = cEmpleado.RegimenContratacion
                     calFechaIngreso.SelectedDate = cEmpleado.FechaIngreso
 

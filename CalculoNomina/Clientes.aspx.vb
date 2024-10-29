@@ -143,7 +143,7 @@ Public Class clientes
 
     Function GetClients() As DataSet
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Dim cmd As New SqlDataAdapter("EXEC pMisClientes  @cmd=1, @txtSearch='" & txtSearch.Text & "'", conn)
 
         Dim ds As DataSet = New DataSet
@@ -284,7 +284,7 @@ Public Class clientes
 
     Private Sub DeleteClient(ByVal id As Integer)
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
 
@@ -315,7 +315,7 @@ Public Class clientes
 
     Private Sub EditClient(ByVal id As Integer)
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
 
@@ -389,7 +389,7 @@ Public Class clientes
             Throw New Exception(ex.Message)
         Finally
             conn.Close()
-        conn.Dispose()
+            conn.Dispose()
         End Try
     End Sub
 
@@ -450,7 +450,7 @@ Public Class clientes
         '    fac_cp = Replace(txtZipCod.Text.Trim.ToString, ";", "")
         'End If
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
 
@@ -641,7 +641,7 @@ Public Class clientes
 
     Function ObtenerCuentas() As DataSet
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Dim qry As String = "EXEC pCatalogoCuentas @cmd=5, @clienteid='" & ClientsID.Value & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
@@ -668,7 +668,7 @@ Public Class clientes
 
     Private Sub DeleteCuenta(ByVal id As Integer)
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
 
@@ -698,7 +698,7 @@ Public Class clientes
 
     Private Sub CargarCuenta()
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
 
         Try
 
@@ -789,7 +789,7 @@ Public Class clientes
 
     Function ObtenerDetallesClientes() As DataSet
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Dim qry As String = "SELECT A.id, A.concepto_base, A.calculo_comision, A.comision_cliente, A.comision_empleado, CB.nombre AS concepto_base_descripcion, CAL.nombre AS calculo_comision_descripcion FROM tblDetallesCliente AS A LEFT JOIN tblConceptoBase CB ON A.concepto_base = CB.id LEFT JOIN tblCalculoComision CAL ON A.calculo_comision = CAL.id WHERE A.borradoBit = 0 AND A.cliente_detalle='" & ClientsID.Value & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
@@ -810,7 +810,7 @@ Public Class clientes
 
     Function ObtenerIMSSISR() As DataSet
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Dim qry As String = "SELECT A.id, A.condicion_imss_id, A.cobro_imss, A.condicion_patronal_imss_id, A.cobro_patronal_imss, A.condicion_isr_id, A.cobro_isr, A.condicion_isn_id, CIM.nombre AS condicion_imss_descripcion, CPIM.nombre AS condicion_patronal_imss_descripcion, CI.nombre AS condicion_isr_descripcion, CISN.nombre AS condicion_isn_descripcion FROM tblClienteDetallesIMSS AS A LEFT JOIN tblCondicionIMSSCliente CIM ON A.condicion_imss_id = CIM.id  LEFT JOIN tblCondicionPatronalIMSSCliente CPIM ON A.condicion_patronal_imss_id = CPIM.id LEFT JOIN tblCondicionISRCliente CI ON A.condicion_isr_id = CI.id LEFT JOIN tblCondicionISNCliente CISN ON A.condicion_isn_id = CISN.id WHERE A.borradoBit = 0 AND A.cliente_id='" & ClientsID.Value & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
@@ -831,7 +831,7 @@ Public Class clientes
 
     Function ObtenerIMSSISREmpleados() As DataSet
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Dim qry As String = "SELECT A.id, A.condicion_imss_id, A.cobro_imss, A.condicion_patronal_imss_id, A.cobro_patronal_imss, A.condicion_isr_id, A.cobro_isr, CIM.nombre AS condicion_imss_descripcion, CPIM.nombre AS condicion_patronal_imss_descripcion, CI.nombre AS condicion_isr_descripcion FROM tblEmpleadoDetallesIMSS AS A LEFT JOIN tblCondicionIMSSEmpleado CIM ON A.condicion_imss_id = CIM.id  LEFT JOIN tblCondicionPatronalIMSSEmpleado CPIM ON A.condicion_patronal_imss_id = CPIM.id LEFT JOIN tblCondicionISREmpleado CI ON A.condicion_isr_id = CI.id WHERE A.borradoBit = 0 AND A.cliente_id='" & ClientsID.Value & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
@@ -852,7 +852,7 @@ Public Class clientes
 
     Function ObtenerTasaIVA() As DataSet
 
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Dim qry As String = "SELECT id, TIRemuneracion, TIComision, TICuotaObrera, TICuotaPatronal, TIISN, TIInfonavit, TIISR FROM tblTasaIVA WHERE borradoBit = 0 AND cliente_id='" & ClientsID.Value & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
@@ -1056,7 +1056,7 @@ Public Class clientes
     End Sub
 
     Private Sub DeleteDetalleCliente(ByVal id As Integer)
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("UPDATE tblDetallesCliente SET borradoBit=1 WHERE id='" & id.ToString & "'", conn)
             conn.Open()
@@ -1076,7 +1076,7 @@ Public Class clientes
     End Sub
 
     Private Sub DeleteDetalleIMSSIRS(ByVal id As Integer)
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("UPDATE tblClienteDetallesIMSS SET borradoBit=1 WHERE id='" & id.ToString & "'", conn)
             conn.Open()
@@ -1096,7 +1096,7 @@ Public Class clientes
     End Sub
 
     Private Sub DeleteDetalleIMSSIRSEmpleado(ByVal id As Integer)
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("UPDATE tblEmpleadoDetallesIMSS SET borradoBit=1 WHERE id='" & id.ToString & "'", conn)
             conn.Open()
@@ -1116,7 +1116,7 @@ Public Class clientes
     End Sub
 
     Private Sub DeleteDetalleTasaIVA(ByVal id As Integer)
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("UPDATE tblTasaIVA SET borradoBit=1 WHERE id='" & id.ToString & "'", conn)
             conn.Open()
@@ -1136,7 +1136,7 @@ Public Class clientes
     End Sub
 
     Private Sub CargarDetalleCliente()
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("SELECT id, concepto_base, calculo_comision, comision_cliente, comision_empleado FROM tblDetallesCliente WHERE id='" & Session("DetalleClienteID") & "'", conn)
             conn.Open()
@@ -1159,7 +1159,7 @@ Public Class clientes
     End Sub
 
     Private Sub CargarDetalleIMSSISR()
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("SELECT id, condicion_imss_id, cobro_imss, condicion_patronal_imss_id, cobro_patronal_imss, condicion_isr_id, cobro_isr, condicion_isn_id FROM tblClienteDetallesIMSS WHERE id='" & Session("IMSS_ISR_ClienteID") & "'", conn)
             conn.Open()
@@ -1186,7 +1186,7 @@ Public Class clientes
     End Sub
 
     Private Sub CargarDetalleIMSSISREmpleado()
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("SELECT id, condicion_imss_id, cobro_imss, condicion_patronal_imss_id, cobro_patronal_imss, condicion_isr_id, cobro_isr FROM tblEmpleadoDetallesIMSS WHERE id='" & Session("IMSS_ISR_EmpleadoID") & "'", conn)
             conn.Open()
@@ -1212,7 +1212,7 @@ Public Class clientes
     End Sub
 
     Private Sub CargarDetalleTasaIVA()
-        Dim conn As New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
             Dim cmd As New SqlCommand("SELECT id, TIRemuneracion, TIComision, TICuotaObrera, TICuotaPatronal, TIISN, TIInfonavit, TIISR FROM tblTasaIVA WHERE id='" & Session("Tasa_IVA_ID") & "'", conn)
             conn.Open()

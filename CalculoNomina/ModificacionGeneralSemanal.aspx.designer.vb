@@ -32,13 +32,13 @@ Partial Public Class ModificacionGeneralSemanal
     Protected WithEvents periodoId As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
-    '''Control empresaId.
+    '''Control clienteId.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents empresaId As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents clienteId As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''Control empleadoId.

@@ -58,7 +58,7 @@ Public Class RptNominaEspecial
     End Sub
     Sub MostrarPercepciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdTipoNomina.Value
         cNomina.Periodo = IdPeriodo.Value
@@ -71,7 +71,7 @@ Public Class RptNominaEspecial
     End Sub
     Sub MostrarDeducciones()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdTipoNomina.Value
         cNomina.Periodo = IdPeriodo.Value
@@ -89,7 +89,7 @@ Public Class RptNominaEspecial
     End Sub
     Private Sub grdPercepciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdPercepciones.NeedDataSource
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdTipoNomina.Value
         cNomina.Periodo = IdPeriodo.Value
@@ -101,7 +101,7 @@ Public Class RptNominaEspecial
     End Sub
     Private Sub grdDeducciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdDeducciones.NeedDataSource
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdTipoNomina.Value
         cNomina.Periodo = IdPeriodo.Value
@@ -150,7 +150,7 @@ Public Class RptNominaEspecial
     Private Sub RadListView1_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles RadListView1.NeedDataSource
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = IdTipoNomina.Value
         cNomina.Periodo = IdPeriodo.Value
@@ -196,7 +196,7 @@ Public Class RptNominaEspecial
                     lblNumEmpleado.Text = dataItem("NoEmpleado")
                     lblRFC.Text = cEmpleado.Rfc
                     lblNombreEmpleado.Text = cEmpleado.Nombre
-                    lblNumImss.Text = cEmpleado.Imss
+                    lblNumImss.Text = cEmpleado.IMSS
                     lblPuesto.Text = cEmpleado.Puesto
                 End If
 
@@ -204,7 +204,7 @@ Public Class RptNominaEspecial
 
                 dtGridPercepciones = New DataTable()
                 Dim cNomina As New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = IdTipoNomina.Value
                 cNomina.Periodo = IdPeriodo.Value
@@ -217,7 +217,7 @@ Public Class RptNominaEspecial
 
                 dtGridDeducciones = New DataTable()
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = IdTipoNomina.Value
                 cNomina.Periodo = IdPeriodo.Value
@@ -231,7 +231,7 @@ Public Class RptNominaEspecial
                 Dim dt As New DataTable()
                 cNomina = New Nomina()
 
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = IdTipoNomina.Value
                 cNomina.Periodo = IdPeriodo.Value
@@ -246,7 +246,7 @@ Public Class RptNominaEspecial
 
                 dt = New DataTable()
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = IdTipoNomina.Value
                 cNomina.Periodo = IdPeriodo.Value
@@ -311,7 +311,7 @@ Public Class RptNominaEspecial
 
             Dim datos As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa.Value
+            cNomina.IdEmpresa = IdEmpresa.Value
             cNomina.NoEmpleado = NoEmpleado
             cNomina.TipoNomina = IdTipoNomina.Value
             cNomina.Ejercicio = IdEjercicio.Value

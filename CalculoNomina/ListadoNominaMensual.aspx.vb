@@ -51,7 +51,7 @@ Public Class ListadoNominaMensual
         cNomina.EsEspecial = False
         cNomina.TipoNomina = periodicidad
         cNomina.Periodo = periodo
-        cNomina.Cliente = cliente
+        cNomina.IdCliente = cliente
         GridNominas.DataSource = cNomina.ConsultarTodasNominaExtraordinaria()
         GridNominas.DataBind()
     End Sub
@@ -84,7 +84,7 @@ Public Class ListadoNominaMensual
         cNomina.EsEspecial = False
         cNomina.TipoNomina = periodicidad
         cNomina.Periodo = periodo
-        cNomina.Cliente = cliente
+        cNomina.IdCliente = cliente
         GridNominas.DataSource = cNomina.ConsultarTodasNominaExtraordinaria()
         cNomina = Nothing
     End Sub

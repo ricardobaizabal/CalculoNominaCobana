@@ -134,7 +134,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
     Private PercepcionesExentas As Decimal = 0
     Private PercepcionesGravadas As Decimal = 0
-    Private Imss As Decimal = 0
+    Private IMSS As Decimal = 0
     Public FolioXml As String
 
     Const URI_SAT = "http://www.sat.gob.mx/cfd/3"
@@ -184,7 +184,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 Call LlenaCmbConcepto(0, "P")
 
                 Dim cConfiguracion As New Entities.Configuracion
-                'cConfiguracion.IdEmpresa = Session("clienteid")
+                cConfiguracion.IdEmpresa = Session("IdEmpresa")
                 cConfiguracion.IdUsuario = Session("usuarioid")
                 cConfiguracion.ActualizaSalarioMinimoDiarioGeneralFiniquitos()
                 cConfiguracion = Nothing
@@ -213,7 +213,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
-        'cConfiguracion.IdEmpresa = Session("clienteid")
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
@@ -431,8 +431,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
         cPeriodo.ConsultarPeriodoID()
 
         cNomina = New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
-        cNomina.Cliente = clienteId.Value
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = clienteId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -600,7 +600,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         If Impuesto > 0 Then
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -626,7 +626,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         End If
         If SubsidioEfectivo > 0 Then
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -669,7 +669,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             cPeriodo.ConsultarPeriodoID()
 
             Dim cNomina = New Nomina()
-            cNomina.Cliente = clienteId.Value
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1023,19 +1023,19 @@ Public Class GeneracionDeFiniquitosCatorcenal
         End Try
     End Sub
     Private Sub CalcularImss()
-        Imss = 0
+        IMSS = 0
         Call ConsultarSalarioDiarioIntegradoTrabajador()
 
         If ImporteDiario <= SalarioMinimoDiarioGeneral Then
-            Imss = 0
+            IMSS = 0
         ElseIf ImporteDiario > SalarioMinimoDiarioGeneral And ImporteDiario < (SalarioMinimoDiarioGeneral * 3) Then
-            Imss = SalarioDiarioIntegradoTrabajador * 0.02375
+            IMSS = SalarioDiarioIntegradoTrabajador * 0.02375
         ElseIf ImporteDiario > (SalarioMinimoDiarioGeneral * 3) And ImporteDiario < (SalarioMinimoDiarioGeneral * 25) Then
-            Imss = SalarioDiarioIntegradoTrabajador * 0.02775
-            'Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 3)) * 0.004)
+            IMSS = SalarioDiarioIntegradoTrabajador * 0.02775
+            'IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 3)) * 0.004)
         ElseIf ImporteDiario > (SalarioMinimoDiarioGeneral * 25) Then
-            Imss = (SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 25)) * 0.02375
-            Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 22)) * 0.004)
+            IMSS = (SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 25)) * 0.02375
+            IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 22)) * 0.004)
         End If
     End Sub
     Private Sub GridPercepciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPercepciones.NeedDataSource
@@ -1044,7 +1044,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Tipo = "F"
@@ -1065,7 +1065,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Tipo = "F"
@@ -1086,7 +1086,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Tipo = "F"
@@ -1114,7 +1114,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Tipo = "F"
@@ -1142,7 +1142,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Tipo = "F"
@@ -1162,7 +1162,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             dt = New DataTable()
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Tipo = "F"
@@ -1191,7 +1191,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             cNomina.Tipo = "F"
             cNomina.IdMovimiento = IdMovimiento
             cNomina.NoEmpleado = empleadoId.Value
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             If CvoConcepto > 0 Then
@@ -1706,7 +1706,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Tipo = "F"
@@ -1735,7 +1735,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Tipo = "F"
@@ -1798,8 +1798,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
             cNomina.EliminaConceptoEmpleado()
 
             cNomina = New Nomina()
-            'cNomina.Cliente = empresaId.Value
-            cNomina.Cliente = clienteId.Value
+            'cNomina.IdCliente = empresaId.Value
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1825,8 +1825,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
             If ConImpuesto = 1 Then
                 If cmbConcepto.SelectedValue <= 51 Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Or cmbConcepto.SelectedValue = 167 Or cmbConcepto.SelectedValue = 168 Or cmbConcepto.SelectedValue = 169 Or cmbConcepto.SelectedValue = 170 Or cmbConcepto.SelectedValue = 171 Then
                     cNomina = New Nomina()
-                    'cNomina.Cliente = empresaId.Value
-                    cNomina.Cliente = clienteId.Value
+                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
                     cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1860,8 +1860,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
                     cNomina.GuadarNominaPeriodo()
                 ElseIf cmbConcepto.SelectedValue = 82 Then
                     cNomina = New Nomina()
-                    'cNomina.Cliente = empresaId.Value
-                    cNomina.Cliente = clienteId.Value
+                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
                     cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1887,8 +1887,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
                     cNomina = Nothing
                 ElseIf cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
                     cNomina = New Nomina()
-                    'cNomina.Cliente = empresaId.Value
-                    cNomina.Cliente = clienteId.Value
+                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
                     cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1914,8 +1914,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
                     cNomina.GuadarNominaPeriodo()
                 ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
                     cNomina = New Nomina()
-                    'cNomina.Cliente = empresaId.Value
-                    cNomina.Cliente = clienteId.Value
+                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
                     cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1948,8 +1948,8 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 If cmbConcepto.SelectedValue < 52 Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Or cmbConcepto.SelectedValue.ToString = "167" Or cmbConcepto.SelectedValue.ToString = "168" Or cmbConcepto.SelectedValue.ToString = "169" Or cmbConcepto.SelectedValue.ToString = "170" Or cmbConcepto.SelectedValue.ToString = "171" Then
                     If Impuesto > 0 Then
                         cNomina = New Nomina()
-                        'cNomina.Cliente = empresaId.Value
-                        cNomina.Cliente = clienteId.Value
+                        'cNomina.IdCliente = empresaId.Value
+                        cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
                         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1975,10 +1975,10 @@ Public Class GeneracionDeFiniquitosCatorcenal
                         cNomina.GuadarNominaPeriodo()
                     End If
 
-                    If Imss > 0 Then
+                    If IMSS > 0 Then
                         cNomina = New Nomina()
-                        'cNomina.Cliente = empresaId.Value
-                        cNomina.Cliente = clienteId.Value
+                        'cNomina.IdCliente = empresaId.Value
+                        cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
                         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1988,9 +1988,9 @@ Public Class GeneracionDeFiniquitosCatorcenal
                         cNomina.Tipo = "F"
                         cNomina.TipoConcepto = "D"
                         cNomina.Unidad = 1
-                        cNomina.Importe = Imss
+                        cNomina.Importe = IMSS
                         cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = Imss
+                        cNomina.ImporteExento = IMSS
                         cNomina.Generado = ""
                         cNomina.Timbrado = ""
                         cNomina.Enviado = ""
@@ -2060,7 +2060,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Tipo = "F"
@@ -2427,7 +2427,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Tipo = "F"
@@ -3070,7 +3070,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
         cNomina.CvoConcepto = CvoConcepto
@@ -3397,7 +3397,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         SubsidioEfectivo = SubsidioEfectivo + SubsidioIncidencias
 
         If NumeroConcepto = 2 Then
-            Call EliminaConceptosFiniquito(Request("id"), 56) 'Imss
+            Call EliminaConceptosFiniquito(Request("id"), 56) 'IMSS
             Call EliminaConceptosFiniquito(Request("id"), 64) 'Infonavit
         End If
 
@@ -3442,7 +3442,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             Dim cNomina As New Nomina()
 
             If Agregar = 1 Then
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Tipo = "F"
@@ -3451,7 +3451,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 cNomina.IdMovimiento = Request("id")
                 dt = cNomina.ConsultarConceptosFiniquito()
             ElseIf Agregar = 0 Then
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Tipo = "F"
@@ -3462,7 +3462,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
                 cNomina.CvoConcepto = CvoConcepto
                 dt = cNomina.ConsultarConceptosFiniquito()
             Else
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Tipo = "F"
@@ -4060,7 +4060,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                 Dim dt As New DataTable
                 Dim cNomina As New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Tipo = "F"
@@ -4103,7 +4103,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
                 dt = New DataTable
                 cNomina = New Nomina()
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Tipo = "F"
@@ -4151,7 +4151,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
             Dim dt As New DataTable
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Tipo = "F"
@@ -4429,7 +4429,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             Next
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Id = Request("id")
         dt = cNomina.ConsultarEmpleadosFiniquito()
@@ -4462,7 +4462,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             Next
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Tipo = "F"
@@ -4483,7 +4483,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             End If
         End If
 
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Tipo = "F"
@@ -4633,7 +4633,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         cNomina.Tipo = "F"
         cNomina.IdMovimiento = Request("id")
         cNomina.NoEmpleado = empleadoId.Value
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = cmbPeriodo.SelectedValue

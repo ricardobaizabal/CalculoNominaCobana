@@ -48,7 +48,7 @@ Public Class CalculoAguinaldo
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
-        'cConfiguracion.IdEmpresa = Session("clienteid")
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
@@ -1938,7 +1938,7 @@ Public Class CalculoAguinaldo
                 '
                 Dim dtEnvioEmail As New DataTable
                 Dim cConfiguracion As New Entities.Configuracion
-                cConfiguracion.IdCliente = Session("clienteid")
+                cConfiguracion.IdEmpresa = Session("clienteid")
                 dtEnvioEmail = cConfiguracion.ConsultarDatosEnvioEmail()
 
                 If dtEnvioEmail.Rows.Count > 0 Then
@@ -2128,7 +2128,7 @@ Public Class CalculoAguinaldo
                 '
                 Dim dtEnvioEmail As New DataTable
                 Dim cConfiguracion As New Entities.Configuracion
-                cConfiguracion.IdCliente = Session("clienteid")
+                cConfiguracion.IdEmpresa = Session("clienteid")
                 dtEnvioEmail = cConfiguracion.ConsultarDatosEnvioEmail()
 
                 If dtEnvioEmail.Rows.Count > 0 Then

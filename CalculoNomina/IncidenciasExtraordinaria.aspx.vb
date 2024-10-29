@@ -3,6 +3,7 @@ Imports Entities
 Public Class IncidenciasExtraordinaria
     Inherits System.Web.UI.Page
 
+    Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
 
     Private CuotaPeriodo As Double
@@ -121,7 +122,7 @@ Public Class IncidenciasExtraordinaria
     Private UMA As Double
     Private SalarioDiarioIntegradoTrabajador As Double
     Private CuotaDiaria As Decimal
-    Private Imss As Double
+    Private IMSS As Double
     Private ImporteSeguroVivienda As Double
 
     Private TiempoExtraordinarioDentroDelMargenLegal As Double
@@ -159,7 +160,7 @@ Public Class IncidenciasExtraordinaria
                     lblNumEmpleado.Text = empleadoId.Value
                     lblRFC.Text = cEmpleado.Rfc
                     lblNombreEmpleado.Text = cEmpleado.Nombre
-                    lblNumImss.Text = cEmpleado.Imss
+                    lblNumImss.Text = cEmpleado.IMSS
                     lblRegContratacion.Text = cEmpleado.RegimenContratacion
                     lblFechaIngreso.Text = cEmpleado.FechaIngreso
                     lblPuesto.Text = cEmpleado.Puesto
@@ -295,7 +296,7 @@ Public Class IncidenciasExtraordinaria
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
@@ -315,7 +316,7 @@ Public Class IncidenciasExtraordinaria
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
@@ -340,6 +341,7 @@ Public Class IncidenciasExtraordinaria
 
             If dt.Rows.Count > 0 Then
                 For Each oDataRow In dt.Rows
+                    IdEmpresa = oDataRow("IdEmpresa")
                     IdEjercicio = oDataRow("IdEjercicio")
                     SalarioMinimoDiarioGeneral = oDataRow("SalarioMinimoDiarioGeneral")
                     ImporteSeguroVivienda = oDataRow("ImporteSeguroVivienda")
@@ -360,7 +362,7 @@ Public Class IncidenciasExtraordinaria
             ' Percepciones
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -383,7 +385,7 @@ Public Class IncidenciasExtraordinaria
             ' Deducciones
             dt = New DataTable()
             cNomina = New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -412,7 +414,7 @@ Public Class IncidenciasExtraordinaria
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -488,9 +490,9 @@ Public Class IncidenciasExtraordinaria
             CalcularSubsidio()
 
             Call CalcularImss()
-            'Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-            Imss = Imss * DiasCuotaPeriodo
-            Imss = Math.Round(Imss, 6)
+            'IMSS = IMSS * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+            IMSS = IMSS * DiasCuotaPeriodo
+            IMSS = Math.Round(IMSS, 6)
 
             If Impuesto > Subsidio Then
                 SubsidioEfectivo = 0
@@ -555,7 +557,7 @@ Public Class IncidenciasExtraordinaria
 
             If Agregar = 1 Then
                 'Me.oDataAdapterChecarPercepcionesGravadasSql = New SqlDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P'", oConexionSql)
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -564,7 +566,7 @@ Public Class IncidenciasExtraordinaria
                 dt = cNomina.ConsultarConceptosEmpleado()
             ElseIf Agregar = 0 Then
                 'Me.oDataAdapterChecarPercepcionesGravadas = New OleDbDataAdapter("SELECT * FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text + " AND TIPOCONCEPTO='P' AND CVOCONCEPTO<>" + NumeroConcepto.ToString + "", oConexion)
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -574,7 +576,7 @@ Public Class IncidenciasExtraordinaria
                 cNomina.CvoConcepto = CvoConcepto
                 dt = cNomina.ConsultarConceptosEmpleado()
             Else
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -823,7 +825,7 @@ Public Class IncidenciasExtraordinaria
             Dim cNomina As New Nomina()
 
             If NumeroConcepto <= 51 Then
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -834,7 +836,7 @@ Public Class IncidenciasExtraordinaria
                 cNomina.EliminaConceptoEmpleado()
             ElseIf NumeroConcepto >= 61 And NumeroConcepto <= 87 Or NumeroConcepto = 56 Or NumeroConcepto = 57 Or NumeroConcepto = 58 Or NumeroConcepto = 59 Or NumeroConcepto = 161 Or NumeroConcepto = 162 Then
                 'Deducciones
-                'cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -892,7 +894,7 @@ Public Class IncidenciasExtraordinaria
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -1276,20 +1278,20 @@ Public Class IncidenciasExtraordinaria
     End Sub
     Private Sub CalcularImss()
 
-        Imss = 0
+        IMSS = 0
         UMA = 0
         Call CargarVariablesGenerales()
 
         If SalarioDiarioIntegradoTrabajador <= SalarioMinimoDiarioGeneral Then
-            Imss = 0
+            IMSS = 0
         ElseIf SalarioDiarioIntegradoTrabajador > SalarioMinimoDiarioGeneral And SalarioDiarioIntegradoTrabajador < (UMA * 3) Then
-            Imss = SalarioDiarioIntegradoTrabajador * 0.02375
+            IMSS = SalarioDiarioIntegradoTrabajador * 0.02375
         ElseIf SalarioDiarioIntegradoTrabajador > (UMA * 3) And SalarioDiarioIntegradoTrabajador < (UMA * 25) Then
-            Imss = SalarioDiarioIntegradoTrabajador * 0.02375
-            Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (UMA * 3)) * 0.004)
+            IMSS = SalarioDiarioIntegradoTrabajador * 0.02375
+            IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (UMA * 3)) * 0.004)
         ElseIf SalarioDiarioIntegradoTrabajador > (UMA * 25) Then
-            Imss = (SalarioDiarioIntegradoTrabajador - (UMA * 25)) * 0.02375
-            Imss = Imss + ((SalarioDiarioIntegradoTrabajador - (UMA * 22)) * 0.004)
+            IMSS = (SalarioDiarioIntegradoTrabajador - (UMA * 25)) * 0.02375
+            IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (UMA * 22)) * 0.004)
         End If
 
     End Sub
@@ -1344,7 +1346,7 @@ Public Class IncidenciasExtraordinaria
 
                     'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + cmbConcepto.SelectedValue.ToString + "', 'P', '" + txtUnidadIncidencia.Text + "', " + txtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, 0)"
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = periodoId.Value
@@ -1371,7 +1373,7 @@ Public Class IncidenciasExtraordinaria
                     'Deducciones por faltas, permisos o incapacidades
                     'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CboConceptos.SelectedValue.ToString + "', 'D', '" + TxtUnidadIncidencia.Text + "', " + TxtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, " + TxtImporteIncidencia.Text + ")"
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = periodoId.Value
@@ -1391,7 +1393,7 @@ Public Class IncidenciasExtraordinaria
                 ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
                     'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', '" + CboConceptos.SelectedValue.ToString + "', 'D', '" + TxtUnidadIncidencia.Text + "', " + TxtImporteIncidencia.Text + ", 'N', 'N', 'N', 'A', 0, " + TxtImporteIncidencia.Text + ")"
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = periodoId.Value
@@ -1417,7 +1419,7 @@ Public Class IncidenciasExtraordinaria
                 If cmbConcepto.SelectedValue < 52 Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
                     'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 52, 'D', 1, " + Impuesto.ToString + ", 'N', 'N', 'N', 'A', 0, " + Impuesto.ToString + ")"
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = periodoId.Value
@@ -1438,7 +1440,7 @@ Public Class IncidenciasExtraordinaria
                     If SubsidioAplicado > 0 Then
                         'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 54, 'P', 1, " + SubsidioAplicado.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioAplicado.ToString + ")"
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = periodoId.Value
@@ -1459,7 +1461,7 @@ Public Class IncidenciasExtraordinaria
                     If SubsidioEfectivo > 0 Then
                         'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 55, 'P', 1, " + SubsidioEfectivo.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioEfectivo.ToString + ")"
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = periodoId.Value
@@ -1477,10 +1479,10 @@ Public Class IncidenciasExtraordinaria
                         cNomina.Situacion = "A"
                         cNomina.GuadarNomina()
                     End If
-                    If Imss > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 56, 'D', 1, " + Imss.ToString + ", 'N', 'N', 'N', 'A', 0, " + Imss.ToString + ")"
+                    If IMSS > 0 Then
+                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 56, 'D', 1, " + IMSS.ToString + ", 'N', 'N', 'N', 'A', 0, " + IMSS.ToString + ")"
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = periodoId.Value
@@ -1489,9 +1491,9 @@ Public Class IncidenciasExtraordinaria
                         cNomina.IdContrato = contratoId.Value
                         cNomina.TipoConcepto = "D"
                         cNomina.Unidad = 1
-                        cNomina.Importe = Imss
+                        cNomina.Importe = IMSS
                         cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = Imss
+                        cNomina.ImporteExento = IMSS
                         cNomina.Generado = ""
                         cNomina.Timbrado = ""
                         cNomina.Enviado = ""
@@ -1503,7 +1505,7 @@ Public Class IncidenciasExtraordinaria
                 If cmbConcepto.SelectedValue < 52 Or cmbConcepto.SelectedValue = "57" Or cmbConcepto.SelectedValue = "58" Or cmbConcepto.SelectedValue = "59" Or cmbConcepto.SelectedValue = "58" Or cmbConcepto.SelectedValue = "59" Or cmbConcepto.SelectedValue = "161" Or cmbConcepto.SelectedValue = "162" Then
                     'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 52, 'D', 1, " + Impuesto.ToString + ", 'N', 'N', 'N', 'A', 0, " + Impuesto.ToString + ")"
                     cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = periodoId.Value
@@ -1523,7 +1525,7 @@ Public Class IncidenciasExtraordinaria
                     If SubsidioAplicado > 0 Then
                         'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 54, 'P', 1, " + SubsidioAplicado.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioAplicado.ToString + ")"
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = periodoId.Value
@@ -1544,7 +1546,7 @@ Public Class IncidenciasExtraordinaria
                     If SubsidioEfectivo > 0 Then
                         'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 55, 'P', 1, " + SubsidioEfectivo.ToString + ", 'N', 'N', 'N', 'A', 0, " + SubsidioEfectivo.ToString + ")"
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = periodoId.Value
@@ -1562,10 +1564,10 @@ Public Class IncidenciasExtraordinaria
                         cNomina.Situacion = "A"
                         cNomina.GuadarNomina()
                     End If
-                    If Imss > 0 Then
-                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 56, 'D', 1, " + Imss.ToString + ", 'N', 'N', 'N', 'A', 0, " + Imss.ToString + ")"
+                    If IMSS > 0 Then
+                        'CadenaSql = "INSERT INTO NOMINAS(EJERCICIO, TIPONOMINA, PERIODO, NOEMPLEADO, CVOCONCEPTO, TIPOCONCEPTO, UNIDAD, IMPORTE, GENERADO, TIMBRADO, ENVIADO, SITUACION, IMPORTEGRAVADO, IMPORTEEXENTO) VALUES('" + Ejerciciio.ToString + "', 1, '" + TxtPeriodo.Text + "', '" + NoEmpleado.ToString + "', 56, 'D', 1, " + IMSS.ToString + ", 'N', 'N', 'N', 'A', 0, " + IMSS.ToString + ")"
                         cNomina = New Nomina()
-                        'cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = periodoId.Value
@@ -1574,9 +1576,9 @@ Public Class IncidenciasExtraordinaria
                         cNomina.IdContrato = contratoId.Value
                         cNomina.TipoConcepto = "D"
                         cNomina.Unidad = 1
-                        cNomina.Importe = Imss
+                        cNomina.Importe = IMSS
                         cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = Imss
+                        cNomina.ImporteExento = IMSS
                         cNomina.Generado = ""
                         cNomina.Timbrado = ""
                         cNomina.Enviado = ""
@@ -1783,9 +1785,9 @@ Public Class IncidenciasExtraordinaria
                     CalcularSubsidio()
 
                     Call CalcularImss()
-                    'Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                    Imss = Imss * DiasCuotaPeriodo
-                    Imss = Math.Round(Imss, 6)
+                    'IMSS = IMSS * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+                    IMSS = IMSS * DiasCuotaPeriodo
+                    IMSS = Math.Round(IMSS, 6)
                     'Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
                     'Subsidio = Subsidio * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
                     If Impuesto > Subsidio Then
@@ -1950,7 +1952,7 @@ Public Class IncidenciasExtraordinaria
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -2550,7 +2552,7 @@ Public Class IncidenciasExtraordinaria
                 Dim DescuentoInvonavit As Decimal
                 Dim datos As New DataTable
                 Dim Infonavit As New Entities.Infonavit()
-                Infonavit.IdEmpresa = Session("clienteid")
+                'Infonavit.IdCliente = empresaId.Value
                 Infonavit.IdEmpleado = NoEmpleado
                 datos = Infonavit.ConsultarEmpleadosConDescuentoInfonavit()
                 Infonavit = Nothing
@@ -2610,7 +2612,7 @@ Public Class IncidenciasExtraordinaria
         Call CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
@@ -2635,7 +2637,7 @@ Public Class IncidenciasExtraordinaria
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -2689,7 +2691,7 @@ Public Class IncidenciasExtraordinaria
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -2722,7 +2724,7 @@ Public Class IncidenciasExtraordinaria
         Call CargarVariablesGenerales()
 
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "N"
@@ -2739,7 +2741,7 @@ Public Class IncidenciasExtraordinaria
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
@@ -2760,7 +2762,7 @@ Public Class IncidenciasExtraordinaria
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
@@ -2830,9 +2832,9 @@ Public Class IncidenciasExtraordinaria
                 CalcularSubsidio()
 
                 Call CalcularImss()
-                'Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                Imss = Imss * DiasCuotaPeriodo
-                Imss = Math.Round(Imss, 6)
+                'IMSS = IMSS * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+                IMSS = IMSS * DiasCuotaPeriodo
+                IMSS = Math.Round(IMSS, 6)
 
                 'Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
                 'Subsidio = Subsidio * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
@@ -2882,7 +2884,7 @@ Public Class IncidenciasExtraordinaria
         Else
             Call CargarVariablesGenerales()
             Dim cNomina As New Nomina()
-            'cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -2899,7 +2901,7 @@ Public Class IncidenciasExtraordinaria
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
-        'cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
@@ -2960,9 +2962,9 @@ Public Class IncidenciasExtraordinaria
                 CalcularSubsidio()
 
                 Call CalcularImss()
-                'Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                Imss = Imss * DiasCuotaPeriodo
-                Imss = Math.Round(Imss, 6)
+                'IMSS = IMSS * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+                IMSS = IMSS * DiasCuotaPeriodo
+                IMSS = Math.Round(IMSS, 6)
 
                 'Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
                 'Subsidio = Subsidio * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
@@ -3030,13 +3032,13 @@ Public Class IncidenciasExtraordinaria
                 End If
 
                 Call CalcularImss()
-                'Imss = Imss * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-                Imss = Imss * DiasCuotaPeriodo
-                Imss = Math.Round(Imss, 6)
+                'IMSS = IMSS * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+                IMSS = IMSS * DiasCuotaPeriodo
+                IMSS = Math.Round(IMSS, 6)
 
-                If Imss > 0 Then
+                If IMSS > 0 Then
                     Dim cNomina = New Nomina()
-                    'cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = periodoId.Value
@@ -3045,9 +3047,9 @@ Public Class IncidenciasExtraordinaria
                     cNomina.IdContrato = contratoId.Value
                     cNomina.TipoConcepto = "D"
                     cNomina.Unidad = 1
-                    cNomina.Importe = Imss
+                    cNomina.Importe = IMSS
                     cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = Imss
+                    cNomina.ImporteExento = IMSS
                     cNomina.Generado = ""
                     cNomina.Timbrado = ""
                     cNomina.Enviado = ""

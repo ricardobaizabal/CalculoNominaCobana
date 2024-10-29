@@ -14,7 +14,7 @@ Public Class PeriodosSemanales
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
-        'cConfiguracion.IdEmpresa = Session("clienteid")
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
@@ -42,7 +42,7 @@ Public Class PeriodosSemanales
     End Sub
     Private Sub GridPeriodosSemanales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosSemanales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = Session("clienteid")
+        cPeriodo.IdEmpresa = Session("IdEmpresa")
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo
@@ -56,12 +56,13 @@ Public Class PeriodosSemanales
         Call CargarVariablesGenerales()
 
         cPeriodo = New Entities.Periodo
-        'cPeriodo.IdEmpresa = Session("clienteid")
+        cPeriodo.IdEmpresa = Session("IdEmpresa")
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo()
         GridPeriodosSemanales.DataBind()
         cPeriodo = Nothing
+
     End Sub
 
 End Class

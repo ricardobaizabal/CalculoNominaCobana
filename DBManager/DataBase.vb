@@ -10,13 +10,13 @@ Public Class DataBase
     Private p_conexion As String = ""
 
     Sub New(Optional ByVal conexion As Integer = 0)
-        If conexion = 0 Then
-            conn = New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        Else
-            conn = New SqlConnection(HttpContext.Current.Session("conexion").ToString)
-        End If
+        conn = New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
+        'If conexion = 0 Then
+        '    conn = New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
+        'Else
+        '    conn = New SqlConnection(HttpContext.Current.Session("conexion").ToString)
+        'End If
     End Sub
-
     Public Sub OpenConnection()
         Try
             If conn.State = ConnectionState.Closed Then
@@ -26,7 +26,6 @@ Public Class DataBase
             Throw ex
         End Try
     End Sub
-
     Public Sub CloseConnection()
         Try
             If conn.State <> ConnectionState.Closed Then
@@ -36,7 +35,6 @@ Public Class DataBase
             Throw ex
         End Try
     End Sub
-
     Public Function ExecuteSP(ByVal spName As String, ByVal params As ArrayList) As DataTable
         Try
 
@@ -72,7 +70,6 @@ Public Class DataBase
             Throw ex
         End Try
     End Function
-
     Public Function ExecuteQuery(ByVal sql As String) As DataTable
         Try
 
@@ -95,7 +92,6 @@ Public Class DataBase
             Throw ex
         End Try
     End Function
-
     Public Sub ExecuteSPWithParams(ByVal spName As String, ByVal params As ArrayList)
         Try
 
@@ -129,7 +125,6 @@ Public Class DataBase
             CloseConnection()
         End Try
     End Sub
-
     Public Sub ExecuteNonQuery(ByVal sql As String)
         Try
 
@@ -144,7 +139,6 @@ Public Class DataBase
             Throw ex
         End Try
     End Sub
-
     Public Function ExecuteSPWithTransaction(ByVal spName As String, ByVal params As ArrayList) As DataTable
         Dim transaction As SqlTransaction = conn.BeginTransaction("SampleTransaction")
         Try
@@ -175,7 +169,6 @@ Public Class DataBase
             Return Nothing
         End Try
     End Function
-
     Public Function ExecuteSP_Insert_Transaction(ByVal ds As DataSet, ByVal spName As String, ByVal params As ArrayList) As Boolean
         Dim transaction As SqlTransaction = conn.BeginTransaction(IsolationLevel.Snapshot)
         Try
@@ -199,7 +192,6 @@ Public Class DataBase
             Return False
         End Try
     End Function
-
     Public Function DSExecuteSP(ByVal spName As String, ByVal params As ArrayList) As DataSet
         Try
 
@@ -239,7 +231,6 @@ Public Class DataBase
         End Try
 
     End Function
-
     Public Function ExecuteSPWithOutParam(ByVal spName As String, ByVal params As ArrayList, ByVal indexParamSalida As Int16) As Object
         Try
             Dim command As New SqlCommand
@@ -262,7 +253,6 @@ Public Class DataBase
             Throw ex
         End Try
     End Function
-
     Public Function ExecuteNonQueryScalar(ByVal spName As String, ByVal params As ArrayList) As Long
         Try
 
@@ -292,7 +282,6 @@ Public Class DataBase
             CloseConnection()
         End Try
     End Function
-
     Public Function ExecuteNonQueryScalarDecimal(ByVal spName As String, ByVal params As ArrayList) As Decimal
         Try
 
@@ -328,7 +317,6 @@ Public Class DataBase
             CloseConnection()
         End Try
     End Function
-
     Public Function ExecuteNonQueryScalarString(ByVal spName As String, ByVal params As ArrayList) As String
         Try
 

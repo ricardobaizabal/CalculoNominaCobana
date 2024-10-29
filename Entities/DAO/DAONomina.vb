@@ -7,7 +7,8 @@ Partial Public Class Nomina
     Public Sub GuadarNomina()
         Try
             p.Clear()
-            p.Add(New SqlParameter("@pIdEmpresa", Cliente))
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pEjercicio", Ejercicio))
             p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
             p.Add(New SqlParameter("@pPeriodo", Periodo))
@@ -49,7 +50,8 @@ Partial Public Class Nomina
     Public Sub GuadarNominaPeriodo()
         Try
             p.Clear()
-            p.Add(New SqlParameter("@pIdEmpresa", Cliente))
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pEjercicio", Ejercicio))
             p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
             p.Add(New SqlParameter("@pPeriodo", Periodo))
@@ -93,7 +95,8 @@ Partial Public Class Nomina
         p.Clear()
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        p.Add(New SqlParameter("@pCliente", Cliente))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         dt = db.ExecuteSP("pConsultarEmpleadosSemanal", p)
         Return dt
     End Function
@@ -105,12 +108,13 @@ Partial Public Class Nomina
         dt = db.ExecuteSP("pConsultarEmpleadosEspecial", p)
         Return dt
     End Function
-    Public Function InsertaCampoNomina(ByVal mi_cliente_id As Integer) As DataTable
+    Public Function InsertaCampoNomina() As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pFechaPago", FechaPago))
-        p.Add(New SqlParameter("@mi_cliente_id", mi_cliente_id))
         dt = db.ExecuteSP("pAgregarCampoNomina", p)
         Return dt
     End Function
@@ -126,7 +130,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosCatorcenal() As DataTable
         p.Clear()
-        p.Add(New SqlParameter("@pCliente", Cliente))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         dt = db.ExecuteSP("pConsultarEmpleadosCatorcenal", p)
@@ -134,7 +139,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosQuincenal() As DataTable
         p.Clear()
-        p.Add(New SqlParameter("@pCliente", Cliente))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         dt = db.ExecuteSP("pConsultarEmpleadosQuincenal", p)
@@ -142,7 +148,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosMensual() As DataTable
         p.Clear()
-        p.Add(New SqlParameter("@pCliente", Cliente))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         dt = db.ExecuteSP("pConsultarEmpleadosMensual", p)
@@ -150,10 +157,11 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarDatosGeneralesNomina() As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        p.Add(New SqlParameter("@pIdEmpresa", Cliente))
         p.Add(New SqlParameter("@pExtraordinarioBit", EsEspecial))
         dt = db.ExecuteSP("pConsultarDatosGeneralesNomina", p)
         Return dt
@@ -167,10 +175,11 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarDetalleNomina() As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        p.Add(New SqlParameter("@pIdEmpresa", Cliente))
         dt = db.ExecuteSP("pConsultarDetalleNomina", p)
         Return dt
     End Function
@@ -179,7 +188,8 @@ Partial Public Class Nomina
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        p.Add(New SqlParameter("@pCliente", Cliente))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
         p.Add(New SqlParameter("@pIdNomina", IdNomina))
         dt = db.ExecuteSP("pConsultarDetalleNominaExtraordinaria", p)
@@ -194,10 +204,11 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarTodasNominaExtraordinaria() As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        p.Add(New SqlParameter("@pCliente", Cliente))
         p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
         dt = db.ExecuteSP("pConsultarTodasLasNominasExtraordinarias", p)
         Return dt
@@ -419,7 +430,8 @@ Partial Public Class Nomina
     End Sub
     Public Sub EliminaNomina()
         p.Clear()
-        p.Add(New SqlParameter("@pIdEmpresa", Cliente))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
@@ -487,12 +499,12 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosNoGenerados() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
-        p.Add(New SqlParameter("@pCliente", Cliente))
         If Tipo.Length > 0 Then
             p.Add(New SqlParameter("@pTipo", Tipo))
         End If
@@ -501,12 +513,12 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosNoGeneradosNominaExtraordinaria() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
-        p.Add(New SqlParameter("@pCliente", Cliente))
         If Tipo.Length > 0 Then
             p.Add(New SqlParameter("@pTipo", Tipo))
         End If
@@ -527,12 +539,12 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosTimbrar() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
-        p.Add(New SqlParameter("@pCliente", Cliente))
         If Timbrado.Length > 0 Then
             p.Add(New SqlParameter("@pTimbrado", Timbrado))
         End If
@@ -545,7 +557,8 @@ Partial Public Class Nomina
     Public Sub GuardarExentoYGravadoFiniquito()
         Try
             p.Clear()
-            p.Add(New SqlParameter("@pIdEmpresa", Cliente))
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pEjercicio", Ejercicio))
             p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
             p.Add(New SqlParameter("@pPeriodo", Periodo))
@@ -564,7 +577,6 @@ Partial Public Class Nomina
             p.Add(New SqlParameter("@pFechaFinalPago", FechaFin))
             p.Add(New SqlParameter("@pFechaPago", FechaPago))
             db.ExecuteSPWithParams("pGuardarExentoYGravadoFiniquito", p)
-
         Catch ex As Exception
             Throw ex
         End Try
@@ -1120,6 +1132,5 @@ Partial Public Class Nomina
         dt = db.ExecuteSP("pConsultarResumenNominas", p)
         Return dt
     End Function
-
 
 End Class

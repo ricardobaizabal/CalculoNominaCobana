@@ -12,15 +12,14 @@ Public Class DataControl
     Private parametros As String = String.Empty
 
     Sub New(Optional ByVal conexion As Integer = 0)
-        If conexion = 0 Then
-            p_conexion = ConfigurationManager.ConnectionStrings("conn").ConnectionString
-            p_conexion_cobana = ConfigurationManager.ConnectionStrings("conn_cobana").ConnectionString
-
-        Else
-            p_conexion = HttpContext.Current.Session("conexion").ToString
-        End If
+        p_conexion = ConfigurationManager.ConnectionStrings("conn").ConnectionString
+        'If conexion = 0 Then
+        '    p_conexion = ConfigurationManager.ConnectionStrings("conn").ConnectionString
+        '    p_conexion_cobana = ConfigurationManager.ConnectionStrings("conn_cobana").ConnectionString
+        'Else
+        '    p_conexion = HttpContext.Current.Session("conexion").ToString
+        'End If
     End Sub
-
     Public Sub CatalogoId(ByVal combo As Web.UI.WebControls.DropDownList, ByVal ds As DataSet, ByVal sel As Integer, Optional ByVal todo As Boolean = False)
         Try
             combo.DataSource = ds
@@ -45,7 +44,6 @@ Public Class DataControl
         End Try
 
     End Sub
-
     Public Sub CatalogoId(ByVal combo As Web.UI.WebControls.DropDownList, ByVal sql As String, ByVal sel As Integer, Optional ByVal todo As Boolean = False)
         '
         Dim conn As New SqlConnection(p_conexion)
@@ -71,7 +69,6 @@ Public Class DataControl
         conn = Nothing
         '
     End Sub
-
     Public Sub Catalogo(ByVal combo As Web.UI.WebControls.DropDownList, ByVal sel As Integer, ByVal dt As DataTable, Optional ByVal todo As Boolean = False, Optional ByVal sin As Boolean = False, Optional ByVal sintexto As String = "")
 
         combo.DataSource = dt
@@ -94,7 +91,6 @@ Public Class DataControl
         End If
 
     End Sub
-
     Public Sub Catalogo(ByVal combo As Web.UI.WebControls.DropDownList, ByVal sql As String, ByVal sel As String, Optional ByVal todo As Boolean = False)
         '
         Dim conn As New SqlConnection(p_conexion)
@@ -120,7 +116,6 @@ Public Class DataControl
         conn = Nothing
         '
     End Sub
-
     Public Sub CatalogoRad(ByVal combo As Telerik.Web.UI.RadComboBox, ByVal dt As DataTable, Optional ByVal textIni As Boolean = False, Optional ByVal todo As Boolean = False)
 
         combo.DataSource = dt
@@ -137,7 +132,6 @@ Public Class DataControl
         End If
 
     End Sub
-
     Public Sub CatalogoRad(ByVal combo As Telerik.Web.UI.RadComboBox, ByVal sql As String, Optional ByVal textIni As Boolean = False, Optional ByVal todo As Boolean = False)
 
         Dim conn As New SqlConnection(p_conexion)
@@ -164,7 +158,6 @@ Public Class DataControl
         End If
 
     End Sub
-
     Public Function getSHA1Hash(ByVal strToHash As String) As String
 
         Dim sha1Obj As New System.Security.Cryptography.SHA1CryptoServiceProvider
@@ -182,7 +175,6 @@ Public Class DataControl
         Return strResult
 
     End Function
-
     Public Function FillDataSet(ByVal spName As String, ByVal params As ArrayList) As DataSet
         Dim conn As New SqlConnection(p_conexion)
 
@@ -225,7 +217,6 @@ Public Class DataControl
         End Try
 
     End Function
-
     Public Function RunSQLScalarQueryString(ByVal SQL As String) As String
         Dim value As String = ""
         Dim conn As New SqlConnection(p_conexion)
@@ -244,19 +235,16 @@ Public Class DataControl
         Return value
 
     End Function
-
     Public Function GetBytes(str As String) As Byte()
         Dim bytes As Byte() = New Byte(str.Length * 2 - 1) {}
         System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length)
         Return bytes
     End Function
-
     Public Function GetString(bytes As Byte()) As String
         Dim chars As Char() = New Char(bytes.Length / 2 - 1) {}
         System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length)
         Return New String(chars)
     End Function
-
     Public Function RunSQLScalarQuery(ByVal SQL As String) As Long
         Dim value As Long
         Dim conn As New SqlConnection(p_conexion)
@@ -268,7 +256,6 @@ Public Class DataControl
         conn = Nothing
         Return value
     End Function
-
     Public Function FillDataSet(ByVal SQL As String) As DataSet
         Dim conn As New SqlConnection(p_conexion)
         conn.Open()
@@ -280,7 +267,6 @@ Public Class DataControl
         conn = Nothing
         Return ds
     End Function
-
     Public Function FillDataSetMasivo(ByVal SQL As String, ByVal commandType As CommandType, ByVal parameters As ArrayList) As DataSet
 
         ' Crear la conexión
@@ -323,8 +309,6 @@ Public Class DataControl
         ' Retornar el DataSet
         Return ds
     End Function
-
-
     Public Sub CatalogoStr(ByVal combo As Web.UI.WebControls.DropDownList, ByVal sql As String, ByVal sel As String, Optional ByVal todo As Boolean = False)
         '
         Dim conn As New SqlConnection(p_conexion)
@@ -351,7 +335,6 @@ Public Class DataControl
         conn = Nothing
         '
     End Sub
-
     Public Sub RunSQLQuery(ByVal SQL As String)
         Dim conn As New SqlConnection(p_conexion)
         conn.Open()

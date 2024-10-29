@@ -18,7 +18,7 @@ Public Class Login
         lblMensaje.Visible = False
         Dim ClienteValido As Boolean = False
         Try
-            Dim ObjData As New DataControl(0)
+            Dim ObjData As New DataControl()
             Dim ds As New DataSet
             Dim p As New ArrayList
             p.Add(New SqlParameter("@email", txtEmail.Text))
@@ -32,20 +32,19 @@ Public Class Login
                         lblMensaje.Text = row("mensaje")
                         ClienteValido = False
                     ElseIf row("error") = 0 Then
-                        Session("conexion") = "Data Source=" & System.Configuration.ConfigurationManager.AppSettings("server").ToString & "; Initial Catalog=" & row("appKey") & "; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;"
+                        'Session("conexion") = "Data Source=" & System.Configuration.ConfigurationManager.AppSettings("server").ToString & "; Initial Catalog=" & row("appKey") & "; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;"
                         'Session("conexion") = "Data Source=" & System.Configuration.ConfigurationManager.AppSettings("server").ToString & "; Initial Catalog=" & row("appKey") & "; User ID=sa; Password=q<PAQkt5(49(8!R; Max Pool Size=360;"
-
-                        Session("clienteid") = row("clienteid")
+                        'Session("clienteid") = row("clienteid")
                         Session("usuarioid") = row("usuarioid")
                         Session("perfilid") = row("perfilid")
                         Session("nombre") = row("nombre")
                         Session("email") = row("email")
 
-                        ClienteValido = True
-                        Dim cConfiguracion As New Configuracion
-                        cConfiguracion.IdUsuario = row("usuarioid")
-                        cConfiguracion.GuadarConfiguracion()
-                        cConfiguracion = Nothing
+                        'ClienteValido = True
+                        'Dim cConfiguracion As New Configuracion
+                        'cConfiguracion.IdUsuario = row("usuarioid")
+                        'cConfiguracion.GuadarConfiguracion()
+                        'cConfiguracion = Nothing
 
                     Else
                         lblMensaje.Text = "Pónganse en contacto con el administrador de sistema."

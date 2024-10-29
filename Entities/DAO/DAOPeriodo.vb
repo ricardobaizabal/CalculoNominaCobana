@@ -20,13 +20,12 @@ Partial Public Class Periodo
     Public Sub GuadarPeriodoSemanal()
         Try
             p.Clear()
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicial))
             p.Add(New SqlParameter("@pGeneraPeriodos", GeneraPeriodos))
-
             db.ExecuteSPWithParams("pGuadarPeriodoSemanal", p)
-
         Catch ex As Exception
             Throw ex
         End Try
@@ -34,13 +33,12 @@ Partial Public Class Periodo
     Public Sub GuadarPeriodoCatorcenal()
         Try
             p.Clear()
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicial))
             p.Add(New SqlParameter("@pGeneraPeriodos", GeneraPeriodos))
-
             db.ExecuteSPWithParams("pGuadarPeriodoCatorcenal", p)
-
         Catch ex As Exception
             Throw ex
         End Try
@@ -48,13 +46,12 @@ Partial Public Class Periodo
     Public Sub GuadarPeriodoQuincenal()
         Try
             p.Clear()
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicial))
             p.Add(New SqlParameter("@pGeneraPeriodos", GeneraPeriodos))
-
             db.ExecuteSPWithParams("pGuadarPeriodoQuincenal", p)
-
         Catch ex As Exception
             Throw ex
         End Try
@@ -62,6 +59,7 @@ Partial Public Class Periodo
     Public Sub GuadarPeriodoMensual()
         Try
             p.Clear()
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicial))
@@ -134,6 +132,7 @@ Partial Public Class Periodo
     End Sub
     Public Function ConsultarPeriodo() As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
         p.Add(New SqlParameter("@IdEjercicio", IdEjercicio))
         p.Add(New SqlParameter("@pIdTipoNomina", IdTipoNomina))
         dt = db.ExecuteSP("pConsultarPeriodo", p)
@@ -141,6 +140,7 @@ Partial Public Class Periodo
     End Function
     Public Function ConsultarPeriodos() As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@IdEmpresa", IdEmpresa))
         p.Add(New SqlParameter("@IdEjercicio", IdEjercicio))
         p.Add(New SqlParameter("@IdTipoNomina", IdTipoNomina))
         p.Add(New SqlParameter("@ExtraordinarioBit", ExtraordinarioBit))
@@ -150,7 +150,6 @@ Partial Public Class Periodo
         dt = db.ExecuteSP("pConsultarPeriodos", p)
         Return dt
     End Function
-
     Public Function ConsultarPeriodosResumen() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", cmd))
@@ -162,7 +161,6 @@ Partial Public Class Periodo
         dt = db.ExecuteSP("pConsultarPeriodosResumen", p)
         Return dt
     End Function
-
     Public Function ConsultarPeriodosQuincenales() As DataTable
         p.Clear()
         dt = db.ExecuteSP("pConsultarPeriodosQuincenales", p)
