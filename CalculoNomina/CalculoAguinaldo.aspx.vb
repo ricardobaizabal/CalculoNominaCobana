@@ -509,7 +509,7 @@ Public Class CalculoAguinaldo
 
         Dim dtEmisor As New DataTable
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -691,7 +691,7 @@ Public Class CalculoAguinaldo
         Dim LugarExpedicion As String = ""
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -752,7 +752,7 @@ Public Class CalculoAguinaldo
     Private Sub CrearNodoEmisor(ByVal Nodo As XmlNode)
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim Emisor As XmlElement
@@ -1247,7 +1247,7 @@ Public Class CalculoAguinaldo
 
         Dim dtEmisor As New DataTable
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim RfcEmisor As String = ""
@@ -1303,7 +1303,7 @@ Public Class CalculoAguinaldo
     Private Function GeneraPDFNoTimbrado(ByVal IdEmpresa As Integer, ByVal Ejercicio As Integer, ByVal TipoNomina As String, ByVal NoEmpleado As Integer) As Telerik.Reporting.Report
 
         Dim reporte As New Formatos.formato_comisiones
-        reporte.ReportParameters("conn").Value = Session("conexion").ToString
+        reporte.ReportParameters("conn").Value = ConfigurationManager.ConnectionStrings("conn").ConnectionString
 
         Dim numero_empleado As String = ""
         Dim periodo_pago As String = ""
@@ -1359,7 +1359,7 @@ Public Class CalculoAguinaldo
         Dim ObjData As New DataControl(0)
         Dim ds As New DataSet
 
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+        ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
         If ds.Tables.Count > 0 Then
             For Each row As DataRow In ds.Tables(0).Rows
@@ -1809,7 +1809,7 @@ Public Class CalculoAguinaldo
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim RfcEmisor As String = ""
@@ -1856,7 +1856,7 @@ Public Class CalculoAguinaldo
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim RfcEmisor As String = ""
@@ -1895,7 +1895,7 @@ Public Class CalculoAguinaldo
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim RfcEmisor As String = ""
@@ -2086,7 +2086,7 @@ Public Class CalculoAguinaldo
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim RfcEmisor As String = ""
@@ -2303,7 +2303,7 @@ Public Class CalculoAguinaldo
 
             Dim dtEmisor As New DataTable
             cNomina = New Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -2628,7 +2628,7 @@ Public Class CalculoAguinaldo
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -2733,7 +2733,7 @@ Public Class CalculoAguinaldo
 
             Dim dtEmisor As New DataTable
             Dim cNomina = New Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             Dim RfcEmisor As String = ""

@@ -1,22 +1,23 @@
 ﻿Imports System.Data.SqlClient
 Partial Public Class Periodo
-    Dim db As New DBManager.DataBase(1)
+    Dim db As New DBManager.DataBase()
     Dim p As New ArrayList
     Dim dt As New DataTable
-    Public Sub GuadarPeriodoEspecial()
+    Public Function GuadarPeriodoEspecial() As Integer
+        Dim IdPeriodo As Integer = 0
         Try
             p.Clear()
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicialDate.ToString("yyyy-MM-dd 00:00:00")))
             p.Add(New SqlParameter("@pFechaFinal", FechaFinalDate.ToString("yyyy-MM-dd 00:00:00")))
-
-            db.ExecuteSPWithParams("pGuadarPeriodoEspecial", p)
-
+            IdPeriodo = db.ExecuteNonQueryScalar("pGuadarPeriodoEspecial", p)
+            Return IdPeriodo
         Catch ex As Exception
             Throw ex
         End Try
-    End Sub
+    End Function
     Public Sub GuadarPeriodoSemanal()
         Try
             p.Clear()

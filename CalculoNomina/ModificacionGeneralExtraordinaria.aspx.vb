@@ -351,19 +351,19 @@ Public Class ModificacionGeneralExtraordinaria
             cNomina.NoEmpleado = NoEmpleado
             dt = cNomina.ConsultarConceptosEmpleado()
 
-            If dt.Rows.Count = 0 Or dt.Compute("SUM(Importe)", "CvoConcepto=85") Is DBNull.Value Then
+            If dt.Rows.Count = 0 Or dt.Compute("SUM(Importe)", "CvoConcepto=2") Is DBNull.Value Then
                 ChecarQueExistaLaCuotaPeriodo = False
-            ElseIf dt.Rows.Count >= 0 And dt.Compute("SUM(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
+            ElseIf dt.Rows.Count >= 0 And dt.Compute("SUM(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
                 If dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") IsNot DBNull.Value Then
-                    If dt.Compute("SUM(Importe)", "CvoConcepto=85") < (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") < (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
+                    If dt.Compute("SUM(Importe)", "CvoConcepto=2") < (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") < (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
                         ChecarQueExistaLaCuotaPeriodo = False
-                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=85") > (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") > (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
+                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=2") > (dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + ImporteIncidencia) Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") > (dt.Compute("SUM(Unidad)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") + UnidadIncidencia) Then
                         ChecarQueExistaLaCuotaPeriodo = True
                     End If
                 ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") Is DBNull.Value Then
-                    If dt.Compute("SUM(Importe)", "CvoConcepto=85") < ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") < UnidadIncidencia Then
+                    If dt.Compute("SUM(Importe)", "CvoConcepto=2") < ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") < UnidadIncidencia Then
                         ChecarQueExistaLaCuotaPeriodo = False
-                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=85") > ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=85") > UnidadIncidencia Then
+                    ElseIf dt.Compute("SUM(Importe)", "CvoConcepto=2") > ImporteIncidencia Or dt.Compute("SUM(Unidad)", "CvoConcepto=2") > UnidadIncidencia Then
                         ChecarQueExistaLaCuotaPeriodo = True
                     End If
                 End If
@@ -434,10 +434,10 @@ Public Class ModificacionGeneralExtraordinaria
 
             ' PercepcionesGravadas
             If dt.Rows.Count > 0 Then
-                If dt.Compute("SUM(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
+                If dt.Compute("SUM(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
                     If Agregar <> 3 Then
-                        DiasCuotaPeriodo = dt.Compute("SUM(Unidad)", "CvoConcepto=85")
-                        CuotaPeriodo = dt.Compute("SUM(Importe)", "CvoConcepto=85")
+                        DiasCuotaPeriodo = dt.Compute("SUM(Unidad)", "CvoConcepto=2")
+                        CuotaPeriodo = dt.Compute("SUM(Importe)", "CvoConcepto=2")
                     ElseIf Agregar = 3 Then
                         ''''''''''''''''''''''PENDIENTE'''''''''''''''''''''''''''''
                         'DiasCuotaPeriodo = TextBox(0).Text
@@ -689,9 +689,9 @@ Public Class ModificacionGeneralExtraordinaria
             dt = cNomina.ConsultarConceptosEmpleado()
             'PercepcionesGravadas
             If dt.Rows.Count > 0 Then
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=85")
-                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=85")
+                If dt.Compute("Sum(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=2")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=2")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -1038,9 +1038,9 @@ Public Class ModificacionGeneralExtraordinaria
             dt = cNomina.ConsultarConceptosEmpleado()
 
             If dt.Rows.Count > 0 Then
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=85")
-                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=85")
+                If dt.Compute("Sum(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=2")
+                    CuotaPeriodo = dt.Compute("Sum(Importe)", "CvoConcepto=2")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -1726,7 +1726,7 @@ Public Class ModificacionGeneralExtraordinaria
             Dim cNomina As New Nomina()
 
             If NumeroConcepto <= 50 Then
-                'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=85 AND TIPOCONCEPTO='P'"
+                'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO=" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO=" + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=2 AND TIPOCONCEPTO='P'"
                 cNomina.IdEmpresa = IdEmpresa
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal

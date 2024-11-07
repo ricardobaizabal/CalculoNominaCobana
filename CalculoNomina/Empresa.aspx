@@ -311,7 +311,7 @@
             </table>
         </telerik:RadPageView>
     </telerik:RadMultiPage>
-    <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Metro" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight">
+    <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight">
     </telerik:RadWindowManager>
     <telerik:RadWindow ID="wndEmpresa" Title="Selecciona una empresa:" runat="server" Modal="true" CenterIfModal="true" AutoSize="false" Behaviors="Maximize" VisibleOnPageLoad="False" Width="400px" Height="280px">
         <ContentTemplate>
@@ -339,6 +339,6 @@
         </ContentTemplate>
         <Localization />
     </telerik:RadWindow>
-    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Default" Width="100%">
+    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Bootstrap" Width="100%">
     </telerik:RadAjaxLoadingPanel>
 </asp:Content>

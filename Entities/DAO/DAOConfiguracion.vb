@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
 Partial Public Class Configuracion
-    Dim db As New DBManager.DataBase(1)
+    Dim db As New DBManager.DataBase()
     Dim p As New ArrayList
     Dim dt As New DataTable
 
@@ -60,7 +60,7 @@ Partial Public Class Configuracion
     End Function
     Public Function ConsultarDatosEnvioEmail() As DataTable
         p.Clear()
-        db = New DBManager.DataBase(0)
+        db = New DBManager.DataBase()
         p.Add(New SqlParameter("@clienteid", IdEmpresa))
         dt = db.ExecuteSP("pDatosEmail", p)
         Return dt

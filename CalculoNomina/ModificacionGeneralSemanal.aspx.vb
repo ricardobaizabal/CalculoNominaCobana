@@ -319,6 +319,7 @@ Public Class ModificacionGeneralSemanal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -342,6 +343,7 @@ Public Class ModificacionGeneralSemanal
             'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=86 AND TIPOCONCEPTO='D'"
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -353,6 +355,7 @@ Public Class ModificacionGeneralSemanal
             'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=54 AND TIPOCONCEPTO='P'"
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -364,6 +367,7 @@ Public Class ModificacionGeneralSemanal
             'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=55 AND TIPOCONCEPTO='P'"
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -375,6 +379,7 @@ Public Class ModificacionGeneralSemanal
             'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=56 AND TIPOCONCEPTO='D'"
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -386,6 +391,7 @@ Public Class ModificacionGeneralSemanal
             'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=108 AND TIPOCONCEPTO='DE'"
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -397,6 +403,7 @@ Public Class ModificacionGeneralSemanal
             'CadenaSql = "DELETE FROM NOMINAS WHERE EJERCICIO='" + Ejerciciio.ToString + "' AND TIPONOMINA=1 AND PERIODO =" + TxtPeriodo.Text.ToString + " AND NOEMPLEADO= " + TxtClaveEmpleado.Text.ToString + " AND CvoConcepto=109 AND TIPOCONCEPTO='DE'"
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -520,6 +527,7 @@ Public Class ModificacionGeneralSemanal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -1189,6 +1197,7 @@ Public Class ModificacionGeneralSemanal
             Dim cNomina As New Nomina()
             If NumeroConcepto <= 51 Or NumeroConcepto = 54 Or NumeroConcepto = 82 Or NumeroConcepto = 165 Or NumeroConcepto = 167 Or NumeroConcepto = 168 Or NumeroConcepto = 169 Or NumeroConcepto = 170 Or NumeroConcepto = 171 Then
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -1199,6 +1208,7 @@ Public Class ModificacionGeneralSemanal
             ElseIf NumeroConcepto >= 61 And NumeroConcepto <= 87 Or NumeroConcepto = 52 Or NumeroConcepto = 56 Or NumeroConcepto = 57 Or NumeroConcepto = 58 Or NumeroConcepto = 59 Or NumeroConcepto = 161 Or NumeroConcepto = 162 Then
                 'Deducciones
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -1217,6 +1227,7 @@ Public Class ModificacionGeneralSemanal
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = clienteId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = periodoId.Value
@@ -1267,6 +1278,7 @@ Public Class ModificacionGeneralSemanal
 
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = clienteId.Value
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "N"
@@ -1681,6 +1693,7 @@ Public Class ModificacionGeneralSemanal
 
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -1699,6 +1712,7 @@ Public Class ModificacionGeneralSemanal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -1759,6 +1773,7 @@ Public Class ModificacionGeneralSemanal
 
             If Agregar = 1 Then
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -1768,6 +1783,7 @@ Public Class ModificacionGeneralSemanal
                 dt = cNomina.ConsultarConceptosEmpleado()
             ElseIf Agregar = 0 Then
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -1779,6 +1795,7 @@ Public Class ModificacionGeneralSemanal
                 dt = cNomina.ConsultarConceptosEmpleado()
             Else
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = periodoId.Value
@@ -1994,6 +2011,7 @@ Public Class ModificacionGeneralSemanal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value
@@ -2387,6 +2405,8 @@ Public Class ModificacionGeneralSemanal
 
             Dim cNomina As New Nomina()
             cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = Periodo
@@ -2542,7 +2562,6 @@ Public Class ModificacionGeneralSemanal
                     If Impuesto > 0 Then
                         cNomina = New Nomina()
                         cNomina.IdEmpresa = IdEmpresa
-                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
@@ -2599,7 +2618,7 @@ Public Class ModificacionGeneralSemanal
             ElseIf ConImpuesto = 2 Then
                 'If cmbConcepto.SelectedValue = "82" Then
                 'cNomina = New Nomina()
-                'cNomina.IdCliente = empresaId.Value
+                'cNomina.IdCliente = clienteId.Value
                 'cNomina.Ejercicio = IdEjercicio
                 'cNomina.TipoNomina = 1 'Semanal
                 'cNomina.Periodo = Periodo
@@ -2624,7 +2643,7 @@ Public Class ModificacionGeneralSemanal
                 'cNomina = Nothing
                 'ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
                 'cNomina = New Nomina()
-                'cNomina.IdCliente = empresaId.Value
+                'cNomina.IdCliente = clienteId.Value
                 'cNomina.Ejercicio = IdEjercicio
                 'cNomina.TipoNomina = 1 'Semanal
                 'cNomina.Periodo = Periodo
@@ -2697,7 +2716,6 @@ Public Class ModificacionGeneralSemanal
 
             If IMSS > 0 Then
                 Dim cNomina = New Nomina()
-                cNomina.IdEmpresa = IdEmpresa
                 cNomina.IdEmpresa = IdEmpresa
                 cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
@@ -2822,6 +2840,7 @@ Public Class ModificacionGeneralSemanal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = periodoId.Value

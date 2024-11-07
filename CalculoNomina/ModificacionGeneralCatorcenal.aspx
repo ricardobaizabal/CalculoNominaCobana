@@ -43,7 +43,7 @@
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
 
         <asp:HiddenField ID="periodoId" runat="server" Value="0" />
-        <asp:HiddenField ID="empresaId" runat="server" Value="0" />
+        <asp:HiddenField ID="clienteId" runat="server" Value="0" />
         <asp:HiddenField ID="empleadoId" runat="server" Value="0" />
         <asp:HiddenField ID="nominaID" runat="server" Value="0" />
 

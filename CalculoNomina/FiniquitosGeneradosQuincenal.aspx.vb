@@ -296,7 +296,7 @@ Public Class FiniquitosGeneradosQuincenal
 
                     Dim dtEmisor As New DataTable
                     cNomina = New Nomina()
-                    cNomina.Id = Session("clienteid")
+                    cNomina.IdEmpresa = Session("IdEmpresa")
                     dtEmisor = cNomina.ConsultarDatosEmisor()
 
                     If dtEmisor.Rows.Count > 0 Then
@@ -473,7 +473,7 @@ Public Class FiniquitosGeneradosQuincenal
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -703,7 +703,7 @@ Public Class FiniquitosGeneradosQuincenal
         Dim LugarExpedicion As String = ""
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -800,7 +800,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim Emisor As XmlElement
@@ -1442,7 +1442,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -1530,7 +1530,7 @@ Public Class FiniquitosGeneradosQuincenal
                 Dim dtEmisor As New DataTable
                 Dim cNomina = New Nomina()
                 cNomina = New Nomina()
-                cNomina.Id = Session("clienteid")
+                cNomina.IdEmpresa = Session("IdEmpresa")
                 dtEmisor = cNomina.ConsultarDatosEmisor()
 
                 If dtEmisor.Rows.Count > 0 Then
@@ -1586,7 +1586,7 @@ Public Class FiniquitosGeneradosQuincenal
                 Dim dtEmisor As New DataTable
                 Dim cNomina = New Nomina()
                 cNomina = New Nomina()
-                cNomina.Id = Session("clienteid")
+                cNomina.IdEmpresa = Session("IdEmpresa")
                 dtEmisor = cNomina.ConsultarDatosEmisor()
 
                 If dtEmisor.Rows.Count > 0 Then
@@ -1641,7 +1641,7 @@ Public Class FiniquitosGeneradosQuincenal
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -1732,7 +1732,7 @@ Public Class FiniquitosGeneradosQuincenal
 
                     Dim dtEmisor As New DataTable
                     cNomina = New Entities.Nomina()
-                    cNomina.Id = Session("clienteid")
+                    cNomina.IdEmpresa = Session("IdEmpresa")
                     dtEmisor = cNomina.ConsultarDatosEmisor()
 
                     If dtEmisor.Rows.Count > 0 Then
@@ -2005,7 +2005,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim ObjData As New DataControl(0)
         Dim ds As New DataSet
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+        ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
         If ds.Tables.Count > 0 Then
             For Each row As DataRow In ds.Tables(0).Rows
@@ -2072,7 +2072,7 @@ Public Class FiniquitosGeneradosQuincenal
 
                     Dim dtEmisor As New DataTable
                     cNomina = New Nomina()
-                    cNomina.Id = Session("clienteid")
+                    cNomina.IdEmpresa = Session("IdEmpresa")
                     dtEmisor = cNomina.ConsultarDatosEmisor()
 
                     If dtEmisor.Rows.Count > 0 Then
@@ -2113,7 +2113,7 @@ Public Class FiniquitosGeneradosQuincenal
 
                     Version = GetXmlAttribute(FolioXml, "Version", "cfdi:Comprobante")
 
-                    reporte.ReportParameters("conn").Value = Session("conexion").ToString
+                    reporte.ReportParameters("conn").Value = ConfigurationManager.ConnectionStrings("conn").ConnectionString
                     reporte.ReportParameters("txtNoNomina").Value = "Nómina No. " & Folio.ToString
                     reporte.ReportParameters("txtTipoNomina").Value = GetXmlAttribute(FolioXml, "TipoNomina", "nomina12:Nomina").ToString & " - Extraordinaria"
                     reporte.ReportParameters("txtTipoContrato").Value = GetXmlAttribute(FolioXml, "TipoContrato", "nomina12:Receptor").ToString & " - " & row("TipoContrato").ToString
@@ -2296,6 +2296,7 @@ Public Class FiniquitosGeneradosQuincenal
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = IdCliente
             cNomina.NoEmpleado = NoEmpleado
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 3 'Quincenal
@@ -2312,7 +2313,7 @@ Public Class FiniquitosGeneradosQuincenal
                 For Each row In dt.Rows
                     Dim dtEmisor As New DataTable
                     cNomina = New Entities.Nomina()
-                    cNomina.Id = Session("clienteid")
+                    cNomina.IdEmpresa = Session("IdEmpresa")
                     dtEmisor = cNomina.ConsultarDatosEmisor()
 
                     If dtEmisor.Rows.Count > 0 Then
@@ -2510,7 +2511,7 @@ Public Class FiniquitosGeneradosQuincenal
 
     '    Dim dt As New DataTable()
     '    Dim cNomina = New Nomina()
-    '    cNomina.Id = Session("clienteid")
+    '    cNomina.IdEmpresa = Session("IdEmpresa")
     '    dt = cNomina.ConsultarDatosEmisor()
 
     '    If dt.Rows.Count > 0 Then
@@ -2836,7 +2837,7 @@ Public Class FiniquitosGeneradosQuincenal
 
         Dim dt As New DataTable()
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -2974,7 +2975,7 @@ Public Class FiniquitosGeneradosQuincenal
 
                 Dim dtEmisor As New DataTable
                 cNomina = New Nomina()
-                cNomina.Id = Session("clienteid")
+                cNomina.IdEmpresa = Session("IdEmpresa")
                 dtEmisor = cNomina.ConsultarDatosEmisor()
 
                 If dtEmisor.Rows.Count > 0 Then
@@ -3088,7 +3089,7 @@ Public Class FiniquitosGeneradosQuincenal
 
                     Dim dtEmisor As New DataTable
                     cNomina = New Entities.Nomina()
-                    cNomina.Id = Session("clienteid")
+                    cNomina.IdEmpresa = Session("IdEmpresa")
                     dtEmisor = cNomina.ConsultarDatosEmisor()
 
                     If dtEmisor.Rows.Count > 0 Then

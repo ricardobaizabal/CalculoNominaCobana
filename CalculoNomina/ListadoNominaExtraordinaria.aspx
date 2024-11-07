@@ -130,6 +130,8 @@
                                 </telerik:GridBoundColumn>
                                 <telerik:GridBoundColumn DataField="Fecha" DataFormatString="{0:dd-MM-yyyy}" ItemStyle-HorizontalAlign="Left" HeaderText="Fecha" UniqueName="Fecha">
                                 </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn DataField="Observaciones" ItemStyle-HorizontalAlign="Left" HeaderText="Observaciones" UniqueName="Observaciones">
+                                </telerik:GridBoundColumn>
                             </Columns>
                         </MasterTableView>
                     </telerik:RadGrid>

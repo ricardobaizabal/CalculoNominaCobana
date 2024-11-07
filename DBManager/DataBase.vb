@@ -9,13 +9,8 @@ Public Class DataBase
     Public parmsC As String = String.Empty
     Private p_conexion As String = ""
 
-    Sub New(Optional ByVal conexion As Integer = 0)
+    Sub New()
         conn = New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        'If conexion = 0 Then
-        '    conn = New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        'Else
-        '    conn = New SqlConnection(HttpContext.Current.Session("conexion").ToString)
-        'End If
     End Sub
     Public Sub OpenConnection()
         Try

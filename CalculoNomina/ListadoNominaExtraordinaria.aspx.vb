@@ -17,79 +17,89 @@ Imports System.Globalization
 Public Class ListadoNominaExtraordinaria
     Inherits System.Web.UI.Page
     Dim ObjData As New DataControl()
+    Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private dtEmpleados As DataTable
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            Dim objCat As New DataControl(1)
+
+            Dim objCat As New DataControl()
             Dim cConcepto As New Entities.Catalogos
-            objCat.CatalogoRad(cmbCliente, cConcepto.ConsultarMisClientes, True, False)
-            objCat.CatalogoRad(cmbPeriodicidad, cConcepto.ConsultarPeriodoPago2, True, False)
-            CargarGridNominas()
+            objCat.CatalogoRad(cmbCliente, cConcepto.ConsultarMisClientes, True, True)
+            objCat.CatalogoRad(cmbPeriodicidad, cConcepto.ConsultarPeriodoPago2, True, True)
+            objCat = Nothing
+
+            Call CargarGridNominas()
+
         End If
     End Sub
     Private Sub CargarGridNominas()
+
         Call CargarVariablesGenerales()
-        Dim periodicidad, cliente, periodo As Integer
+
+        Dim TipoNomina, IdCliente, Periodo As Integer
 
         If cmbPeriodicidad.SelectedValue.ToString() = "" Then
-            periodicidad = 0
+            TipoNomina = 0
         Else
-            periodicidad = cmbPeriodicidad.SelectedValue
+            TipoNomina = cmbPeriodicidad.SelectedValue
         End If
 
         If cmbCliente.SelectedValue.ToString() = "" Then
-            cliente = 0
+            IdCliente = 0
         Else
-            cliente = cmbCliente.SelectedValue
+            IdCliente = cmbCliente.SelectedValue
         End If
 
         If cmbPeriodo.SelectedValue.ToString() = "" Then
-            periodo = 0
+            Periodo = 0
         Else
-            periodo = cmbPeriodo.SelectedValue
+            Periodo = cmbPeriodo.SelectedValue
         End If
 
         Dim dt_nominas As New DataTable()
         Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = IdCliente
         cNomina.Ejercicio = IdEjercicio
         cNomina.EsEspecial = True
-        cNomina.TipoNomina = periodicidad
-        cNomina.Periodo = periodo
-        cNomina.IdCliente = cliente
+        cNomina.TipoNomina = TipoNomina
+        cNomina.Periodo = Periodo
         GridNominas.DataSource = cNomina.ConsultarTodasNominaExtraordinaria()
         GridNominas.DataBind()
     End Sub
     Private Sub GridNominas_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridNominas.NeedDataSource
+
         Call CargarVariablesGenerales()
 
-        Dim periodicidad, cliente, periodo As Integer
+        Dim TipoNomina, IdCliente, Periodo As Integer
 
         If cmbPeriodicidad.SelectedValue.ToString() = "" Then
-            periodicidad = 0
+            TipoNomina = 0
         Else
-            periodicidad = cmbPeriodicidad.SelectedValue
+            TipoNomina = cmbPeriodicidad.SelectedValue
         End If
 
         If cmbCliente.SelectedValue.ToString() = "" Then
-            cliente = 0
+            IdCliente = 0
         Else
-            cliente = cmbCliente.SelectedValue
+            IdCliente = cmbCliente.SelectedValue
         End If
 
         If cmbPeriodo.SelectedValue.ToString() = "" Then
-            periodo = 0
+            Periodo = 0
         Else
-            periodo = cmbPeriodo.SelectedValue
+            Periodo = cmbPeriodo.SelectedValue
         End If
 
         Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = IdCliente
         cNomina.Ejercicio = IdEjercicio
         cNomina.EsEspecial = True
-        cNomina.TipoNomina = periodicidad
-        cNomina.Periodo = periodo
-        cNomina.IdCliente = cliente
+        cNomina.TipoNomina = TipoNomina
+        cNomina.Periodo = Periodo
         GridNominas.DataSource = cNomina.ConsultarTodasNominaExtraordinaria()
         cNomina = Nothing
     End Sub
@@ -136,19 +146,21 @@ Public Class ListadoNominaExtraordinaria
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
         cPeriodo.ExtraordinarioBit = False
-        ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
+        ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, True)
         ObjData = Nothing
     End Sub
     Private Sub CargarVariablesGenerales()
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
+                IdEmpresa = oDataRow("IdEmpresa")
                 IdEjercicio = oDataRow("IdEjercicio")
             Next
         End If

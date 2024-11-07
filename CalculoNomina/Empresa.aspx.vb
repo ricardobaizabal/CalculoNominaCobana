@@ -152,7 +152,6 @@ Public Class Empresa
 
             cmd.ExecuteReader()
 
-
             conn.Close()
             conn.Dispose()
 
@@ -163,6 +162,8 @@ Public Class Empresa
             conn.Close()
             conn.Dispose()
         End Try
+
+        Call CargarCliente()
 
         rwAlerta.RadAlert("Datos actualizados", 330, 180, "Alerta", "", "")
     End Sub
@@ -178,6 +179,7 @@ Public Class Empresa
         cEmpresa.ConsultarEmpresaID()
 
         If cEmpresa.IdEmpresa > 0 Then
+
             Session("IdEmpresa") = cEmpresa.IdEmpresa.ToString()
             Session("Empresa") = cEmpresa.Nombre.ToString()
 
@@ -187,9 +189,13 @@ Public Class Empresa
             cConfiguracion.GuadarConfiguracion()
             cConfiguracion = Nothing
 
+            rwAlerta.RadAlert("<span style=""font-weight: 500;"">SELECCIONASTE LA EMPRESA:</span> <span style=""font-weight: 700; text-transform: uppercase;"">" & cEmpresa.Nombre.ToString() & "</span>", 330, 180, "Alerta", "", "")
+
+            Call CargarCliente()
+
         End If
         cEmpresa = Nothing
-        Response.Redirect("~/Empresa.aspx")
+        'Response.Redirect("~/Empresa.aspx")
     End Sub
 
     Private Sub btnSalir_Click(sender As Object, e As EventArgs) Handles btnSalir.Click

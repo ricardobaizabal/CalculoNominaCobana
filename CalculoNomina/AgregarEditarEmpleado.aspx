@@ -1178,12 +1178,12 @@
                                     <tr>
                                         <td style="width: 25%;">
                                             <asp:Label ID="lblRegistroPatronal" runat="server" CssClass="item" Font-Bold="True" Text="Registro Patronal:"></asp:Label>
-                                            <asp:RequiredFieldValidator ID="valRegistroPatronal" runat="server" ControlToValidate="ddlRegistroPatronal" ValidationGroup="vDatosContrato" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                                            <%--<asp:RequiredFieldValidator ID="valRegistroPatronal" runat="server" ControlToValidate="ddlRegistroPatronal" ValidationGroup="vDatosContrato" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                         </td>
-                                        <td style="width: 25%;">
+                                        <%--<td style="width: 25%;">
                                             <asp:Label ID="lblRegimenContratacion" runat="server" CssClass="item" Font-Bold="True" Text="Régimen de Contratación:"></asp:Label>
                                             <asp:RequiredFieldValidator ID="valRegimenContratacion" ValidationGroup="vDatosContrato" runat="server" ControlToValidate="ddlRegimenContratacion" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                                        </td>
+                                        </td>--%>
                                         <td style="width: 25%;">
                                             <asp:Label ID="lblAnosAntiguedad" runat="server" CssClass="item" Font-Bold="True" Text="Años Antiguedad:"></asp:Label>
                                         </td>
@@ -1199,14 +1199,16 @@
                                                 </tr>
                                             </table>
                                         </td>
+                                        <td>&nbsp;</td>
                                     </tr>
                                     <tr>
                                         <td style="width: 25%;">
-                                            <telerik:RadComboBox ID="ddlRegistroPatronal" runat="server" Width="300px"></telerik:RadComboBox>
+                                            <%--<telerik:RadComboBox ID="ddlRegistroPatronal" runat="server" Width="300px"></telerik:RadComboBox>--%>
+                                            <telerik:RadTextBox ID="txtRegistroPatronal" runat="server" Enabled="false"></telerik:RadTextBox>
                                         </td>
-                                        <td style="width: 25%;">
+                                        <%--<td style="width: 25%;">
                                             <telerik:RadComboBox ID="ddlRegimenContratacion" runat="server" Width="300px"></telerik:RadComboBox>
-                                        </td>
+                                        </td>--%>
                                         <td style="width: 25%;">
                                             <telerik:RadNumericTextBox ID="txtAnosAntiguedad" runat="server" Value="0" MinValue="0" Width="100px"></telerik:RadNumericTextBox>
                                         </td>
@@ -1225,6 +1227,7 @@
                                                 </tr>
                                             </table>
                                         </td>
+                                        <td>&nbsp;</td>
                                     </tr>
                                     <tr>
                                         <td style="width: 25%;">
@@ -1422,7 +1425,7 @@
                                             <telerik:RadComboBox ID="ddlEjecutivo" runat="server" Width="300px"></telerik:RadComboBox>
                                         </td>
                                         <td style="width: 25%;">
-                                            <telerik:RadComboBox ID="ddlPlaza" runat="server" Width="300px" Visible="false"></telerik:RadComboBox>
+                                            <%--<telerik:RadComboBox ID="ddlPlaza" runat="server" Width="300px" Visible="false"></telerik:RadComboBox>--%>
                                             <%--<asp:RequiredFieldValidator ID="RequiredFieldValidator37" runat="server" ControlToValidate="ddlPlaza" ValidationGroup="vDatosContrato" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>--%>
                                         </td>
                                         <td style="width: 25%;">&nbsp;</td>

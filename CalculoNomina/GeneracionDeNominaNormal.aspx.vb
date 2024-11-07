@@ -278,7 +278,7 @@ Public Class GeneracionDeNominaNormal
         cNomina.IdEmpresa = IdEmpresa
         cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = 1 'Semanal
+        cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.EsEspecial = True
         dt = cNomina.ConsultarDetalleNomina()
@@ -934,8 +934,8 @@ Public Class GeneracionDeNominaNormal
                 If IMSS > 0 Then
                     cNomina = New Nomina()
                     cNomina.IdEmpresa = IdEmpresa
-                    cNomina.Ejercicio = IdEjercicio
                     cNomina.IdCliente = cmbCliente.SelectedValue
+                    cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = Periodo
                     cNomina.NoEmpleado = NoEmpleado
@@ -971,6 +971,7 @@ Public Class GeneracionDeNominaNormal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1008,6 +1009,7 @@ Public Class GeneracionDeNominaNormal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1067,6 +1069,7 @@ Public Class GeneracionDeNominaNormal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1330,6 +1333,7 @@ Public Class GeneracionDeNominaNormal
             Call CargarVariablesGenerales()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1340,6 +1344,7 @@ Public Class GeneracionDeNominaNormal
 
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1350,6 +1355,7 @@ Public Class GeneracionDeNominaNormal
 
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1360,6 +1366,7 @@ Public Class GeneracionDeNominaNormal
 
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1370,6 +1377,7 @@ Public Class GeneracionDeNominaNormal
 
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1380,6 +1388,7 @@ Public Class GeneracionDeNominaNormal
 
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1424,6 +1433,7 @@ Public Class GeneracionDeNominaNormal
 
             If Agregar = 1 Then
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1432,6 +1442,7 @@ Public Class GeneracionDeNominaNormal
                 dt = cNomina.ConsultarConceptosEmpleado()
             ElseIf Agregar = 0 Then
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1442,6 +1453,7 @@ Public Class GeneracionDeNominaNormal
                 dt = cNomina.ConsultarConceptosEmpleado()
             Else
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -1708,7 +1720,6 @@ Public Class GeneracionDeNominaNormal
                 cNomina.Periodo = Periodo
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = 2
-                'cNomina.CvoConcepto = 85
                 cNomina.IdContrato = IdContrato
                 cNomina.TipoConcepto = "P"
                 cNomina.Unidad = 7
@@ -2171,8 +2182,18 @@ Public Class GeneracionDeNominaNormal
                 End If
 
             ElseIf rowTimbrado.Length = 0 Then
+
+                If (rowGenerados.Length > 0) Then
+                    If rowGenerados.Length < dt.Rows.Count Then
+                        btnTimbrarNominaSemanal.Enabled = False
+                    Else
+                        btnTimbrarNominaSemanal.Enabled = True
+                    End If
+                Else
+                    btnTimbrarNominaSemanal.Enabled = False
+                End If
+
                 btnBorrarNomina.Enabled = True
-                btnTimbrarNominaSemanal.Enabled = True
                 btnGenerarPDF.Enabled = False
                 btnGeneraTxtDispersion.Enabled = False
             End If
@@ -2278,6 +2299,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2299,6 +2321,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2360,6 +2383,7 @@ Public Class GeneracionDeNominaNormal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2546,8 +2570,6 @@ Public Class GeneracionDeNominaNormal
 
         If folio.Value > 0 Then
             Dim path As String = Server.MapPath("~/Certificado/") & CertificadoCliente() & ".cer"
-            Response.Write(path)
-            'Response.End()
             FolioXml = RutaXML & "/" & serie.Value.ToString & folio.Value.ToString & ".xml"
             SellarCFD(Comprobante, path)
             m_xmlDOM.InnerXml = (Replace(m_xmlDOM.InnerXml, "schemaLocation", "xsi:schemaLocation", , , CompareMethod.Text))
@@ -2573,7 +2595,7 @@ Public Class GeneracionDeNominaNormal
         Dim LugarExpedicion As String = ""
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("IdEmpresa")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -2589,6 +2611,7 @@ Public Class GeneracionDeNominaNormal
         dt = New DataTable
         cNomina = New Nomina()
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2655,7 +2678,7 @@ Public Class GeneracionDeNominaNormal
     Private Sub CrearNodoEmisor(ByVal Nodo As XmlNode)
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("IdEmpresa")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim Emisor As XmlElement
@@ -2676,6 +2699,8 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtReceptor As New DataTable
         Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = cmbPeriodicidad.SelectedValue 'Semanal
@@ -2735,6 +2760,8 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmpleado As New DataTable
         Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
@@ -2780,6 +2807,8 @@ Public Class GeneracionDeNominaNormal
 
                 Dim dt As New DataTable
                 cNomina = New Nomina()
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -2852,6 +2881,8 @@ Public Class GeneracionDeNominaNormal
 
                 dt = New DataTable
                 cNomina = New Nomina()
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -2910,7 +2941,7 @@ Public Class GeneracionDeNominaNormal
                 Dim registro_patronal As String = ""
                 Dim fac_rfc As String = ""
 
-                ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("IdEmpresa") & "'")
+                ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
                 If ds.Tables.Count > 0 Then
                     For Each row As DataRow In ds.Tables(0).Rows
@@ -3016,6 +3047,7 @@ Public Class GeneracionDeNominaNormal
                 dt = New DataTable
                 cNomina = New Nomina()
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -3067,6 +3099,7 @@ Public Class GeneracionDeNominaNormal
                 dt = New DataTable
                 cNomina = New Nomina()
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -3118,6 +3151,7 @@ Public Class GeneracionDeNominaNormal
                 dt = New DataTable
                 cNomina = New Nomina()
                 cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -3147,6 +3181,8 @@ Public Class GeneracionDeNominaNormal
                 '
                 dt = New DataTable
                 cNomina = New Nomina()
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Tipo = "N"
@@ -3225,6 +3261,8 @@ Public Class GeneracionDeNominaNormal
                 '
                 dt = New DataTable
                 cNomina = New Nomina()
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = cmbCliente.SelectedValue
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 1 'Semanal
                 cNomina.Periodo = Periodo
@@ -3287,6 +3325,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -3350,7 +3389,7 @@ Public Class GeneracionDeNominaNormal
     End Function
     Private Function CertificadoCliente() As String
         Dim Certificado As String = ""
-        Dim ObjData As New DataControl(0)
+        Dim ObjData As New DataControl()
         Certificado = ObjData.RunSQLScalarQueryString("select top 1 isnull(certificado,'') as certificado from tblCliente where id='" & Session("IdEmpresa").ToString & "'")
         Dim elements() As String = Certificado.Split(New Char() {"."c}, StringSplitOptions.RemoveEmptyEntries)
         ObjData = Nothing
@@ -3360,7 +3399,7 @@ Public Class GeneracionDeNominaNormal
     End Function
     Private Function ContrasenaPfx() As String
         Dim contrasena_llave_privada As String = ""
-        Dim ObjData As New DataControl(0)
+        Dim ObjData As New DataControl()
         contrasena_llave_privada = ObjData.RunSQLScalarQueryString("select top 1 isnull(contrasena,'') as contrasena from tblCliente where id='" & Session("IdEmpresa").ToString & "'")
         ObjData = Nothing
 
@@ -3386,6 +3425,7 @@ Public Class GeneracionDeNominaNormal
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "N"
@@ -3408,6 +3448,7 @@ Public Class GeneracionDeNominaNormal
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal 
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -3434,7 +3475,9 @@ Public Class GeneracionDeNominaNormal
         End If
 
     End Sub
-    Private Function GeneraPDF(ByVal NoEmpleado As Integer, ByVal UUID As String) As Telerik.Reporting.Report
+    Private Function GeneraPDF(ByVal NoEmpleado As Integer, ByVal UUID As String, ByVal RFC As String) As Telerik.Reporting.Report
+
+        Call CargarVariablesGenerales()
 
         Dim Serie As String = ""
         Dim Folio As String = ""
@@ -3457,7 +3500,7 @@ Public Class GeneracionDeNominaNormal
         Dim ObjData As New DataControl(0)
         Dim ds As New DataSet
 
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("IdEmpresa") & "'")
+        ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
         If ds.Tables.Count > 0 Then
             For Each row As DataRow In ds.Tables(0).Rows
@@ -3469,7 +3512,7 @@ Public Class GeneracionDeNominaNormal
         End If
 
         Dim reporte As New Formatos.formato_nomina
-        reporte.ReportParameters("conn").Value = Session("conexion").ToString
+        reporte.ReportParameters("conn").Value = ConfigurationManager.ConnectionStrings("conn").ConnectionString
 
         Dim dt As New DataTable
 
@@ -3485,7 +3528,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmisor As New DataTable
         cNomina = New Nomina()
-        cNomina.Id = Session("IdEmpresa")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -3513,6 +3556,8 @@ Public Class GeneracionDeNominaNormal
                     emp_nombre = row("emp_nombre")
 
                     cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = Periodo
@@ -3528,6 +3573,8 @@ Public Class GeneracionDeNominaNormal
                     End If
 
                     cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
                     cNomina.Periodo = Periodo
@@ -3546,7 +3593,16 @@ Public Class GeneracionDeNominaNormal
                     Dim largo = Len(CStr(Format(CDbl(Neto), "#,###.00")))
                     Dim decimales = Mid(CStr(Format(CDbl(Neto), "#,###.00")), largo - 2)
 
-                    FolioXml = Server.MapPath("~\XmlTimbrados\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & UUID & ".xml"
+                    'FolioXml = Server.MapPath("~\XmlTimbrados\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & UUID & ".xml"
+
+                    Dim cPeriodo As New Entities.Periodo()
+                    cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+                    cPeriodo.ConsultarPeriodoID()
+
+                    Dim rutaEmpresa As String = ""
+                    rutaEmpresa = Server.MapPath("~\XmlTimbrados\" & RfcEmisor & "\" & RfcCliente.ToString & "\S\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+
+                    FolioXml = rutaEmpresa & "\" & RFC.ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & UUID.ToString & ".xml"
 
                     Serie = GetXmlAttribute(FolioXml, "Serie", "cfdi:Comprobante").ToString
                     Folio = GetXmlAttribute(FolioXml, "Folio", "cfdi:Comprobante").ToString
@@ -3662,233 +3718,239 @@ Public Class GeneracionDeNominaNormal
         Return reporte
 
     End Function
-    Private Function GeneraPDFNoTimbrado(ByVal NoEmpleado As Integer) As Telerik.Reporting.Report
+    'Private Function GeneraPDFNoTimbrado(ByVal NoEmpleado As Integer) As Telerik.Reporting.Report
 
-        Dim reporte As New Formatos.formato_comisiones
+    '    Dim reporte As New Formatos.formato_comisiones
 
-        Dim Serie As String = ""
-        Dim Folio As String = ""
+    '    Dim Serie As String = ""
+    '    Dim Folio As String = ""
 
-        Dim plantillaid As Integer = 1
-        Dim numero_empleado As String = ""
-        Dim periodo_pago As String = ""
-        Dim fecha_inicial As String = ""
-        Dim fecha_final As String = ""
-        Dim regimen As String = ""
-        Dim metodo_pago As String = ""
-        Dim razonsocial As String = ""
-        Dim fac_rfc As String = ""
-        Dim registro_patronal As String = ""
+    '    Dim plantillaid As Integer = 1
+    '    Dim numero_empleado As String = ""
+    '    Dim periodo_pago As String = ""
+    '    Dim fecha_inicial As String = ""
+    '    Dim fecha_final As String = ""
+    '    Dim regimen As String = ""
+    '    Dim metodo_pago As String = ""
+    '    Dim razonsocial As String = ""
+    '    Dim fac_rfc As String = ""
+    '    Dim registro_patronal As String = ""
 
-        Dim emp_nombre As String = ""
-        Dim emp_direccion As String = ""
-        Dim emp_num_exterior As String = ""
-        Dim emp_num_interior As String = ""
-        Dim emp_colonia As String = ""
-        Dim emp_codigo_postal As String = ""
-        Dim emp_municipio As String = ""
-        Dim emp_estado As String = ""
-        Dim emp_pais As String = ""
-        Dim emp_fecha_ingreso As String = ""
-        Dim emp_antiguedad As String = ""
-        Dim emp_rfc As String = ""
-        Dim emp_curp As String = ""
-        Dim emp_numero_seguro_social As String = ""
-        Dim emp_regimen_contratacion As String = ""
-        Dim emp_registro_patronal As String = ""
-        Dim emp_riesgo_puesto As String = ""
-        Dim emp_salario_base As String = ""
-        Dim emp_salario_diario_integrado As String = ""
-        Dim emp_horas_extra_dobles As String = ""
-        Dim emp_horas_extra_triples As String = ""
-        Dim emp_tipo_jornada As String = ""
-        Dim emp_departamento As String = ""
-        Dim emp_puesto As String = ""
-        Dim emp_dias_laborados As String = ""
-        Dim emp_banco As String = ""
-        Dim emp_clabe As String = ""
-        Dim empleadoid As String = ""
-        Dim CantidadTexto As String = ""
-        Dim lugar_expedicion1 As String = ""
-        Dim lugar_expedicion2 As String = ""
-        Dim lugar_expedicion3 As String = ""
-        Dim logo_formato As String = ""
-        Dim total_percepciones As Decimal = 0
-        Dim total_deducciones As Decimal = 0
-        Dim total As Decimal = 0
-        Dim lugar_expedicion As String = ""
+    '    Dim emp_nombre As String = ""
+    '    Dim emp_direccion As String = ""
+    '    Dim emp_num_exterior As String = ""
+    '    Dim emp_num_interior As String = ""
+    '    Dim emp_colonia As String = ""
+    '    Dim emp_codigo_postal As String = ""
+    '    Dim emp_municipio As String = ""
+    '    Dim emp_estado As String = ""
+    '    Dim emp_pais As String = ""
+    '    Dim emp_fecha_ingreso As String = ""
+    '    Dim emp_antiguedad As String = ""
+    '    Dim emp_rfc As String = ""
+    '    Dim emp_curp As String = ""
+    '    Dim emp_numero_seguro_social As String = ""
+    '    Dim emp_regimen_contratacion As String = ""
+    '    Dim emp_registro_patronal As String = ""
+    '    Dim emp_riesgo_puesto As String = ""
+    '    Dim emp_salario_base As String = ""
+    '    Dim emp_salario_diario_integrado As String = ""
+    '    Dim emp_horas_extra_dobles As String = ""
+    '    Dim emp_horas_extra_triples As String = ""
+    '    Dim emp_tipo_jornada As String = ""
+    '    Dim emp_departamento As String = ""
+    '    Dim emp_puesto As String = ""
+    '    Dim emp_dias_laborados As String = ""
+    '    Dim emp_banco As String = ""
+    '    Dim emp_clabe As String = ""
+    '    Dim empleadoid As String = ""
+    '    Dim CantidadTexto As String = ""
+    '    Dim lugar_expedicion1 As String = ""
+    '    Dim lugar_expedicion2 As String = ""
+    '    Dim lugar_expedicion3 As String = ""
+    '    Dim logo_formato As String = ""
+    '    Dim total_percepciones As Decimal = 0
+    '    Dim total_deducciones As Decimal = 0
+    '    Dim total As Decimal = 0
+    '    Dim lugar_expedicion As String = ""
 
-        Dim ObjData As New DataControl(0)
-        Dim ds As New DataSet
+    '    Dim ObjData As New DataControl(0)
+    '    Dim ds As New DataSet
 
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("IdEmpresa") & "'")
+    '    ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
-        If ds.Tables.Count > 0 Then
-            For Each row As DataRow In ds.Tables(0).Rows
-                lugar_expedicion = "C. P." & row("fac_cp") & " - " & row("fac_municipio") & ", " & row("fac_pais")
-                razonsocial = row("razonsocial")
-                fac_rfc = row("rfc")
-                registro_patronal = row("registro_patronal")
-                plantillaid = row("plantillaid")
-            Next
-        End If
+    '    If ds.Tables.Count > 0 Then
+    '        For Each row As DataRow In ds.Tables(0).Rows
+    '            lugar_expedicion = "C. P." & row("fac_cp") & " - " & row("fac_municipio") & ", " & row("fac_pais")
+    '            razonsocial = row("razonsocial")
+    '            fac_rfc = row("rfc")
+    '            registro_patronal = row("registro_patronal")
+    '            plantillaid = row("plantillaid")
+    '        Next
+    '    End If
 
-        Dim dt As DataTable = New DataTable()
+    '    Dim dt As DataTable = New DataTable()
 
-        Dim cNomina As New Nomina()
-        cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = 1 'Semanal
-        cNomina.Periodo = Periodo
-        cNomina.TipoConcepto = "P"
-        cNomina.Tipo = "N"
-        cNomina.NoEmpleado = NoEmpleado
-        dt = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
-        cNomina = Nothing
+    '    Dim cNomina As New Nomina()
+    '    cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdCliente = cmbCliente.SelectedValue
+    '    cNomina.Ejercicio = IdEjercicio
+    '    cNomina.TipoNomina = 1 'Semanal
+    '    cNomina.Periodo = Periodo
+    '    cNomina.TipoConcepto = "P"
+    '    cNomina.Tipo = "N"
+    '    cNomina.NoEmpleado = NoEmpleado
+    '    dt = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
+    '    cNomina = Nothing
 
-        If dt.Rows.Count > 0 Then
-            total_percepciones = Math.Round(dt.Compute("SUM(Importe)", ""), 6)
-        End If
+    '    If dt.Rows.Count > 0 Then
+    '        total_percepciones = Math.Round(dt.Compute("SUM(Importe)", ""), 6)
+    '    End If
 
-        cNomina = New Nomina()
-        cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = 1 'Semanal
-        cNomina.Periodo = Periodo
-        cNomina.TipoConcepto = "D"
-        cNomina.Tipo = "N"
-        cNomina.NoEmpleado = NoEmpleado
-        dt = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
-        cNomina = Nothing
+    '    cNomina = New Nomina()
+    '    cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdCliente = cmbCliente.SelectedValue
+    '    cNomina.Ejercicio = IdEjercicio
+    '    cNomina.TipoNomina = 1 'Semanal
+    '    cNomina.Periodo = Periodo
+    '    cNomina.TipoConcepto = "D"
+    '    cNomina.Tipo = "N"
+    '    cNomina.NoEmpleado = NoEmpleado
+    '    dt = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
+    '    cNomina = Nothing
 
-        If dt.Rows.Count > 0 Then
-            total_deducciones = Math.Round(dt.Compute("SUM(Importe)", ""), 6)
-        End If
+    '    If dt.Rows.Count > 0 Then
+    '        total_deducciones = Math.Round(dt.Compute("SUM(Importe)", ""), 6)
+    '    End If
 
-        total = total_percepciones - total_deducciones
+    '    total = total_percepciones - total_deducciones
 
-        cNomina = New Nomina()
-        cNomina.NoEmpleado = NoEmpleado
-        cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = 1 'Semanal
-        cNomina.Periodo = Periodo
-        dt = cNomina.ConsultarDatosPDF()
+    '    cNomina = New Nomina()
+    '    cNomina.NoEmpleado = NoEmpleado
+    '    cNomina.Ejercicio = IdEjercicio
+    '    cNomina.TipoNomina = 1 'Semanal
+    '    cNomina.Periodo = Periodo
+    '    dt = cNomina.ConsultarDatosPDF()
 
-        Try
+    '    Try
 
-            If dt.Rows.Count > 0 Then
-                For Each row As DataRow In dt.Rows
+    '        If dt.Rows.Count > 0 Then
+    '            For Each row As DataRow In dt.Rows
 
-                    Call ConsultarNumeroDeDiasPagados(NoEmpleado)
+    '                Call ConsultarNumeroDeDiasPagados(NoEmpleado)
 
-                    Serie = row("Serie")
-                    Folio = row("Folio")
+    '                Serie = row("Serie")
+    '                Folio = row("Folio")
 
-                    numero_empleado = NoEmpleado
-                    periodo_pago = row("periodo_pago")
-                    fecha_inicial = row("fecha_inicial")
-                    fecha_final = row("fecha_final")
-                    metodo_pago = row("metodo_pago")
-                    emp_nombre = row("emp_nombre")
-                    emp_fecha_ingreso = row("emp_fecha_ingreso")
-                    emp_rfc = row("emp_rfc")
-                    emp_curp = row("emp_curp")
-                    emp_numero_seguro_social = row("emp_numero_seguro_social")
-                    emp_regimen_contratacion = row("emp_regimen_contratacion")
-                    emp_riesgo_puesto = row("emp_riesgo_puesto")
-                    emp_salario_base = row("emp_salario_base")
-                    emp_salario_diario_integrado = row("emp_salario_diario_integrado")
-                    emp_tipo_jornada = row("emp_tipo_jornada")
-                    emp_departamento = row("emp_departamento")
-                    emp_puesto = row("emp_puesto")
-                    emp_dias_laborados = row("emp_dias_laborados")
-                    emp_banco = row("emp_banco")
-                    emp_clabe = row("emp_clabe")
-                    empleadoid = row("empleadoid")
+    '                numero_empleado = NoEmpleado
+    '                periodo_pago = row("periodo_pago")
+    '                fecha_inicial = row("fecha_inicial")
+    '                fecha_final = row("fecha_final")
+    '                metodo_pago = row("metodo_pago")
+    '                emp_nombre = row("emp_nombre")
+    '                emp_fecha_ingreso = row("emp_fecha_ingreso")
+    '                emp_rfc = row("emp_rfc")
+    '                emp_curp = row("emp_curp")
+    '                emp_numero_seguro_social = row("emp_numero_seguro_social")
+    '                emp_regimen_contratacion = row("emp_regimen_contratacion")
+    '                emp_riesgo_puesto = row("emp_riesgo_puesto")
+    '                emp_salario_base = row("emp_salario_base")
+    '                emp_salario_diario_integrado = row("emp_salario_diario_integrado")
+    '                emp_tipo_jornada = row("emp_tipo_jornada")
+    '                emp_departamento = row("emp_departamento")
+    '                emp_puesto = row("emp_puesto")
+    '                emp_dias_laborados = row("emp_dias_laborados")
+    '                emp_banco = row("emp_banco")
+    '                emp_clabe = row("emp_clabe")
+    '                empleadoid = row("empleadoid")
 
-                    Dim largo = Len(CStr(Format(CDbl(total), "#,###.00")))
-                    Dim decimales = Mid(CStr(Format(CDbl(total), "#,###.00")), largo - 2)
+    '                Dim largo = Len(CStr(Format(CDbl(total), "#,###.00")))
+    '                Dim decimales = Mid(CStr(Format(CDbl(total), "#,###.00")), largo - 2)
 
-                    CantidadTexto = "( " + Num2Text(total - decimales) & " pesos " & Mid(decimales, Len(decimales) - 1) & "/100 M.N. )"
+    '                CantidadTexto = "( " + Num2Text(total - decimales) & " pesos " & Mid(decimales, Len(decimales) - 1) & "/100 M.N. )"
 
-                    reporte.ReportParameters("IdEmpresa").Value = IdEmpresa
-                    reporte.ReportParameters("conn").Value = Session("conexion").ToString
-                    reporte.ReportParameters("txtNoNomina").Value = Serie.ToString & " - " & Folio.ToString
-                    reporte.ReportParameters("NoEmpleado").Value = NoEmpleado
-                    reporte.ReportParameters("Ejercicio").Value = IdEjercicio
-                    reporte.ReportParameters("TipoNomina").Value = 1 'Semanal
-                    reporte.ReportParameters("Periodo").Value = Periodo
-                    reporte.ReportParameters("Tipo").Value = "N"
-                    reporte.ReportParameters("plantillaId").Value = plantillaid
-                    reporte.ReportParameters("empleadoid").Value = empleadoid.ToString
-                    reporte.ReportParameters("txtLugarExpedicion1").Value = lugar_expedicion
-                    reporte.ReportParameters("txtRazonSocialEmisor").Value = razonsocial
-                    reporte.ReportParameters("txtRFCEmisor").Value = fac_rfc
-                    reporte.ReportParameters("txtRegistroPatronal").Value = registro_patronal
-                    reporte.ReportParameters("txtTipoComprobante").Value = "N - Nómina"
-                    reporte.ReportParameters("txtFormaPago").Value = "99 - Por definir"
-                    reporte.ReportParameters("txtEmpleadoNo").Value = numero_empleado.ToString
-                    reporte.ReportParameters("txtEmpleadoNombre").Value = emp_nombre.ToString
-                    reporte.ReportParameters("txtEmpleadoDireccion").Value = emp_direccion.ToString
-                    reporte.ReportParameters("txtEmpleadoNumExterior").Value = emp_num_exterior.ToString
-                    reporte.ReportParameters("txtEmpleadoNumInterior").Value = emp_num_interior.ToString
-                    reporte.ReportParameters("txtEmpleadoColonia").Value = emp_colonia.ToString
-                    reporte.ReportParameters("txtEmpleadoCodigoPostal").Value = emp_codigo_postal.ToString
-                    reporte.ReportParameters("txtEmpleadoMunicipio").Value = emp_municipio.ToString
-                    reporte.ReportParameters("txtEmpleadoEstado").Value = emp_estado.ToString
-                    reporte.ReportParameters("txtEmpleadoPais").Value = emp_pais.ToString
-                    reporte.ReportParameters("txtEmpleadoFechaIngreso").Value = emp_fecha_ingreso.ToString
-                    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = emp_antiguedad.ToString
-                    reporte.ReportParameters("txtEmpleadoRFC").Value = emp_rfc.ToString
-                    reporte.ReportParameters("txtEmpleadoCURP").Value = emp_curp.ToString
-                    reporte.ReportParameters("txtEmpleadoNoSeguroSocial").Value = emp_numero_seguro_social.ToString
-                    reporte.ReportParameters("txtEmpleadoRegimen").Value = emp_regimen_contratacion.ToString
-                    reporte.ReportParameters("txtEmpleadoTipoRiesgo").Value = emp_riesgo_puesto.ToString
-                    reporte.ReportParameters("txtEmpleadoDepartamento").Value = emp_departamento.ToString
-                    reporte.ReportParameters("txtEmpleadoPuesto").Value = emp_puesto.ToString
-                    'reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = FormatCurrency(emp_salario_base, 2).ToString
-                    'reporte.ReportParameters("txtEmpleadoSalarioDiarioIntegrado").Value = FormatCurrency(emp_salario_diario_integrado, 2).ToString
-                    reporte.ReportParameters("txtTipoJornada").Value = emp_tipo_jornada.ToString
-                    reporte.ReportParameters("txtDiasPagados").Value = NumeroDeDiasPagados.ToString
-                    reporte.ReportParameters("txtPeriocidadPago").Value = periodo_pago.ToString
-                    reporte.ReportParameters("txtFechaInicial").Value = fecha_inicial.ToString
-                    reporte.ReportParameters("txtFechaFinal").Value = fecha_final.ToString
-                    reporte.ReportParameters("txtMetodoPago").Value = "PUE - Pago en una sola exhibición"
-                    reporte.ReportParameters("txtBanco").Value = emp_banco.ToString
-                    reporte.ReportParameters("txtClabe").Value = emp_clabe.ToString
-                    reporte.ReportParameters("txtTotalPercepciones").Value = FormatCurrency(total_percepciones, 2).ToString
-                    reporte.ReportParameters("txtTotalDeducciones").Value = FormatCurrency(total_deducciones, 2).ToString
-                    reporte.ReportParameters("txtTotal").Value = FormatCurrency(total, 2).ToString
-                    reporte.ReportParameters("txtCantidadLetra").Value = CantidadTexto.ToString.ToUpper
-                    reporte.ReportParameters("paramImgBanner").Value = Server.MapPath("~/logos/ImgBanner.jpg")
+    '                reporte.ReportParameters("IdEmpresa").Value = IdEmpresa
+    '                reporte.ReportParameters("conn").Value = ConfigurationManager.ConnectionStrings("conn").ConnectionString
+    '                reporte.ReportParameters("txtNoNomina").Value = Serie.ToString & " - " & Folio.ToString
+    '                reporte.ReportParameters("NoEmpleado").Value = NoEmpleado
+    '                reporte.ReportParameters("Ejercicio").Value = IdEjercicio
+    '                reporte.ReportParameters("TipoNomina").Value = 1 'Semanal
+    '                reporte.ReportParameters("Periodo").Value = Periodo
+    '                reporte.ReportParameters("Tipo").Value = "N"
+    '                reporte.ReportParameters("plantillaId").Value = plantillaid
+    '                reporte.ReportParameters("empleadoid").Value = empleadoid.ToString
+    '                reporte.ReportParameters("txtLugarExpedicion1").Value = lugar_expedicion
+    '                reporte.ReportParameters("txtRazonSocialEmisor").Value = razonsocial
+    '                reporte.ReportParameters("txtRFCEmisor").Value = fac_rfc
+    '                reporte.ReportParameters("txtRegistroPatronal").Value = registro_patronal
+    '                reporte.ReportParameters("txtTipoComprobante").Value = "N - Nómina"
+    '                reporte.ReportParameters("txtFormaPago").Value = "99 - Por definir"
+    '                reporte.ReportParameters("txtEmpleadoNo").Value = numero_empleado.ToString
+    '                reporte.ReportParameters("txtEmpleadoNombre").Value = emp_nombre.ToString
+    '                reporte.ReportParameters("txtEmpleadoDireccion").Value = emp_direccion.ToString
+    '                reporte.ReportParameters("txtEmpleadoNumExterior").Value = emp_num_exterior.ToString
+    '                reporte.ReportParameters("txtEmpleadoNumInterior").Value = emp_num_interior.ToString
+    '                reporte.ReportParameters("txtEmpleadoColonia").Value = emp_colonia.ToString
+    '                reporte.ReportParameters("txtEmpleadoCodigoPostal").Value = emp_codigo_postal.ToString
+    '                reporte.ReportParameters("txtEmpleadoMunicipio").Value = emp_municipio.ToString
+    '                reporte.ReportParameters("txtEmpleadoEstado").Value = emp_estado.ToString
+    '                reporte.ReportParameters("txtEmpleadoPais").Value = emp_pais.ToString
+    '                reporte.ReportParameters("txtEmpleadoFechaIngreso").Value = emp_fecha_ingreso.ToString
+    '                reporte.ReportParameters("txtEmpleadoAntiguedad").Value = emp_antiguedad.ToString
+    '                reporte.ReportParameters("txtEmpleadoRFC").Value = emp_rfc.ToString
+    '                reporte.ReportParameters("txtEmpleadoCURP").Value = emp_curp.ToString
+    '                reporte.ReportParameters("txtEmpleadoNoSeguroSocial").Value = emp_numero_seguro_social.ToString
+    '                reporte.ReportParameters("txtEmpleadoRegimen").Value = emp_regimen_contratacion.ToString
+    '                reporte.ReportParameters("txtEmpleadoTipoRiesgo").Value = emp_riesgo_puesto.ToString
+    '                reporte.ReportParameters("txtEmpleadoDepartamento").Value = emp_departamento.ToString
+    '                reporte.ReportParameters("txtEmpleadoPuesto").Value = emp_puesto.ToString
+    '                'reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = FormatCurrency(emp_salario_base, 2).ToString
+    '                'reporte.ReportParameters("txtEmpleadoSalarioDiarioIntegrado").Value = FormatCurrency(emp_salario_diario_integrado, 2).ToString
+    '                reporte.ReportParameters("txtTipoJornada").Value = emp_tipo_jornada.ToString
+    '                reporte.ReportParameters("txtDiasPagados").Value = NumeroDeDiasPagados.ToString
+    '                reporte.ReportParameters("txtPeriocidadPago").Value = periodo_pago.ToString
+    '                reporte.ReportParameters("txtFechaInicial").Value = fecha_inicial.ToString
+    '                reporte.ReportParameters("txtFechaFinal").Value = fecha_final.ToString
+    '                reporte.ReportParameters("txtMetodoPago").Value = "PUE - Pago en una sola exhibición"
+    '                reporte.ReportParameters("txtBanco").Value = emp_banco.ToString
+    '                reporte.ReportParameters("txtClabe").Value = emp_clabe.ToString
+    '                reporte.ReportParameters("txtTotalPercepciones").Value = FormatCurrency(total_percepciones, 2).ToString
+    '                reporte.ReportParameters("txtTotalDeducciones").Value = FormatCurrency(total_deducciones, 2).ToString
+    '                reporte.ReportParameters("txtTotal").Value = FormatCurrency(total, 2).ToString
+    '                reporte.ReportParameters("txtCantidadLetra").Value = CantidadTexto.ToString.ToUpper
+    '                reporte.ReportParameters("paramImgBanner").Value = Server.MapPath("~/logos/ImgBanner.jpg")
 
-                    Dim datos As New DataTable()
-                    cNomina = New Nomina()
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 1 'Semanal
-                    cNomina.Periodo = Periodo
-                    cNomina.TipoConcepto = "DE"
-                    cNomina.Tipo = "N"
-                    cNomina.CvoConcepto = 87
-                    cNomina.NoEmpleado = NoEmpleado
-                    datos = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
-                    cNomina = Nothing
+    '                Dim datos As New DataTable()
+    '                cNomina = New Nomina()
+    '                cNomina.IdEmpresa = IdEmpresa
+    '                cNomina.IdCliente = cmbCliente.SelectedValue
+    '                cNomina.Ejercicio = IdEjercicio
+    '                cNomina.TipoNomina = 1 'Semanal
+    '                cNomina.Periodo = Periodo
+    '                cNomina.TipoConcepto = "DE"
+    '                cNomina.Tipo = "N"
+    '                cNomina.CvoConcepto = 87
+    '                cNomina.NoEmpleado = NoEmpleado
+    '                datos = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
+    '                cNomina = Nothing
 
-                    If datos.Rows.Count > 0 Then
-                        reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = FormatCurrency(datos.Rows(0).Item("CuotaDiaria"), 2).ToString
-                    End If
+    '                If datos.Rows.Count > 0 Then
+    '                    reporte.ReportParameters("txtEmpleadoSalarioDiario").Value = FormatCurrency(datos.Rows(0).Item("CuotaDiaria"), 2).ToString
+    '                End If
 
-                Next
+    '            Next
 
-                GrabarPDF(NoEmpleado, "S")
+    '            GrabarPDF(NoEmpleado, "S")
 
-            End If
-        Catch ex As Exception
-            GrabarPDF(NoEmpleado, "N")
-        Finally
-        End Try
+    '        End If
+    '    Catch ex As Exception
+    '        GrabarPDF(NoEmpleado, "N")
+    '    Finally
+    '    End Try
 
-        Return reporte
+    '    Return reporte
 
-    End Function
+    'End Function
     Private Sub GuardaPDF(ByVal report As Telerik.Reporting.Report, ByVal fileName As String)
         Dim reportProcessor As New Telerik.Reporting.Processing.ReportProcessor()
         Dim result As RenderingResult = reportProcessor.RenderReport("PDF", report, Nothing)
@@ -3958,6 +4020,7 @@ Public Class GeneracionDeNominaNormal
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -4141,12 +4204,8 @@ Public Class GeneracionDeNominaNormal
         '
         '   Analizar el fichero y presentar cada nodo
         '
-        If Version = "3.2" Then
-            CadenaCodigoBidimensional = "?re=" & RFCEmisor & "&rr=" & RFCReceptor & "&tt=" & Total & "&id=" & UUID
-        ElseIf Version = "3.3" Or Version = "4.0" Then
-            FinalSelloDigitalEmisor = Mid(SelloCFD, (Len(SelloCFD) - 7))
-            CadenaCodigoBidimensional = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx" & "?id=" & UUID & "&re=" & RFCEmisor & "&rr=" & RFCReceptor & "&tt=" & Total.ToString & "&fe=" & FinalSelloDigitalEmisor
-        End If
+        FinalSelloDigitalEmisor = Mid(SelloCFD, (Len(SelloCFD) - 7))
+        CadenaCodigoBidimensional = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx" & "?id=" & UUID & "&re=" & RFCEmisor & "&rr=" & RFCReceptor & "&tt=" & Total.ToString & "&fe=" & FinalSelloDigitalEmisor
         '
         '   Genera gráfico
         '
@@ -4166,6 +4225,8 @@ Public Class GeneracionDeNominaNormal
     End Sub
     Private Sub btnConfirmarGeneraNominaElectronica_Click(sender As Object, e As EventArgs) Handles btnConfirmarGeneraNominaElectronica.Click
 
+        Call CargarVariablesGenerales()
+
         Dim RfcEmisor As String = ""
         Dim RfcCliente As String = ""
 
@@ -4175,17 +4236,18 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Tipo = "N"
             cNomina.EsEspecial = False
-            cNomina.IdCliente = cmbCliente.SelectedValue
             dt = cNomina.ConsultarEmpleadosNoGenerados()
 
             Dim dtEmisor As New DataTable
             cNomina = New Nomina()
-            cNomina.Id = Session("IdEmpresa")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4269,8 +4331,13 @@ Public Class GeneracionDeNominaNormal
         End If
     End Sub
     Private Sub CargarPercepciones(ByVal NoEmpleado As Integer)
+
+        Call CargarVariablesGenerales()
+
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = Periodo
@@ -4308,9 +4375,13 @@ Public Class GeneracionDeNominaNormal
 
     End Sub
     Private Sub CargarDeducciones(ByVal NoEmpleado As Integer)
+
+        Call CargarVariablesGenerales()
+
         Dim dt As New DataTable
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = Periodo
@@ -4342,18 +4413,19 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.Tipo = "N"
-            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.EsEspecial = False
             dt = cNomina.ConsultarEmpleadosTimbrar()
 
             Dim FolioXmlTimbrado As String = ""
             Dim dtEmisor As New DataTable
             cNomina = New Nomina()
-            cNomina.Id = Session("IdEmpresa")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4447,14 +4519,15 @@ Public Class GeneracionDeNominaNormal
                         Call Comprimir()
 
                         Dim bytes() As Byte
-                        ' bytes = TimbreSifeiVersion33.getCFDI(SIFEIUsuario, SIFEIContrasena, data, "", SIFEIIdEquipo)
-                        bytes = TimbreSifeiVersion33.getCFDI("MUMR6604247X9", "650976ba", data, "", "ZDZmMzVlZjgtOWNlYi0xNjE3LWY3ZGUtNTJkODQ1MjIyMWFi")
-                        Descomprimir(bytes, oDataRow("NoEmpleado"))
+                        bytes = TimbreSifeiVersion33.getCFDI(SIFEIUsuario, SIFEIContrasena, data, "", SIFEIIdEquipo)
+                        Descomprimir(bytes, oDataRow("NoEmpleado"), oDataRow("RFC"))
                         '
                         '   Descontar Adeudo Fonacot
                         '
                         Dim dtCreditoFonacot As New DataTable
                         cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = cmbCliente.SelectedValue
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -4486,6 +4559,8 @@ Public Class GeneracionDeNominaNormal
                         '
                         Dim dtPrestamosPersonal As New DataTable
                         cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = cmbCliente.SelectedValue
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
                         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -4558,12 +4633,14 @@ Public Class GeneracionDeNominaNormal
 
                             Dim bytes() As Byte
                             bytes = TimbreSifeiVersion33.getCFDI(SIFEIUsuario, SIFEIContrasena, data, "", SIFEIIdEquipo)
-                            Descomprimir(bytes, oDataRow("NoEmpleado"))
+                            Descomprimir(bytes, oDataRow("NoEmpleado"), oDataRow("RFC"))
                             '
                             '   Descontar Adeudo Fonacot
                             '
                             Dim dtCreditoFonacot As New DataTable
                             cNomina = New Nomina()
+                            cNomina.IdEmpresa = IdEmpresa
+                            cNomina.IdCliente = cmbCliente.SelectedValue
                             cNomina.Ejercicio = IdEjercicio
                             cNomina.TipoNomina = 1 'Semanal
                             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -4579,6 +4656,7 @@ Public Class GeneracionDeNominaNormal
 
                                 Dim cFonacot = New Fonacot()
                                 cFonacot.IdCreditoFonacot = IdCreditoFonacot
+                                cFonacot.IdEmpresa = IdEmpresa
                                 cFonacot.Ejercicio = IdEjercicio
                                 cFonacot.TipoNomina = 1 'Semanal
                                 cFonacot.Periodo = cmbPeriodo.SelectedValue
@@ -4595,6 +4673,8 @@ Public Class GeneracionDeNominaNormal
                             '
                             Dim dtPrestamosPersonal As New DataTable
                             cNomina = New Nomina()
+                            cNomina.IdEmpresa = IdEmpresa
+                            cNomina.IdCliente = cmbCliente.SelectedValue
                             cNomina.Ejercicio = IdEjercicio
                             cNomina.TipoNomina = 1 'Semanal
                             cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -4681,7 +4761,7 @@ Public Class GeneracionDeNominaNormal
         zip.Save(ms)
         data = ms.ToArray
     End Function
-    Private Function Descomprimir(ByVal data5 As Byte(), ByVal NoEmpleado As Integer)
+    Private Sub Descomprimir(ByVal data5 As Byte(), ByVal NoEmpleado As Integer, ByVal RFC As String)
 
         Dim RfcEmisor As String = ""
         Dim RfcCliente As String = ""
@@ -4689,7 +4769,7 @@ Public Class GeneracionDeNominaNormal
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
         cNomina = New Nomina()
-        cNomina.Id = Session("IdEmpresa")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4736,16 +4816,19 @@ Public Class GeneracionDeNominaNormal
 
             Call GrabarTimbrado(NoEmpleado, "S", UUID)
 
-            FolioXmlTimbrado = DirectorioExtraccion & "\" & UUID.ToString & ".xml"
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+            cPeriodo.ConsultarPeriodoID()
+
+            FolioXmlTimbrado = DirectorioExtraccion & "\" & RFC.ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & UUID.ToString & ".xml"
 
             If File.Exists(FolioXml) Then
                 My.Computer.FileSystem.CopyFile(DirectorioExtraccion & "\" & archivo, FolioXmlTimbrado)
                 File.Delete(Server.MapPath("~\XmlGenerados\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\" & serie.Value.ToString & folio.Value.ToString & ".xml")
             End If
-
         End If
 
-    End Function
+    End Sub
     Private Sub btnConfirmarGeneraPDF_Click(sender As Object, e As EventArgs) Handles btnConfirmarGeneraPDF.Click
 
         If cmbPeriodo.SelectedValue > 0 Then
@@ -4758,6 +4841,8 @@ Public Class GeneracionDeNominaNormal
             Dim dt As New DataTable
 
             Dim cNomina As New Entities.Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = Periodo
@@ -4766,7 +4851,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("IdEmpresa")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4797,17 +4882,18 @@ Public Class GeneracionDeNominaNormal
                     i += 1
 
                     Dim rutaEmpresa As String = ""
-                    rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
+                    Dim FilePath As String = ""
+                    'rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
 
-                    Dim FilePath = rutaEmpresa & "\" & row("RFC").ToString & ".pdf"
+                    'FilePath = rutaEmpresa & "\" & row("RFC").ToString & ".pdf"
 
-                    If Not Directory.Exists(rutaEmpresa) Then
-                        Directory.CreateDirectory(rutaEmpresa)
-                    End If
+                    'If Not Directory.Exists(rutaEmpresa) Then
+                    '    Directory.CreateDirectory(rutaEmpresa)
+                    'End If
 
-                    If Not Directory.Exists(FilePath) Then
-                        GuardaPDF(GeneraPDFNoTimbrado(CInt(row("NoEmpleado"))), FilePath)
-                    End If
+                    'If Not Directory.Exists(FilePath) Then
+                    '    GuardaPDF(GeneraPDFNoTimbrado(CInt(row("NoEmpleado"))), FilePath)
+                    'End If
 
                     If row("UUID").ToString.Length > 0 Then
 
@@ -4823,7 +4909,7 @@ Public Class GeneracionDeNominaNormal
 
                         FilePath = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID") & ".pdf"
                         If Not File.Exists(FilePath) Then
-                            GuardaPDF(GeneraPDF(CInt(row("NoEmpleado")), row("UUID")), FilePath)
+                            GuardaPDF(GeneraPDF(CInt(row("NoEmpleado")), row("UUID"), row("RFC")), FilePath)
                         End If
 
                     End If
@@ -4857,21 +4943,27 @@ Public Class GeneracionDeNominaNormal
     Private Sub grdEmpleadosSemanal_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles grdEmpleadosSemanal.ItemCommand
         Select Case e.CommandName
             Case "cmdXML"
+                Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
                 Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
-                Call DownloadXML(e.CommandArgument.ToString)
+                Call DownloadXML(RFC, NoEmpleado, e.CommandArgument)
             Case "cmdPDF"
-                Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
-                Call DownloadPDF(RFC, e.CommandArgument.ToString)
+                'Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
+                'Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
+                'Call DownloadPDF(RFC, e.CommandArgument.ToString)
             Case "cmdPDFTimbrado"
                 Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
                 Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
                 Call DownloadPDFTimbrado(RFC, NoEmpleado, e.CommandArgument)
             Case "cmdSend"
+                Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
                 Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
-                Call EnviaEmail(e.CommandArgument)
+                Call EnviaEmail(RFC, NoEmpleado, e.CommandArgument)
+
+                Call CargarGridEmpleadosSemanal()
+
         End Select
     End Sub
-    Private Sub DownloadXML(ByVal UUID As String)
+    Private Sub DownloadXML(ByVal RFC As String, ByVal NoEmpleado As Int64, ByVal UUID As String)
 
         Dim RfcEmisor As String = ""
         Dim RfcCliente As String = ""
@@ -4880,7 +4972,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("IdEmpresa")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4907,7 +4999,13 @@ Public Class GeneracionDeNominaNormal
             Directory.CreateDirectory(rutaEmpresa)
         End If
 
-        Dim FilePath = rutaEmpresa & "/" & UUID & ".xml"
+        Dim cPeriodo As New Entities.Periodo()
+        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+        cPeriodo.ConsultarPeriodoID()
+
+        Dim FilePath As String = ""
+        FilePath = rutaEmpresa & "\" & RFC.ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & UUID.ToString & ".xml"
+
         If File.Exists(FilePath) Then
             Dim FileName As String = Path.GetFileName(FilePath)
             Response.Clear()
@@ -4918,63 +5016,63 @@ Public Class GeneracionDeNominaNormal
             Response.End()
         End If
     End Sub
-    Private Sub DownloadPDF(ByVal RFC As String, ByVal NoEmpleado As Integer)
+    'Private Sub DownloadPDF(ByVal RFC As String, ByVal NoEmpleado As Integer)
 
-        Dim RfcEmisor As String = ""
-        Dim RfcCliente As String = ""
+    '    Dim RfcEmisor As String = ""
+    '    Dim RfcCliente As String = ""
 
-        Call CargarVariablesGenerales()
+    '    Call CargarVariablesGenerales()
 
-        Dim dtEmisor As New DataTable
-        Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("IdEmpresa")
-        dtEmisor = cNomina.ConsultarDatosEmisor()
+    '    Dim dtEmisor As New DataTable
+    '    Dim cNomina As New Entities.Nomina()
+    '    cNomina.IdEmpresa = Session("IdEmpresa")
+    '    dtEmisor = cNomina.ConsultarDatosEmisor()
 
-        If dtEmisor.Rows.Count > 0 Then
-            For Each oDataRow In dtEmisor.Rows
-                RfcEmisor = oDataRow("RFC")
-            Next
-        End If
+    '    If dtEmisor.Rows.Count > 0 Then
+    '        For Each oDataRow In dtEmisor.Rows
+    '            RfcEmisor = oDataRow("RFC")
+    '        Next
+    '    End If
 
-        Dim dtCliente As New DataTable
-        cNomina = New Nomina()
-        cNomina.Id = cmbCliente.SelectedValue
-        dtCliente = cNomina.ConsultarDatosCliente()
+    '    Dim dtCliente As New DataTable
+    '    cNomina = New Nomina()
+    '    cNomina.Id = cmbCliente.SelectedValue
+    '    dtCliente = cNomina.ConsultarDatosCliente()
 
-        If dtCliente.Rows.Count > 0 Then
-            For Each oDataRow In dtCliente.Rows
-                RfcCliente = oDataRow("RFC")
-            Next
-        End If
+    '    If dtCliente.Rows.Count > 0 Then
+    '        For Each oDataRow In dtCliente.Rows
+    '            RfcCliente = oDataRow("RFC")
+    '        Next
+    '    End If
 
-        Dim rutaEmpresa As String = ""
-        rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
+    '    Dim rutaEmpresa As String = ""
+    '    rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
 
-        If Not Directory.Exists(rutaEmpresa) Then
-            Directory.CreateDirectory(rutaEmpresa)
-        End If
+    '    If Not Directory.Exists(rutaEmpresa) Then
+    '        Directory.CreateDirectory(rutaEmpresa)
+    '    End If
 
-        Dim FilePathPDF = rutaEmpresa & "\" & RFC.ToString & ".pdf"
+    '    Dim FilePathPDF = rutaEmpresa & "\" & RFC.ToString & ".pdf"
 
-        If File.Exists(FilePathPDF) Then
-            Dim FileName As String = Path.GetFileName(FilePathPDF)
-            Response.Clear()
-            Response.ContentType = "application/octet-stream"
-            Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
-            Response.Flush()
-            Response.WriteFile(FilePathPDF)
-            Response.End()
-        Else
-            Call GuardaPDF(GeneraPDFNoTimbrado(NoEmpleado), FilePathPDF)
-            Dim FileName As String = Path.GetFileName(FilePathPDF)
-            Response.Clear()
-            Response.ContentType = "application/octet-stream"
-            Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
-            Response.Flush()
-            Response.WriteFile(FilePathPDF)
-            Response.End()
-        End If
-    End Sub
+    '    If File.Exists(FilePathPDF) Then
+    '        Dim FileName As String = Path.GetFileName(FilePathPDF)
+    '        Response.Clear()
+    '        Response.ContentType = "application/octet-stream"
+    '        Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
+    '        Response.Flush()
+    '        Response.WriteFile(FilePathPDF)
+    '        Response.End()
+    '    Else
+    '        Call GuardaPDF(GeneraPDFNoTimbrado(NoEmpleado), FilePathPDF)
+    '        Dim FileName As String = Path.GetFileName(FilePathPDF)
+    '        Response.Clear()
+    '        Response.ContentType = "application/octet-stream"
+    '        Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
+    '        Response.Flush()
+    '        Response.WriteFile(FilePathPDF)
+    '        Response.End()
+    '    End If
+    'End Sub
     Private Sub DownloadPDFTimbrado(ByVal RFC As String, ByVal NoEmpleado As Int64, ByVal UUID As String)
 
         Dim RfcEmisor As String = ""
@@ -4984,7 +5082,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("IdEmpresa")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -5018,7 +5116,7 @@ Public Class GeneracionDeNominaNormal
         Dim FilePath = rutaEmpresa & "\" & RFC.ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & UUID.ToString & ".pdf"
 
         If Not File.Exists(FilePath) Then
-            Call GuardaPDF(GeneraPDF(NoEmpleado, UUID), FilePath)
+            Call GuardaPDF(GeneraPDF(NoEmpleado, UUID, RFC), FilePath)
             Dim FileName As String = Path.GetFileName(FilePath)
             Response.Clear()
             Response.ContentType = "application/octet-stream"
@@ -5050,6 +5148,8 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = Periodo
@@ -5121,8 +5221,10 @@ Public Class GeneracionDeNominaNormal
 
             Call CargarVariablesGenerales()
 
-            Dim dt As New DataTable
-            Dim cNomina = New Nomina()
+            Dim dt As New DataTable()
+            Dim cNomina As New Entities.Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = Periodo
@@ -5133,7 +5235,7 @@ Public Class GeneracionDeNominaNormal
 
                 Dim dtEmisor As New DataTable
                 cNomina = New Entities.Nomina()
-                cNomina.Id = Session("IdEmpresa")
+                cNomina.IdEmpresa = Session("IdEmpresa")
                 dtEmisor = cNomina.ConsultarDatosEmisor()
 
                 If dtEmisor.Rows.Count > 0 Then
@@ -5172,7 +5274,9 @@ Public Class GeneracionDeNominaNormal
                     cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
                     cPeriodo.ConsultarPeriodoID()
 
-                    Dim FilePathXML = rutaEmpresa & "\" & row("UUID").ToString & ".xml"
+                    rutaEmpresa = Server.MapPath("~\XmlTimbrados\" & RfcEmisor & "\" & RfcCliente.ToString & "\S\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
+
+                    Dim FilePathXML = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
 
                     rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\T"
 
@@ -5180,17 +5284,17 @@ Public Class GeneracionDeNominaNormal
                         Directory.CreateDirectory(rutaEmpresa)
                     End If
 
-                    Dim FilePathPDF = rutaEmpresa & "\" & row("rfc").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
+                    Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
 
                     If Not File.Exists(FilePathPDF) Then
-                        Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID")), FilePathPDF)
+                        Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID"), row("RFC")), FilePathPDF)
                     End If
                     '
                     '   Obtiene datos de la persona
                     '
                     Dim mensaje As String = ""
                     Dim razonsocial As String = ""
-                    Dim telefono_contacto As String = ""
+                    'Dim telefono_contacto As String = ""
                     Dim email_from As String = ""
                     Dim email_smtp_server As String = ""
                     Dim email_smtp_username As String = ""
@@ -5205,7 +5309,7 @@ Public Class GeneracionDeNominaNormal
                     If dtEnvioEmail.Rows.Count > 0 Then
                         '       
                         razonsocial = dtEnvioEmail.Rows(0)("razonsocial").ToString
-                        telefono_contacto = dtEnvioEmail.Rows(0)("telefono_contacto")
+                        'telefono_contacto = dtEnvioEmail.Rows(0)("telefono_contacto")
                         email_from = dtEnvioEmail.Rows(0)("email_from_nomina").ToString
                         email_smtp_server = dtEnvioEmail.Rows(0)("email_smtp_server").ToString
                         email_smtp_username = dtEnvioEmail.Rows(0)("email_smtp_username").ToString
@@ -5241,7 +5345,6 @@ Public Class GeneracionDeNominaNormal
                     Next
 
                     'objMM.To.Add("gesquivel@linkium.mx")
-                    'objMM.To.Add("cristina.lopez@humantop.mx")
 
                     If validos.Length > 0 Then
                         Dim SmtpMail As New SmtpClient
@@ -5254,13 +5357,13 @@ Public Class GeneracionDeNominaNormal
                             mensaje = "Estimado(a) " & nombre_empleado.ToString & vbCrLf & vbCrLf
                             mensaje += "Adjunto a este correo estamos enviándole el Comprobante de Nómina correspondiente al periodo del " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & email_from & vbCrLf & vbCrLf
                             mensaje += "Atentamente." & vbCrLf
-                            mensaje += razonsocial.ToString.ToUpper & vbCrLf
-                            mensaje += "Tel. " & telefono_contacto
+                            mensaje += "Departamento Nóminas" & vbCrLf
+                            'mensaje += razonsocial.ToString.ToUpper & vbCrLf
 
-                            objMM.From = New MailAddress(email_from, razonsocial)
+                            objMM.From = New MailAddress(email_from, "Departamento Nóminas")
                             objMM.IsBodyHtml = False
                             objMM.Priority = MailPriority.Normal
-                            objMM.Subject = razonsocial & " - Recibo de Nómina"
+                            objMM.Subject = "Recibo de Nómina"
                             objMM.Body = mensaje
                             '
                             '   Agrega anexos
@@ -5277,11 +5380,13 @@ Public Class GeneracionDeNominaNormal
                             Dim SmtpUser As New Net.NetworkCredential
                             SmtpUser.UserName = email_smtp_username
                             SmtpUser.Password = email_smtp_password
-                            SmtpUser.Domain = email_smtp_server
+                            'SmtpUser.Domain = email_smtp_server
                             SmtpMail.UseDefaultCredentials = False
                             SmtpMail.Credentials = SmtpUser
                             SmtpMail.Host = email_smtp_server
+                            SmtpMail.Port = email_smtp_port
                             SmtpMail.DeliveryMethod = SmtpDeliveryMethod.Network
+                            SmtpMail.EnableSsl = True
                             SmtpMail.Send(objMM)
                             '
                             '   Lo marca como enviado a nivel empleado
@@ -5313,24 +5418,17 @@ Public Class GeneracionDeNominaNormal
                         Call GrabarEnviado(row("NoEmpleado"), "N")
                     End If
                 Next
+                '
+                rwAlerta.RadAlert("Correo(s) enviado(s).", 330, 180, "Alerta", "", "")
+                '
             End If
 
-            Call CargarVariablesGenerales()
-
-            cNomina = New Nomina()
-            cNomina.IdEmpresa = IdEmpresa
-            cNomina.IdCliente = cmbCliente.SelectedValue
-            cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = 1 'Semanal
-            cNomina.Periodo = cmbPeriodo.SelectedValue
-            cNomina.EsEspecial = False
-            grdEmpleadosSemanal.DataSource = cNomina.ConsultarDetalleNomina()
-            cNomina = Nothing
+            Call CargarGridEmpleadosSemanal()
 
         End If
 
     End Sub
-    Private Sub EnviaEmail(ByVal NoEmpleado As Integer)
+    Private Sub EnviaEmail(ByVal RFC As String, ByVal NoEmpleado As Int64, ByVal UUID As String)
 
         Dim RfcEmisor As String = ""
         Dim RfcCliente As String = ""
@@ -5344,17 +5442,18 @@ Public Class GeneracionDeNominaNormal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             cNomina.Periodo = cmbPeriodo.SelectedValue
-            cNomina.NoEmpleado = NoEmpleado
             cNomina.Tipo = "N"
             dt = cNomina.ConsultarDatosEnvioPDF()
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("IdEmpresa")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -5399,14 +5498,14 @@ Public Class GeneracionDeNominaNormal
                     Dim FilePathPDF = rutaEmpresa & "\" & row("rfc").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
 
                     If Not File.Exists(FilePathPDF) Then
-                        Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID")), FilePathPDF)
+                        Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID"), row("RFC")), FilePathPDF)
                     End If
                     '
                     '   Obtiene datos de la persona
                     '
                     Dim mensaje As String = ""
                     Dim razonsocial As String = ""
-                    Dim telefono_contacto As String = ""
+                    'Dim telefono_contacto As String = ""
                     Dim email_from As String = ""
                     Dim email_smtp_server As String = ""
                     Dim email_smtp_username As String = ""
@@ -5421,7 +5520,7 @@ Public Class GeneracionDeNominaNormal
                     If dtEnvioEmail.Rows.Count > 0 Then
                         '       
                         razonsocial = dtEnvioEmail.Rows(0)("razonsocial")
-                        telefono_contacto = dtEnvioEmail.Rows(0)("telefono_contacto")
+                        'telefono_contacto = dtEnvioEmail.Rows(0)("telefono_contacto")
                         email_from = dtEnvioEmail.Rows(0)("email_from_nomina")
                         email_smtp_server = dtEnvioEmail.Rows(0)("email_smtp_server")
                         email_smtp_username = dtEnvioEmail.Rows(0)("email_smtp_username")
@@ -5433,7 +5532,7 @@ Public Class GeneracionDeNominaNormal
                     cConfiguracion = Nothing
 
                     Dim correo As String = row("Email").ToString.Trim
-                    'Dim correo As String = "egraciano@linkium.mx"
+
                     Dim delimit As Char() = New Char() {";"c, ","c}
 
                     Dim objMM As New MailMessage
@@ -5456,7 +5555,6 @@ Public Class GeneracionDeNominaNormal
                     Next
 
                     'objMM.To.Add("gesquivel@linkium.mx")
-                    'objMM.To.Add("cristina.lopez@humantop.mx")
 
                     If validos.Length > 0 Then
                         Dim SmtpMail As New SmtpClient
@@ -5469,13 +5567,13 @@ Public Class GeneracionDeNominaNormal
                             mensaje = "Estimado(a) " & nombre_empleado.ToString & vbCrLf & vbCrLf
                             mensaje += "Adjunto a este correo estamos enviándole el Comprobante de Nómina correspondiente al periodo del " & fecha_inicial & " al " & fecha_final & ". Cualquier duda o comentario,  escríbenos a " & email_from & vbCrLf & vbCrLf
                             mensaje += "Atentamente." & vbCrLf
-                            mensaje += razonsocial.ToString.ToUpper & vbCrLf
-                            mensaje += "Tel. " & telefono_contacto
+                            mensaje += "Departamento Nóminas" & vbCrLf
+                            'mensaje += razonsocial.ToString.ToUpper & vbCrLf
 
-                            objMM.From = New MailAddress(email_from, razonsocial)
+                            objMM.From = New MailAddress(email_from, "Departamento Nóminas")
                             objMM.IsBodyHtml = False
                             objMM.Priority = MailPriority.Normal
-                            objMM.Subject = razonsocial & " - Recibo de Nómina"
+                            objMM.Subject = "Recibo de Nómina"
                             objMM.Body = mensaje
                             '
                             '   Agrega anexos
@@ -5484,10 +5582,10 @@ Public Class GeneracionDeNominaNormal
                             Dim AttachXML As Net.Mail.Attachment
                             '
                             AttachPDF = New Net.Mail.Attachment(FilePathPDF)
-                            'AttachXML = New Net.Mail.Attachment(FilePathXML)
+                            AttachXML = New Net.Mail.Attachment(FilePathXML)
                             '
                             objMM.Attachments.Add(AttachPDF)
-                            'objMM.Attachments.Add(AttachXML)
+                            objMM.Attachments.Add(AttachXML)
                             '
                             Dim SmtpUser As New Net.NetworkCredential
                             SmtpUser.UserName = email_smtp_username
@@ -5496,7 +5594,7 @@ Public Class GeneracionDeNominaNormal
                             SmtpMail.UseDefaultCredentials = False
                             SmtpMail.Credentials = SmtpUser
                             SmtpMail.Host = email_smtp_server
-                            SmtpMail.Port = 587
+                            SmtpMail.Port = email_smtp_port
                             SmtpMail.DeliveryMethod = SmtpDeliveryMethod.Network
                             SmtpMail.EnableSsl = True
                             SmtpMail.Send(objMM)
@@ -5540,6 +5638,7 @@ Public Class GeneracionDeNominaNormal
         Dim cNomina = New Nomina()
         cNomina.NoEmpleado = NoEmpleado
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
@@ -5904,7 +6003,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("IdEmpresa")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -5932,7 +6031,7 @@ Public Class GeneracionDeNominaNormal
 
                         rutaEmpresa = Server.MapPath("~\XmlTimbrados\" & RfcEmisor & "\" & RfcCliente.ToString & "\S\").ToString & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString
 
-                        Dim FilePathXML = rutaEmpresa & "\" & row("UUID").ToString & ".xml"
+                        Dim FilePathXML = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
 
                         If File.Exists(FilePathXML) Then
                             zip.AddFile(FilePathXML, "")
@@ -5981,7 +6080,7 @@ Public Class GeneracionDeNominaNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("IdEmpresa")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -6017,7 +6116,7 @@ Public Class GeneracionDeNominaNormal
                         Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
 
                         If Not File.Exists(FilePathPDF) Then
-                            Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID")), FilePathPDF)
+                            Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID"), row("RFC")), FilePathPDF)
                         End If
 
                         If File.Exists(FilePathPDF) Then

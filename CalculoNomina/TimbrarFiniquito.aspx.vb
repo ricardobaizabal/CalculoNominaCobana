@@ -294,7 +294,7 @@ Public Class TimbrarFiniquito
         Dim LugarExpedicion As String = ""
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -368,7 +368,7 @@ Public Class TimbrarFiniquito
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim Emisor As XmlElement

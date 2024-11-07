@@ -2465,7 +2465,7 @@ Public Class GeneracionDeNominaQuincenalNormal
         Dim LugarExpedicion As String = ""
         Dim dt As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -2545,7 +2545,7 @@ Public Class GeneracionDeNominaQuincenalNormal
     Private Sub CrearNodoEmisor(ByVal Nodo As XmlNode)
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim Emisor As XmlElement
@@ -2803,7 +2803,7 @@ Public Class GeneracionDeNominaQuincenalNormal
                 Dim registro_patronal As String = ""
                 Dim fac_rfc As String = ""
 
-                ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+                ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
                 If ds.Tables.Count > 0 Then
                     For Each row As DataRow In ds.Tables(0).Rows
@@ -3353,7 +3353,7 @@ Public Class GeneracionDeNominaQuincenalNormal
         Dim ObjData As New DataControl(0)
         Dim ds As New DataSet
 
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+        ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
         If ds.Tables.Count > 0 Then
             For Each row As DataRow In ds.Tables(0).Rows
@@ -3365,7 +3365,7 @@ Public Class GeneracionDeNominaQuincenalNormal
         End If
 
         Dim reporte As New Formatos.formato_nomina
-        reporte.ReportParameters("conn").Value = Session("conexion").ToString
+        reporte.ReportParameters("conn").Value = ConfigurationManager.ConnectionStrings("conn").ConnectionString
 
         Dim dt As New DataTable
 
@@ -3381,7 +3381,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
         Dim dtEmisor As New DataTable
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -3617,7 +3617,7 @@ Public Class GeneracionDeNominaQuincenalNormal
         Dim ObjData As New DataControl(0)
         Dim ds As New DataSet
 
-        ds = ObjData.FillDataSet("exec pCliente @cmd=4, @clienteid='" & Session("clienteid") & "'")
+        ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
 
         If ds.Tables.Count > 0 Then
             For Each row As DataRow In ds.Tables(0).Rows
@@ -3713,7 +3713,7 @@ Public Class GeneracionDeNominaQuincenalNormal
                     CantidadTexto = "( " + Num2Text(total - decimales) & " pesos " & Mid(decimales, Len(decimales) - 1) & "/100 M.N. )"
 
                     'reporte.ReportParameters("IdEmpresa").Value = IdEmpresa
-                    reporte.ReportParameters("conn").Value = Session("conexion").ToString
+                    reporte.ReportParameters("conn").Value = ConfigurationManager.ConnectionStrings("conn").ConnectionString
                     reporte.ReportParameters("NoEmpleado").Value = NoEmpleado
                     reporte.ReportParameters("Ejercicio").Value = IdEjercicio
                     reporte.ReportParameters("TipoNomina").Value = 3 'Quincenal
@@ -4096,7 +4096,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4289,7 +4289,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4631,7 +4631,7 @@ Public Class GeneracionDeNominaQuincenalNormal
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4708,7 +4708,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -4819,7 +4819,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4866,7 +4866,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4923,7 +4923,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
         Dim dtEmisor As New DataTable
         Dim cNomina As New Entities.Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -5071,7 +5071,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
                 Dim dtEmisor As New DataTable
                 cNomina = New Entities.Nomina()
-                cNomina.Id = Session("clienteid")
+                cNomina.IdEmpresa = Session("IdEmpresa")
                 dtEmisor = cNomina.ConsultarDatosEmisor()
 
                 If dtEmisor.Rows.Count > 0 Then
@@ -5252,6 +5252,8 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             Dim dt As New DataTable
             Dim cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = cmbCliente.SelectedValue
             cNomina.NoEmpleado = NoEmpleado
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 3 'Quincenal
@@ -5262,7 +5264,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -5479,7 +5481,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -5556,7 +5558,7 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             Dim dtEmisor As New DataTable
             cNomina = New Entities.Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then

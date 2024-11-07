@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
 Partial Public Class TarifaSemanal
-    Dim db As New DBManager.DataBase(1)
+    Dim db As New DBManager.DataBase()
     Dim p As New ArrayList
     Dim dt As New DataTable
 

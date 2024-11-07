@@ -133,10 +133,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td style="width: 20%; vertical-align: top;">
+                                    <label class="control-label">Observaciones</label>
+                                </td>
+                                <td>
+                                    <telerik:RadTextBox ID="txtObservaciones" runat="server" AutoPostBack="true" Width="50%" Height="80px" TextMode="MultiLine" Wrap="false">
+                                    </telerik:RadTextBox>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td style="width: 20%;"></td>
                                 <td>
-                                    <br />
                                     <telerik:RadButton ID="btnRegresar" Text="Regresar" runat="server" Skin="Bootstrap" RenderMode="Lightweight" CssClass="rbPrimaryButton" Width="90px">
+                                    </telerik:RadButton>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <telerik:RadButton ID="btnAgregarNominaE" runat="server" Text="Agregar Nómina" CssClass="rbPrimaryButton" CausesValidation="False">
                                     </telerik:RadButton>
                                 </td>
                             </tr>
@@ -238,10 +249,10 @@
                     <table style="width: 100%;" border="0">
                         <tr style="height: 30px;">
                             <td style="width: 10%;">
-                                <label class="control-label">Ejercicio:</label>
+                                <label class="control-label">Folio:</label>
                             </td>
                             <td style="width: 10%;">
-                                <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
+                                <asp:Label ID="lblFolio" runat="server"></asp:Label>
                             </td>
                             <td style="width: 10%;">
                                 <label class="control-label">Cliente:</label>
@@ -252,10 +263,10 @@
                         </tr>
                         <tr style="height: 30px;">
                             <td style="width: 10%;">
-                                <label class="control-label">No. Periodo:</label>
+                                <label class="control-label">Ejercicio:</label>
                             </td>
                             <td style="width: 10%;">
-                                <asp:Label ID="lblNoPeriodo" runat="server"></asp:Label>
+                                <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
                             </td>
                             <td style="width: 10%;">
                                 <label class="control-label">Tipo:</label>
@@ -444,7 +455,6 @@
                         <asp:Label ID="Label4" runat="server">Monto:</asp:Label>
                     </td>
                     <td>
-                        <%--<asp:TextBox ID="txtMontoIndividual" runat="server" Skin="Bootstrap"></asp:TextBox>--%>
                         <telerik:RadNumericTextBox RenderMode="Lightweight" runat="server" Skin="Bootstrap" ID="txtMontoIndividual" EmptyMessage="0.00" MinValue="0" NumberFormat-DecimalDigits="2"></telerik:RadNumericTextBox>
                     </td>
                 </tr>

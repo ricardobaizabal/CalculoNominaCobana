@@ -2129,33 +2129,6 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents lblRegistroPatronal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control valRegistroPatronal.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents valRegistroPatronal As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
-    '''Control lblRegimenContratacion.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblRegimenContratacion As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control valRegimenContratacion.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents valRegimenContratacion As Global.System.Web.UI.WebControls.RequiredFieldValidator
-
-    '''<summary>
     '''Control lblAnosAntiguedad.
     '''</summary>
     '''<remarks>
@@ -2183,22 +2156,13 @@ Partial Public Class AgregarEditarEmpleado
     Protected WithEvents Label3 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control ddlRegistroPatronal.
+    '''Control txtRegistroPatronal.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents ddlRegistroPatronal As Global.Telerik.Web.UI.RadComboBox
-
-    '''<summary>
-    '''Control ddlRegimenContratacion.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents ddlRegimenContratacion As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents txtRegistroPatronal As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''Control txtAnosAntiguedad.
@@ -2676,15 +2640,6 @@ Partial Public Class AgregarEditarEmpleado
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents ddlEjecutivo As Global.Telerik.Web.UI.RadComboBox
-
-    '''<summary>
-    '''Control ddlPlaza.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents ddlPlaza As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control lblComentariosNoRecomendable.

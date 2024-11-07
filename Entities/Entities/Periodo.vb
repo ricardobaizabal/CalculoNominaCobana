@@ -1,4 +1,6 @@
 ﻿Public Class Periodo
+
+    Private _cmd As Integer
     Private _IdPeriodo As Int32
     Private _Descripcion As String
     Private _NoPeriodo As String
@@ -13,10 +15,11 @@
     Private _ExtraordinarioBit As Boolean
     Private _FechaInicialDate As Date
     Private _FechaFinalDate As Date
-    Private _cmd As Integer
     Private _IdEmpresa As Integer
 
     Public Sub New()
+        _cmd = 0
+        _IdEmpresa = 0
         _IdPeriodo = 0
         _Descripcion = String.Empty
         _NoPeriodo = String.Empty
@@ -30,6 +33,22 @@
         _GeneraPeriodos = 0
         _ExtraordinarioBit = False
     End Sub
+    Public Property cmd As Integer
+        Get
+            Return _cmd
+        End Get
+        Set(value As Integer)
+            _cmd = value
+        End Set
+    End Property
+    Public Property IdEmpresa As Integer
+        Get
+            Return _IdEmpresa
+        End Get
+        Set(value As Integer)
+            _IdEmpresa = value
+        End Set
+    End Property
     Public Property IdPeriodo() As Int32
         Get
             Return _IdPeriodo
@@ -140,23 +159,6 @@
         End Get
         Set(value As Date)
             _FechaFinalDate = value
-        End Set
-    End Property
-    Public Property cmd As Integer
-        Get
-            Return _cmd
-        End Get
-        Set(value As Integer)
-            _cmd = value
-        End Set
-    End Property
-
-    Public Property IdEmpresa As Integer
-        Get
-            Return _IdEmpresa
-        End Get
-        Set(value As Integer)
-            _IdEmpresa = value
         End Set
     End Property
 

@@ -1,6 +1,6 @@
 ﻿Imports System.Data.SqlClient
 Partial Public Class Nomina
-    Dim db As New DBManager.DataBase(1)
+    Dim db As New DBManager.DataBase()
     Dim p As New ArrayList
     Dim dt As New DataTable
 
@@ -100,11 +100,11 @@ Partial Public Class Nomina
         dt = db.ExecuteSP("pConsultarEmpleadosSemanal", p)
         Return dt
     End Function
-    Public Function ConsultarEmpleadosEspecial(ByVal mi_cliente_id As Integer) As DataTable
+    Public Function ConsultarEmpleadosEspecial() As DataTable
         p.Clear()
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        p.Add(New SqlParameter("@mi_cliente_id", mi_cliente_id))
         dt = db.ExecuteSP("pConsultarEmpleadosEspecial", p)
         Return dt
     End Function
@@ -115,17 +115,21 @@ Partial Public Class Nomina
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pFechaPago", FechaPago))
+        p.Add(New SqlParameter("@pObservaciones", Observaciones))
         dt = db.ExecuteSP("pAgregarCampoNomina", p)
         Return dt
     End Function
+    Public Function ActualizarObservacionesNomina() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pIdNomina", IdNomina))
+        p.Add(New SqlParameter("@pObservaciones", Observaciones))
+        dt = db.ExecuteSP("pActualizarObservacionesNomina", p)
+        Return dt
+    End Function
     Public Function ConsultarNominaPorFolio(ByVal folio As Integer) As DataTable
-        Dim p As New List(Of SqlParameter)()
+        p.Clear()
         p.Add(New SqlParameter("@ID", folio))
-
-        ' Convertir List(Of SqlParameter) a ArrayList
-        Dim parametros As New ArrayList(p.ToArray())
-
-        Dim dt As DataTable = db.ExecuteSP("pConsultarPorIdNominaExtraordinaria", parametros)
+        Dim dt As DataTable = db.ExecuteSP("pConsultarPorIdNominaExtraordinaria", p)
         Return dt
     End Function
     Public Function ConsultarEmpleadosCatorcenal() As DataTable
@@ -215,8 +219,10 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarConceptosEmpleado() As DataTable
         p.Clear()
-        p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         If TipoConcepto.Length > 0 Then
@@ -265,7 +271,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarPercepcionesDeduccionesEmpleado() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
@@ -527,7 +534,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosGenerados() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
@@ -621,14 +629,14 @@ Partial Public Class Nomina
     End Sub
     Public Function ConsultarDatosEmisor() As DataTable
         p.Clear()
-        db = New DBManager.DataBase(0)
-        p.Add(New SqlParameter("@clienteid", Id))
+        db = New DBManager.DataBase()
+        p.Add(New SqlParameter("@clienteid", IdEmpresa))
         dt = db.ExecuteSP("pConsultarDatosEmisor", p)
         Return dt
     End Function
     Public Function ConsultarDatosCliente() As DataTable
         p.Clear()
-        db = New DBManager.DataBase(1)
+        db = New DBManager.DataBase()
         p.Add(New SqlParameter("@clienteid", Id))
         dt = db.ExecuteSP("pConsultarDatosCliente", p)
         Return dt
@@ -819,7 +827,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarDatosEnvioPDF() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
@@ -840,7 +849,7 @@ Partial Public Class Nomina
             p.Add(New SqlParameter("@txtSearch", busqueda))
         End If
 
-        db = New DBManager.DataBase(1)
+        db = New DBManager.DataBase()
         dt = db.ExecuteSP("pConsultarEmpleadosFiniquito", p)
         Return dt
     End Function
@@ -904,7 +913,8 @@ Partial Public Class Nomina
     End Sub
     Public Function ConsultarDatosEmpleadosGenerados() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))

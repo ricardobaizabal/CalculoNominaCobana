@@ -3671,7 +3671,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
             Dim dtEmisor As New DataTable
             Dim cNomina = New Nomina()
             cNomina = New Nomina()
-            cNomina.Id = Session("clienteid")
+            cNomina.IdEmpresa = Session("IdEmpresa")
             dtEmisor = cNomina.ConsultarDatosEmisor()
 
             If dtEmisor.Rows.Count > 0 Then
@@ -3826,7 +3826,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         Dim Emisor As XmlElement
@@ -4404,7 +4404,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
 
         Dim dt As New DataTable()
         Dim cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dt = cNomina.ConsultarDatosEmisor()
 
         If dt.Rows.Count > 0 Then
@@ -4650,7 +4650,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then
@@ -4698,7 +4698,7 @@ Public Class GeneracionDeFiniquitosCatorcenal
         Dim dtEmisor As New DataTable
         Dim cNomina = New Nomina()
         cNomina = New Nomina()
-        cNomina.Id = Session("clienteid")
+        cNomina.IdEmpresa = Session("IdEmpresa")
         dtEmisor = cNomina.ConsultarDatosEmisor()
 
         If dtEmisor.Rows.Count > 0 Then

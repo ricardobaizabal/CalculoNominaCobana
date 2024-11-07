@@ -99,6 +99,7 @@
         <asp:HiddenField ID="conceptoId" runat="server" Value="0" Visible="False" />
         <asp:HiddenField ID="nominaId" runat="server" Value="0" Visible="False" />
         <asp:HiddenField ID="empresaId" runat="server" Value="0" Visible="False" />
+        <asp:HiddenField ID="clienteId" runat="server" Value="0" Visible="False" />
 
         <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
             <div class="ibox-content" style="border: solid 0px; height: 585px;">
