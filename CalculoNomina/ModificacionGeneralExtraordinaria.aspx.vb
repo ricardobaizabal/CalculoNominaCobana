@@ -1699,7 +1699,7 @@ Public Class ModificacionGeneralExtraordinaria
                 dt = New DataTable
 
                 Dim Nomina As New Entities.Nomina()
-                'Nomina.IdEmpresa = Session("clienteid")
+                Nomina.IdCliente = IdEmpresa
                 Nomina.TipoNomina = 1 'Semanal
                 Nomina.Periodo = periodoId.Value
                 dt = Nomina.ConsultarEmpleadosSemanal()

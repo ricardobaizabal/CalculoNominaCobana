@@ -282,12 +282,11 @@ Public Class GeneracionDeNominaCatorcenal
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
-        cNomina.EsEspecial = True
+        cNomina.EsEspecial = False
         dt = cNomina.ConsultarDetalleNomina()
 
         ' Crear el contenido CSV
         Dim csvContent As New StringBuilder()
-
         csvContent.Append("Clave Empleado,")
         csvContent.Append("Nombre Empleado,")
         csvContent.Append("Monto,")
@@ -386,7 +385,7 @@ Public Class GeneracionDeNominaCatorcenal
         End If
     End Sub
     Private Sub btnCrearPeriodoID_Click(sender As Object, e As EventArgs) Handles btnCrearPeriodoID.Click
-        If cmbPeriodicidad.SelectedIndex = 0 Then
+        If cmbPeriodicidad.SelectedValue = 0 Then
             rwAlerta.RadAlert("Seleccione una periodicidad.", 330, 180, "Alerta", "", "")
         Else
             WinPeriodoSave.VisibleOnPageLoad = True
@@ -450,10 +449,10 @@ Public Class GeneracionDeNominaCatorcenal
         Dim dt As New DataTable
 
         Dim Nomina As New Entities.Nomina()
-        Nomina.TipoNomina = 2 'Catorcenal
-        Nomina.Periodo = cmbPeriodo.SelectedValue
         Nomina.IdEmpresa = IdEmpresa
         Nomina.IdCliente = cmbCliente.SelectedValue
+        Nomina.Ejercicio = IdEjercicio
+        Nomina.TipoNomina = 2 'Catorcenal
         Nomina.Periodo = cmbPeriodo.SelectedValue
         Nomina.FechaPago = fchPago.SelectedDate
 
@@ -3575,7 +3574,7 @@ Public Class GeneracionDeNominaCatorcenal
                     reporte.ReportParameters("txtUUID").Value = GetXmlAttribute(FolioXml, "UUID", "tfd:TimbreFiscalDigital").ToString.ToUpper
                     reporte.ReportParameters("txtSerieEmisor").Value = GetXmlAttribute(FolioXml, "NoCertificado", "cfdi:Comprobante")
                     reporte.ReportParameters("txtSerieCertificadoSAT").Value = GetXmlAttribute(FolioXml, "NoCertificadoSAT", "tfd:TimbreFiscalDigital")
-                    reporte.ReportParameters("txtRegimenEmisor").Value = GetXmlAttribute(FolioXml, "RegimenFiscal", "cfdi:Emisor") & " - " & regimen_fiscal
+                    reporte.ReportParameters("txtRegimenEmisor").Value = regimen_fiscal
 
                     Try
                         reporte.ReportParameters("txtRegistroPatronal").Value = GetXmlAttribute(FolioXml, "RegistroPatronal", "nomina12:Emisor").ToString
@@ -5588,7 +5587,7 @@ Public Class GeneracionDeNominaCatorcenal
         cPeriodo.IdEmpresa = IdEmpresa
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
-        cPeriodo.ExtraordinarioBit = Nothing
+        cPeriodo.ExtraordinarioBit = False
         ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
         validaBtnCrearNomina()
     End Sub
@@ -5600,13 +5599,15 @@ Public Class GeneracionDeNominaCatorcenal
     End Sub
     Private Sub btnCrearPeriodoEspecial_Click(sender As Object, e As EventArgs) Handles btnCrearPeriodoEspecial.Click
 
+        Call CargarVariablesGenerales()
+
         Dim cEmpresa As New Entities.Empresa
         cEmpresa.IdUsuario = Session("usuarioid")
         cEmpresa.ConsultarEjercicioID()
 
         If cEmpresa.IdUsuario > 0 Then
             Dim cPeriodo As New Entities.Periodo
-            cPeriodo.IdEmpresa = Session("IdEmpresa")
+            cPeriodo.IdEmpresa = IdEmpresa
             cPeriodo.IdEjercicio = cEmpresa.IdEjercicio
             cPeriodo.IdTipoNomina = 2
             cPeriodo.FechaInicial = String.Format("{0:MM/dd/yyyy}", fchInicioPeriodo.SelectedDate)

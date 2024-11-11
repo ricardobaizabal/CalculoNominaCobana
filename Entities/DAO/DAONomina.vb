@@ -93,13 +93,40 @@ Partial Public Class Nomina
     End Sub
     Public Function ConsultarEmpleadosSemanal() As DataTable
         p.Clear()
+        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
-        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
-        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         dt = db.ExecuteSP("pConsultarEmpleadosSemanal", p)
         Return dt
     End Function
+    'Public Function ConsultarEmpleadosCatorcenal() As DataTable
+    '    p.Clear()
+    '    'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+    '    p.Add(New SqlParameter("@pIdCliente", IdCliente))
+    '    p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+    '    p.Add(New SqlParameter("@pPeriodo", Periodo))
+    '    dt = db.ExecuteSP("pConsultarEmpleadosCatorcenal", p)
+    '    Return dt
+    'End Function
+    'Public Function ConsultarEmpleadosQuincenal() As DataTable
+    '    p.Clear()
+    '    'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+    '    p.Add(New SqlParameter("@pIdCliente", IdCliente))
+    '    p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+    '    p.Add(New SqlParameter("@pPeriodo", Periodo))
+    '    dt = db.ExecuteSP("pConsultarEmpleadosQuincenal", p)
+    '    Return dt
+    'End Function
+    'Public Function ConsultarEmpleadosMensual() As DataTable
+    '    p.Clear()
+    '    'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+    '    p.Add(New SqlParameter("@pIdCliente", IdCliente))
+    '    p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+    '    p.Add(New SqlParameter("@pPeriodo", Periodo))
+    '    dt = db.ExecuteSP("pConsultarEmpleadosMensual", p)
+    '    Return dt
+    'End Function
     Public Function ConsultarEmpleadosEspecial() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@pIdCliente", IdCliente))
@@ -130,33 +157,6 @@ Partial Public Class Nomina
         p.Clear()
         p.Add(New SqlParameter("@ID", folio))
         Dim dt As DataTable = db.ExecuteSP("pConsultarPorIdNominaExtraordinaria", p)
-        Return dt
-    End Function
-    Public Function ConsultarEmpleadosCatorcenal() As DataTable
-        p.Clear()
-        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
-        p.Add(New SqlParameter("@pIdCliente", IdCliente))
-        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
-        p.Add(New SqlParameter("@pPeriodo", Periodo))
-        dt = db.ExecuteSP("pConsultarEmpleadosCatorcenal", p)
-        Return dt
-    End Function
-    Public Function ConsultarEmpleadosQuincenal() As DataTable
-        p.Clear()
-        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
-        p.Add(New SqlParameter("@pIdCliente", IdCliente))
-        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
-        p.Add(New SqlParameter("@pPeriodo", Periodo))
-        dt = db.ExecuteSP("pConsultarEmpleadosQuincenal", p)
-        Return dt
-    End Function
-    Public Function ConsultarEmpleadosMensual() As DataTable
-        p.Clear()
-        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
-        p.Add(New SqlParameter("@pIdCliente", IdCliente))
-        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
-        p.Add(New SqlParameter("@pPeriodo", Periodo))
-        dt = db.ExecuteSP("pConsultarEmpleadosMensual", p)
         Return dt
     End Function
     Public Function ConsultarDatosGeneralesNomina() As DataTable

@@ -280,7 +280,7 @@ Public Class GeneracionDeNominaNormal
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = cmbPeriodicidad.SelectedValue
         cNomina.Periodo = cmbPeriodo.SelectedValue
-        cNomina.EsEspecial = True
+        cNomina.EsEspecial = False
         dt = cNomina.ConsultarDetalleNomina()
 
         ' Crear el contenido CSV
@@ -385,7 +385,7 @@ Public Class GeneracionDeNominaNormal
         End If
     End Sub
     Private Sub btnCrearPeriodoID_Click(sender As Object, e As EventArgs) Handles btnCrearPeriodoID.Click
-        If cmbPeriodicidad.SelectedIndex = 0 Then
+        If cmbPeriodicidad.SelectedValue = 0 Then
             rwAlerta.RadAlert("Seleccione una periodicidad.", 330, 180, "Alerta", "", "")
         Else
             WinPeriodoSave.VisibleOnPageLoad = True
@@ -449,10 +449,11 @@ Public Class GeneracionDeNominaNormal
         Dim dt As New DataTable
 
         Dim Nomina As New Entities.Nomina()
-        Nomina.TipoNomina = 1 'Semanal
-        Nomina.Periodo = cmbPeriodo.SelectedValue
         Nomina.IdEmpresa = IdEmpresa
         Nomina.IdCliente = cmbCliente.SelectedValue
+        Nomina.Ejercicio = IdEjercicio
+        Nomina.TipoNomina = 1 'Semanal
+        Nomina.Periodo = cmbPeriodo.SelectedValue
         Nomina.FechaPago = fchPago.SelectedDate
 
         Dim _Nominaid As Integer = 0
@@ -573,61 +574,61 @@ Public Class GeneracionDeNominaNormal
                 End If
 
                 ''''''// Consultar SI tiene ADEUDO PERSONAL //'''''''
-                datos = New DataTable
-                Dim PrestamoPersonal As New Entities.PrestamoPersonal()
-                PrestamoPersonal.IdEmpresa = Session("IdEmpresa")
-                PrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
-                datos = PrestamoPersonal.ConsultarEmpleadosConPrestamoPersonal()
-                PrestamoPersonal = Nothing
+                'datos = New DataTable
+                'Dim PrestamoPersonal As New Entities.PrestamoPersonal()
+                'PrestamoPersonal.IdEmpresa = Session("IdEmpresa")
+                'PrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
+                'datos = PrestamoPersonal.ConsultarEmpleadosConPrestamoPersonal()
+                'PrestamoPersonal = Nothing
 
-                Dim pago_minimo_prestamo As Decimal = 0
-                Dim saldo_insoluto_prestamo As Decimal = 0
-                Dim descuento_prestamo As Decimal = 0
+                'Dim pago_minimo_prestamo As Decimal = 0
+                'Dim saldo_insoluto_prestamo As Decimal = 0
+                'Dim descuento_prestamo As Decimal = 0
 
-                If datos.Rows.Count > 0 Then
-                    pago_minimo_prestamo = datos.Rows(0)("pago_minimo")
-                    saldo_insoluto_prestamo = datos.Rows(0)("saldo_insoluto")
-                    If saldo_insoluto_prestamo <= pago_minimo_prestamo Then
-                        descuento_prestamo = saldo_insoluto_prestamo
-                    Else
-                        descuento_prestamo = pago_minimo_prestamo
-                    End If
+                'If datos.Rows.Count > 0 Then
+                '    pago_minimo_prestamo = datos.Rows(0)("pago_minimo")
+                '    saldo_insoluto_prestamo = datos.Rows(0)("saldo_insoluto")
+                '    If saldo_insoluto_prestamo <= pago_minimo_prestamo Then
+                '        descuento_prestamo = saldo_insoluto_prestamo
+                '    Else
+                '        descuento_prestamo = pago_minimo_prestamo
+                '    End If
 
-                    GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), 71, descuento_prestamo, 1, _Nominaid)
+                '    GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), 71, descuento_prestamo, 1, _Nominaid)
 
-                    Dim dts As New DataTable
-                    PrestamoPersonal = New Entities.PrestamoPersonal()
-                    PrestamoPersonal.IdEmpresa = Session("IdEmpresa")
-                    PrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
-                    dts = PrestamoPersonal.ConsultarPrestamosEmpleado()
-                    PrestamoPersonal = Nothing
+                '    Dim dts As New DataTable
+                '    PrestamoPersonal = New Entities.PrestamoPersonal()
+                '    PrestamoPersonal.IdEmpresa = Session("IdEmpresa")
+                '    PrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
+                '    dts = PrestamoPersonal.ConsultarPrestamosEmpleado()
+                '    PrestamoPersonal = Nothing
 
-                    If dts.Rows.Count > 0 Then
-                        For Each row In dts.Rows
-                            pago_minimo_prestamo = row("pago_minimo")
-                            saldo_insoluto_prestamo = row("saldo_insoluto")
-                            If saldo_insoluto_prestamo <= pago_minimo_prestamo Then
-                                descuento_prestamo = saldo_insoluto_prestamo
-                            Else
-                                descuento_prestamo = pago_minimo_prestamo
-                            End If
+                '    If dts.Rows.Count > 0 Then
+                '        For Each row In dts.Rows
+                '            pago_minimo_prestamo = row("pago_minimo")
+                '            saldo_insoluto_prestamo = row("saldo_insoluto")
+                '            If saldo_insoluto_prestamo <= pago_minimo_prestamo Then
+                '                descuento_prestamo = saldo_insoluto_prestamo
+                '            Else
+                '                descuento_prestamo = pago_minimo_prestamo
+                '            End If
 
-                            Dim cPrestamoPersonal = New PrestamoPersonal()
-                            cPrestamoPersonal.IdPrestamoPersonal = row("id")
-                            ''cPrestamoPersonal.IdEmpresa = IdEmpresa
-                            cPrestamoPersonal.Ejercicio = IdEjercicio
-                            cPrestamoPersonal.TipoNomina = 1 'Semanal
-                            cPrestamoPersonal.Periodo = cmbPeriodo.SelectedValue
-                            cPrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
-                            cPrestamoPersonal.CvoConcepto = 71
-                            cPrestamoPersonal.Importe = descuento_prestamo
-                            cPrestamoPersonal.Serie = ""
-                            cPrestamoPersonal.Folio = 0
-                            cPrestamoPersonal.UUID = ""
-                            cPrestamoPersonal.AgregaPrestamoPersonalDetalle()
-                        Next
-                    End If
-                End If
+                '            Dim cPrestamoPersonal = New PrestamoPersonal()
+                '            cPrestamoPersonal.IdPrestamoPersonal = row("id")
+                '            ''cPrestamoPersonal.IdEmpresa = IdEmpresa
+                '            cPrestamoPersonal.Ejercicio = IdEjercicio
+                '            cPrestamoPersonal.TipoNomina = 1 'Semanal
+                '            cPrestamoPersonal.Periodo = cmbPeriodo.SelectedValue
+                '            cPrestamoPersonal.NoEmpleado = oDataRow("NoEmpleado")
+                '            cPrestamoPersonal.CvoConcepto = 71
+                '            cPrestamoPersonal.Importe = descuento_prestamo
+                '            cPrestamoPersonal.Serie = ""
+                '            cPrestamoPersonal.Folio = 0
+                '            cPrestamoPersonal.UUID = ""
+                '            cPrestamoPersonal.AgregaPrestamoPersonalDetalle()
+                '        Next
+                '    End If
+                'End If
 
                 progress.SecondaryTotal = Total
                 progress.SecondaryValue = i
@@ -3624,7 +3625,7 @@ Public Class GeneracionDeNominaNormal
                     reporte.ReportParameters("txtUUID").Value = GetXmlAttribute(FolioXml, "UUID", "tfd:TimbreFiscalDigital").ToString.ToUpper
                     reporte.ReportParameters("txtSerieEmisor").Value = GetXmlAttribute(FolioXml, "NoCertificado", "cfdi:Comprobante")
                     reporte.ReportParameters("txtSerieCertificadoSAT").Value = GetXmlAttribute(FolioXml, "NoCertificadoSAT", "tfd:TimbreFiscalDigital")
-                    reporte.ReportParameters("txtRegimenEmisor").Value = GetXmlAttribute(FolioXml, "RegimenFiscal", "cfdi:Emisor") & " - " & regimen_fiscal
+                    reporte.ReportParameters("txtRegimenEmisor").Value = regimen_fiscal
 
                     Try
                         reporte.ReportParameters("txtRegistroPatronal").Value = GetXmlAttribute(FolioXml, "RegistroPatronal", "nomina12:Emisor").ToString
@@ -4713,6 +4714,7 @@ Public Class GeneracionDeNominaNormal
                         Catch oExcep As SoapException
                             GrabarTimbrado(oDataRow("NoEmpleado"), "N", "")
                             Dim ErrorTimbrado = New ErrorTimbrado()
+                            ErrorTimbrado.IdEmpresa = IdEmpresa
                             ErrorTimbrado.Ejercicio = IdEjercicio
                             ErrorTimbrado.TipoNomina = 1 'Semanal
                             ErrorTimbrado.Periodo = cmbPeriodo.SelectedValue
@@ -5487,7 +5489,7 @@ Public Class GeneracionDeNominaNormal
                     cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
                     cPeriodo.ConsultarPeriodoID()
 
-                    Dim FilePathXML = rutaEmpresa & "\" & row("rfc").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
+                    Dim FilePathXML = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".xml"
 
                     rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\S\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\T"
 
@@ -5495,7 +5497,7 @@ Public Class GeneracionDeNominaNormal
                         Directory.CreateDirectory(rutaEmpresa)
                     End If
 
-                    Dim FilePathPDF = rutaEmpresa & "\" & row("rfc").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
+                    Dim FilePathPDF = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID").ToString & ".pdf"
 
                     If Not File.Exists(FilePathPDF) Then
                         Call GuardaPDF(GeneraPDF(row("NoEmpleado"), row("UUID"), row("RFC")), FilePathPDF)

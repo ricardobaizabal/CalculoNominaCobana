@@ -11,13 +11,13 @@
             }
         }
         function OpenWindow(empresaid, ejercicioid, periodoid) {
-            var oWnd = radopen("RptNominaSemanal.aspx?e=" + empresaid + "&ej=" + ejercicioid + "&p=" + periodoid, "wndReporte");
+            var oWnd = radopen("RptNominaQuincenal.aspx?e=" + empresaid + "&ej=" + ejercicioid + "&p=" + periodoid, "wndReporte");
             oWnd.set_modal(true);
             oWnd.set_centerIfModal(true);
             oWnd.setSize(1024, 768);
             oWnd.set_behaviors(Telerik.Web.UI.WindowBehaviors.Close);
             oWnd.set_autoSize(false);
-            oWnd.set_title("Reporte Nómina Semanal")
+            oWnd.set_title("Reporte Nómina Quincenal")
             oWnd.center();
             oWnd.show();
         }
@@ -42,7 +42,6 @@
         }
     </style>
 </asp:Content>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
         <asp:HiddenField ID="periodoID" runat="server" Value="0" Visible="False" />

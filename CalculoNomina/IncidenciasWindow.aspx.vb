@@ -153,7 +153,6 @@ Public Class IncidenciasWindow
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
-
             If Not String.IsNullOrEmpty(Request("id")) And Not String.IsNullOrEmpty(Request("empleadoid")) Then
 
                 CargarVariablesGenerales()
@@ -197,7 +196,7 @@ Public Class IncidenciasWindow
                     lblNumEmpleado.Text = empleadoId.Value
                     lblRFC.Text = cEmpleado.Rfc
                     lblNombreEmpleado.Text = cEmpleado.Nombre
-                    lblNumImss.Text = cEmpleado.IMSS
+                    lblNumImss.Text = cEmpleado.Imss
                     lblRegContratacion.Text = cEmpleado.RegimenContratacion
                     lblFechaIngreso.Text = cEmpleado.FechaIngreso
                     lblPuesto.Text = cEmpleado.Puesto
