@@ -7,14 +7,15 @@
         End If
     End Sub
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+        Dim cPeriodo As New Entities.Periodo
 
         Dim cEmpresa As New Entities.Empresa
+        cEmpresa.IdEmpresa = Session("clienteid")
         cEmpresa.IdUsuario = Session("usuarioid")
         cEmpresa.ConsultarEjercicioID()
 
         If cEmpresa.IdUsuario > 0 Then
-            Dim cPeriodo As New Entities.Periodo
-            cPeriodo.IdEmpresa = Session("IdEmpresa")
+            'cPeriodo.IdEmpresa = Session("clienteid")
             cPeriodo.IdEjercicio = cEmpresa.IdEjercicio
             cPeriodo.IdTipoNomina = 1
             cPeriodo.FechaInicial = String.Format("{0:MM/dd/yyyy}", calFechaInicio.SelectedDate)

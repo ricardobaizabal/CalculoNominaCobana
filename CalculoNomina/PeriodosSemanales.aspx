@@ -38,7 +38,7 @@
                             </ClientSettings>
                             <MasterTableView DataKeyNames="IdPeriodo" NoMasterRecordsText="No hay registros para mostrar.">
                                 <Columns>
-                                    <telerik:GridBoundColumn DataField="IdPeriodo" ItemStyle-HorizontalAlign="Left" HeaderText="No. Periodo" UniqueName="NoPeriodo">
+                                    <telerik:GridBoundColumn DataField="NoPeriodo" ItemStyle-HorizontalAlign="Left" HeaderText="No. Periodo" UniqueName="NoPeriodo">
                                     </telerik:GridBoundColumn>
                                     <telerik:GridBoundColumn DataField="Fechainicial" ItemStyle-HorizontalAlign="Left" HeaderText="Fecha Inicial" DataFormatString="{0:dd/MM/yyyy}" UniqueName="Fechainicial">
                                     </telerik:GridBoundColumn>
