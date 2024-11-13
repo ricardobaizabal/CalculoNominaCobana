@@ -111,3 +111,11 @@ legend {
 /*.TelerikModalOverlay {
     height: 100% !important;
 }*/
+
+.rcbScroll {
+    max-height: 380px !important;
+}
+
+.rcbSlide {
+    max-height: 380px !important;
+}

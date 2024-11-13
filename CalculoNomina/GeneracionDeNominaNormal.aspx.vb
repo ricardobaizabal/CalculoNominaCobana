@@ -212,7 +212,7 @@ Public Class GeneracionDeNominaNormal
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            Dim objCat As New DataControl(1)
+            Dim objCat As New DataControl()
             Dim cConcepto As New Entities.Catalogos
             objCat.CatalogoRad(cmbCliente, cConcepto.ConsultarMisClientes, True, False)
             objCat.CatalogoRad(cmbPeriodicidad, cConcepto.ConsultarPeriodoPago2, True, False)
@@ -1908,6 +1908,8 @@ Public Class GeneracionDeNominaNormal
 
         Call CargarVariablesGenerales()
 
+        Call CargaPeriodos(cmbPeriodicidad.SelectedValue)
+
         If cmbPeriodo.SelectedValue > 0 Then
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
         Else
@@ -1942,6 +1944,7 @@ Public Class GeneracionDeNominaNormal
         If cmbPeriodo.SelectedValue > 0 Then
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
             Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdCliente = cmbCliente.SelectedValue
             cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
             cPeriodo.ConsultarPeriodoID()
 
@@ -6159,6 +6162,7 @@ Public Class GeneracionDeNominaNormal
         Call CargarVariablesGenerales()
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
         cPeriodo.ExtraordinarioBit = False

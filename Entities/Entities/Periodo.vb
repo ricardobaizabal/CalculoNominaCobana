@@ -4,6 +4,7 @@
     Private _IdPeriodo As Int32
     Private _Descripcion As String
     Private _NoPeriodo As String
+    Private _Cliente As String
     Private _IdEjercicio As Integer
     Private _IdTipoNomina As Int32
     Private _FechaInicial As String
@@ -16,13 +17,20 @@
     Private _FechaInicialDate As Date
     Private _FechaFinalDate As Date
     Private _IdEmpresa As Integer
+    Private _IdCliente As Integer
+    Private _InicioMesBit As Boolean
+    Private _FinMesBit As Boolean
+    Private _InicioEjercicioBit As Boolean
+    Private _FinEjercicioBit As Boolean
 
     Public Sub New()
         _cmd = 0
         _IdEmpresa = 0
+        _IdCliente = 0
         _IdPeriodo = 0
         _Descripcion = String.Empty
         _NoPeriodo = String.Empty
+        _Cliente = String.Empty
         _IdEjercicio = 0
         _IdTipoNomina = 0
         _FechaInicial = String.Empty
@@ -32,6 +40,10 @@
         _IdUsuario = 0
         _GeneraPeriodos = 0
         _ExtraordinarioBit = False
+        _InicioMesBit = False
+        _FinMesBit = False
+        _InicioEjercicioBit = False
+        _FinEjercicioBit = False
     End Sub
     Public Property cmd As Integer
         Get
@@ -47,6 +59,14 @@
         End Get
         Set(value As Integer)
             _IdEmpresa = value
+        End Set
+    End Property
+    Public Property IdCliente As Integer
+        Get
+            Return _IdCliente
+        End Get
+        Set(value As Integer)
+            _IdCliente = value
         End Set
     End Property
     Public Property IdPeriodo() As Int32
@@ -95,6 +115,14 @@
         End Get
         Set(ByVal value As String)
             _NoPeriodo = value
+        End Set
+    End Property
+    Public Property Cliente() As String
+        Get
+            Return _Cliente
+        End Get
+        Set(ByVal value As String)
+            _Cliente = value
         End Set
     End Property
     Public Property FechaInicial() As String
@@ -159,6 +187,38 @@
         End Get
         Set(value As Date)
             _FechaFinalDate = value
+        End Set
+    End Property
+    Public Property InicioMesBit() As Boolean
+        Get
+            Return _InicioMesBit
+        End Get
+        Set(ByVal value As Boolean)
+            _InicioMesBit = value
+        End Set
+    End Property
+    Public Property FinMesBit() As Boolean
+        Get
+            Return _FinMesBit
+        End Get
+        Set(ByVal value As Boolean)
+            _FinMesBit = value
+        End Set
+    End Property
+    Public Property InicioEjercicioBit() As Boolean
+        Get
+            Return _InicioEjercicioBit
+        End Get
+        Set(ByVal value As Boolean)
+            _InicioEjercicioBit = value
+        End Set
+    End Property
+    Public Property FinEjercicioBit() As Boolean
+        Get
+            Return _FinEjercicioBit
+        End Get
+        Set(ByVal value As Boolean)
+            _FinEjercicioBit = value
         End Set
     End Property
 

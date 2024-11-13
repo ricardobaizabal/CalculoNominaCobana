@@ -22,6 +22,7 @@ Partial Public Class Periodo
         Try
             p.Clear()
             p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicial))
@@ -134,6 +135,7 @@ Partial Public Class Periodo
     Public Function ConsultarPeriodo() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@IdEjercicio", IdEjercicio))
         p.Add(New SqlParameter("@pIdTipoNomina", IdTipoNomina))
         dt = db.ExecuteSP("pConsultarPeriodo", p)
@@ -142,6 +144,7 @@ Partial Public Class Periodo
     Public Function ConsultarPeriodos() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@IdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@IdCliente", IdCliente))
         p.Add(New SqlParameter("@IdEjercicio", IdEjercicio))
         p.Add(New SqlParameter("@IdTipoNomina", IdTipoNomina))
         p.Add(New SqlParameter("@ExtraordinarioBit", ExtraordinarioBit))
@@ -181,6 +184,11 @@ Partial Public Class Periodo
                 FechaPago = dt.Rows(0).Item("FechaPago")
                 NoPeriodo = dt.Rows(0).Item("NoPeriodo")
                 Dias = dt.Rows(0).Item("Dias")
+                Cliente = dt.Rows(0).Item("Cliente")
+                InicioMesBit = CBool(dt.Rows(0).Item("InicioMesBit"))
+                FinMesBit = CBool(dt.Rows(0).Item("FinMesBit"))
+                InicioEjercicioBit = CBool(dt.Rows(0).Item("InicioEjercicioBit"))
+                FinEjercicioBit = CBool(dt.Rows(0).Item("FinEjercicioBit"))
 
                 Dim formato As String = "dd/MM/yyyy"
                 FechaInicialDate = Date.ParseExact(FechaInicial, formato, System.Globalization.CultureInfo.InvariantCulture)

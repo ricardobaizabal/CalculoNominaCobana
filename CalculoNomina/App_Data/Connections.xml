@@ -1,4 +1,3 @@
 ﻿<connectionStrings>
-	<add name="conn_cobana" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
-	<add name="conn" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_general; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
+	<add name="conn" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
 </connectionStrings>

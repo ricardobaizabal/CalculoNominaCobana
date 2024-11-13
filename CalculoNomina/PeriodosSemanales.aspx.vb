@@ -6,6 +6,12 @@ Public Class PeriodosSemanales
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
+
+            Dim objCat As New DataControl()
+            Dim cConcepto As New Entities.Catalogos
+            objCat.CatalogoRad(cmbCliente, cConcepto.ConsultarMisClientes, True, False)
+            objCat = Nothing
+
             Call CargarVariablesGenerales()
             registroId.Value = 0
         End If
@@ -43,6 +49,7 @@ Public Class PeriodosSemanales
     Private Sub GridPeriodosSemanales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosSemanales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = Session("IdEmpresa")
+        cPeriodo.IdPeriodo = cmbCliente.SelectedValue
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo
@@ -63,6 +70,16 @@ Public Class PeriodosSemanales
         GridPeriodosSemanales.DataBind()
         cPeriodo = Nothing
 
+    End Sub
+    Private Sub btnConsultar_Click(sender As Object, e As EventArgs) Handles btnConsultar.Click
+        Dim cPeriodo As New Entities.Periodo
+        cPeriodo.IdEmpresa = Session("IdEmpresa")
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
+        cPeriodo.IdTipoNomina = 1 'Semanal
+        cPeriodo.IdEjercicio = ejercicioId.Value
+        GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo
+        GridPeriodosSemanales.DataBind()
+        cPeriodo = Nothing
     End Sub
 
 End Class
