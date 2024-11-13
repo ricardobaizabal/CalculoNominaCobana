@@ -7,7 +7,7 @@
 	<add key="Telerik.ScriptManager.TelerikCdn" value="Disabled" />
 	<add key="Telerik.StyleSheetManager.TelerikCdn" value="Disabled" />
 	<add key="Telerik.Skin" value="Bootstrap" />
-	<add key="server" value=".\SQLEXPRESS03" />
+	<add key="server" value="25.10.96.205" />
 	<!--<add key="conn" value="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />-->
 	<!--<add key="conn" value="Data Source=25.10.96.205; Initial Catalog=nomilink_cobana; User ID=sa; Password=q&lt;PAQkt5(49(8!R; Max Pool Size=360;" />-->
 </appSettings>

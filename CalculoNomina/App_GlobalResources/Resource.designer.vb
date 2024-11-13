@@ -803,7 +803,7 @@ Namespace Resources
         End Property
         
         '''<summary>
-        '''  Busca una cadena traducida similar a Previsión social a nombre de {0}. Se puso a mi disposición el archivo XML correspondiente y recibí de la empresa arriba mencionada la cantidad neta a que este documento se refiere estando conforme con las percepciones y deducciones que en él aparecen especificados..
+        '''  Busca una cadena traducida similar a PREVISION SOCIAL PERCIBIDOS EN TERMINOS DEL CONTRATO COLECTIVO DE TRABAJO Y DE LOS ART. 79 LISR, ART. 27 LSS..
         '''</summary>
         Friend Shared ReadOnly Property LeyendaNominaEspecial() As String
             Get
