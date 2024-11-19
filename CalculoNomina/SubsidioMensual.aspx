@@ -45,7 +45,7 @@
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Bootstrap" Width="100%">
     </telerik:RadAjaxLoadingPanel>
 
-    <asp:SqlDataSource ID="SubsidioMensual" runat="server" ConnectionString="Data Source=localhost; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=200"
+    <asp:SqlDataSource ID="SubsidioMensual" runat="server" ConnectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=200"
         SelectCommand="SELECT IdTablaSubsidio, isnull(LimiteInferior,0) as pLimiteInferior, isnull(LimiteSuperior,0) as pLimiteSuperior, isnull(Subsidio,0) as pCuotaFija FROM tblTablaSubsidioMensual order by LimiteInferior ASC"
         UpdateCommand="UPDATE tblTablaSubsidioMensual SET LimiteInferior=@pLimiteInferior, LimiteSuperior=@pLimiteSuperior, Subsidio=@pCuotaFija WHERE IdTablaSubsidio=@IdTablaSubsidio">
         <UpdateParameters>

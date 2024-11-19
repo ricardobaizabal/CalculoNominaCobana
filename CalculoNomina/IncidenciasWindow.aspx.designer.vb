@@ -221,22 +221,22 @@ Partial Public Class IncidenciasWindow
     Protected WithEvents txtDias As Global.Telerik.Web.UI.RadNumericTextBox
 
     '''<summary>
-    '''Control txtCuotaDiaria.
+    '''Control lblCuotaDiaria.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtCuotaDiaria As Global.Telerik.Web.UI.RadNumericTextBox
+    Protected WithEvents lblCuotaDiaria As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control txtIntegradoImss.
+    '''Control lblIntegradoIMSS.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtIntegradoImss As Global.Telerik.Web.UI.RadNumericTextBox
+    Protected WithEvents lblIntegradoIMSS As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control GridPercepciones.

@@ -479,6 +479,9 @@ Public Class GeneracionDeNominaNormal
             Dim i As Integer = 0
             For Each oDataRow In dt.Rows
 
+                'Validar si existen registros para acumulados ( si no existen, se agregan)
+                Call AgregaConceptosAcumuladosEmpleado(oDataRow("NoEmpleado"), oDataRow("IdContrato"))
+
                 i += 1
 
                 'Dias = 7
@@ -651,6 +654,21 @@ Public Class GeneracionDeNominaNormal
 
         End If
     End Sub
+    Private Sub AgregaConceptosAcumuladosEmpleado(ByVal NoEmpleado, ByVal IdContrato)
+
+        Call CargarVariablesGenerales()
+
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.IdContrato = IdContrato
+        cNomina.AgregaConceptosAcumuladosEmpleado()
+        cNomina = Nothing
+
+    End Sub
     Private Sub AgregaConcepto(ByVal ImporteIncidencia, ByVal UnidadIncidencia, ByVal CuotaPeriodo, ByVal ImporteDiario, ByVal NoEmpleado, ByVal CvoConcepto, ByVal IdContrato, ByVal IdNomina)
         Try
             Dim Importe As Decimal = 0
@@ -725,7 +743,7 @@ Public Class GeneracionDeNominaNormal
                     CalcularSubsidio()
 
                     Call CalcularImss()
-                    IMSS = IMSS * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+                    IMSS = IMSS * 7
                     IMSS = Math.Round(IMSS, 6)
 
                     Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
@@ -1612,36 +1630,80 @@ Public Class GeneracionDeNominaNormal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    'Private Sub CalcularImpuesto()
-    '    Try
-    '        Impuesto = 0
-    '        Dim dt As New DataTable()
-    '        Dim TarifaDiaria As New TarifaDiaria()
-    '        TarifaDiaria.ImporteDiario = ImporteDiario
-    '        dt = TarifaDiaria.ConsultarValoresTarifaDiaria()
-
-    '        If dt.Rows.Count > 0 Then
-    '            Impuesto = ((ImporteDiario - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
-    '        End If
-
-    '    Catch oExcep As Exception
-    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-    '    End Try
-    'End Sub
     Private Sub CalcularImpuesto()
+
+        Call CargarVariablesGenerales()
+
+        Dim ImporteMensual As Decimal = 0
+        ImporteMensual = ImporteDiario * FactorDiarioPromedio
+
         Try
             Impuesto = 0
             Dim dt As New DataTable()
-            Dim TarifaSemanal As New TarifaSemanal()
-            TarifaSemanal.ImporteSemanal = ImportePeriodo
-            dt = TarifaSemanal.ConsultarTarifa()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = ImporteMensual
+            dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
-                Impuesto = ((ImportePeriodo - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = ((ImporteMensual - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = (Impuesto / FactorDiarioPromedio) * Dias
             End If
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
+    End Sub
+    Private Sub CalcularSubsidio()
+
+        Call CargarVariablesGenerales()
+
+        Dim DiasTarifaSubsidio As Decimal = 7
+        Dim BaseGravadaPeriodo As Decimal = 0
+        Dim BaseCalculoSubsidio As Decimal = 0
+
+        BaseGravadaPeriodo = ImporteDiario * DiasTarifaSubsidio
+        BaseCalculoSubsidio = (BaseGravadaPeriodo / DiasTarifaSubsidio) * FactorDiarioPromedio
+
+        Try
+            Subsidio = 0
+            Dim dt As New DataTable()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseCalculoSubsidio
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
+
+            If dt.Rows.Count > 0 Then
+                Subsidio = dt.Rows(0).Item("Subsidio")
+                SubsidioAplicado = (Subsidio / FactorDiarioPromedio) * DiasTarifaSubsidio
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+
+        'Call CargarVariablesGenerales()
+
+        'SubsidioAplicado = 0
+
+        'BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+
+        'If ImporteDiario <= BaseGravableMensualSubsidioDiario Then
+        '    UMAMensual = UMA * FactorDiarioPromedio
+        '    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
+        '    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
+
+        '    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * Dias))) Then
+        '        SubsidioAplicado = Impuesto
+        '    Else
+        '        SubsidioAplicado = (SubsidioDiario * Dias)
+        '    End If
+
+        '    If Impuesto > SubsidioAplicado Then
+        '        Impuesto = Impuesto - SubsidioAplicado
+        '    ElseIf Impuesto < SubsidioAplicado Then
+        '        SubsidioAplicado = SubsidioAplicado - Impuesto
+        '        Impuesto = 0
+        '    End If
+
+        'End If
+
     End Sub
     'Private Sub CalcularSubsidio()
     '    Try
@@ -1658,32 +1720,32 @@ Public Class GeneracionDeNominaNormal
     '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
     '    End Try
     'End Sub
-    Private Sub CalcularSubsidio()
-        Try
-            If HonorarioAsimilado > 0 And ImporteGravado < HonorarioAsimilado Then
-                ImporteGravado = ImporteGravado - HonorarioAsimilado
-                ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
-            End If
+    'Private Sub CalcularSubsidio()
+    '    Try
+    '        If HonorarioAsimilado > 0 And ImporteGravado < HonorarioAsimilado Then
+    '            ImporteGravado = ImporteGravado - HonorarioAsimilado
+    '            ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
+    '        End If
 
-            Subsidio = 0
-            'Dim ImporteSemanal As Decimal
-            'ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-            Dim dt As New DataTable()
-            Dim TablaSubsidioSemanal As New TablaSubsidioSemanal()
-            TablaSubsidioSemanal.ImporteSemanal = ImportePeriodo
-            dt = TablaSubsidioSemanal.ConsultarSubsidio()
+    '        Subsidio = 0
+    '        'Dim ImporteSemanal As Decimal
+    '        'ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+    '        Dim dt As New DataTable()
+    '        Dim TablaSubsidioSemanal As New TablaSubsidioSemanal()
+    '        TablaSubsidioSemanal.ImporteSemanal = ImportePeriodo
+    '        dt = TablaSubsidioSemanal.ConsultarSubsidio()
 
-            If dt.Rows.Count > 0 Then
-                Subsidio = dt.Rows(0).Item("Subsidio")
-            End If
-            'If HonorarioAsimilado > 0 Then
-            '    ImporteGravado = ImporteGravado + HonorarioAsimilado
-            '    ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-            'End If
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        End Try
-    End Sub
+    '        If dt.Rows.Count > 0 Then
+    '            Subsidio = dt.Rows(0).Item("Subsidio")
+    '        End If
+    '        'If HonorarioAsimilado > 0 Then
+    '        '    ImporteGravado = ImporteGravado + HonorarioAsimilado
+    '        '    ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
+    '        'End If
+    '    Catch oExcep As Exception
+    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+    '    End Try
+    'End Sub
     Private Sub CalcularImss()
 
         IMSS = 0
@@ -1791,28 +1853,39 @@ Public Class GeneracionDeNominaNormal
             cNomina.GuadarNominaPeriodo()
 
             SubsidioAplicado = 0
+            Call CalcularSubsidio()
+            SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
 
-            BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
-
-            If CuotaDiaria <= BaseGravableMensualSubsidioDiario Then
-                UMAMensual = UMA * FactorDiarioPromedio
-                SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
-                SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
-
-                If (Impuesto > 0 And (Impuesto < (SubsidioDiario * Dias))) Then
-                    SubsidioAplicado = Impuesto
-                Else
-                    SubsidioAplicado = (SubsidioDiario * Dias)
-                End If
-
-                If Impuesto > SubsidioAplicado Then
-                    Impuesto = Impuesto - SubsidioAplicado
-                ElseIf Impuesto < SubsidioAplicado Then
-                    SubsidioAplicado = SubsidioAplicado - Impuesto
-                    Impuesto = 0
-                End If
-
+            If Impuesto > SubsidioAplicado Then
+                Impuesto = Impuesto - SubsidioAplicado
+            ElseIf Impuesto < SubsidioAplicado Then
+                SubsidioAplicado = SubsidioAplicado - Impuesto
+                Impuesto = 0
             End If
+
+            'SubsidioAplicado = 0
+
+            'BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+
+            'If CuotaDiaria <= BaseGravableMensualSubsidioDiario Then
+            '    UMAMensual = UMA * FactorDiarioPromedio
+            '    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
+            '    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
+
+            '    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * Dias))) Then
+            '        SubsidioAplicado = Impuesto
+            '    Else
+            '        SubsidioAplicado = (SubsidioDiario * Dias)
+            '    End If
+
+            '    If Impuesto > SubsidioAplicado Then
+            '        Impuesto = Impuesto - SubsidioAplicado
+            '    ElseIf Impuesto < SubsidioAplicado Then
+            '        SubsidioAplicado = SubsidioAplicado - Impuesto
+            '        Impuesto = 0
+            '    End If
+
+            'End If
 
             If Impuesto > 0 Then
                 cNomina = New Nomina()

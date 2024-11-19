@@ -3171,7 +3171,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     reporte.ReportParameters("txtCantidadLetra").Value = CantidadTexto.ToString.ToUpper
                     reporte.ReportParameters("txtCadenaOriginal").Value = CadenaOriginalComplemento(FolioXml)
 
-                    Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
+                    Dim leyenda As String = Resources.Resource.LeyendaNominaEspecial.ToUpper
                     reporte.ReportParameters("txtLeyenda").Value = leyenda
 
                     GrabarPDF(NoEmpleado, "S")
@@ -3389,7 +3389,7 @@ Public Class GeneracionDeNominaExtraordinaria
                     reporte.ReportParameters("txtCantidadLetra").Value = CantidadTexto.ToString.ToUpper
                     reporte.ReportParameters("paramImgBanner").Value = Server.MapPath("~/logos/ImgBanner.jpg")
 
-                    Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
+                    Dim leyenda As String = Resources.Resource.LeyendaNominaEspecial.ToUpper
                     reporte.ReportParameters("txtLeyenda").Value = leyenda
 
                     Dim datos As New DataTable()

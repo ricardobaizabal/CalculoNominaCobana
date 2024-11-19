@@ -1142,5 +1142,15 @@ Partial Public Class Nomina
         dt = db.ExecuteSP("pConsultarResumenNominas", p)
         Return dt
     End Function
+    Public Sub AgregaConceptosAcumuladosEmpleado()
+        p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pIdEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pIdTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pIdEmpleado", NoEmpleado))
+        p.Add(New SqlParameter("@pIdContrato", IdContrato))
+        db.ExecuteSPWithParams("pAgregaConceptosAcumuladosEmpleado", p)
+    End Sub
 
 End Class

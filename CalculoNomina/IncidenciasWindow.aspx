@@ -193,19 +193,19 @@
                                     <label class="control-label">Sueldo Diario:</label>
                                 </td>
                                 <td>
-                                    <%--<asp:Label ID="lblCuotaDiaria" runat="server"></asp:Label>--%>
-                                    <telerik:RadNumericTextBox ID="txtCuotaDiaria" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
+                                    <asp:Label ID="lblCuotaDiaria" runat="server"></asp:Label>
+                                    <%--<telerik:RadNumericTextBox ID="txtCuotaDiaria" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
                                         <EnabledStyle HorizontalAlign="Right" />
-                                    </telerik:RadNumericTextBox>
+                                    </telerik:RadNumericTextBox>--%>
                                 </td>
                                 <td style="width: 10%;" align="right">
                                     <label class="control-label">Sueldo Diario Integrado:</label>
                                 </td>
                                 <td>
-                                    <%--<asp:Label ID="lblIntegradoImss" runat="server"></asp:Label>--%>
-                                    <telerik:RadNumericTextBox ID="txtIntegradoImss" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
+                                    <asp:Label ID="lblIntegradoIMSS" runat="server"></asp:Label>
+                                    <%--<telerik:RadNumericTextBox ID="txtIntegradoImss" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
                                         <EnabledStyle HorizontalAlign="Right" />
-                                    </telerik:RadNumericTextBox>
+                                    </telerik:RadNumericTextBox>--%>
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>

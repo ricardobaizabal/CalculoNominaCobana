@@ -224,9 +224,9 @@
                                     <li>
                                         <a href="#">Tabla de ISPT<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <li>
+                                            <%--<li>
                                                 <a href="TablaISPTDiaria.aspx">Diaria</a>
-                                            </li>
+                                            </li>--%>
                                             <li>
                                                 <a href="TablaISPTMensual.aspx">Mensual</a>
                                             </li>
@@ -235,9 +235,9 @@
                                     <li>
                                         <a href="#">Tabla de subsidio<span class="fa arrow"></span></a>
                                         <ul class="nav nav-third-level">
-                                            <li>
+                                            <%--<li>
                                                 <a href="SubsidioDiaria.aspx">Diaria</a>
-                                            </li>
+                                            </li>--%>
                                             <li>
                                                 <a href="SubsidioMensual.aspx">Mensual</a>
                                             </li>
