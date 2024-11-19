@@ -23,67 +23,22 @@ Partial Public Class Puesto
     Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
-    '''Control GridPuesto.
+    '''Control cmbCliente.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents GridPuesto As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents cmbCliente As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
-    '''Control btnAgregar.
+    '''Control valCliente.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnAgregar As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''Control panelPuesto.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents panelPuesto As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
-    '''Control FiniquitoId.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents FiniquitoId As Global.System.Web.UI.WebControls.HiddenField
-
-    '''<summary>
-    '''Control Label8.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents Label8 As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblCodigo.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblCodigo As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control txtCodigo.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents txtCodigo As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents valCliente As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
     '''Control lblPuesto.
@@ -104,31 +59,31 @@ Partial Public Class Puesto
     Protected WithEvents txtPuesto As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
-    '''Control lblMensajepuesto.
+    '''Control valPuesto.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblMensajepuesto As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents valPuesto As Global.System.Web.UI.WebControls.RequiredFieldValidator
 
     '''<summary>
-    '''Control btnSavePuesto.
+    '''Control btnGuardar.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnSavePuesto As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnGuardar As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control btnCancelar.
+    '''Control GridPuesto.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnCancelar As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents GridPuesto As Global.Telerik.Web.UI.RadGrid
 
     '''<summary>
     '''Control RadAjaxLoadingPanel1.
