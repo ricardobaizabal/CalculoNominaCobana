@@ -1,9 +1,11 @@
 ﻿Public Class Puesto
     Private _IdPuesto As Int32
     Private _Descripcion As String
+    Private _clienteid As Int32
 
     Public Sub New()
         _IdPuesto = 0
+        _clienteid = 0
         _Descripcion = String.Empty
     End Sub
     Public Property IdPuesto() As Int32
@@ -22,4 +24,13 @@
             _Descripcion = value
         End Set
     End Property
+    Public Property clienteid() As Int32
+        Get
+            Return _clienteid
+        End Get
+        Set(ByVal value As Int32)
+            _clienteid = value
+        End Set
+    End Property
+
 End Class

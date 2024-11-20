@@ -71,9 +71,9 @@ li.rlbItem .rlbText {
     line-height: 37px;
 }
 
-#ctl00_ContentPlaceHolder1_txtPuesto{
+/*#ctl00_ContentPlaceHolder1_txtPuesto{
         width: 140%;
-}
+}*/
 
 .RadGrid_Bootstrap .rgFilterBox {
     width: 100%;
