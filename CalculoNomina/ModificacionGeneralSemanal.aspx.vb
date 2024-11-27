@@ -1279,10 +1279,13 @@ Public Class ModificacionGeneralSemanal
         dt = cNomina.ConsultarConceptosEmpleado()
 
         If dt.Rows.Count > 0 Then
-            If dt.Compute("Sum(ImporteGravado)", "CvoConcepto<>2") IsNot DBNull.Value Then
-                BaseGravadaPeriodo = dt.Compute("Sum(ImporteGravado)", "CvoConcepto<>2") + (CuotaDiaria * DiasTarifaISR)
-            Else
-                BaseGravadaPeriodo = CuotaDiaria * DiasTarifaISR
+            'If dt.Compute("Sum(ImporteGravado)", "CvoConcepto<>2") IsNot DBNull.Value Then
+            '    BaseGravadaPeriodo = dt.Compute("Sum(ImporteGravado)", "CvoConcepto<>2") + (CuotaDiaria * DiasTarifaISR)
+            'Else
+            '    BaseGravadaPeriodo = CuotaDiaria * DiasTarifaISR
+            'End If
+            If dt.Compute("Sum(ImporteGravado)", "") IsNot DBNull.Value Then
+                BaseGravadaPeriodo = dt.Compute("Sum(ImporteGravado)", "")
             End If
             BaseCalculoISR = (BaseGravadaPeriodo / DiasTarifaISR) * FactorDiarioPromedio
         End If
@@ -1520,12 +1523,15 @@ Public Class ModificacionGeneralSemanal
                     Impuesto = 0
                     SubsidioAplicado = 0
 
+                    'CÁLCULO DEL ISR DIRECTO DEL PERIODO VIGENTE
                     Call CalcularImpuesto(NoEmpleado, CuotaDiaria)
                     Impuesto = Math.Round(Impuesto, 6)
 
+                    'CÁLCULO DEL SUBSIDIO CAUSADO DEL PERIODO VIGENTE
                     Call CalcularSubsidio(NoEmpleado, CuotaDiaria)
                     SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
 
+                    'CÁLCULO DE IMPUESTOS  A RETENER
                     If Impuesto > SubsidioAplicado Then
                         Impuesto = Impuesto - SubsidioAplicado
                     ElseIf Impuesto < SubsidioAplicado Then

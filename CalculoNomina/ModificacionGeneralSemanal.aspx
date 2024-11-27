@@ -11,7 +11,8 @@
             oWnd.setSize(1024, 850);
             oWnd.set_behaviors(Telerik.Web.UI.WindowBehaviors.Maximize);
             oWnd.set_autoSize(false);
-            oWnd.set_title("Modificación de nómina ordinaria semanal - Incidencias")
+            oWnd.set_title("Modificación de nómina ordinaria semanal - Incidencias");
+            oWnd.set_status("");
             oWnd.center();
         }
         function confirmCallbackFnEliminaEmpleado(arg) {
@@ -40,6 +41,11 @@
             }
         }
     </script>
+    <style type="text/css">
+        .RadWindow_Bootstrap .rwStatusBar {
+            display: none !important;
+        }
+    </style>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">

@@ -274,14 +274,14 @@
                                     <br />
                                     <asp:HiddenField ID="IdEjercicio" runat="server" Value="0" Visible="False" />
                                     <input type="hidden" class="IdEmpresa" runat="server" id="IdEmpresa" name="IdEmpresa" value="0" />
-                                    <asp:Label class="m-t-none m-b" runat="server" ID="Empresa"></asp:Label>
+                                    <asp:Label class="m-t-none m-b" runat="server" Font-Bold="true" ID="Empresa"></asp:Label>
                                 </div>
                                 <%--</form>--%>
                             </div>
                             <ul class="nav navbar-top-links navbar-right">
                                 <li>
                                     <br />
-                                    <asp:Label class="m-t-none m-b" runat="server" ID="lblUsuario"></asp:Label>
+                                    <asp:Label class="m-t-none m-b" runat="server" Font-Bold="true" ID="lblUsuario"></asp:Label>
                                 </li>
                             </ul>
                         </nav>

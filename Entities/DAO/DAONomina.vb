@@ -1152,5 +1152,70 @@ Partial Public Class Nomina
         p.Add(New SqlParameter("@pIdContrato", IdContrato))
         db.ExecuteSPWithParams("pAgregaConceptosAcumuladosEmpleado", p)
     End Sub
+    Public Function ConsultarPercepcionesGravadasEmpleado() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
+        p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pPeriodo", Periodo))
+        p.Add(New SqlParameter("@pTipoConcepto", TipoConcepto))
+        p.Add(New SqlParameter("@pTipo", Tipo))
+        dt = db.ExecuteSP("pConsultarPercepcionesGravadasEmpleado", p)
+        Return dt
+    End Function
+    Public Function ConsultarPercepcionesGravadasMesEmpleado() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
+        p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pMesAcumula", MesAcumula))
+        p.Add(New SqlParameter("@pTipoConcepto", TipoConcepto))
+        p.Add(New SqlParameter("@pTipo", Tipo))
+        dt = db.ExecuteSP("pConsultarPercepcionesGravadasMesEmpleado", p)
+        Return dt
+    End Function
+    Public Function ConsultarSubsidioCausadoMesEmpleado() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
+        p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pMesAcumula", MesAcumula))
+        p.Add(New SqlParameter("@pTipoConcepto", TipoConcepto))
+        p.Add(New SqlParameter("@pTipo", Tipo))
+        dt = db.ExecuteSP("pConsultarSubsidioCausadoMesEmpleado", p)
+        Return dt
+    End Function
+    Public Function ConsultarISRRetenidoMesEmpleado() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
+        p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pMesAcumula", MesAcumula))
+        p.Add(New SqlParameter("@pTipoConcepto", TipoConcepto))
+        p.Add(New SqlParameter("@pTipo", Tipo))
+        dt = db.ExecuteSP("pConsultarISRRetenidoMesEmpleado", p)
+        Return dt
+    End Function
+    Public Sub ActualizaAcumuladosEmpleado()
+        p.Clear()
+        p.Add(New SqlParameter("@cmd", cmd))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pIdEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pIdTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pPeriodo", Periodo))
+        p.Add(New SqlParameter("@pIdEmpleado", NoEmpleado))
+        p.Add(New SqlParameter("@pIdContrato", IdContrato))
+        p.Add(New SqlParameter("@pTipo", Tipo))
+        db.ExecuteSPWithParams("pActualizaAcumuladosEmpleado", p)
+    End Sub
 
 End Class

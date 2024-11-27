@@ -1,3 +1,4 @@
 ﻿<connectionStrings>
 	<add name="conn" connectionString="Data Source=.\SQLEXPRESS03; Initial Catalog=nomilink_cobana; Persist Security Info=True; Trusted_Connection=yes; Max Pool Size=360;" />
+	<!--<add name="conn" connectionString="Data Source=25.66.1.191; Initial Catalog=nomilink_cobana; User ID=sa; Password=g1N#2[ulh7Iww(!; Connect Timeout=360;" />-->
 </connectionStrings>

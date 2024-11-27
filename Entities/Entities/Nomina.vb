@@ -8,6 +8,7 @@
     'Private _Cliente As Integer
     Private _TipoNomina As Integer
     Private _Periodo As Integer
+    Private _MesAcumula As Integer
     Private _EsEspecial As Boolean
     Private _NoEmpleado As Integer
     Private _IdContrato As Integer
@@ -52,6 +53,7 @@
         _Ejercicio = 0
         _TipoNomina = 0
         _Periodo = 0
+        _MesAcumula = 0
         _EsEspecial = False
         _NoEmpleado = 0
         _CvoConcepto = 0
@@ -164,6 +166,14 @@
         End Get
         Set(ByVal value As Integer)
             _Periodo = value
+        End Set
+    End Property
+    Public Property MesAcumula() As Integer
+        Get
+            Return _MesAcumula
+        End Get
+        Set(ByVal value As Integer)
+            _MesAcumula = value
         End Set
     End Property
     Public Property NoEmpleado() As Integer

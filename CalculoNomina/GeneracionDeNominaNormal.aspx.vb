@@ -23,6 +23,7 @@ Public Class GeneracionDeNominaNormal
     Private ImportePeriodo As Double
     Private ImporteSeguroVivienda As Double
     Private Subsidio As Double
+    Private SubsidioMes As Double
 
     Private UMA As Double
     Private UMAMensual As Double
@@ -156,6 +157,7 @@ Public Class GeneracionDeNominaNormal
     Public HaberPorRetiro As Double
 
     Private Impuesto As Double
+    Private ImpuestoMes As Double
     Public IsrIndemnizacion As Double
     Public SubsidioAplicado As Double
     Public SubsidioEfectivo As Double
@@ -197,6 +199,8 @@ Public Class GeneracionDeNominaNormal
     Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private Periodo As Integer = 0
+    Private MesAcumula As Integer = 0
+    Private FinMesBit As Boolean = False
     Private dtEmpleados As DataTable
 
     Const URI_SAT = "http://www.sat.gob.mx/cfd/4"
@@ -521,6 +525,97 @@ Public Class GeneracionDeNominaNormal
 
                 GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), Math.Round(ImporteDiario, 6), oDataRow("ClaveRegimenContratacion"), _Nominaid)
 
+                If FinMesBit = True Then
+
+                    'CÁLCULO DEL IMPUESTO/SUBSIDIO MENSUAL (OBJETIVO A LLEGAR) CUANDO ES FIN DE MES
+                    Call CalcularImpuestoFinMes(oDataRow("NoEmpleado"))
+                    Call CalcularSubsidioFinMes(oDataRow("NoEmpleado"))
+
+                    'ACUMULADOS DE LO QUE SE LLEVA EN EL MES (incluyendo el periodo vigente)
+                    Dim SubsidioCausado As Double = 0
+                    Dim ISRRetenido As Double = 0
+                    Dim SubsidioCausadoMayorAlQueLeCorrespondia As Double = 0
+                    Dim ISRAjusteMensual As Double = 0
+                    Dim ISRAjustadoPorSubsidio As Double = 0
+
+                    Dim dts As New DataTable()
+                    Dim cNomina As New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
+                    cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.MesAcumula = MesAcumula
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Tipo = "N"
+                    dts = cNomina.ConsultarSubsidioCausadoMesEmpleado()
+
+                    'Acumulado del mes (incluyendo periodo vigente) del Subsidio Causado
+                    If dts.Rows.Count > 0 Then
+                        SubsidioCausado = dts.Rows(0).Item("Importe")
+                    End If
+
+                    dts = New DataTable()
+                    cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
+                    cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.MesAcumula = MesAcumula
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Tipo = "N"
+                    dts = cNomina.ConsultarISRRetenidoMesEmpleado()
+
+                    'Acumulado del mes (incluyendo periodo vigente) del ISR retenido
+                    If dts.Rows.Count > 0 Then
+                        ISRRetenido = dts.Rows(0).Item("Importe")
+                    End If
+
+                    'CÁLCULO DE AJUSTES CUANDO ES FIN DE MES
+                    'Subsidio causado mayor al que le correspondía
+                    If SubsidioCausado > SubsidioMes Then
+                        SubsidioCausadoMayorAlQueLeCorrespondia = SubsidioCausado - SubsidioMes
+                    End If
+
+                    'ISR AJUSTADO POR SUBSIDIO
+                    If SubsidioCausadoMayorAlQueLeCorrespondia > 0 Then
+
+                        Dim cPeriodo As New Entities.Periodo()
+                        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+                        cPeriodo.ConsultarPeriodoID()
+
+                        cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = cmbCliente.SelectedValue
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                        cNomina.CvoConcepto = 7
+                        cNomina.IdContrato = oDataRow("IdContrato")
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = SubsidioCausadoMayorAlQueLeCorrespondia
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = SubsidioCausadoMayorAlQueLeCorrespondia
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = _Nominaid
+                        cNomina.GuadarNominaPeriodo()
+
+                        Call QuitarConcepto(54, oDataRow("NoEmpleado")) 'SUBSIDIO
+
+                    End If
+                End If
+
                 ''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
                 Dim Valor As Decimal
                 Dim DescuentoInvonavit As Decimal
@@ -653,6 +748,21 @@ Public Class GeneracionDeNominaNormal
             Response.Redirect("~/GeneracionDeNominaNormal.aspx?id=" & cmbPeriodo.SelectedValue.ToString)
 
         End If
+    End Sub
+    Private Sub QuitarConcepto(ByVal NumeroConcepto As Int32, ByVal NoEmpleado As Int32)
+
+        Call CargarVariablesGenerales()
+
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.Periodo = periodoID.Value
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.CvoConcepto = NumeroConcepto
+        cNomina.TipoConcepto = "D"
+        cNomina.EliminaConceptoEmpleado()
     End Sub
     Private Sub AgregaConceptosAcumuladosEmpleado(ByVal NoEmpleado, ByVal IdContrato)
 
@@ -1652,6 +1762,42 @@ Public Class GeneracionDeNominaNormal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
+    Private Sub CalcularImpuestoFinMes(ByVal NoEmpleado As Integer)
+
+        Call CargarVariablesGenerales()
+
+        Dim BaseGravadaMes As Decimal = 0
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            ImpuestoMes = 0
+            dt = New DataTable()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = BaseGravadaMes
+            dt = TarifaMensual.ConsultarTarifaMensual()
+
+            If dt.Rows.Count > 0 Then
+                ImpuestoMes = ((BaseGravadaMes - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
     Private Sub CalcularSubsidio()
 
         Call CargarVariablesGenerales()
@@ -1705,47 +1851,42 @@ Public Class GeneracionDeNominaNormal
         'End If
 
     End Sub
-    'Private Sub CalcularSubsidio()
-    '    Try
-    '        Subsidio = 0
-    '        Dim dt As New DataTable()
-    '        Dim TablaSubsidioDiario As New TablaSubsidioDiario()
-    '        TablaSubsidioDiario.Importe = ImporteDiario
-    '        dt = TablaSubsidioDiario.ConsultarSubsidioDiario()
+    Private Sub CalcularSubsidioFinMes(ByVal NoEmpleado As Integer)
 
-    '        If dt.Rows.Count > 0 Then
-    '            Subsidio = dt.Rows(0).Item("Subsidio")
-    '        End If
-    '    Catch oExcep As Exception
-    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-    '    End Try
-    'End Sub
-    'Private Sub CalcularSubsidio()
-    '    Try
-    '        If HonorarioAsimilado > 0 And ImporteGravado < HonorarioAsimilado Then
-    '            ImporteGravado = ImporteGravado - HonorarioAsimilado
-    '            ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo)
-    '        End If
+        Call CargarVariablesGenerales()
 
-    '        Subsidio = 0
-    '        'Dim ImporteSemanal As Decimal
-    '        'ImporteSemanal = ImporteDiario * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-    '        Dim dt As New DataTable()
-    '        Dim TablaSubsidioSemanal As New TablaSubsidioSemanal()
-    '        TablaSubsidioSemanal.ImporteSemanal = ImportePeriodo
-    '        dt = TablaSubsidioSemanal.ConsultarSubsidio()
+        Dim BaseGravadaMes As Decimal = 0
 
-    '        If dt.Rows.Count > 0 Then
-    '            Subsidio = dt.Rows(0).Item("Subsidio")
-    '        End If
-    '        'If HonorarioAsimilado > 0 Then
-    '        '    ImporteGravado = ImporteGravado + HonorarioAsimilado
-    '        '    ImporteDiario = ImporteGravado / (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado)
-    '        'End If
-    '    Catch oExcep As Exception
-    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-    '    End Try
-    'End Sub
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            SubsidioMes = 0
+            dt = New DataTable()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseGravadaMes
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
+
+            If dt.Rows.Count > 0 Then
+                SubsidioMes = dt.Rows(0).Item("Subsidio")
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
     Private Sub CalcularImss()
 
         IMSS = 0
@@ -2141,6 +2282,8 @@ Public Class GeneracionDeNominaNormal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                FinMesBit = CBool(oDataRow("FinMesBit"))
+                MesAcumula = oDataRow("MesAcumula")
             Next
         End If
     End Sub
@@ -4599,6 +4742,52 @@ Public Class GeneracionDeNominaNormal
                         bytes = TimbreSifeiVersion33.getCFDI(SIFEIUsuario, SIFEIContrasena, data, "", SIFEIIdEquipo)
                         Descomprimir(bytes, oDataRow("NoEmpleado"), oDataRow("RFC"))
                         '
+                        '   Guardar acumulados
+                        '
+                        Call CargarVariablesGenerales()
+
+                        cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = cmbCliente.SelectedValue
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = cmbPeriodo.SelectedValue
+                        cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                        cNomina.IdContrato = oDataRow("IdContrato")
+                        cNomina.Tipo = "N"
+                        cNomina.cmd = 1 'ISR Total de percepciones
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 2 'ISR Base Gravada
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 3 'ISR Base Exenta
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 4 'ISR
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 5 'ISR SUBS AL EMPLEO
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 12 'PTU Ingresos acumulados
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 13 'IMSS
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 14 'Días trabajados
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 15 'Permisos
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 16 'Incapacidad Enfermedad General
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 17 'Incapacidad Materna
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 18 'Incapacidad Riesgo de Trabajo
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 19 'ISPT antes de Subs al Empleo
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 20 'Subs al Empleo Acreditado
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 21 'ISR retenido mes
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        cNomina.cmd = 22 'ISR Directo
+                        cNomina.ActualizaAcumuladosEmpleado()
+                        '
                         '   Descontar Adeudo Fonacot
                         '
                         Dim dtCreditoFonacot As New DataTable
@@ -4711,6 +4900,52 @@ Public Class GeneracionDeNominaNormal
                             Dim bytes() As Byte
                             bytes = TimbreSifeiVersion33.getCFDI(SIFEIUsuario, SIFEIContrasena, data, "", SIFEIIdEquipo)
                             Descomprimir(bytes, oDataRow("NoEmpleado"), oDataRow("RFC"))
+                            '
+                            '   Guardar acumulados
+                            '
+                            Call CargarVariablesGenerales()
+
+                            cNomina = New Nomina()
+                            cNomina.IdEmpresa = IdEmpresa
+                            cNomina.IdCliente = cmbCliente.SelectedValue
+                            cNomina.Ejercicio = IdEjercicio
+                            cNomina.TipoNomina = 1 'Semanal
+                            cNomina.Periodo = cmbPeriodo.SelectedValue
+                            cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                            cNomina.IdContrato = oDataRow("IdContrato")
+                            cNomina.Tipo = "N"
+                            cNomina.cmd = 1 'ISR Total de percepciones
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 2 'ISR Base Gravada
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 3 'ISR Base Exenta
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 4 'ISR
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 5 'ISR SUBS AL EMPLEO
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 12 'PTU Ingresos acumulados
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 13 'IMSS
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 14 'Días trabajados
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 15 'Permisos
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 16 'Incapacidad Enfermedad General
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 17 'Incapacidad Materna
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 18 'Incapacidad Riesgo de Trabajo
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 19 'ISPT antes de Subs al Empleo
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 20 'Subs al Empleo Acreditado
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 21 'ISR retenido mes
+                            cNomina.ActualizaAcumuladosEmpleado()
+                            cNomina.cmd = 22 'ISR Directo
+                            cNomina.ActualizaAcumuladosEmpleado()
                             '
                             '   Descontar Adeudo Fonacot
                             '
