@@ -41,6 +41,24 @@ Partial Public Class PeriodosCatorcenales
     Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
+    '''Control cmbCliente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbCliente As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control btnConsultar.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnConsultar As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
     '''Control btnAgregar.
     '''</summary>
     '''<remarks>

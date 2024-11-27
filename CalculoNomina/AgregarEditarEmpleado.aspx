@@ -113,7 +113,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <br />
+    <asp:HiddenField ID="clienteID" runat="server" Value="0" />
     <%--<telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">--%>
     <telerik:RadWindowManager ID="RadWindowManager2" runat="server">
     </telerik:RadWindowManager>
@@ -472,7 +472,7 @@
                                     <telerik:RadTextBox ID="txtCuenta" Width="300px" runat="server"></telerik:RadTextBox>
                                 </td>
                                 <td style="width: 25%;">
-                                    <telerik:RadComboBox ID="ddCliente" runat="server" Filter="StartsWith" OnClientFocus="clearFilters" Width="95%"></telerik:RadComboBox>
+                                    <telerik:RadComboBox ID="ddCliente" runat="server" Filter="StartsWith" AutoPostBack="true" OnClientFocus="clearFilters" Width="95%"></telerik:RadComboBox>
                                     <asp:RequiredFieldValidator ID="valCliente" ValidationGroup="vDatosGenerales" runat="server" ControlToValidate="ddCliente" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage=" Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
                                 </td>
                                 <td style="width: 25%;">

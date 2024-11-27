@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class AgregarEditarEmpleado
 
     '''<summary>
+    '''Control clienteID.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents clienteID As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''Control RadWindowManager2.
     '''</summary>
     '''<remarks>

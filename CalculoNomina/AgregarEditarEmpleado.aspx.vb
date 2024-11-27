@@ -20,7 +20,7 @@ Public Class AgregarEditarEmpleado
         If Not IsPostBack Then
             objCat.CatalogoRad(ddlEstado, cConcepto.ConsultarEstado, True)
             objCat.CatalogoRad(ddlEjecutivo, cConcepto.ConsultarEjecutivo, True)
-            objCat.CatalogoRad(ddlPuesto, cConcepto.ConsultarPuesto, True)
+            'objCat.CatalogoRad(ddlPuesto, cConcepto.ConsultarPuesto, True)
             objCat.CatalogoRad(ddlEstadoBeneficiario, cConcepto.ConsultarEstado, True)
             objCat.CatalogoRad(ddlMunicipio, cConcepto.ConsultaMunicipio(ddlEstado.SelectedValue), True)
             objCat.CatalogoRad(ddlEstadoCivil, cConcepto.ConsultarEdoCivil, True)
@@ -37,7 +37,7 @@ Public Class AgregarEditarEmpleado
             objCat.CatalogoRad(ddlTipoNomina, cConcepto.ConsultarTipoNomina, True)
             objCat.CatalogoRad(ddlTipoBaja, cConcepto.ConsultarTipoBaja, True)
             objCat.CatalogoRad(ddlMotivoNoRecomendable, cConcepto.ConsultarMotivo, True)
-            objCat.CatalogoRad(ddlDepartamento, cConcepto.ConsultarDepartamento, True)
+            'objCat.CatalogoRad(ddlDepartamento, cConcepto.ConsultarDepartamento, True)
             objCat.CatalogoRad(ddCliente, cConcepto.ConsultarMisClientes, True, False)
             objCat = Nothing
 
@@ -427,10 +427,11 @@ Public Class AgregarEditarEmpleado
                 End If
 
                 Dim cConcepto As New Entities.Catalogos
-
                 Dim ObjCat As New DataControl()
                 ObjCat.CatalogoRad(ddlTipoDescuento, "select id, nombre from tblTipoDescuentoInfonavit order by nombre asc", True)
                 ObjCat.CatalogoRad(ddlMunicipio, cConcepto.ConsultaMunicipio(ddlEstado.SelectedValue), True)
+                ObjCat.CatalogoRad(ddlPuesto, cConcepto.ConsultarPuesto(rs("clienteid")), True)
+                ObjCat.CatalogoRad(ddlDepartamento, cConcepto.ConsultarDepartamento(rs("clienteid")), True)
                 ObjCat = Nothing
                 cConcepto = Nothing
 
@@ -1818,6 +1819,14 @@ Public Class AgregarEditarEmpleado
         SalarioDiario = txtSueldoDiario.Text
         SDI = SalarioDiario * 1.0452
         txtSueldoDiarioIntegrado.Text = SDI.ToString
+    End Sub
+    Private Sub ddCliente_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles ddCliente.SelectedIndexChanged
+        Dim cConcepto As New Entities.Catalogos
+        Dim ObjCat As New DataControl()
+        ObjCat.CatalogoRad(ddlPuesto, cConcepto.ConsultarPuesto(ddCliente.SelectedValue), True)
+        ObjCat.CatalogoRad(ddlDepartamento, cConcepto.ConsultarDepartamento(ddCliente.SelectedValue), True)
+        ObjCat = Nothing
+        cConcepto = Nothing
     End Sub
 
 End Class

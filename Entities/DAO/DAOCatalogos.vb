@@ -3,7 +3,6 @@ Partial Public Class Catalogos
     Dim db As New DBManager.DataBase()
     Dim p As New ArrayList
     Dim dt As New DataTable
-
     Public Function ConsultarEjercicio() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 58))
@@ -121,10 +120,10 @@ Partial Public Class Catalogos
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
-    Public Function ConsultarPlaza(cliente As Integer) As DataTable
+    Public Function ConsultarPlaza(ByVal clienteid As Integer) As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 69))
-        p.Add(New SqlParameter("@clienteid", cliente))
+        p.Add(New SqlParameter("@clienteid", clienteid))
 
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
@@ -153,17 +152,17 @@ Partial Public Class Catalogos
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
-    Public Function ConsultarDepartamento() As DataTable
+    Public Function ConsultarDepartamento(ByVal clienteid As Integer) As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 73))
-        'p.Add(New SqlParameter("@clienteid", cliente))
-
+        p.Add(New SqlParameter("@clienteid", clienteid))
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
-    Public Function ConsultarPuesto() As DataTable
+    Public Function ConsultarPuesto(ByVal clienteid As Integer) As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 74))
+        p.Add(New SqlParameter("@clienteid", clienteid))
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
@@ -191,10 +190,10 @@ Partial Public Class Catalogos
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
-    Public Function ConsultarCentrodeCosto(cliente As Integer) As DataTable
+    Public Function ConsultarCentrodeCosto(ByVal clienteid As Integer) As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 38))
-        p.Add(New SqlParameter("@clienteid", cliente))
+        p.Add(New SqlParameter("@clienteid", clienteid))
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
@@ -216,18 +215,18 @@ Partial Public Class Catalogos
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
-    Public Function ConsultarGrupoPeriodoPago(cliente As Integer, periodopago As Integer) As DataTable
+    Public Function ConsultarGrupoPeriodoPago(clienteid As Integer, periodopago As Integer) As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 82))
-        p.Add(New SqlParameter("@clienteid", cliente))
+        p.Add(New SqlParameter("@clienteid", clienteid))
         p.Add(New SqlParameter("@periodopagoid", periodopago))
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
-    Public Function ConsultarGrupoPeriodoPago2(cliente As Integer) As DataTable
+    Public Function ConsultarGrupoPeriodoPago2(ByVal clienteid As Integer) As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 83))
-        p.Add(New SqlParameter("@clienteid", cliente))
+        p.Add(New SqlParameter("@clienteid", clienteid))
 
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
@@ -239,10 +238,10 @@ Partial Public Class Catalogos
         dt = db.ExecuteSP("pCatalogo", p)
         Return dt
     End Function
-    Public Function ConsultarFolioNomina(cliente As Integer, tipoNomina As Integer) As DataTable
+    Public Function ConsultarFolioNomina(clienteid As Integer, tipoNomina As Integer) As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", 95))
-        p.Add(New SqlParameter("@clienteid", cliente))
+        p.Add(New SqlParameter("@clienteid", clienteid))
         p.Add(New SqlParameter("@tipoNomina", tipoNomina))
 
         dt = db.ExecuteSP("pCatalogo", p)
