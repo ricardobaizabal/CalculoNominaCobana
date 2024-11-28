@@ -13,6 +13,7 @@ Imports System.Data.SqlClient
 Imports System.Data
 Imports System.Globalization
 Imports Telerik.Web.UI.Calendar
+
 Public Class GeneracionDeNominaNormal
     Inherits System.Web.UI.Page
     Dim ObjData As New DataControl()
@@ -412,6 +413,7 @@ Public Class GeneracionDeNominaNormal
 
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.ExtraordinarioBit = False

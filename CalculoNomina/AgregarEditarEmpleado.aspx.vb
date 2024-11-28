@@ -300,7 +300,7 @@ Public Class AgregarEditarEmpleado
         RadTabStrip1.Tabs(0).Selected = True
         RadMultiPage1.SelectedIndex = 0
 
-        Call ClearItemsContrato()
+        'Call ClearItemsContrato()
         panelContratos.Visible = False
         Call clearItemsDBeneficiarios()
         panelBeneficiarios.Visible = False
@@ -430,8 +430,8 @@ Public Class AgregarEditarEmpleado
                 Dim ObjCat As New DataControl()
                 ObjCat.CatalogoRad(ddlTipoDescuento, "select id, nombre from tblTipoDescuentoInfonavit order by nombre asc", True)
                 ObjCat.CatalogoRad(ddlMunicipio, cConcepto.ConsultaMunicipio(ddlEstado.SelectedValue), True)
-                ObjCat.CatalogoRad(ddlPuesto, cConcepto.ConsultarPuesto(rs("clienteid")), True)
                 ObjCat.CatalogoRad(ddlDepartamento, cConcepto.ConsultarDepartamento(rs("clienteid")), True)
+                ObjCat.CatalogoRad(ddlPuesto, cConcepto.ConsultarPuesto(rs("clienteid")), True)
                 ObjCat = Nothing
                 cConcepto = Nothing
 

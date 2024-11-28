@@ -49,7 +49,7 @@ Public Class PeriodosSemanales
     Private Sub GridPeriodosSemanales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosSemanales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = Session("IdEmpresa")
-        cPeriodo.IdPeriodo = cmbCliente.SelectedValue
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo
@@ -64,6 +64,7 @@ Public Class PeriodosSemanales
 
         cPeriodo = New Entities.Periodo
         cPeriodo.IdEmpresa = Session("IdEmpresa")
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosSemanales.DataSource = cPeriodo.ConsultarPeriodo()

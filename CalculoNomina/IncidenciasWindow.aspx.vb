@@ -384,6 +384,7 @@ Public Class IncidenciasWindow
         End If
     End Sub
     Private Sub CargarVariablesGenerales()
+
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
         cConfiguracion.IdEmpresa = Session("IdEmpresa")

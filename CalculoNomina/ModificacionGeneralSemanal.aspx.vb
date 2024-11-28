@@ -6,6 +6,8 @@ Public Class ModificacionGeneralSemanal
     Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private Periodo As Integer = 0
+    Private MesAcumula As Integer = 0
+    Private FinMesBit As Boolean = False
 
     'Private CuotaPeriodo As Double
     Private HorasTriples As Double
@@ -110,7 +112,9 @@ Public Class ModificacionGeneralSemanal
     Private ImporteDiario As Double
     Private ImportePeriodo As Double
     Private Impuesto As Double
+    Private ImpuestoMes As Double
     Private Subsidio As Double
+    Private SubsidioMes As Double
     Private SubsidioAplicado As Double
     Private SubsidioEfectivo As Double
     Private SalarioMinimoDiarioGeneral As Double
@@ -225,7 +229,8 @@ Public Class ModificacionGeneralSemanal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
-                UMI = oDataRow("UMI")
+                FinMesBit = CBool(oDataRow("FinMesBit"))
+                MesAcumula = oDataRow("MesAcumula")
             Next
         End If
     End Sub
@@ -1258,7 +1263,7 @@ Public Class ModificacionGeneralSemanal
     '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
     '    End Try
     'End Sub
-    Private Sub CalcularImpuesto(ByVal NoEmpleado, ByVal CuotaDiaria)
+    Private Sub CalcularImpuesto(ByVal NoEmpleado)
 
         Call CargarVariablesGenerales()
 
@@ -1279,11 +1284,6 @@ Public Class ModificacionGeneralSemanal
         dt = cNomina.ConsultarConceptosEmpleado()
 
         If dt.Rows.Count > 0 Then
-            'If dt.Compute("Sum(ImporteGravado)", "CvoConcepto<>2") IsNot DBNull.Value Then
-            '    BaseGravadaPeriodo = dt.Compute("Sum(ImporteGravado)", "CvoConcepto<>2") + (CuotaDiaria * DiasTarifaISR)
-            'Else
-            '    BaseGravadaPeriodo = CuotaDiaria * DiasTarifaISR
-            'End If
             If dt.Compute("Sum(ImporteGravado)", "") IsNot DBNull.Value Then
                 BaseGravadaPeriodo = dt.Compute("Sum(ImporteGravado)", "")
             End If
@@ -1304,7 +1304,43 @@ Public Class ModificacionGeneralSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub CalcularSubsidio(ByVal NoEmpleado, ByVal CuotaDiaria)
+    Private Sub CalcularImpuestoFinMes(ByVal NoEmpleado)
+
+        Call CargarVariablesGenerales()
+
+        Dim BaseGravadaMes As Decimal = 0
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = clienteId.Value
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            ImpuestoMes = 0
+            dt = New DataTable()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = BaseGravadaMes
+            dt = TarifaMensual.ConsultarTarifaMensual()
+
+            If dt.Rows.Count > 0 Then
+                ImpuestoMes = ((BaseGravadaMes - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub CalcularSubsidio(ByVal NoEmpleado)
 
         Call CargarVariablesGenerales()
 
@@ -1340,6 +1376,42 @@ Public Class ModificacionGeneralSemanal
             If dt.Rows.Count > 0 Then
                 Subsidio = dt.Rows(0).Item("Subsidio")
                 SubsidioAplicado = (Subsidio / FactorDiarioPromedio) * DiasTarifaSubsidio
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub CalcularSubsidioFinMes(ByVal NoEmpleado)
+
+        Call CargarVariablesGenerales()
+
+        Dim BaseGravadaMes As Decimal = 0
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = clienteId.Value
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            SubsidioMes = 0
+            dt = New DataTable()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseGravadaMes
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
+
+            If dt.Rows.Count > 0 Then
+                SubsidioMes = dt.Rows(0).Item("Subsidio")
             End If
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -1524,11 +1596,11 @@ Public Class ModificacionGeneralSemanal
                     SubsidioAplicado = 0
 
                     'CÁLCULO DEL ISR DIRECTO DEL PERIODO VIGENTE
-                    Call CalcularImpuesto(NoEmpleado, CuotaDiaria)
+                    Call CalcularImpuesto(NoEmpleado)
                     Impuesto = Math.Round(Impuesto, 6)
 
                     'CÁLCULO DEL SUBSIDIO CAUSADO DEL PERIODO VIGENTE
-                    Call CalcularSubsidio(NoEmpleado, CuotaDiaria)
+                    Call CalcularSubsidio(NoEmpleado)
                     SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
 
                     'CÁLCULO DE IMPUESTOS  A RETENER
@@ -1594,6 +1666,92 @@ Public Class ModificacionGeneralSemanal
                         cNomina.IdNomina = nominaID.Value
                         cNomina.GuadarNominaPeriodo()
                     End If
+
+                    If FinMesBit = True Then
+
+                        'CÁLCULO DEL IMPUESTO/SUBSIDIO MENSUAL (OBJETIVO A LLEGAR) CUANDO ES FIN DE MES
+                        Call CalcularImpuestoFinMes(NoEmpleado)
+                        Call CalcularSubsidioFinMes(NoEmpleado)
+
+                        'ACUMULADOS DE LO QUE SE LLEVA EN EL MES (incluyendo el periodo vigente)
+                        Dim SubsidioCausado As Double = 0
+                        Dim ISRRetenido As Double = 0
+                        Dim SubsidioCausadoMayorAlQueLeCorrespondia As Double = 0
+                        Dim ISRAjusteMensual As Double = 0
+                        Dim ISRAjustadoPorSubsidio As Double = 0
+
+                        Dim dt As New DataTable()
+                        Dim cNomina As New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = clienteId.Value
+                        cNomina.NoEmpleado = empleadoId.Value
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.MesAcumula = MesAcumula
+                        cNomina.TipoConcepto = "P"
+                        cNomina.Tipo = "N"
+                        dt = cNomina.ConsultarSubsidioCausadoMesEmpleado()
+
+                        'Acumulado del mes (incluyendo periodo vigente) del Subsidio Causado
+                        If dt.Rows.Count > 0 Then
+                            SubsidioCausado = dt.Rows(0).Item("Importe")
+                        End If
+
+                        cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = clienteId.Value
+                        cNomina.NoEmpleado = NoEmpleado
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.MesAcumula = MesAcumula
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Tipo = "N"
+                        dt = cNomina.ConsultarISRRetenidoMesEmpleado()
+
+                        'Acumulado del mes (incluyendo periodo vigente) del ISR retenido
+                        If dt.Rows.Count > 0 Then
+                            ISRRetenido = dt.Rows(0).Item("Importe")
+                        End If
+
+                        'CÁLCULO DE AJUSTES CUANDO ES FIN DE MES
+                        'Subsidio causado mayor al que le correspondía
+                        If SubsidioCausado > SubsidioMes Then
+                            SubsidioCausadoMayorAlQueLeCorrespondia = SubsidioCausado - SubsidioMes
+                        End If
+
+                        'ISR AJUSTADO POR SUBSIDIO
+                        If SubsidioCausadoMayorAlQueLeCorrespondia > 0 Then
+                            cNomina = New Nomina()
+                            cNomina.IdEmpresa = IdEmpresa
+                            cNomina.IdCliente = clienteId.Value
+                            cNomina.Ejercicio = IdEjercicio
+                            cNomina.TipoNomina = 1 'Semanal
+                            cNomina.Periodo = Periodo
+                            cNomina.NoEmpleado = NoEmpleado
+                            cNomina.CvoConcepto = 7
+                            cNomina.IdContrato = IdContrato
+                            cNomina.TipoConcepto = "D"
+                            cNomina.Unidad = 1
+                            cNomina.Importe = SubsidioCausadoMayorAlQueLeCorrespondia
+                            cNomina.ImporteGravado = 0
+                            cNomina.ImporteExento = SubsidioCausadoMayorAlQueLeCorrespondia
+                            cNomina.Generado = ""
+                            cNomina.Timbrado = ""
+                            cNomina.Enviado = ""
+                            cNomina.Situacion = "A"
+                            cNomina.EsEspecial = False
+                            cNomina.FechaIni = cPeriodo.FechaInicialDate
+                            cNomina.FechaFin = cPeriodo.FechaFinalDate
+                            cNomina.FechaPago = cPeriodo.FechaPago
+                            cNomina.DiasPagados = cPeriodo.Dias
+                            cNomina.IdNomina = nominaID.Value
+                            cNomina.GuadarNominaPeriodo()
+
+                            Call QuitarConcepto(54, "") 'SUBSIDIO
+
+                        End If
+                    End If
+
                 Else
                     Call GuardarRegistro(CuotaDiaria, 1, Importe, Unidad, IdContrato, NoEmpleado, CvoConcepto)
                 End If
@@ -2823,10 +2981,10 @@ Public Class ModificacionGeneralSemanal
             Impuesto = 0
             SubsidioAplicado = 0
 
-            Call CalcularImpuesto(NoEmpleado, CuotaDiaria)
+            Call CalcularImpuesto(NoEmpleado)
             Impuesto = Math.Round(Impuesto, 6)
 
-            Call CalcularSubsidio(NoEmpleado, CuotaDiaria)
+            Call CalcularSubsidio(NoEmpleado)
             SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
 
             If Impuesto > SubsidioAplicado Then

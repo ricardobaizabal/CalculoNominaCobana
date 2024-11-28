@@ -36,6 +36,7 @@ Partial Public Class Periodo
         Try
             p.Clear()
             p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicial))
@@ -71,36 +72,6 @@ Partial Public Class Periodo
             Throw ex
         End Try
     End Sub
-    Public Sub UpdatePeriodoQuincenal()
-        Try
-            p.Clear()
-            p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
-            p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
-            p.Add(New SqlParameter("@pFechainicial", FechaInicial))
-            p.Add(New SqlParameter("@pFechafinal", FechaFinal))
-            p.Add(New SqlParameter("@pFechapago", FechaPago))
-            p.Add(New SqlParameter("@pDias", Dias))
-            p.Add(New SqlParameter("@pGeneraPeriodos", GeneraPeriodos))
-
-            db.ExecuteSPWithParams("pGuadarPeriodoSemanal", p)
-
-        Catch ex As Exception
-            Throw ex
-        End Try
-    End Sub
-    Public Sub UpdatePeriodoCatorcenal()
-        Try
-            p.Clear()
-            p.Add(New SqlParameter("@pIdPeriodo", IdPeriodo))
-            p.Add(New SqlParameter("@pFechainicial", FechaInicial))
-            p.Add(New SqlParameter("@pFechafinal", FechaFinal))
-
-            db.ExecuteSPWithParams("pUpdatePeriodoCatorcenal", p)
-
-        Catch ex As Exception
-            Throw ex
-        End Try
-    End Sub
     Public Sub UpdatePeriodoSemanal()
         Try
             p.Clear()
@@ -111,8 +82,49 @@ Partial Public Class Periodo
             If FechaPago.ToString.Length > 0 Then
                 p.Add(New SqlParameter("@pFechaPago", FechaPago))
             End If
-
+            p.Add(New SqlParameter("@pInicioMesBit", InicioMesBit))
+            p.Add(New SqlParameter("@pFinMesBit", FinMesBit))
+            p.Add(New SqlParameter("@pInicioEjercicioBit", InicioEjercicioBit))
+            p.Add(New SqlParameter("@pFinEjercicioBit", FinEjercicioBit))
             db.ExecuteSPWithParams("pUpdatePeriodoSemanal", p)
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+    Public Sub UpdatePeriodoCatorcenal()
+        Try
+            p.Clear()
+            p.Add(New SqlParameter("@pIdPeriodo", IdPeriodo))
+            p.Add(New SqlParameter("@pNoPeriodo", NoPeriodo))
+            p.Add(New SqlParameter("@pFechainicial", FechaInicial))
+            p.Add(New SqlParameter("@pFechafinal", FechaFinal))
+            If FechaPago.ToString.Length > 0 Then
+                p.Add(New SqlParameter("@pFechaPago", FechaPago))
+            End If
+            p.Add(New SqlParameter("@pInicioMesBit", InicioMesBit))
+            p.Add(New SqlParameter("@pFinMesBit", FinMesBit))
+            p.Add(New SqlParameter("@pInicioEjercicioBit", InicioEjercicioBit))
+            p.Add(New SqlParameter("@pFinEjercicioBit", FinEjercicioBit))
+            db.ExecuteSPWithParams("pUpdatePeriodoCatorcenal", p)
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Sub
+    Public Sub UpdatePeriodoQuincenal()
+        Try
+            p.Clear()
+            p.Add(New SqlParameter("@pIdPeriodo", IdPeriodo))
+            p.Add(New SqlParameter("@pNoPeriodo", NoPeriodo))
+            p.Add(New SqlParameter("@pFechainicial", FechaInicial))
+            p.Add(New SqlParameter("@pFechafinal", FechaFinal))
+            If FechaPago.ToString.Length > 0 Then
+                p.Add(New SqlParameter("@pFechaPago", FechaPago))
+            End If
+            p.Add(New SqlParameter("@pInicioMesBit", InicioMesBit))
+            p.Add(New SqlParameter("@pFinMesBit", FinMesBit))
+            p.Add(New SqlParameter("@pInicioEjercicioBit", InicioEjercicioBit))
+            p.Add(New SqlParameter("@pFinEjercicioBit", FinEjercicioBit))
+            db.ExecuteSPWithParams("pUpdatePeriodoQuincenal", p)
 
         Catch ex As Exception
             Throw ex

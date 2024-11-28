@@ -63,7 +63,7 @@
                         </Items>
                     </telerik:RadComboBox>
                 </td>
-                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarGeneraPeriodos" runat="server" ControlToValidate="cmbGeneraPeriodos" InitialValue="0" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarGeneraPeriodos" runat="server" ControlToValidate="cmbGeneraPeriodos" InitialValue="0" CssClass="Text" ErrorMessage="* Fecha requerida" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>

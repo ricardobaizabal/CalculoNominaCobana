@@ -10,7 +10,6 @@
         End If
     End Sub
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        Dim cPeriodo As New Entities.Periodo
 
         Dim cEmpresa As New Entities.Empresa
         cEmpresa.IdEmpresa = Session("IdEmpresa")
@@ -18,10 +17,11 @@
         cEmpresa.ConsultarEjercicioID()
 
         If cEmpresa.IdUsuario > 0 Then
+            Dim cPeriodo As New Entities.Periodo
             cPeriodo.IdEmpresa = Session("IdEmpresa")
             cPeriodo.IdCliente = cmbCliente.SelectedValue
             cPeriodo.IdEjercicio = cEmpresa.IdEjercicio
-            cPeriodo.IdTipoNomina = 1
+            cPeriodo.IdTipoNomina = 1 'Semanal
             cPeriodo.FechaInicial = String.Format("{0:MM/dd/yyyy}", calFechaInicio.SelectedDate)
             cPeriodo.GeneraPeriodos = cmbGeneraPeriodos.SelectedValue
             cPeriodo.GuadarPeriodoSemanal()
@@ -32,6 +32,7 @@
         Response.Redirect("~/PeriodosSemanales.aspx")
     End Sub
     Private Sub resetControles()
+        cmbCliente.SelectedValue = 0
         calFechaInicio.Clear()
         registroId.Value = 0
     End Sub
