@@ -3199,6 +3199,7 @@
     <Content Include="RegimenContratacion.aspx" />
     <Content Include="Acumulados.aspx" />
     <Content Include="ReporteDeducciones.aspx" />
+    <Content Include="ReporteEmpleadosNotimbrados.aspx" />
     <Content Include="ReportePercepciones.aspx" />
     <Content Include="Reportes\css\animate.css" />
     <Content Include="Reportes\css\bootstrap.css" />
@@ -4168,6 +4169,13 @@
       <DependentUpon>ReporteDeducciones.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ReporteEmpleadosNotimbrados.aspx.designer.vb">
+      <DependentUpon>ReporteEmpleadosNotimbrados.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReporteEmpleadosNotimbrados.aspx.vb">
+      <DependentUpon>ReporteEmpleadosNotimbrados.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="ReportePercepciones.aspx.designer.vb">
       <DependentUpon>ReportePercepciones.aspx</DependentUpon>
     </Compile>
@@ -4859,7 +4867,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
+      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

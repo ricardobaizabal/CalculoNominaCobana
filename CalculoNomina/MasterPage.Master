@@ -252,6 +252,7 @@
                                 <a href="#"><i class="fa fa fa-bar-chart-o"></i><span class="nav-label">Reportes</span><span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level collapse">
                                     <li><a href="AcumuladosEmpleado.aspx">Acumulados por Empleado</a></li>
+                                    <li><a href="ReporteEmpleadosNotimbrados.aspx">Empleados sin timbrar</a></li>
                                     <li><a href="Acumulados.aspx">Acumulados General</a></li>
                                     <li><a href="DiasLaborados.aspx">Días Laborados</a></li>
                                     <li><a href="ReporteDeducciones.aspx">Deducciones</a></li>
