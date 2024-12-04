@@ -20,6 +20,7 @@ Public Class GeneracionDeNominaQuincenalNormal
     Private ImportePeriodo As Double
     Private ImporteSeguroVivienda As Double
     Private Subsidio As Double
+    Private SubsidioMes As Double
 
     Private UMAMensual As Double
     Private UMA As Double
@@ -150,6 +151,7 @@ Public Class GeneracionDeNominaQuincenalNormal
     Public HaberPorRetiro As Double
 
     Private Impuesto As Double
+    Private ImpuestoMes As Double
     Public IsrIndemnizacion As Double
     Public SubsidioAplicado As Double
     Public SubsidioEfectivo As Double
@@ -191,6 +193,8 @@ Public Class GeneracionDeNominaQuincenalNormal
     Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private Periodo As Integer = 0
+    Private MesAcumula As Integer = 0
+    Private FinMesBit As Boolean = False
     Private dtEmpleados As DataTable
 
     Const URI_SAT = "http://www.sat.gob.mx/cfd/4"
@@ -506,10 +510,100 @@ Public Class GeneracionDeNominaQuincenalNormal
                     IMSS = Math.Round(IMSS, 6)
                 End If
 
-                Impuesto = Impuesto * Dias
                 Impuesto = Math.Round(Impuesto, 6)
 
                 GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), Math.Round(ImporteDiario, 6), oDataRow("ClaveRegimenContratacion"), _Nominaid)
+
+                If FinMesBit = True Then
+
+                    'CÁLCULO DEL IMPUESTO/SUBSIDIO MENSUAL (OBJETIVO A LLEGAR) CUANDO ES FIN DE MES
+                    Call CalcularImpuestoFinMes(oDataRow("NoEmpleado"))
+                    Call CalcularSubsidioFinMes(oDataRow("NoEmpleado"))
+
+                    'ACUMULADOS DE LO QUE SE LLEVA EN EL MES (incluyendo el periodo vigente)
+                    Dim SubsidioCausado As Double = 0
+                    Dim ISRRetenido As Double = 0
+                    Dim SubsidioCausadoMayorAlQueLeCorrespondia As Double = 0
+                    Dim ISRAjusteMensual As Double = 0
+                    Dim ISRAjustadoPorSubsidio As Double = 0
+
+                    Dim dts As New DataTable()
+                    Dim cNomina As New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
+                    cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 3 'Quincenal
+                    cNomina.MesAcumula = MesAcumula
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Tipo = "N"
+                    dts = cNomina.ConsultarSubsidioCausadoMesEmpleado()
+
+                    'Acumulado del mes (incluyendo periodo vigente) del Subsidio Causado
+                    If dts.Rows.Count > 0 Then
+                        SubsidioCausado = dts.Rows(0).Item("Importe")
+                    End If
+
+                    dts = New DataTable()
+                    cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
+                    cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 3 'Quincenal
+                    cNomina.MesAcumula = MesAcumula
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Tipo = "N"
+                    dts = cNomina.ConsultarISRRetenidoMesEmpleado()
+
+                    'Acumulado del mes (incluyendo periodo vigente) del ISR retenido
+                    If dts.Rows.Count > 0 Then
+                        ISRRetenido = dts.Rows(0).Item("Importe")
+                    End If
+
+                    'CÁLCULO DE AJUSTES CUANDO ES FIN DE MES
+                    'Subsidio causado mayor al que le correspondía
+                    If SubsidioCausado > SubsidioMes Then
+                        SubsidioCausadoMayorAlQueLeCorrespondia = SubsidioCausado - SubsidioMes
+                    End If
+
+                    'ISR AJUSTADO POR SUBSIDIO
+                    If SubsidioCausadoMayorAlQueLeCorrespondia > 0 Then
+
+                        Dim cPeriodo As New Entities.Periodo()
+                        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+                        cPeriodo.ConsultarPeriodoID()
+
+                        cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = cmbCliente.SelectedValue
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 3 'Quincenal
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                        cNomina.CvoConcepto = 7
+                        cNomina.IdContrato = oDataRow("IdContrato")
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = SubsidioCausadoMayorAlQueLeCorrespondia
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = SubsidioCausadoMayorAlQueLeCorrespondia
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = _Nominaid
+                        cNomina.GuadarNominaPeriodo()
+
+                        Call QuitarConcepto(54, oDataRow("NoEmpleado")) 'SUBSIDIO
+
+                    End If
+                End If
 
                 ''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
                 Dim Valor As Decimal
@@ -642,6 +736,21 @@ Public Class GeneracionDeNominaQuincenalNormal
             Response.Redirect("~/GeneracionDeNominaQuincenalNormal.aspx?id=" & cmbPeriodo.SelectedValue.ToString, False)
 
         End If
+    End Sub
+    Private Sub QuitarConcepto(ByVal NumeroConcepto As Int32, ByVal NoEmpleado As Int32)
+
+        Call CargarVariablesGenerales()
+
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 3 'Quincenal
+        cNomina.Periodo = periodoID.Value
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.CvoConcepto = NumeroConcepto
+        cNomina.TipoConcepto = "D"
+        cNomina.EliminaConceptoEmpleado()
     End Sub
     Private Sub AgregaConcepto(ByVal ImporteIncidencia, ByVal UnidadIncidencia, ByVal CuotaPeriodo, ByVal ImporteDiario, ByVal NoEmpleado, ByVal CvoConcepto, ByVal IdContrato, ByVal IdNomina)
         Try
@@ -1554,30 +1663,150 @@ Public Class GeneracionDeNominaQuincenalNormal
         End Try
     End Sub
     Private Sub CalcularImpuesto()
+
+        Call CargarVariablesGenerales()
+
+        Dim ImporteMensual As Decimal = 0
+        ImporteMensual = ImporteDiario * FactorDiarioPromedio
+
         Try
             Impuesto = 0
             Dim dt As New DataTable()
-            Dim TarifaDiaria As New TarifaDiaria()
-            TarifaDiaria.ImporteDiario = ImporteDiario
-            dt = TarifaDiaria.ConsultarValoresTarifaDiaria()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = ImporteMensual
+            dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
-                Impuesto = ((ImporteDiario - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = ((ImporteMensual - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = (Impuesto / FactorDiarioPromedio) * Dias
             End If
-
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
+    Private Sub CalcularImpuestoFinMes(ByVal NoEmpleado As Integer)
+
+        Call CargarVariablesGenerales()
+
+        Dim BaseGravadaMes As Decimal = 0
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 3 'Quincenal
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            ImpuestoMes = 0
+            dt = New DataTable()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = BaseGravadaMes
+            dt = TarifaMensual.ConsultarTarifaMensual()
+
+            If dt.Rows.Count > 0 Then
+                ImpuestoMes = ((BaseGravadaMes - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    'Private Sub CalcularImpuesto()
+    '    Try
+    '        Impuesto = 0
+    '        Dim dt As New DataTable()
+    '        Dim TarifaDiaria As New TarifaDiaria()
+    '        TarifaDiaria.ImporteDiario = ImporteDiario
+    '        dt = TarifaDiaria.ConsultarValoresTarifaDiaria()
+
+    '        If dt.Rows.Count > 0 Then
+    '            Impuesto = ((ImporteDiario - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+    '        End If
+
+    '    Catch oExcep As Exception
+    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+    '    End Try
+    'End Sub
+    'Private Sub CalcularSubsidio()
+    '    Try
+    '        Subsidio = 0
+    '        Dim dt As New DataTable()
+    '        Dim TablaSubsidioDiario As New TablaSubsidioDiario()
+    '        TablaSubsidioDiario.Importe = ImporteDiario
+    '        dt = TablaSubsidioDiario.ConsultarSubsidioDiario()
+    '        If dt.Rows.Count > 0 Then
+    '            Subsidio = dt.Rows(0).Item("Subsidio")
+    '        End If
+    '    Catch oExcep As Exception
+    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+    '    End Try
+    'End Sub
     Private Sub CalcularSubsidio()
+
+        Call CargarVariablesGenerales()
+
+        Dim DiasTarifaSubsidio As Decimal = 15
+        Dim BaseGravadaPeriodo As Decimal = 0
+        Dim BaseCalculoSubsidio As Decimal = 0
+
+        BaseGravadaPeriodo = ImporteDiario * DiasTarifaSubsidio
+        BaseCalculoSubsidio = (BaseGravadaPeriodo / DiasTarifaSubsidio) * FactorDiarioPromedio
+
         Try
             Subsidio = 0
             Dim dt As New DataTable()
-            Dim TablaSubsidioDiario As New TablaSubsidioDiario()
-            TablaSubsidioDiario.Importe = ImporteDiario
-            dt = TablaSubsidioDiario.ConsultarSubsidioDiario()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseCalculoSubsidio
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
+
             If dt.Rows.Count > 0 Then
                 Subsidio = dt.Rows(0).Item("Subsidio")
+                SubsidioAplicado = (Subsidio / FactorDiarioPromedio) * DiasTarifaSubsidio
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub CalcularSubsidioFinMes(ByVal NoEmpleado As Integer)
+
+        Call CargarVariablesGenerales()
+
+        Dim BaseGravadaMes As Decimal = 0
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 3 'Quincenal
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            SubsidioMes = 0
+            dt = New DataTable()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseGravadaMes
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
+
+            If dt.Rows.Count > 0 Then
+                SubsidioMes = dt.Rows(0).Item("Subsidio")
             End If
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -1690,27 +1919,38 @@ Public Class GeneracionDeNominaQuincenalNormal
             cNomina.GuadarNominaPeriodo()
 
             SubsidioAplicado = 0
-            BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+            Call CalcularSubsidio()
+            SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
 
-            If CuotaDiaria <= BaseGravableMensualSubsidioDiario Then
-                UMAMensual = UMA * FactorDiarioPromedio
-                SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
-                SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
-
-                If (Impuesto > 0 And (Impuesto < (SubsidioDiario * Dias))) Then
-                    SubsidioAplicado = Impuesto
-                Else
-                    SubsidioAplicado = (SubsidioDiario * Dias)
-                End If
-
-                If Impuesto > SubsidioAplicado Then
-                    Impuesto = Impuesto - SubsidioAplicado
-                ElseIf Impuesto < SubsidioAplicado Then
-                    SubsidioAplicado = SubsidioAplicado - Impuesto
-                    Impuesto = 0
-                End If
-
+            If Impuesto > SubsidioAplicado Then
+                Impuesto = Impuesto - SubsidioAplicado
+            ElseIf Impuesto < SubsidioAplicado Then
+                SubsidioAplicado = SubsidioAplicado - Impuesto
+                Impuesto = 0
             End If
+
+            'SubsidioAplicado = 0
+            'BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+
+            'If CuotaDiaria <= BaseGravableMensualSubsidioDiario Then
+            '    UMAMensual = UMA * FactorDiarioPromedio
+            '    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
+            '    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
+
+            '    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * Dias))) Then
+            '        SubsidioAplicado = Impuesto
+            '    Else
+            '        SubsidioAplicado = (SubsidioDiario * Dias)
+            '    End If
+
+            '    If Impuesto > SubsidioAplicado Then
+            '        Impuesto = Impuesto - SubsidioAplicado
+            '    ElseIf Impuesto < SubsidioAplicado Then
+            '        SubsidioAplicado = SubsidioAplicado - Impuesto
+            '        Impuesto = 0
+            '    End If
+
+            'End If
 
             If Impuesto > 0 Then
                 cNomina = New Nomina()
@@ -1806,6 +2046,8 @@ Public Class GeneracionDeNominaQuincenalNormal
     Private Sub cmbCliente_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbCliente.SelectedIndexChanged
 
         Call CargarVariablesGenerales()
+
+        Call CargaPeriodos(cmbPeriodicidad.SelectedValue)
 
         If cmbPeriodo.SelectedValue > 0 Then
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
@@ -1907,10 +2149,12 @@ Public Class GeneracionDeNominaQuincenalNormal
 
             cNomina = Nothing
             If dt.Rows.Count > 0 And dt_Empleado.Rows.Count > 0 Then
+
                 panelDatos.Visible = True
                 btnExportar.Enabled = True
                 btnImportar.Enabled = True
 
+                Me.lblNoNomina.Text = Session("Folio").ToString
                 Me.lblEjercicio.Text = dt.Rows(0)("Ejercicio").ToString()
                 Me.lblRazonSocial.Text = dt.Rows(0)("Cliente").ToString()
                 Me.lblNoPeriodo.Text = dt.Rows(0)("Periodo").ToString()
@@ -1919,18 +2163,11 @@ Public Class GeneracionDeNominaQuincenalNormal
                 Me.lblFechaFinal.Text = dt.Rows(0)("FechaFinal").ToString()
                 Me.lblDias.Text = dt.Rows(0)("Dias").ToString()
 
-                'For Each oDataRow In dt.Rows
-                '    Me.lblEjercicio.Text = oDataRow("Ejercicio")
-                '    Me.lblRazonSocial.Text = oDataRow("Cliente")
-                '    Me.lblNoPeriodo.Text = oDataRow("Periodo")
-                '    Me.lblTipoNomina.Text = "Quincenal"
-                '    Me.lblFechaInicial.Text = oDataRow("FechaInicial")
-                '    Me.lblFechaFinal.Text = oDataRow("FechaFinal")
-                '    Me.lblDias.Text = oDataRow("Dias")
-                'Next
                 Call CargarGridEmpleadosQuincenal()
+
             Else
                 panelDatos.Visible = False
+                Me.lblNoNomina.Text = ""
                 Me.lblEjercicio.Text = ""
                 Me.lblRazonSocial.Text = ""
                 Me.lblNoPeriodo.Text = ""
@@ -1964,6 +2201,9 @@ Public Class GeneracionDeNominaQuincenalNormal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                UMI = oDataRow("UMI")
+                FinMesBit = CBool(oDataRow("FinMesBit"))
+                MesAcumula = oDataRow("MesAcumula")
             Next
         End If
     End Sub
@@ -3597,8 +3837,8 @@ Public Class GeneracionDeNominaQuincenalNormal
                     reporte.ReportParameters("txtCantidadLetra").Value = CantidadTexto.ToString.ToUpper
                     reporte.ReportParameters("txtCadenaOriginal").Value = CadenaOriginalComplemento(FolioXml)
 
-                    Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
-                    reporte.ReportParameters("txtLeyenda").Value = leyenda
+                    'Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
+                    reporte.ReportParameters("txtLeyenda").Value = ""
 
                     GrabarPDF(NoEmpleado, "S")
 
@@ -5759,6 +5999,7 @@ Public Class GeneracionDeNominaQuincenalNormal
         Call CargarVariablesGenerales()
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
         cPeriodo.ExtraordinarioBit = False

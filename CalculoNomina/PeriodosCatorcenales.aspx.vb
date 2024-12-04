@@ -40,11 +40,8 @@ Public Class PeriodosCatorcenales
                 Response.Redirect("~/EditorPeriodosCatorcenales.aspx?id=" & e.CommandArgument)
             Case "cmdDelete"
                 registroId.Value = e.CommandArgument
-                rwConfirmEliminaPeriodo.RadConfirm("¿Está seguro de eliminar el periodo catorcenal de la base de datos?", "confirmCallbackFn", 330, 180, Nothing, "Confirmar")
+                rwConfirmEliminaPeriodo.RadConfirm("¿Está seguro de eliminar el periodo catorcenal?", "confirmCallbackFn", 330, 180, Nothing, "Confirmar")
         End Select
-    End Sub
-    Private Sub GridPeriodosCatorcenales_ItemDataBound(sender As Object, e As GridItemEventArgs) Handles GridPeriodosCatorcenales.ItemDataBound
-
     End Sub
     Private Sub GridPeriodosCatorcenales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosCatorcenales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo

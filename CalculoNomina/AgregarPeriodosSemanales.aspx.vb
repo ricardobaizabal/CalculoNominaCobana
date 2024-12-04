@@ -24,7 +24,7 @@
             cPeriodo.IdTipoNomina = 1 'Semanal
             cPeriodo.FechaInicial = String.Format("{0:MM/dd/yyyy}", calFechaInicio.SelectedDate)
             cPeriodo.GeneraPeriodos = cmbGeneraPeriodos.SelectedValue
-            cPeriodo.GuadarPeriodoSemanal()
+            cPeriodo.GuadarPeriodoQuincenal()
             cPeriodo = Nothing
         End If
         cEmpresa = Nothing

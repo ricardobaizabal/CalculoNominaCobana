@@ -24,24 +24,28 @@ Public Class RptNominaCatorcenal
             If Not String.IsNullOrEmpty(Request("e")) Then
                 IdEmpresa.Value = Request("e")
             End If
+            If Not String.IsNullOrEmpty(Request("c")) Then
+                IdCliente.Value = Request("c")
+            End If
             If Not String.IsNullOrEmpty(Request("ej")) Then
                 IdEjercicio.Value = Request("ej")
             End If
             If Not String.IsNullOrEmpty(Request("p")) Then
+
                 IdPeriodo.Value = Request("p")
 
                 Dim ObjData As New DataControl(0)
                 Dim ds As New DataSet
                 Dim p As New ArrayList
-                p.Add(New SqlParameter("@cmd", 1))
-                p.Add(New SqlParameter("@clienteid", Session("clienteid")))
-                ds = ObjData.FillDataSet("pCliente", p)
+                p.Add(New SqlParameter("@cmd", 2))
+                p.Add(New SqlParameter("@clienteid", IdCliente.Value))
+                ds = ObjData.FillDataSet("pMisClientes", p)
                 ObjData = Nothing
 
                 If ds.Tables(0).Rows.Count > 0 Then
                     For Each row As DataRow In ds.Tables(0).Rows
-                        lblEmpresa.Text = row("nombre_comercial")
-                        lblDireccion.Text = row("expedicionLinea3")
+                        lblEmpresa.Text = row("razonsocial")
+                        lblDireccion.Text = row("expedicionLinea")
                     Next
                 End If
 
@@ -49,7 +53,40 @@ Public Class RptNominaCatorcenal
                 cPeriodo.IdPeriodo = IdPeriodo.Value
                 cPeriodo.ConsultarPeriodoID()
 
-                lblPeriodoTitulo.Text = "NOMINA CATORCENAL DEL PERIODO NO. " & IdPeriodo.Value.ToString & " DEL " & cPeriodo.FechaInicial.ToString & " AL " & cPeriodo.FechaFinal.ToString
+                Dim dt As New DataTable()
+                Dim cNomina As New Nomina()
+                cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdCliente = IdCliente.Value
+                cNomina.Ejercicio = IdEjercicio.Value
+                cNomina.TipoNomina = 2 'Catorcenal
+                cNomina.Periodo = IdPeriodo.Value
+                cNomina.EsEspecial = False
+                dt = cNomina.ConsultarDatosGeneralesNomina()
+
+                Dim dt_Empleado As New DataTable()
+                cNomina = New Nomina()
+                cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdCliente = IdCliente.Value
+                cNomina.Ejercicio = IdEjercicio.Value
+                cNomina.TipoNomina = 2 'Catorcenal
+                cNomina.Periodo = IdPeriodo.Value
+                cNomina.EsEspecial = False
+                dt_Empleado = cNomina.ConsultarDetalleNomina()
+                cNomina = Nothing
+
+                lblPeriodoTitulo.Text = "NÓMINA CATORCENAL ORDINARIA DEL PERIODO: " & cPeriodo.FechaInicial.ToString & " AL " & cPeriodo.FechaFinal.ToString
+
+                If dt.Rows.Count > 0 And dt_Empleado.Rows.Count > 0 Then
+                    Me.lblTitulo.Text = "Periodo " & dt.Rows(0)("RangoFecha").ToString()
+                    Me.lblNoNomina.Text = Session("Folio").ToString
+                    Me.lblEjercicio.Text = dt.Rows(0)("Ejercicio").ToString()
+                    Me.lblRazonSocial.Text = dt.Rows(0)("Cliente").ToString()
+                    Me.lblNoPeriodo.Text = dt.Rows(0)("Periodo").ToString()
+                    Me.lblTipoNomina.Text = "Catorcenal"
+                    Me.lblFechaInicial.Text = dt.Rows(0)("FechaInicial").ToString()
+                    Me.lblFechaFinal.Text = dt.Rows(0)("FechaFinal").ToString()
+                    Me.lblDias.Text = dt.Rows(0)("Dias").ToString()
+                End If
 
                 Call MostrarPercepciones()
                 Call MostrarDeducciones()
@@ -61,10 +98,11 @@ Public Class RptNominaCatorcenal
     Sub MostrarPercepciones()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdCliente = IdCliente.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
-        dtPercepciones = cNomina.ConsultarPercepcionesCorridaSemanal()
+        dtPercepciones = cNomina.ConsultarPercepcionesCorrida()
         grdPercepciones.DataSource = dtPercepciones
         grdPercepciones.DataBind()
         cNomina = Nothing
@@ -72,57 +110,61 @@ Public Class RptNominaCatorcenal
     Sub MostrarDeducciones()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdCliente = IdCliente.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
-        dtDeducciones = cNomina.ConsultarDeduccionesCorridaSemanal()
+        dtDeducciones = cNomina.ConsultarDeduccionesCorrida()
         grdDeducciones.DataSource = dtDeducciones
         grdDeducciones.DataBind()
         cNomina = Nothing
     End Sub
     Sub MostrarTotalNeto()
-        lblTotalNeto.Text = "TOTAL: " & FormatCurrency(totalNetoPercepciones - totalNetoDeducciones, 2).ToString
+        lblTotalNeto.Text = FormatCurrency(totalNetoPercepciones - totalNetoDeducciones, 2).ToString
         lblTotalGravado.Text = FormatCurrency(totalGravado, 2).ToString
         lblTotalExento.Text = FormatCurrency(totalExento, 2).ToString
     End Sub
     Private Sub grdPercepciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdPercepciones.NeedDataSource
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdCliente = IdCliente.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
-        dtPercepciones = cNomina.ConsultarPercepcionesCorridaSemanal()
+        dtPercepciones = cNomina.ConsultarPercepcionesCorrida()
         grdPercepciones.DataSource = dtPercepciones
         cNomina = Nothing
     End Sub
     Private Sub grdDeducciones_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdDeducciones.NeedDataSource
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdCliente = IdCliente.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
-        dtDeducciones = cNomina.ConsultarDeduccionesCorridaSemanal()
+        dtDeducciones = cNomina.ConsultarDeduccionesCorrida()
         grdDeducciones.DataSource = dtDeducciones
         cNomina = Nothing
     End Sub
     Private Sub ListarPercepciones()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdCliente = IdCliente.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
-        dtPercepciones = cNomina.ConsultarPercepcionesCorridaSemanal()
-        grdPercepciones.DataSource = dtPercepciones
+        dtPercepciones = cNomina.ConsultarPercepcionesCorrida()
         grdPercepciones.DataBind()
         cNomina = Nothing
     End Sub
     Private Sub ListarDeducciones()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa.Value
+        cNomina.IdCliente = IdCliente.Value
         cNomina.Ejercicio = IdEjercicio.Value
         cNomina.TipoNomina = 2 'Catorcenal
         cNomina.Periodo = IdPeriodo.Value
-        dtDeducciones = cNomina.ConsultarDeduccionesCorridaSemanal()
+        dtDeducciones = cNomina.ConsultarDeduccionesCorrida()
         grdPercepciones.DataSource = dtDeducciones
         grdPercepciones.DataBind()
         cNomina = Nothing
@@ -219,8 +261,8 @@ Public Class RptNominaCatorcenal
                     lblNumImss.Text = cEmpleado.IMSS
                     'lblRegContratacion.Text = cEmpleado.RegimenContratacion
                     lblPuesto.Text = cEmpleado.Puesto
-                    'lblCuotaDiaria.Text = FormatCurrency(cEmpleado.CuotaDiaria, 2)
-                    'lblIntegradoImss.Text = FormatCurrency(cEmpleado.IntegradoImss, 2)
+                    lblCuotaDiaria.Text = FormatCurrency(cEmpleado.CuotaDiaria, 2)
+                    lblIntegradoImss.Text = FormatCurrency(cEmpleado.IntegradoImss, 2)
                 End If
 
                 Call ConsultarNumeroDeDiasPagados(dataItem("NoEmpleado"))
@@ -228,6 +270,7 @@ Public Class RptNominaCatorcenal
                 dtGridPercepciones = New DataTable()
                 Dim cNomina As New Nomina()
                 cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdCliente = IdCliente.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Periodo = IdPeriodo.Value
@@ -240,6 +283,7 @@ Public Class RptNominaCatorcenal
                 dtGridDeducciones = New DataTable()
                 cNomina = New Nomina()
                 cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdCliente = IdCliente.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Periodo = IdPeriodo.Value
@@ -268,6 +312,7 @@ Public Class RptNominaCatorcenal
                 dt = New DataTable()
                 cNomina = New Nomina()
                 cNomina.IdEmpresa = IdEmpresa.Value
+                cNomina.IdCliente = IdCliente.Value
                 cNomina.Ejercicio = IdEjercicio.Value
                 cNomina.TipoNomina = 2 'Catorcenal
                 cNomina.Periodo = IdPeriodo.Value
@@ -339,6 +384,7 @@ Public Class RptNominaCatorcenal
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
             cNomina.IdEmpresa = IdEmpresa.Value
+            cNomina.IdCliente = IdCliente.Value
             cNomina.Ejercicio = IdEjercicio.Value
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = IdPeriodo.Value
@@ -347,8 +393,8 @@ Public Class RptNominaCatorcenal
             dt = cNomina.ConsultarConceptosEmpleado()
 
             If dt.Rows.Count > 0 Then
-                If dt.Compute("Sum(Importe)", "CvoConcepto=85") IsNot DBNull.Value Then
-                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=85")
+                If dt.Compute("Sum(Importe)", "CvoConcepto=2") IsNot DBNull.Value Then
+                    DiasCuotaPeriodo = dt.Compute("Sum(UNIDAD)", "CvoConcepto=2")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=3") IsNot DBNull.Value Then
                     DiasComision = 7
@@ -390,5 +436,8 @@ Public Class RptNominaCatorcenal
             MsgBox(oExcep.Message)
         End Try
     End Sub
+    'Private Sub btnImprimir_Click(sender As Object, e As EventArgs) Handles btnImprimir.Click
+    '    ScriptManager.RegisterStartupScript(Me, GetType(RadWindow), "print", "printPage();", True)
+    'End Sub
 
 End Class

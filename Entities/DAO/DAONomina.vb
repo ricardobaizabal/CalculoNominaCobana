@@ -729,6 +729,16 @@ Partial Public Class Nomina
             Throw ex
         End Try
     End Sub
+    Public Function ConsultarPercepcionesCorrida() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pPeriodo", Periodo))
+        dt = db.ExecuteSP("pConsultarPercepcionesCorrida", p)
+        Return dt
+    End Function
     Public Function ConsultarPercepcionesCorridaSemanal() As DataTable
         p.Clear()
         'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
@@ -756,6 +766,16 @@ Partial Public Class Nomina
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         dt = db.ExecuteSP("pConsultarDeduccionesCorridaSemanal", p)
+        Return dt
+    End Function
+    Public Function ConsultarDeduccionesCorrida() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
+        p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pPeriodo", Periodo))
+        dt = db.ExecuteSP("pConsultarDeduccionesCorrida", p)
         Return dt
     End Function
     Public Function ConsultarEmpleadosCorridaSemanal() As DataTable

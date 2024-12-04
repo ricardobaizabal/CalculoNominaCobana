@@ -113,7 +113,7 @@
                                 <td>
                                     <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
                                     &nbsp;&nbsp;&nbsp;
-                                    <telerik:RadButton ID="btnCrearPeriodoID" Text="Crear Periodo" runat="server" RenderMode="Lightweight" CssClass="rbPrimaryButton" CausesValidation="true"></telerik:RadButton>
+                                    <telerik:RadButton ID="btnCrearPeriodoID" Text="Crear Periodo" runat="server" RenderMode="Lightweight" CssClass="rbPrimaryButton" Visible="false" CausesValidation="true"></telerik:RadButton>
                                 </td>
                             </tr>
                             <tr>
@@ -242,6 +242,27 @@
                     <table style="width: 100%;" border="0">
                         <tr style="height: 30px;">
                             <td style="width: 10%;">
+                                <label class="control-label">Folio:</label>
+                            </td>
+                            <td style="width: 10%;">
+                                <asp:Label ID="lblNoNomina" runat="server"></asp:Label>
+                                <asp:Label ID="lblNoPeriodo" runat="server" Visible="false"></asp:Label>
+                            </td>
+                            <td style="width: 10%;">
+                                <label class="control-label">Tipo:</label>
+                            </td>
+                            <td>
+                                <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
+                            </td>
+                            <td style="width: 10%;">
+                                <%--<label class="control-label">Dias:</label>--%>
+                            </td>
+                            <td>
+                                <asp:Label ID="lblDias" runat="server" Visible="false"></asp:Label>
+                            </td>
+                        </tr>
+                        <tr style="height: 30px;">
+                            <td style="width: 10%;">
                                 <label class="control-label">Ejercicio:</label>
                             </td>
                             <td style="width: 10%;">
@@ -252,20 +273,6 @@
                             </td>
                             <td colspan="3">
                                 <asp:Label ID="lblRazonSocial" runat="server"></asp:Label>
-                            </td>
-                        </tr>
-                        <tr style="height: 30px;">
-                            <td style="width: 10%;">
-                                <label class="control-label">No. Periodo:</label>
-                            </td>
-                            <td style="width: 10%;">
-                                <asp:Label ID="lblNoPeriodo" runat="server"></asp:Label>
-                            </td>
-                            <td style="width: 10%;">
-                                <label class="control-label">Tipo:</label>
-                            </td>
-                            <td colspan="2">
-                                <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
                             </td>
                         </tr>
                         <tr style="height: 30px;">
@@ -281,15 +288,9 @@
                             <td style="width: 10%;">
                                 <asp:Label ID="lblFechaFinal" runat="server"></asp:Label>
                             </td>
-                            <td style="width: 10%;">
-                                <label class="control-label">Dias:</label>
-                            </td>
-                            <td>
-                                <asp:Label ID="lblDias" runat="server"></asp:Label>
-                            </td>
+                            <td>&nbsp;</td>
                         </tr>
                     </table>
-
                 </div>
                 <div class="form-group row">
                     <div class="col-md-9 text-right">

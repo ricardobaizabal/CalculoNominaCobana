@@ -59,22 +59,22 @@ Partial Public Class ModificacionGeneralQuincenal
     Protected WithEvents nominaID As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
-    '''Control lblEjercicio.
+    '''Control lblTitulo.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblTitulo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblRazonSocial.
+    '''Control lblNoNomina.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblRazonSocial As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblNoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblNoPeriodo.
@@ -95,6 +95,33 @@ Partial Public Class ModificacionGeneralQuincenal
     Protected WithEvents lblTipoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control lblDias.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblDias As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblEjercicio.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblRazonSocial.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblRazonSocial As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control lblFechaInicial.
     '''</summary>
     '''<remarks>
@@ -111,15 +138,6 @@ Partial Public Class ModificacionGeneralQuincenal
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblFechaFinal As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblDias.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblDias As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control grdEmpleadosQuincenal.

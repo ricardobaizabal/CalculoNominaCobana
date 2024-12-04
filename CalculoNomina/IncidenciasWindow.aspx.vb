@@ -403,6 +403,7 @@ Public Class IncidenciasWindow
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                UMI = oDataRow("UMI")
                 FinMesBit = CBool(oDataRow("FinMesBit"))
                 MesAcumula = oDataRow("MesAcumula")
             Next

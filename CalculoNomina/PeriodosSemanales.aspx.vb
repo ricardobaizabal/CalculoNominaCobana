@@ -40,7 +40,7 @@ Public Class PeriodosSemanales
                 Response.Redirect("~/EditorPeriodosSemanales.aspx?id=" & e.CommandArgument)
             Case "cmdDelete"
                 registroId.Value = e.CommandArgument
-                rwConfirmEliminaPeriodo.RadConfirm("¿Está seguro de eliminar el periodo semanal de la base de datos?", "confirmCallbackFn", 330, 180, Nothing, "Confirmar")
+                rwConfirmEliminaPeriodo.RadConfirm("¿Está seguro de eliminar el periodo semanal?", "confirmCallbackFn", 330, 180, Nothing, "Confirmar")
         End Select
     End Sub
     Private Sub GridPeriodosSemanales_ItemDataBound(sender As Object, e As GridItemEventArgs) Handles GridPeriodosSemanales.ItemDataBound

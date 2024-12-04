@@ -38,12 +38,12 @@
                 __doPostBack("<%=btnConfirmarEnvioPDF.UniqueID %>", "");
             }
         }
-        function OpenWindow(empresaid, ejercicioid, periodoid, periodicidad, esp) {
-            var oWnd = radopen("RptNominaSemanal.aspx?e=" + empresaid + "&ej=" + ejercicioid + "&p=" + periodoid + "&periodicidad=" + periodicidad + "&especial=" + esp, "wndReporte");
+        function OpenWindow(empresaid, clienteid, ejercicioid, periodoid, periodicidad, esp) {
+            var oWnd = radopen("RptNominaSemanal.aspx?e=" + empresaid + "&c=" + clienteid + "&ej=" + ejercicioid + "&p=" + periodoid + "&periodicidad=" + periodicidad + "&especial=" + esp, "wndReporte");
             oWnd.set_modal(true);
             oWnd.set_centerIfModal(true);
-            oWnd.setSize(1024, 900);
-            oWnd.set_behaviors(Telerik.Web.UI.WindowBehaviors.Close);
+            oWnd.setSize(1024, 850);
+            oWnd.set_behaviors(Telerik.Web.UI.WindowBehaviors.Maximize + Telerik.Web.UI.WindowBehaviors.Close);
             oWnd.set_autoSize(false);
             oWnd.set_title("Reporte Nómina Semanal")
             oWnd.center();
@@ -242,6 +242,27 @@
                         <table style="width: 100%;" border="0">
                             <tr style="height: 30px;">
                                 <td style="width: 10%;">
+                                    <label class="control-label">Folio:</label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <asp:Label ID="lblNoNomina" runat="server"></asp:Label>
+                                    <asp:Label ID="lblNoPeriodo" runat="server" Visible="false"></asp:Label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <label class="control-label">Tipo:</label>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <%--<label class="control-label">Dias:</label>--%>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblDias" runat="server" Visible="false"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr style="height: 30px;">
+                                <td style="width: 10%;">
                                     <label class="control-label">Ejercicio:</label>
                                 </td>
                                 <td style="width: 10%;">
@@ -252,20 +273,6 @@
                                 </td>
                                 <td colspan="3">
                                     <asp:Label ID="lblRazonSocial" runat="server"></asp:Label>
-                                </td>
-                            </tr>
-                            <tr style="height: 30px;">
-                                <td style="width: 10%;">
-                                    <label class="control-label">No. Periodo:</label>
-                                </td>
-                                <td style="width: 10%;">
-                                    <asp:Label ID="lblNoPeriodo" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;">
-                                    <label class="control-label">Tipo:</label>
-                                </td>
-                                <td colspan="2">
-                                    <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
                                 </td>
                             </tr>
                             <tr style="height: 30px;">
@@ -281,12 +288,7 @@
                                 <td style="width: 10%;">
                                     <asp:Label ID="lblFechaFinal" runat="server"></asp:Label>
                                 </td>
-                                <td style="width: 10%;">
-                                    <label class="control-label">Dias:</label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblDias" runat="server"></asp:Label>
-                                </td>
+                                <td>&nbsp;</td>
                             </tr>
                         </table>
                     </div>

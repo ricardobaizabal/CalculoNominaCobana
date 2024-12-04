@@ -116,6 +116,7 @@ Public Class ListadoNominaQuincenal
         Call CargarVariablesGenerales()
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
         cPeriodo.ExtraordinarioBit = False
@@ -138,6 +139,10 @@ Public Class ListadoNominaQuincenal
                 IdEjercicio = oDataRow("IdEjercicio")
             Next
         End If
+    End Sub
+
+    Private Sub cmbCliente_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles cmbCliente.SelectedIndexChanged
+        CargaPeriodos(cmbPeriodicidad.SelectedValue)
     End Sub
 
 End Class

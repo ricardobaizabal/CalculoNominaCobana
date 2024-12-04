@@ -5,7 +5,7 @@ Public Class ModificacionGeneralCatorcenal
 
     Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
-    Private Periodo As Integer = 0
+    Private IdPeriodo As Integer = 0
     Private MesAcumula As Integer = 0
     Private FinMesBit As Boolean = False
 
@@ -222,14 +222,15 @@ Public Class ModificacionGeneralCatorcenal
             For Each oDataRow In dt.Rows
                 IdEmpresa = oDataRow("IdEmpresa")
                 IdEjercicio = oDataRow("IdEjercicio")
-                Periodo = oDataRow("IdPeriodo")
+                IdPeriodo = oDataRow("IdPeriodo")
                 SalarioMinimoDiarioGeneral = oDataRow("SalarioMinimoDiarioGeneral")
                 ImporteSeguroVivienda = oDataRow("ImporteSeguroVivienda")
                 BaseGravableMensualSubsidio = oDataRow("BaseGravableMensualSubsidio")
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
-                UMI = oDataRow("UMI")
+                FinMesBit = CBool(oDataRow("FinMesBit"))
+                MesAcumula = oDataRow("MesAcumula")
             Next
         End If
     End Sub
@@ -2101,7 +2102,7 @@ Public Class ModificacionGeneralCatorcenal
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = Periodo
+                        cNomina.Periodo = IdPeriodo
                         cNomina.NoEmpleado = NoEmpleado
                         cNomina.CvoConcepto = 56
                         cNomina.IdContrato = IdContrato
@@ -2142,24 +2143,24 @@ Public Class ModificacionGeneralCatorcenal
                         Impuesto = 0
                     End If
 
-                    If ImporteDiarioGravado <= BaseGravableMensualSubsidioDiario Then
-                        '    UMAMensual = UMA * FactorDiarioPromedio
-                        '    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
-                        '    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
+                    'If ImporteDiarioGravado <= BaseGravableMensualSubsidioDiario Then
+                    '    UMAMensual = UMA * FactorDiarioPromedio
+                    '    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
+                    '    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
 
-                        '    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * NumeroDeDiasPagados))) Then
-                        '        SubsidioAplicado = Impuesto
-                        '    Else
-                        '        SubsidioAplicado = (SubsidioDiario * NumeroDeDiasPagados)
-                        '    End If
+                    '    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * NumeroDeDiasPagados))) Then
+                    '        SubsidioAplicado = Impuesto
+                    '    Else
+                    '        SubsidioAplicado = (SubsidioDiario * NumeroDeDiasPagados)
+                    '    End If
 
-                        '    If Impuesto > SubsidioAplicado Then
-                        '        Impuesto = Impuesto - SubsidioAplicado
-                        '    ElseIf Impuesto < SubsidioAplicado Then
-                        '        SubsidioAplicado = SubsidioAplicado - Impuesto
-                        '        Impuesto = 0
-                        '    End If
-                    End If
+                    '    If Impuesto > SubsidioAplicado Then
+                    '        Impuesto = Impuesto - SubsidioAplicado
+                    '    ElseIf Impuesto < SubsidioAplicado Then
+                    '        SubsidioAplicado = SubsidioAplicado - Impuesto
+                    '        Impuesto = 0
+                    '    End If
+                    'End If
 
                     If Impuesto > 0 Then
                         Dim cNomina = New Nomina()
@@ -2167,7 +2168,7 @@ Public Class ModificacionGeneralCatorcenal
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = Periodo
+                        cNomina.Periodo = IdPeriodo
                         cNomina.NoEmpleado = NoEmpleado
                         cNomina.CvoConcepto = 52
                         cNomina.IdContrato = IdContrato
@@ -2195,7 +2196,7 @@ Public Class ModificacionGeneralCatorcenal
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = Periodo
+                        cNomina.Periodo = IdPeriodo
                         cNomina.NoEmpleado = NoEmpleado
                         cNomina.CvoConcepto = 54
                         cNomina.IdContrato = IdContrato
@@ -2276,7 +2277,7 @@ Public Class ModificacionGeneralCatorcenal
                             cNomina.IdCliente = clienteId.Value
                             cNomina.Ejercicio = IdEjercicio
                             cNomina.TipoNomina = 2 'Catorcenal
-                            cNomina.Periodo = Periodo
+                            cNomina.Periodo = IdPeriodo
                             cNomina.NoEmpleado = NoEmpleado
                             cNomina.CvoConcepto = 7
                             cNomina.IdContrato = IdContrato
@@ -2508,7 +2509,7 @@ Public Class ModificacionGeneralCatorcenal
             cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
-            cNomina.Periodo = Periodo
+            cNomina.Periodo = IdPeriodo
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 87
             cNomina.TipoConcepto = "DE"
@@ -2519,7 +2520,7 @@ Public Class ModificacionGeneralCatorcenal
             cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
-            cNomina.Periodo = Periodo
+            cNomina.Periodo = IdPeriodo
             cNomina.NoEmpleado = NoEmpleado
             cNomina.CvoConcepto = 87
             cNomina.IdContrato = IdContrato
@@ -2545,7 +2546,7 @@ Public Class ModificacionGeneralCatorcenal
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
-                    cNomina.Periodo = Periodo
+                    cNomina.Periodo = IdPeriodo
                     cNomina.NoEmpleado = NoEmpleado
                     cNomina.CvoConcepto = CvoConcepto.ToString
                     cNomina.IdContrato = IdContrato
@@ -2579,7 +2580,7 @@ Public Class ModificacionGeneralCatorcenal
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
-                    cNomina.Periodo = Periodo
+                    cNomina.Periodo = IdPeriodo
                     cNomina.NoEmpleado = NoEmpleado
                     cNomina.CvoConcepto = CvoConcepto.ToString
                     cNomina.IdContrato = IdContrato
@@ -2605,7 +2606,7 @@ Public Class ModificacionGeneralCatorcenal
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
-                    cNomina.Periodo = Periodo
+                    cNomina.Periodo = IdPeriodo
                     cNomina.NoEmpleado = NoEmpleado
                     cNomina.CvoConcepto = CvoConcepto.ToString
                     cNomina.IdContrato = IdContrato
@@ -2631,7 +2632,7 @@ Public Class ModificacionGeneralCatorcenal
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 2 'Catorcenal
-                    cNomina.Periodo = Periodo
+                    cNomina.Periodo = IdPeriodo
                     cNomina.NoEmpleado = NoEmpleado
                     cNomina.CvoConcepto = CvoConcepto.ToString
                     cNomina.IdContrato = IdContrato
@@ -2664,7 +2665,7 @@ Public Class ModificacionGeneralCatorcenal
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = Periodo
+                        cNomina.Periodo = IdPeriodo
                         cNomina.NoEmpleado = NoEmpleado
                         cNomina.CvoConcepto = 52
                         cNomina.IdContrato = IdContrato
@@ -2692,7 +2693,7 @@ Public Class ModificacionGeneralCatorcenal
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 2 'Catorcenal
-                        cNomina.Periodo = Periodo
+                        cNomina.Periodo = IdPeriodo
                         cNomina.NoEmpleado = NoEmpleado
                         cNomina.CvoConcepto = 56
                         cNomina.IdContrato = IdContrato
@@ -2720,7 +2721,7 @@ Public Class ModificacionGeneralCatorcenal
                 'cNomina.IdCliente = empresaId.Value
                 'cNomina.Ejercicio = IdEjercicio
                 'cNomina.TipoNomina = 2 'Catorcenal
-                'cNomina.Periodo = Periodo
+                'cNomina.Periodo = IdPeriodo
                 'cNomina.NoEmpleado = empleadoId.Value
                 'cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
                 'cNomina.IdContrato = contratoId.Value
@@ -2745,7 +2746,7 @@ Public Class ModificacionGeneralCatorcenal
                 'cNomina.IdCliente = empresaId.Value
                 'cNomina.Ejercicio = IdEjercicio
                 'cNomina.TipoNomina = 2 'Catorcenal
-                'cNomina.Periodo = Periodo
+                'cNomina.Periodo = IdPeriodo
                 'cNomina.NoEmpleado = empleadoId.Value
                 'cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
                 'cNomina.IdContrato = contratoId.Value
@@ -2819,7 +2820,7 @@ Public Class ModificacionGeneralCatorcenal
                 cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
-                cNomina.Periodo = Periodo
+                cNomina.Periodo = IdPeriodo
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = 56
                 cNomina.IdContrato = IdContrato
@@ -2857,33 +2858,13 @@ Public Class ModificacionGeneralCatorcenal
                 Impuesto = 0
             End If
 
-            If ImporteDiarioGravado <= BaseGravableMensualSubsidioDiario Then
-                UMAMensual = UMA * FactorDiarioPromedio
-                SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
-                SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
-
-                If (Impuesto > 0 And (Impuesto < (SubsidioDiario * NumeroDeDiasPagados))) Then
-                    SubsidioAplicado = Impuesto
-                Else
-                    SubsidioAplicado = (SubsidioDiario * NumeroDeDiasPagados)
-                End If
-
-                If Impuesto > SubsidioAplicado Then
-                    Impuesto = Impuesto - SubsidioAplicado
-                ElseIf Impuesto < SubsidioAplicado Then
-                    SubsidioAplicado = SubsidioAplicado - Impuesto
-                    Impuesto = 0
-                End If
-
-            End If
-
             If Impuesto > 0 Then
                 Dim cNomina = New Nomina()
                 cNomina.IdEmpresa = IdEmpresa
                 cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
-                cNomina.Periodo = Periodo
+                cNomina.Periodo = IdPeriodo
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = 52
                 cNomina.IdContrato = IdContrato
@@ -2911,7 +2892,7 @@ Public Class ModificacionGeneralCatorcenal
                 cNomina.IdCliente = clienteId.Value
                 cNomina.Ejercicio = IdEjercicio
                 cNomina.TipoNomina = 2 'Catorcenal
-                cNomina.Periodo = Periodo
+                cNomina.Periodo = IdPeriodo
                 cNomina.NoEmpleado = NoEmpleado
                 cNomina.CvoConcepto = 54
                 cNomina.IdContrato = IdContrato
@@ -2932,6 +2913,92 @@ Public Class ModificacionGeneralCatorcenal
                 cNomina.IdNomina = nominaID.Value
                 cNomina.GuadarNominaPeriodo()
             End If
+
+            If FinMesBit = True Then
+
+                'CÁLCULO DEL IMPUESTO/SUBSIDIO MENSUAL (OBJETIVO A LLEGAR) CUANDO ES FIN DE MES
+                Call CalcularImpuestoFinMes(NoEmpleado)
+                Call CalcularSubsidioFinMes(NoEmpleado)
+
+                'ACUMULADOS DE LO QUE SE LLEVA EN EL MES (incluyendo el periodo vigente)
+                Dim SubsidioCausado As Double = 0
+                Dim ISRRetenido As Double = 0
+                Dim SubsidioCausadoMayorAlQueLeCorrespondia As Double = 0
+                Dim ISRAjusteMensual As Double = 0
+                Dim ISRAjustadoPorSubsidio As Double = 0
+
+                Dim dt As New DataTable()
+                Dim cNomina As New Nomina()
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = clienteId.Value
+                cNomina.NoEmpleado = empleadoId.Value
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 2 'Catorcenal
+                cNomina.MesAcumula = MesAcumula
+                cNomina.TipoConcepto = "P"
+                cNomina.Tipo = "N"
+                dt = cNomina.ConsultarSubsidioCausadoMesEmpleado()
+
+                'Acumulado del mes (incluyendo periodo vigente) del Subsidio Causado
+                If dt.Rows.Count > 0 Then
+                    SubsidioCausado = dt.Rows(0).Item("Importe")
+                End If
+
+                cNomina = New Nomina()
+                cNomina.IdEmpresa = IdEmpresa
+                cNomina.IdCliente = clienteId.Value
+                cNomina.NoEmpleado = NoEmpleado
+                cNomina.Ejercicio = IdEjercicio
+                cNomina.TipoNomina = 2 'Catorcenal
+                cNomina.MesAcumula = MesAcumula
+                cNomina.TipoConcepto = "D"
+                cNomina.Tipo = "N"
+                dt = cNomina.ConsultarISRRetenidoMesEmpleado()
+
+                'Acumulado del mes (incluyendo periodo vigente) del ISR retenido
+                If dt.Rows.Count > 0 Then
+                    ISRRetenido = dt.Rows(0).Item("Importe")
+                End If
+
+                'CÁLCULO DE AJUSTES CUANDO ES FIN DE MES
+                'Subsidio causado mayor al que le correspondía
+                If SubsidioCausado > SubsidioMes Then
+                    SubsidioCausadoMayorAlQueLeCorrespondia = SubsidioCausado - SubsidioMes
+                End If
+
+                'ISR AJUSTADO POR SUBSIDIO
+                If SubsidioCausadoMayorAlQueLeCorrespondia > 0 Then
+                    cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 2 'Catorcenal
+                    cNomina.Periodo = IdPeriodo
+                    cNomina.NoEmpleado = NoEmpleado
+                    cNomina.CvoConcepto = 7
+                    cNomina.IdContrato = IdContrato
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = SubsidioCausadoMayorAlQueLeCorrespondia
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = SubsidioCausadoMayorAlQueLeCorrespondia
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    cNomina.FechaPago = cPeriodo.FechaPago
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.IdNomina = nominaID.Value
+                    cNomina.GuadarNominaPeriodo()
+
+                    Call QuitarConcepto(54, "") 'SUBSIDIO
+
+                End If
+            End If
+
         End If
 
         Call GuardarRegistro(CuotaDiaria, 2, ImporteIncidencia, UnidadIncidencia, IdContrato, NoEmpleado, NumeroConcepto)

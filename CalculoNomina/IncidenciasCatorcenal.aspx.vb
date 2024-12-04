@@ -425,6 +425,7 @@ Public Class IncidenciasCatorcenal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                UMI = oDataRow("UMI")
                 FinMesBit = CBool(oDataRow("FinMesBit"))
                 MesAcumula = oDataRow("MesAcumula")
             Next
@@ -804,6 +805,7 @@ Public Class IncidenciasCatorcenal
                 'Ajuste por ISR retenido menor al que le correspondia
 
             End If
+
         End If
 
         Try
@@ -1150,7 +1152,6 @@ Public Class IncidenciasCatorcenal
             Call CargarVariablesGenerales()
 
             Dim cNomina As New Nomina()
-
             If NumeroConcepto = 7 Then
                 'Deducciones
                 cNomina.IdEmpresa = IdEmpresa

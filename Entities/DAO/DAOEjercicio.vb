@@ -21,7 +21,6 @@ Partial Public Class Ejercicio
             p.Add(New SqlParameter("@cmd", 4))
             p.Add(New SqlParameter("@id", IdEjercicio))
             p.Add(New SqlParameter("@ejercicio", Descripcion))
-
             db.ExecuteSPWithParams("pEjercicio", p)
 
         Catch ex As Exception

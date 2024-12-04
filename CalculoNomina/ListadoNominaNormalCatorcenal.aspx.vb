@@ -62,34 +62,37 @@ Public Class ListadoNominaNormalCatorcenal
     End Sub
 
     Private Sub GridNominas_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridNominas.NeedDataSource
+
         Call CargarVariablesGenerales()
 
-        Dim periodicidad, cliente, periodo As Integer
+        Dim TipoNomina, IdCliente, Periodo As Integer
 
         If cmbPeriodicidad.SelectedValue.ToString() = "" Then
-            periodicidad = 0
+            TipoNomina = 0
         Else
-            periodicidad = cmbPeriodicidad.SelectedValue
+            TipoNomina = cmbPeriodicidad.SelectedValue
         End If
 
         If cmbCliente.SelectedValue.ToString() = "" Then
-            cliente = 0
+            IdCliente = 0
         Else
-            cliente = cmbCliente.SelectedValue
+            IdCliente = cmbCliente.SelectedValue
         End If
 
         If cmbPeriodo.SelectedValue.ToString() = "" Then
-            periodo = 0
+            Periodo = 0
         Else
-            periodo = cmbPeriodo.SelectedValue
+            Periodo = cmbPeriodo.SelectedValue
         End If
 
+        Dim dt_nominas As New DataTable()
         Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = IdCliente
         cNomina.Ejercicio = IdEjercicio
         cNomina.EsEspecial = False
-        cNomina.TipoNomina = periodicidad
-        cNomina.Periodo = periodo
-        cNomina.IdCliente = cliente
+        cNomina.TipoNomina = TipoNomina
+        cNomina.Periodo = Periodo
         GridNominas.DataSource = cNomina.ConsultarTodasNominaExtraordinaria()
         cNomina = Nothing
     End Sub

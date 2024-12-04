@@ -113,7 +113,7 @@
                                 <td>
                                     <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
                                     &nbsp;&nbsp;&nbsp;
-                                    <telerik:RadButton ID="btnCrearPeriodoID" Text="Crear Periodo" runat="server" RenderMode="Lightweight" CssClass="rbPrimaryButton" CausesValidation="true"></telerik:RadButton>
+                                    <telerik:RadButton ID="btnCrearPeriodoID" Text="Crear Periodo" runat="server" RenderMode="Lightweight" CssClass="rbPrimaryButton" Visible="false" CausesValidation="true"></telerik:RadButton>
                                 </td>
                             </tr>
                             <tr>

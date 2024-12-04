@@ -11,6 +11,8 @@ Public Class GeneracionDeFiniquitosQuincenal
     Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private IdPeriodo As Integer = 0
+    Private MesAcumula As Integer = 0
+    Private FinMesBit As Boolean = False
     Private SalarioMinimoDiarioGeneral As Decimal = 0
     Private ImporteSeguroVivienda As Decimal = 0
 
@@ -224,6 +226,8 @@ Public Class GeneracionDeFiniquitosQuincenal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                FinMesBit = CBool(oDataRow("FinMesBit"))
+                MesAcumula = oDataRow("MesAcumula")
             Next
         End If
     End Sub

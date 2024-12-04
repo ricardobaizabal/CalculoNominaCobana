@@ -41,6 +41,15 @@ Partial Public Class RptNominaSemanal
     Protected WithEvents IdEmpresa As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''Control IdCliente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents IdCliente As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''Control IdEjercicio.
     '''</summary>
     '''<remarks>
@@ -113,6 +122,15 @@ Partial Public Class RptNominaSemanal
     Protected WithEvents lblPeriodoTitulo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control lblTitulo.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblTitulo As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control lblNoNomina.
     '''</summary>
     '''<remarks>
@@ -122,49 +140,67 @@ Partial Public Class RptNominaSemanal
     Protected WithEvents lblNoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblEjercicio_.
+    '''Control lblNoPeriodo.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblEjercicio_ As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblNoPeriodo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblCliente_.
+    '''Control lblTipoNomina.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblCliente_ As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblTipoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblPeriodo_.
+    '''Control lblDias.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblPeriodo_ As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblDias As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblFechaInicial_.
+    '''Control lblEjercicio.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblFechaInicial_ As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblFechaFinal_.
+    '''Control lblRazonSocial.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblFechaFinal_ As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblRazonSocial As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblFechaInicial.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblFechaInicial As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblFechaFinal.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblFechaFinal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblPercepciones.

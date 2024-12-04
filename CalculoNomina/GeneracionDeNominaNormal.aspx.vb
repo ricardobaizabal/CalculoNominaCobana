@@ -2202,7 +2202,7 @@ Public Class GeneracionDeNominaNormal
             Call CargarVariablesGenerales()
 
             'lnkReporte.Attributes.Add("onclick", "javascript: OpenWindow('" & IdEmpresa.ToString & "','" & IdEjercicio.ToString & "','" & cmbPeriodo.SelectedValue.ToString & "'); return false;")
-            lnkReporte.Attributes.Add("onclick", "javascript: OpenWindow('" & cmbCliente.SelectedValue & "','" & IdEjercicio.ToString & "','" & cmbPeriodo.SelectedValue.ToString & "','" & cmbPeriodicidad.SelectedValue.ToString & "', '0'); return false;")
+            lnkReporte.Attributes.Add("onclick", "javascript: OpenWindow('" & IdEmpresa.ToString & "','" & cmbCliente.SelectedValue & "','" & IdEjercicio.ToString & "','" & cmbPeriodo.SelectedValue.ToString & "','" & cmbPeriodicidad.SelectedValue.ToString & "', '0'); return false;")
 
             Dim dt As New DataTable()
             Dim cNomina As New Nomina()
@@ -2226,10 +2226,12 @@ Public Class GeneracionDeNominaNormal
             cNomina = Nothing
 
             If dt.Rows.Count > 0 And dt_Empleado.Rows.Count > 0 Then
+
                 panelDatos.Visible = True
                 btnExportar.Enabled = True
                 btnImportar.Enabled = True
 
+                Me.lblNoNomina.Text = Session("Folio").ToString
                 Me.lblEjercicio.Text = dt.Rows(0)("Ejercicio").ToString()
                 Me.lblRazonSocial.Text = dt.Rows(0)("Cliente").ToString()
                 Me.lblNoPeriodo.Text = dt.Rows(0)("Periodo").ToString()
@@ -2238,19 +2240,11 @@ Public Class GeneracionDeNominaNormal
                 Me.lblFechaFinal.Text = dt.Rows(0)("FechaFinal").ToString()
                 Me.lblDias.Text = dt.Rows(0)("Dias").ToString()
 
-                'For Each oDataRow In dt.Rows
-                '    Me.lblEjercicio.Text = oDataRow("Ejercicio")
-                '    Me.lblRazonSocial.Text = oDataRow("Cliente")
-                '    Me.lblNoPeriodo.Text = oDataRow("Periodo")
-                '    Me.lblTipoNomina.Text = "Semanal"
-                '    Me.lblFechaInicial.Text = oDataRow("FechaInicial")
-                '    Me.lblFechaFinal.Text = oDataRow("FechaFinal")
-                '    Me.lblDias.Text = oDataRow("Dias")
-                '    Me.lblRazonSocial.Text = oDataRow("Cliente")
-                'Next
                 Call CargarGridEmpleadosSemanal()
+
             Else
                 panelDatos.Visible = False
+                Me.lblNoNomina.Text = ""
                 Me.lblEjercicio.Text = ""
                 Me.lblRazonSocial.Text = ""
                 Me.lblNoPeriodo.Text = ""
@@ -2284,6 +2278,7 @@ Public Class GeneracionDeNominaNormal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                UMI = oDataRow("UMI")
                 FinMesBit = CBool(oDataRow("FinMesBit"))
                 MesAcumula = oDataRow("MesAcumula")
             Next
@@ -3924,8 +3919,8 @@ Public Class GeneracionDeNominaNormal
                     reporte.ReportParameters("txtCantidadLetra").Value = CantidadTexto.ToString.ToUpper
                     reporte.ReportParameters("txtCadenaOriginal").Value = CadenaOriginalComplemento(FolioXml)
 
-                    Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
-                    reporte.ReportParameters("txtLeyenda").Value = leyenda
+                    'Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
+                    reporte.ReportParameters("txtLeyenda").Value = ""
 
                     GrabarPDF(NoEmpleado, "S")
 

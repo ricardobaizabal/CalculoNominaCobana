@@ -3612,8 +3612,8 @@ Public Class GeneracionDeNominaMensualNormal
                     reporte.ReportParameters("txtCantidadLetra").Value = CantidadTexto.ToString.ToUpper
                     reporte.ReportParameters("txtCadenaOriginal").Value = CadenaOriginalComplemento(FolioXml)
 
-                    Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
-                    reporte.ReportParameters("txtLeyenda").Value = leyenda
+                    'Dim leyenda As String = String.Format(Resources.Resource.LeyendaNominaEspecial, cmbCliente.SelectedItem.Text).ToUpper
+                    reporte.ReportParameters("txtLeyenda").Value = ""
 
                     GrabarPDF(NoEmpleado, "S")
 
