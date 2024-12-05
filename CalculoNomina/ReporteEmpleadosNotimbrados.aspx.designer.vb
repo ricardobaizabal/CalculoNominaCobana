@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class ReporteEmpleadosNotimbrados
 
     '''<summary>
+    '''Control RadWindowManager2.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadWindowManager2 As Global.Telerik.Web.UI.RadWindowManager
+
+    '''<summary>
     '''Control RadAjaxPanel1.
     '''</summary>
     '''<remarks>
@@ -68,6 +77,15 @@ Partial Public Class ReporteEmpleadosNotimbrados
     Protected WithEvents FolioUUID As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''Control RadAjaxManager1.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadAjaxManager1 As Global.Telerik.Web.UI.RadAjaxManager
+
+    '''<summary>
     '''Control cmbEmpresa.
     '''</summary>
     '''<remarks>
@@ -75,6 +93,15 @@ Partial Public Class ReporteEmpleadosNotimbrados
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents cmbEmpresa As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control cmbFolioNomina.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbFolioNomina As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control cmbPeriodicidad.
@@ -93,6 +120,15 @@ Partial Public Class ReporteEmpleadosNotimbrados
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents cmbPeriodo As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control txtNombreEmpleado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtNombreEmpleado As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''Control btnBuscarEmpleados.

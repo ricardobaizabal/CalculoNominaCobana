@@ -28,12 +28,41 @@ Public Class ReporteEmpleadosNotimbrados
             Dim cConcepto As New Entities.Catalogos
             objCat.CatalogoRad(cmbEmpresa, cConcepto.ConsultarMisClientes, True, False)
             objCat.CatalogoRad(cmbPeriodicidad, cConcepto.ConsultarPeriodoPago2, True, False)
+
+            ' Cambiar el texto del primer ítem de la lista a "--Todos--"
+            If cmbPeriodicidad.Items.Count > 0 Then
+                cmbPeriodicidad.Items(0).Text = "--Todos--"
+            End If
+
+
+            ' Agregar ítem por defecto a los combos
+            SetDefaultItem(cmbFolioNomina)
+            SetDefaultItem(cmbPeriodo)
+
+
             CargarGridEmpleadosNoTimbrados()
         End If
     End Sub
 
 
+    Private Sub SetDefaultItem(ByRef combo As Telerik.Web.UI.RadComboBox)
+        If combo IsNot Nothing Then
+            combo.Items.Clear() ' Limpiar ítems previos para evitar duplicados
+            Dim defaultItem As New Telerik.Web.UI.RadComboBoxItem("--Todos--", "0")
+            combo.Items.Insert(0, defaultItem) ' Agregar el ítem predeterminado al inicio
+            combo.SelectedIndex = 0 ' Seleccionar el ítem por defecto
+        End If
+    End Sub
+
+
+
     Private Sub btnBuscarEmpleados_Click(sender As Object, e As EventArgs) Handles btnBuscarEmpleados.Click
+        ' Validar que se haya seleccionado una empresa
+        If cmbEmpresa.SelectedValue = "0" Then
+            ' Mostrar un mensaje de alerta si no hay selección
+            RadWindowManager2.RadAlert("Debe seleccionar un cliente antes de buscar empleados..", 330, 180, "Alert", "", "")
+            Return
+        End If
         CargarGridEmpleadosNoTimbrados()
     End Sub
 
@@ -41,7 +70,8 @@ Public Class ReporteEmpleadosNotimbrados
     Private Sub CargarGridEmpleadosNoTimbrados()
 
         Call CargarVariablesGenerales()
-        Dim periodicidad, cliente, periodo As Integer
+        Dim periodicidad, cliente, periodo, folioNomina As Integer
+        Dim nombreEmpleado As String
 
         If cmbPeriodicidad.SelectedValue.ToString() = "" Then
             periodicidad = 0
@@ -61,11 +91,25 @@ Public Class ReporteEmpleadosNotimbrados
             periodo = cmbPeriodo.SelectedValue
         End If
 
+        If cmbFolioNomina.SelectedValue.ToString() = "" Then
+            folioNomina = 0
+        Else
+            folioNomina = cmbFolioNomina.SelectedValue
+        End If
+
+        If txtNombreEmpleado.Text.ToString() = "" Then
+            nombreEmpleado = ""
+        Else
+            nombreEmpleado = txtNombreEmpleado.Text
+        End If
+
         Dim cNomina As New Nomina()
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = periodicidad
         cNomina.Periodo = periodo
         cNomina.Cliente = cliente
+        cNomina.IdNomina = folioNomina
+        cNomina.NombreEmpleado = nombreEmpleado
         dtEmpleados = cNomina.ConsultarEmpleadosNoTimbrados()
         GridEmpleadosNoTimbrados.DataSource = dtEmpleados
         GridEmpleadosNoTimbrados.DataBind()
@@ -76,7 +120,7 @@ Public Class ReporteEmpleadosNotimbrados
     Private Sub GridEmpleadosNoTimbrados_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridEmpleadosNoTimbrados.NeedDataSource
 
         Call CargarVariablesGenerales()
-        Dim periodicidad, cliente, periodo As Integer
+        Dim periodicidad, cliente, periodo, folioNomina As Integer
 
         If cmbPeriodicidad.SelectedValue.ToString() = "" Then
             periodicidad = 0
@@ -96,11 +140,18 @@ Public Class ReporteEmpleadosNotimbrados
             periodo = cmbPeriodo.SelectedValue
         End If
 
+        If cmbFolioNomina.SelectedValue.ToString() = "" Then
+            folioNomina = 0
+        Else
+            folioNomina = cmbFolioNomina.SelectedValue
+        End If
+
         Dim cNomina As New Nomina()
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = periodicidad
         cNomina.Periodo = periodo
         cNomina.Cliente = cliente
+        cNomina.IdNomina = folioNomina
         dtEmpleados = cNomina.ConsultarEmpleadosNoTimbrados()
         GridEmpleadosNoTimbrados.DataSource = dtEmpleados
 
@@ -122,6 +173,47 @@ Public Class ReporteEmpleadosNotimbrados
         cPeriodo.ExtraordinarioBit = False
         ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
         ObjData = Nothing
+
+        If cmbPeriodo.Items.Count > 0 Then
+            cmbPeriodo.Items(0).Text = "--Todos--"
+        End If
+
+    End Sub
+
+
+    Private Sub cmbEmpresa_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbEmpresa.SelectedIndexChanged
+        CargaFolioNomina()
+    End Sub
+
+
+    Private Sub CargaFolioNomina()
+        Call CargarVariablesGenerales()
+
+        Dim periodicidad, IdEmpresa As Integer
+
+        If cmbEmpresa.SelectedValue.ToString() = "" Then
+            IdEmpresa = 0
+        Else
+            IdEmpresa = cmbEmpresa.SelectedValue
+        End If
+
+        If cmbPeriodicidad.SelectedValue.ToString() = "" Then
+            periodicidad = 0
+        Else
+            periodicidad = cmbPeriodicidad.SelectedValue
+        End If
+
+        Dim cNomina As New Entities.Nomina
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.TipoNomina = periodicidad
+        ObjData.CatalogoRad(cmbFolioNomina, cNomina.ConsultarFolioNomina(), True, False)
+        ObjData = Nothing
+
+        ' Cambiar el texto del primer ítem de la lista a "--Todos--"
+        If cmbFolioNomina.Items.Count > 0 Then
+            cmbFolioNomina.Items(0).Text = "--Todos--"
+        End If
     End Sub
 
     Private Sub CargarVariablesGenerales()
