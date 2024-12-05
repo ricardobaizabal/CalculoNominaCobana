@@ -113,13 +113,13 @@ Partial Public Class IncidenciasCatorcenal
     Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
-    '''Control lblEjercicio.
+    '''Control lblNoNomina.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblNoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblNoPeriodo.
@@ -129,6 +129,15 @@ Partial Public Class IncidenciasCatorcenal
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblNoPeriodo As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblEjercicio.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblFechaInicial.
@@ -221,22 +230,22 @@ Partial Public Class IncidenciasCatorcenal
     Protected WithEvents txtDias As Global.Telerik.Web.UI.RadNumericTextBox
 
     '''<summary>
-    '''Control txtCuotaDiaria.
+    '''Control lblCuotaDiaria.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtCuotaDiaria As Global.Telerik.Web.UI.RadNumericTextBox
+    Protected WithEvents lblCuotaDiaria As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control txtIntegradoImss.
+    '''Control lblIntegradoImss.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents txtIntegradoImss As Global.Telerik.Web.UI.RadNumericTextBox
+    Protected WithEvents lblIntegradoImss As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control GridPercepciones.

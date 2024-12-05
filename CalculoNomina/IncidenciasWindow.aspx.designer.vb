@@ -113,13 +113,13 @@ Partial Public Class IncidenciasWindow
     Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
-    '''Control lblEjercicio.
+    '''Control lblNoNomina.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblNoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblNoPeriodo.
@@ -129,6 +129,15 @@ Partial Public Class IncidenciasWindow
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblNoPeriodo As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblEjercicio.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblFechaInicial.
@@ -230,13 +239,13 @@ Partial Public Class IncidenciasWindow
     Protected WithEvents lblCuotaDiaria As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblIntegradoIMSS.
+    '''Control lblIntegradoImss.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblIntegradoIMSS As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblIntegradoImss As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control GridPercepciones.

@@ -92,6 +92,7 @@
     <form id="form1" runat="server">
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server">
         </telerik:RadScriptManager>
+
         <asp:HiddenField ID="tipohorasextraId" runat="server" Value="" Visible="False" />
         <asp:HiddenField ID="periodoId" runat="server" Value="0" Visible="False" />
         <asp:HiddenField ID="empleadoId" runat="server" Value="0" Visible="False" />
@@ -104,122 +105,123 @@
         <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
             <div class="ibox-content" style="border: solid 0px; height: 585px;">
                 <div class="row">
-                    <fieldset>
-                        <table style="width: 100%" border="0">
-                            <tr style="height: 30px;">
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">Ejercicio:</label>
-                                </td>
-                                <td style="width: 20%;">
-                                    <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">No. Periodo:</label>
-                                </td>
-                                <td style="width: 15%;">
-                                    <asp:Label ID="lblNoPeriodo" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">F. Inicial:</label>
-                                </td>
-                                <td style="width: 15%;">
-                                    <asp:Label ID="lblFechaInicial" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">F. Final:</label>
-                                </td>
-                                <td style="width: 15%;">
-                                    <asp:Label ID="lblFechaFinal" runat="server"></asp:Label>
-                                </td>
-                            </tr>
-                            <tr style="height: 30px;">
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">No. Empleado:</label>
-                                </td>
-                                <td style="width: 20%;">
-                                    <asp:Label ID="lblNumEmpleado" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">Nombre:</label>
-                                </td>
-                                <td style="width: 20%;">
-                                    <asp:Label ID="lblNombreEmpleado" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 15%;" align="right">
-                                    <label class="control-label">RFC:</label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblRFC" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 15%;" align="right">
-                                    <label class="control-label">IMSS:</label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblNumImss" runat="server"></asp:Label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">Puesto:</label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblPuesto" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">F. Ingreso:</label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblFechaIngreso" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">Reg. Contratación:</label>
-                                </td>
-                                <td>
-                                    <asp:Label ID="lblRegContratacion" runat="server"></asp:Label>
-                                </td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                            <tr>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">Dias:</label>
-                                </td>
-                                <td>
-                                    <telerik:RadNumericTextBox ID="txtDias" runat="server" Value="0" MinValue="1" MaxValue="14" NumberFormat-DecimalDigits="2" Width="90px" AutoPostBack="true">
+                    <div class="col-md-12" style="border: solid 0px;">
+                        <fieldset>
+                            <table style="width: 100%" border="0">
+                                <tr style="height: 30px;">
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Folio:</label>
+                                    </td>
+                                    <td style="width: 15%;">
+                                        <asp:Label ID="lblNoNomina" runat="server"></asp:Label>
+                                        <asp:Label ID="lblNoPeriodo" runat="server" Visible="false"></asp:Label>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Ejercicio:</label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">F. Inicial:</label>
+                                    </td>
+                                    <td style="width: 15%;">
+                                        <asp:Label ID="lblFechaInicial" runat="server"></asp:Label>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">F. Final:</label>
+                                    </td>
+                                    <td style="width: 15%;">
+                                        <asp:Label ID="lblFechaFinal" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr style="height: 30px;">
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">No. Empleado:</label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="lblNumEmpleado" runat="server"></asp:Label>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Nombre:</label>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <asp:Label ID="lblNombreEmpleado" runat="server"></asp:Label>
+                                    </td>
+                                    <td style="width: 15%;" align="right">
+                                        <label class="control-label">RFC:</label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblRFC" runat="server"></asp:Label>
+                                    </td>
+                                    <td style="width: 15%;" align="right">
+                                        <label class="control-label">IMSS:</label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblNumImss" runat="server"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Puesto:</label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblPuesto" runat="server"></asp:Label>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">F. Ingreso:</label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblFechaIngreso" runat="server"></asp:Label>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Reg. Contratación:</label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblRegContratacion" runat="server"></asp:Label>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Dias:</label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadNumericTextBox ID="txtDias" runat="server" Value="0" MinValue="1" MaxValue="31" NumberFormat-DecimalDigits="2" Width="90px" AutoPostBack="true">
+                                            <EnabledStyle HorizontalAlign="Right" />
+                                        </telerik:RadNumericTextBox>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Sueldo Diario:</label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblCuotaDiaria" runat="server"></asp:Label>
+                                        <%--<telerik:RadNumericTextBox ID="txtCuotaDiaria" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
                                         <EnabledStyle HorizontalAlign="Right" />
-                                    </telerik:RadNumericTextBox>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">Sueldo Diario:</label>
-                                </td>
-                                <td>
-                                    <%--<asp:Label ID="lblCuotaDiaria" runat="server"></asp:Label>--%>
-                                    <telerik:RadNumericTextBox ID="txtCuotaDiaria" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
+                                    </telerik:RadNumericTextBox>--%>
+                                    </td>
+                                    <td style="width: 10%;" align="right">
+                                        <label class="control-label">Sueldo Diario Integrado:</label>
+                                    </td>
+                                    <td>
+                                        <asp:Label ID="lblIntegradoImss" runat="server"></asp:Label>
+                                        <%--<telerik:RadNumericTextBox ID="txtIntegradoImss" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
                                         <EnabledStyle HorizontalAlign="Right" />
-                                    </telerik:RadNumericTextBox>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">Sueldo Diario Integrado:</label>
-                                </td>
-                                <td>
-                                    <%--<asp:Label ID="lblIntegradoImss" runat="server"></asp:Label>--%>
-                                    <telerik:RadNumericTextBox ID="txtIntegradoImss" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
-                                        <EnabledStyle HorizontalAlign="Right" />
-                                    </telerik:RadNumericTextBox>
-                                </td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
-                        </table>
-                    </fieldset>
+                                    </telerik:RadNumericTextBox>--%>
+                                    </td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6" style="border: solid 0px;">
                         <label class="control-label">P E R C E P C I O N E S</label>
                         <telerik:RadGrid ID="GridPercepciones" runat="server" AutoGenerateColumns="False" ShowFooter="True" AllowPaging="False" CellSpacing="0" GridLines="None" Skin="Bootstrap">
-                            <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
-                            </ClientSettings>
-                            <MasterTableView DataKeyNames="CvoConcepto,TipoHorasExtra" NoMasterRecordsText="No hay registros para mostrar.">
+                            <MasterTableView DataKeyNames="CvoConcepto, TipoHorasExtra" NoMasterRecordsText="No hay registros para mostrar.">
                                 <Columns>
                                     <telerik:GridBoundColumn DataField="Unidad" ItemStyle-HorizontalAlign="Left" HeaderText="Unidad" UniqueName="Unidad">
                                     </telerik:GridBoundColumn>
@@ -242,8 +244,6 @@
                     <div class="col-md-6" style="border: solid 0px;">
                         <label class="control-label">D E D U C C I O N E S</label>
                         <telerik:RadGrid ID="GridDeduciones" runat="server" AutoGenerateColumns="False" ShowFooter="True" AllowPaging="False" CellSpacing="0" GridLines="None" Skin="Bootstrap">
-                            <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
-                            </ClientSettings>
                             <MasterTableView DataKeyNames="CvoConcepto" NoMasterRecordsText="No hay registros para mostrar.">
                                 <Columns>
                                     <telerik:GridBoundColumn DataField="Unidad" ItemStyle-HorizontalAlign="Left" HeaderText="Unidad" UniqueName="Unidad">
@@ -434,6 +434,7 @@
             </div>
             <asp:Button ID="btnEliminarConcepto" Text="" Style="display: none;" runat="server" />
         </telerik:RadAjaxPanel>
+
         <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
         <telerik:RadWindowManager ID="rwConfirmEliminaConcepto" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
         <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Bootstrap" Width="100%">

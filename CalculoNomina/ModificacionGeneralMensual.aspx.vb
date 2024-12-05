@@ -1667,7 +1667,7 @@ Public Class ModificacionGeneralMensual
 
         Call CargarVariablesGenerales()
 
-        Dim DiasTarifaSubsidio As Decimal = 15
+        Dim DiasTarifaSubsidio As Decimal = 30
         Dim BaseGravadaPeriodo As Decimal = 0
         Dim BaseCalculoSubsidio As Decimal = 0
 
@@ -2027,7 +2027,7 @@ Public Class ModificacionGeneralMensual
                         Dim cNomina As New Nomina()
                         cNomina.IdEmpresa = IdEmpresa
                         cNomina.IdCliente = clienteId.Value
-                        cNomina.NoEmpleado = empleadoId.Value
+                        cNomina.NoEmpleado = NoEmpleado
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 4 'Mensual
                         cNomina.MesAcumula = MesAcumula
@@ -3161,7 +3161,7 @@ Public Class ModificacionGeneralMensual
                 'cNomina.Ejercicio = IdEjercicio
                 'cNomina.TipoNomina = 4 'Mensual
                 'cNomina.Periodo = IdPeriodo
-                'cNomina.NoEmpleado = empleadoId.Value
+                'cNomina.NoEmpleado = NoEmpleado
                 'cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
                 'cNomina.IdContrato = contratoId.Value
                 'cNomina.TipoConcepto = "P"
@@ -3186,7 +3186,7 @@ Public Class ModificacionGeneralMensual
                 'cNomina.Ejercicio = IdEjercicio
                 'cNomina.TipoNomina = 4 'Mensual
                 'cNomina.Periodo = IdPeriodo
-                'cNomina.NoEmpleado = empleadoId.Value
+                'cNomina.NoEmpleado = NoEmpleado
                 'cNomina.CvoConcepto = cmbConcepto.SelectedValue.ToString
                 'cNomina.IdContrato = contratoId.Value
                 'cNomina.TipoConcepto = "D"

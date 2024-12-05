@@ -197,7 +197,7 @@ Public Class ModificacionGeneralQuincenal
                     Me.lblFechaFinal.Text = oDataRow("FechaFinal")
                     Me.lblDias.Text = oDataRow("Dias")
                 Next
-                Call CargarGridEmpleadosQuincenal()
+                Call CargarGridEmpleados()
             Else
                 Me.lblTitulo.Text = ""
                 Me.lblNoNomina.Text = ""
@@ -238,7 +238,7 @@ Public Class ModificacionGeneralQuincenal
             Next
         End If
     End Sub
-    Private Sub CargarGridEmpleadosQuincenal()
+    Private Sub CargarGridEmpleados()
 
         CargarVariablesGenerales()
 
@@ -2247,7 +2247,7 @@ Public Class ModificacionGeneralQuincenal
     End Sub
     Private Sub btnEliminarEmpleado_Click(sender As Object, e As EventArgs) Handles btnEliminarEmpleado.Click
         Call EliminarTrabajador()
-        Call CargarGridEmpleadosQuincenal()
+        Call CargarGridEmpleados()
     End Sub
     Private Sub EliminarTrabajador()
         Try

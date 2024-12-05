@@ -195,27 +195,28 @@ Public Class IncidenciasQuincenal
                 cEmpleado.ConsultarEmpleadoID()
 
                 If cEmpleado.IdEmpleado > 0 Then
-                    lblNoPeriodo.Text = periodoId.Value
-                    lblNumEmpleado.Text = empleadoId.Value
-                    lblRFC.Text = cEmpleado.Rfc
-                    lblNombreEmpleado.Text = cEmpleado.Nombre
-                    lblNumImss.Text = cEmpleado.Imss
-                    lblRegContratacion.Text = cEmpleado.RegimenContratacion
-                    lblFechaIngreso.Text = cEmpleado.FechaIngreso
-                    lblPuesto.Text = cEmpleado.Puesto
-                    txtCuotaDiaria.Text = cEmpleado.CuotaDiaria
-                    txtIntegradoImss.Text = cEmpleado.IntegradoImss
-                    CuotaDiaria = cEmpleado.CuotaDiaria
+                    Me.lblNoNomina.Text = Session("Folio").ToString
+                    Me.lblNoPeriodo.Text = periodoId.Value
+                    Me.lblNumEmpleado.Text = empleadoId.Value
+                    Me.lblRFC.Text = cEmpleado.Rfc
+                    Me.lblNombreEmpleado.Text = cEmpleado.Nombre
+                    Me.lblNumImss.Text = cEmpleado.Imss
+                    Me.lblRegContratacion.Text = cEmpleado.RegimenContratacion
+                    Me.lblFechaIngreso.Text = cEmpleado.FechaIngreso
+                    Me.lblPuesto.Text = cEmpleado.Puesto
+                    Me.lblCuotaDiaria.Text = FormatCurrency(cEmpleado.CuotaDiaria, 2)
+                    Me.lblIntegradoImss.Text = FormatCurrency(cEmpleado.IntegradoImss, 2)
+                    Me.CuotaDiaria = cEmpleado.CuotaDiaria
                     Call CargarPercepcionesYDeducciones()
                     Call ChecarPercepcionesExentasYGravadas()
-                    txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
-                    txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
+                    Me.txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
+                    Me.txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
                 End If
                 cEmpleado = Nothing
 
                 Call LlenaCmbConcepto(0, "P")
                 Call MostrarDiasLaborados()
-                Call MostrarCuotasDiaria()
+                'Call MostrarCuotasDiaria()
 
                 Page.SetFocus(cmbConcepto)
 
@@ -244,28 +245,28 @@ Public Class IncidenciasQuincenal
             txtDias.Text = dt.Rows(0).Item("Unidad")
         End If
     End Sub
-    Private Sub MostrarCuotasDiaria()
+    'Private Sub MostrarCuotasDiaria()
 
-        Call CargarVariablesGenerales()
+    '    Call CargarVariablesGenerales()
 
-        Dim dt As New DataTable()
-        Dim cNomina As New Nomina()
-        cNomina.IdEmpresa = IdEmpresa
-        cNomina.IdCliente = clienteId.Value
-        cNomina.Ejercicio = IdEjercicio
-        cNomina.TipoNomina = 3 'Quincenal
-        cNomina.Periodo = periodoId.Value
-        cNomina.TipoConcepto = "DE"
-        cNomina.CvoConcepto = 87
-        cNomina.NoEmpleado = empleadoId.Value
-        cNomina.Tipo = "N"
-        dt = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
-        cNomina = Nothing
+    '    Dim dt As New DataTable()
+    '    Dim cNomina As New Nomina()
+    '    cNomina.IdEmpresa = IdEmpresa
+    '    cNomina.IdCliente = clienteId.Value
+    '    cNomina.Ejercicio = IdEjercicio
+    '    cNomina.TipoNomina = 3 'Quincenal
+    '    cNomina.Periodo = periodoId.Value
+    '    cNomina.TipoConcepto = "DE"
+    '    cNomina.CvoConcepto = 87
+    '    cNomina.NoEmpleado = empleadoId.Value
+    '    cNomina.Tipo = "N"
+    '    dt = cNomina.ConsultarPercepcionesDeduccionesEmpleado()
+    '    cNomina = Nothing
 
-        If dt.Rows.Count > 0 Then
-            txtCuotaDiaria.Text = dt.Rows(0).Item("CuotaDiaria")
-        End If
-    End Sub
+    '    If dt.Rows.Count > 0 Then
+    '        lblCuotaDiaria.Text = dt.Rows(0).Item("CuotaDiaria")
+    '    End If
+    'End Sub
     Private Sub LlenaCmbConcepto(ByVal sel As Integer, ByVal Tipo As String)
         Try
             Dim cConcepto As New Entities.Concepto
@@ -537,14 +538,24 @@ Public Class IncidenciasQuincenal
         End Select
     End Sub
     Private Sub EliminarConcepto(ByVal NumeroConcepto As Int32, ByVal TipoHorasExtra As String)
+
         ImporteDiario = 0
         ImportePeriodo = 0
         ImporteExento = 0
         ImporteGravado = 0
         Agregar = 0
-        'imss
         SalarioDiarioIntegradoTrabajador = 0
-        SalarioDiarioIntegradoTrabajador = txtIntegradoImss.Text
+
+        Dim cEmpleado As New Entities.Empleado
+        cEmpleado.IdEmpleado = empleadoId.Value
+        cEmpleado.ConsultarEmpleadoID()
+
+        If cEmpleado.IdEmpleado > 0 Then
+            CuotaDiaria = cEmpleado.CuotaDiaria
+            SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
+        End If
+        cEmpleado = Nothing
+
         'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
         ChecarSiExistenDiasEnPercepciones(empleadoId.Value, NumeroConcepto)
         'en este caso, si se pagan conceptos tales como comisiones, en teoria estas se generan posterior a que el trabajador tiene un sueldo, es decir una cuaota del periodo actual, ese es el motivo del mensaje.
@@ -778,12 +789,6 @@ Public Class IncidenciasQuincenal
             End If
 
         End If
-
-        Try
-            CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-        Catch ex As Exception
-            CuotaDiaria = 0
-        End Try
 
         Call GuardarRegistro(CuotaDiaria, 2)
         Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, NumeroConcepto)
@@ -1218,11 +1223,15 @@ Public Class IncidenciasQuincenal
                 UnidadIncidencia = 0
             End Try
 
-            Try
-                CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-            Catch ex As Exception
-                CuotaDiaria = 0
-            End Try
+            Dim cEmpleado As New Entities.Empleado
+            cEmpleado.IdEmpleado = empleadoId.Value
+            cEmpleado.ConsultarEmpleadoID()
+
+            If cEmpleado.IdEmpleado > 0 Then
+                CuotaDiaria = cEmpleado.CuotaDiaria
+                SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
+            End If
+            cEmpleado = Nothing
 
             Call CargarVariablesGenerales()
 
@@ -2097,6 +2106,7 @@ Public Class IncidenciasQuincenal
         End Try
     End Sub
     Private Sub txtUnidadIncidencia_TextChanged(sender As Object, e As EventArgs) Handles txtUnidadIncidencia.TextChanged
+
         Dim FactorDestajo, AsimiladoTotalSemanal, PagoPorHora As Decimal
         Dim cEmpleado As New Entities.Empleado
         cEmpleado.IdEmpleado = empleadoId.Value
@@ -2106,13 +2116,8 @@ Public Class IncidenciasQuincenal
             FactorDestajo = cEmpleado.FactorDestajo
             AsimiladoTotalSemanal = cEmpleado.AsimiladoTotalSemanal
             PagoPorHora = cEmpleado.PagoPorHora
+            CuotaDiaria = cEmpleado.CuotaDiaria
         End If
-
-        Try
-            CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-        Catch ex As Exception
-            CuotaDiaria = 0
-        End Try
 
         Dim UnidadIncidencia As Decimal = 0
         Try
@@ -2136,12 +2141,6 @@ Public Class IncidenciasQuincenal
         ElseIf cmbConcepto.SelectedValue.ToString = "9" And UnidadIncidencia > 0 Then
             txtImporteIncidencia.Text = (CuotaDiaria * 2) * UnidadIncidencia
         ElseIf cmbConcepto.SelectedValue.ToString = "10" And UnidadIncidencia > 0 Then
-            Try
-                CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-            Catch ex As Exception
-                CuotaDiaria = 0
-            End Try
-
             If cmbTipoHorasExtra.SelectedValue = "01" Then 'Dobles
                 txtImporteIncidencia.Text = ((CuotaDiaria / 8) * 2) * UnidadIncidencia
             ElseIf cmbTipoHorasExtra.SelectedValue = "02" Then 'Triples
@@ -2186,12 +2185,6 @@ Public Class IncidenciasQuincenal
             Catch ex As Exception
                 Unidad = 0
             End Try
-            Try
-                CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-            Catch ex As Exception
-                CuotaDiaria = 0
-            End Try
-
             If Importe <= 0 Then
                 rwAlerta.RadAlert("Favor de digitar un importe!!", 330, 180, "Alerta", "", "")
                 Exit Sub
@@ -2209,7 +2202,9 @@ Public Class IncidenciasQuincenal
             If cEmpleado.IdEmpleado > 0 Then
                 ClaveRegimenContratacion = cEmpleado.IdRegimenContratacion
                 SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
+                CuotaDiaria = cEmpleado.CuotaDiaria
             End If
+            cEmpleado = Nothing
 
             If cmbConcepto.SelectedValue.ToString = "5" And ClaveRegimenContratacion <> 9 Then
                 rwAlerta.RadAlert("El regimen de contratacion de este trabajador no es honorarios asimilado a salarios!!", 330, 180, "Alerta", "", "")
@@ -2631,8 +2626,6 @@ Public Class IncidenciasQuincenal
             ExentoHorasExtra = 0
             ExentoDescansoTrabajado = 0
             ExentoFestivoTrabajado = 0
-
-            '/* Ajuste 07/04/2020*/
             ImporteGravado = 0
 
             Dim ImporteIncidencia As Decimal = 0
@@ -2642,11 +2635,15 @@ Public Class IncidenciasQuincenal
                 ImporteIncidencia = 0
             End Try
 
-            Try
-                CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-            Catch ex As Exception
-                CuotaDiaria = 0
-            End Try
+            Dim cEmpleado As New Entities.Empleado
+            cEmpleado.IdEmpleado = empleadoId.Value
+            cEmpleado.ConsultarEmpleadoID()
+
+            If cEmpleado.IdEmpleado > 0 Then
+                CuotaDiaria = cEmpleado.CuotaDiaria
+                SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
+            End If
+            cEmpleado = Nothing
 
             Call CargarVariablesGenerales()
 
@@ -3642,18 +3639,17 @@ Public Class IncidenciasQuincenal
             Agregar = 3
             NumeroConcepto = 2
             CuotaDiaria = 0
+            SalarioDiarioIntegradoTrabajador = 0
 
-            Try
-                CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-            Catch ex As Exception
-                CuotaDiaria = 0
-            End Try
+            Dim cEmpleado As New Entities.Empleado
+            cEmpleado.IdEmpleado = empleadoId.Value
+            cEmpleado.ConsultarEmpleadoID()
 
-            Try
-                SalarioDiarioIntegradoTrabajador = Convert.ToDecimal(txtIntegradoImss.Text)
-            Catch ex As Exception
-                SalarioDiarioIntegradoTrabajador = 0
-            End Try
+            If cEmpleado.IdEmpleado > 0 Then
+                CuotaDiaria = cEmpleado.CuotaDiaria
+                SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
+            End If
+            cEmpleado = Nothing
 
             'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             ChecarSiExistenDiasEnPercepciones(empleadoId.Value, NumeroConcepto)
@@ -3677,8 +3673,7 @@ Public Class IncidenciasQuincenal
                 Call QuitarConcepto(54, "") 'SUBSIDIO
                 Call QuitarConcepto(56, "") 'CUOTA IMSS
 
-                ChecarPercepcionesGravadas(empleadoId.Value, NumeroConcepto)
-
+                Call ChecarPercepcionesGravadas(empleadoId.Value, NumeroConcepto)
                 Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
                 Call ChecarPercepcionesExentasYGravadas()
 
@@ -3948,377 +3943,6 @@ Public Class IncidenciasQuincenal
         cNomina.ActualizarExentoYGravado()
         cNomina = Nothing
     End Sub
-    Private Sub txtCuotaDiaria_TextChanged(sender As Object, e As EventArgs) Handles txtCuotaDiaria.TextChanged
-
-        Try
-            CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-        Catch ex As Exception
-            CuotaDiaria = 0
-        End Try
-        If CuotaDiaria = 0 Then
-            rwAlerta.RadAlert("Ingresa un importe de cuota diaria válido!!!", 490, 210, "Alerta", "", "")
-        Else
-            Dim NumeroConcepto As Integer
-            ImporteDiario = 0
-            ImportePeriodo = 0
-            ImporteExento = 0
-            ImporteGravado = 0
-            Agregar = 3
-            NumeroConcepto = 2
-
-            Dim cEmpleado As New Entities.Empleado
-            cEmpleado.IdEmpleado = empleadoId.Value
-            cEmpleado.ConsultarEmpleadoID()
-
-            If cEmpleado.IdEmpleado > 0 Then
-                SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
-            End If
-            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            ChecarSiExistenDiasEnPercepciones(empleadoId.Value, NumeroConcepto)
-            'en este caso, si se pagan conceptos tales como comisiones, en teoria estas se generan posterior a que el trabajador tiene un sueldo, es decir una cuaota del periodo actual, ese es el motivo del mensaje.
-            If DiasCuotaPeriodo = 0 And DiasVacaciones = 0 And DiasComision = 0 And DiasPagoPorHoras = 0 And DiasDestajo = 0 And DiasHonorarioAsimilado = 0 Then
-                rwAlerta.RadAlert("Esta percepcion no puede quitarse sin que exista alguna de las siguientes: 1.- CuotaPeriodo. 2.- Vacaciones. 3.- Honorario Asimilado. 4.- Pago Por Horas. 5.- Comisión. 6.- Destajo. Pues estas van acompañadas implicitamente por los 7 dias correspondientes al periodo semanal lo cual es base necesaria para el cálculo del impuesto, lo que si puede hacer es cambiar el número de dias o eliminar completamente el empleado en este periodo!!!", 490, 210, "Alerta", "", "")
-                Exit Sub
-            End If
-
-            Call ActualizarDiasYCuotaPeriodo()
-            'en esta parte se checa si el concepto que se esta agregando es percepcion(menor que 51) o es falta, permiso o incapacidad(57,58,59), siempre se borran los impuestos actuales y se recalculan, la demas deduccioen no entran aqui ya que no recalculan impuestos, simplemente se restan
-            If NumeroConcepto < 52 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Then
-                BorrarDeducciones(empleadoId.Value)
-            End If
-            'QuitarConcepto()
-            'If cmbConcepto.SelectedValue.ToString < 52 Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Then
-            If NumeroConcepto < 52 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Then
-
-                Call QuitarConcepto(7, "") 'ISR AJUSTADO POR SUBSIDIO
-                Call QuitarConcepto(52, "") 'IMPUESTO
-                Call QuitarConcepto(54, "") 'SUBSIDIO
-                Call QuitarConcepto(56, "") 'CUOTA IMSS
-
-                ChecarPercepcionesGravadas(empleadoId.Value, NumeroConcepto)
-
-                Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
-                Call ChecarPercepcionesExentasYGravadas()
-
-                Dim cPeriodo As New Entities.Periodo()
-                cPeriodo.IdPeriodo = periodoId.Value
-                cPeriodo.ConsultarPeriodoID()
-
-                Call CalcularImss()
-
-                'IMSS = IMSS * DiasCuotaPeriodo
-                IMSS = IMSS * NumeroDeDiasPagados
-                IMSS = Math.Round(IMSS, 6)
-
-                If IMSS > 0 Then
-                    Dim cNomina = New Nomina()
-                    cNomina.IdEmpresa = IdEmpresa
-                    cNomina.IdCliente = clienteId.Value
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 3 'Quincenal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = empleadoId.Value
-                    cNomina.CvoConcepto = 56
-                    cNomina.IdContrato = contratoId.Value
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = IMSS
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = IMSS
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.EsEspecial = False
-                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
-                    cNomina.DiasPagados = cPeriodo.Dias
-                    cNomina.IdNomina = nominaId.Value
-                    cNomina.GuadarNominaPeriodo()
-                End If
-
-                Call CalcularImpuesto()
-
-                Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado - DiasFaltasPermisosIncapacidades)
-                Impuesto = Math.Round(Impuesto, 6)
-
-                SubsidioAplicado = 0
-                ImporteDiarioGravado = 0
-                BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
-                ImporteDiarioGravado = PercepcionesGravadas / NumeroDeDiasPagados
-
-                If ImporteDiarioGravado <= BaseGravableMensualSubsidioDiario Then
-                    UMAMensual = UMA * FactorDiarioPromedio
-                    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
-                    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
-
-                    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * NumeroDeDiasPagados))) Then
-                        SubsidioAplicado = Impuesto
-                    Else
-                        SubsidioAplicado = (SubsidioDiario * NumeroDeDiasPagados)
-                    End If
-
-                    If Impuesto > SubsidioAplicado Then
-                        Impuesto = Impuesto - SubsidioAplicado
-                    ElseIf Impuesto < SubsidioAplicado Then
-                        SubsidioAplicado = SubsidioAplicado - Impuesto
-                        Impuesto = 0
-                    End If
-
-                End If
-
-                If Impuesto > 0 Then
-                    Dim cNomina = New Nomina()
-                    cNomina.IdEmpresa = IdEmpresa
-                    cNomina.IdCliente = clienteId.Value
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 3 'Quincenal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = empleadoId.Value
-                    cNomina.CvoConcepto = 52
-                    cNomina.IdContrato = contratoId.Value
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = Impuesto
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = Impuesto
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.EsEspecial = False
-                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
-                    cNomina.DiasPagados = cPeriodo.Dias
-                    cNomina.IdNomina = nominaId.Value
-                    cNomina.GuadarNominaPeriodo()
-                End If
-
-                If SubsidioAplicado > 0 Then
-                    Dim cNomina = New Nomina()
-                    cNomina.IdEmpresa = IdEmpresa
-                    cNomina.IdCliente = clienteId.Value
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 3 'Quincenal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = empleadoId.Value
-                    cNomina.CvoConcepto = 54
-                    cNomina.IdContrato = contratoId.Value
-                    cNomina.TipoConcepto = "P"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = SubsidioAplicado
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = SubsidioAplicado
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.EsEspecial = False
-                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
-                    cNomina.DiasPagados = cPeriodo.Dias
-                    cNomina.IdNomina = nominaId.Value
-                    cNomina.GuadarNominaPeriodo()
-                End If
-            End If
-
-            Call GuardarRegistro(CuotaDiaria, 2)
-
-            '*******************************************************************************************************
-            '*******************************************************************************************************
-            Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
-            '*******************************************************************************************************
-            '*******************************************************************************************************
-            Call SolicitarGeneracionXml(empleadoId.Value, "")
-            Call CargarPercepcionesYDeducciones()
-            Call CargarPercepciones()
-            Call CargarDeducciones()
-            Call CargarOtrosPagos()
-            Call ChecarPercepcionesExentasYGravadas()
-            txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
-            txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
-            NumeroConcepto = 0
-        End If
-    End Sub
-    Private Sub txtIntegradoImss_TextChanged(sender As Object, e As EventArgs) Handles txtIntegradoImss.TextChanged
-
-        Try
-            CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-        Catch ex As Exception
-            CuotaDiaria = 0
-        End Try
-
-        Try
-            SalarioDiarioIntegradoTrabajador = Convert.ToDecimal(txtIntegradoImss.Text)
-        Catch ex As Exception
-            SalarioDiarioIntegradoTrabajador = 0
-        End Try
-
-        If CuotaDiaria = 0 Then
-            rwAlerta.RadAlert("Ingresa un importe de cuota diaria válido!!!", 490, 210, "Alerta", "", "")
-        Else
-            If SalarioDiarioIntegradoTrabajador = 0 Then
-                rwAlerta.RadAlert("Ingresa un importe de Integrado IMSS válido!!!", 490, 210, "Alerta", "", "")
-            Else
-
-                Call QuitarConcepto(7, "") 'ISR AJUSTADO POR SUBSIDIO
-                Call QuitarConcepto(52, "") 'IMPUESTO
-                Call QuitarConcepto(54, "") 'SUBSIDIO
-                Call QuitarConcepto(56, "") 'CUOTA IMSS
-
-                ChecarPercepcionesGravadas(empleadoId.Value, 56)
-
-                Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
-                Call ChecarPercepcionesExentasYGravadas()
-
-                'en este caso, si se pagan conceptos tales como comisiones, en teoria estas se generan posterior a que el trabajador tiene un sueldo, es decir una cuaota del periodo actual, ese es el motivo del mensaje.
-                If DiasCuotaPeriodo = 0 And DiasVacaciones = 0 And DiasComision = 0 And DiasPagoPorHoras = 0 And DiasDestajo = 0 And DiasHonorarioAsimilado = 0 Then
-                    rwAlerta.RadAlert("Esta percepcion no puede quitarse sin que exista alguna de las siguientes: 1.- CuotaPeriodo. 2.- Vacaciones. 3.- Honorario Asimilado. 4.- Pago Por Horas. 5.- Comisión. 6.- Destajo. Pues estas van acompañadas implicitamente por los 7 dias correspondientes al periodo semanal lo cual es base necesaria para el cálculo del impuesto, lo que si puede hacer es cambiar el número de dias o eliminar completamente el empleado en este periodo!!!", 490, 210, "Alerta", "", "")
-                    Exit Sub
-                End If
-
-                Dim cPeriodo As New Entities.Periodo()
-                cPeriodo.IdPeriodo = periodoId.Value
-                cPeriodo.ConsultarPeriodoID()
-
-                Call CalcularImss()
-                'IMSS = IMSS * DiasCuotaPeriodo
-                IMSS = IMSS * NumeroDeDiasPagados
-                IMSS = Math.Round(IMSS, 6)
-
-                If IMSS > 0 Then
-                    Dim cNomina = New Nomina()
-                    cNomina.IdEmpresa = IdEmpresa
-                    cNomina.IdCliente = clienteId.Value
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 3 'Quincenal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = empleadoId.Value
-                    cNomina.CvoConcepto = 56
-                    cNomina.IdContrato = contratoId.Value
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = IMSS
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = IMSS
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.EsEspecial = False
-                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
-                    cNomina.DiasPagados = cPeriodo.Dias
-                    cNomina.IdNomina = nominaId.Value
-                    cNomina.GuadarNominaPeriodo()
-                End If
-
-                Call CalcularImpuesto()
-
-                Impuesto = Impuesto * (DiasCuotaPeriodo + DiasVacaciones + DiasPagoPorHoras + DiasComision + DiasDestajo + DiasHonorarioAsimilado - DiasFaltasPermisosIncapacidades)
-                Impuesto = Math.Round(Impuesto, 6)
-
-                SubsidioAplicado = 0
-                ImporteDiarioGravado = 0
-                BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
-                ImporteDiarioGravado = PercepcionesGravadas / NumeroDeDiasPagados
-
-                If ImporteDiarioGravado <= BaseGravableMensualSubsidioDiario Then
-                    UMAMensual = UMA * FactorDiarioPromedio
-                    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
-                    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
-
-                    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * NumeroDeDiasPagados))) Then
-                        SubsidioAplicado = Impuesto
-                    Else
-                        SubsidioAplicado = (SubsidioDiario * NumeroDeDiasPagados)
-                    End If
-
-                    If Impuesto > SubsidioAplicado Then
-                        Impuesto = Impuesto - SubsidioAplicado
-                    ElseIf Impuesto < SubsidioAplicado Then
-                        SubsidioAplicado = SubsidioAplicado - Impuesto
-                        Impuesto = 0
-                    End If
-
-                End If
-
-                If Impuesto > 0 Then
-                    Dim cNomina = New Nomina()
-                    cNomina.IdEmpresa = IdEmpresa
-                    cNomina.IdCliente = clienteId.Value
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 3 'Quincenal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = empleadoId.Value
-                    cNomina.CvoConcepto = 52
-                    cNomina.IdContrato = contratoId.Value
-                    cNomina.TipoConcepto = "D"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = Impuesto
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = Impuesto
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.EsEspecial = False
-                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
-                    cNomina.DiasPagados = cPeriodo.Dias
-                    cNomina.IdNomina = nominaId.Value
-                    cNomina.GuadarNominaPeriodo()
-                End If
-
-                If SubsidioAplicado > 0 Then
-                    Dim cNomina = New Nomina()
-                    cNomina.IdEmpresa = IdEmpresa
-                    cNomina.IdCliente = clienteId.Value
-                    cNomina.Ejercicio = IdEjercicio
-                    cNomina.TipoNomina = 3 'Quincenal
-                    cNomina.Periodo = Periodo
-                    cNomina.NoEmpleado = empleadoId.Value
-                    cNomina.CvoConcepto = 54
-                    cNomina.IdContrato = contratoId.Value
-                    cNomina.TipoConcepto = "P"
-                    cNomina.Unidad = 1
-                    cNomina.Importe = SubsidioAplicado
-                    cNomina.ImporteGravado = 0
-                    cNomina.ImporteExento = SubsidioAplicado
-                    cNomina.Generado = ""
-                    cNomina.Timbrado = ""
-                    cNomina.Enviado = ""
-                    cNomina.Situacion = "A"
-                    cNomina.EsEspecial = False
-                    cNomina.FechaIni = cPeriodo.FechaInicialDate
-                    cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
-                    cNomina.DiasPagados = cPeriodo.Dias
-                    cNomina.IdNomina = nominaId.Value
-                    cNomina.GuadarNominaPeriodo()
-                End If
-
-                '*******************************************************************************************************
-                '*******************************************************************************************************
-                Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
-                '*******************************************************************************************************
-                '*******************************************************************************************************
-                Call SolicitarGeneracionXml(empleadoId.Value, "")
-                Call CargarPercepcionesYDeducciones()
-                Call CargarPercepciones()
-                Call CargarDeducciones()
-                Call CargarOtrosPagos()
-                Call ChecarPercepcionesExentasYGravadas()
-                txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
-                txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
-            End If
-        End If
-    End Sub
     Private Sub cmbConcepto_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbConcepto.SelectedIndexChanged
         If cmbConcepto.SelectedValue = 10 Then
             lblDiasHorasExtra.Visible = True
@@ -4335,11 +3959,17 @@ Public Class IncidenciasQuincenal
         End If
     End Sub
     Private Sub cmbTipoHorasExtra_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbTipoHorasExtra.SelectedIndexChanged
-        Try
-            CuotaDiaria = Convert.ToDecimal(txtCuotaDiaria.Text)
-        Catch ex As Exception
-            CuotaDiaria = 0
-        End Try
+
+        Dim cEmpleado As New Entities.Empleado
+        cEmpleado.IdEmpleado = empleadoId.Value
+        cEmpleado.ConsultarEmpleadoID()
+
+        If cEmpleado.IdEmpleado > 0 Then
+            CuotaDiaria = cEmpleado.CuotaDiaria
+            SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
+        End If
+        cEmpleado = Nothing
+
         Dim Unidad As Decimal = 0
         Try
             Unidad = Convert.ToDecimal(txtUnidadIncidencia.Text)

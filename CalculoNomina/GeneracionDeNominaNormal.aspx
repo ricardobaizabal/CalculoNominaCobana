@@ -69,8 +69,8 @@
             display: none !important;
         }
 
-        .RadButton {
-            margin-left: 0px;
+        .rwStatusBar {
+            display: none !important;
         }
     </style>
 </asp:Content>

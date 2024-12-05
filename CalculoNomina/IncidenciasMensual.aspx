@@ -15,8 +15,6 @@
     <!-- Gritter -->
     <link href="js/plugins/gritter/jquery.gritter.css" rel="stylesheet" />
 
-    <%--<script src="js/FixFocus.js"></script>--%>
-
     <link href="css/animate.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
     <link href="styles.css" rel="stylesheet" />
@@ -94,6 +92,7 @@
     <form id="form1" runat="server">
         <telerik:RadScriptManager ID="RadScriptManager1" runat="server">
         </telerik:RadScriptManager>
+        
         <asp:HiddenField ID="tipohorasextraId" runat="server" Value="" Visible="False" />
         <asp:HiddenField ID="periodoId" runat="server" Value="0" Visible="False" />
         <asp:HiddenField ID="empleadoId" runat="server" Value="0" Visible="False" />
@@ -110,16 +109,17 @@
                         <table style="width: 100%" border="0">
                             <tr style="height: 30px;">
                                 <td style="width: 10%;" align="right">
+                                    <label class="control-label">Folio:</label>
+                                </td>
+                                <td style="width: 15%;">
+                                    <asp:Label ID="lblNoNomina" runat="server"></asp:Label>
+                                    <asp:Label ID="lblNoPeriodo" runat="server" Visible="false"></asp:Label>
+                                </td>
+                                <td style="width: 10%;" align="right">
                                     <label class="control-label">Ejercicio:</label>
                                 </td>
                                 <td style="width: 20%;">
                                     <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
-                                </td>
-                                <td style="width: 10%;" align="right">
-                                    <label class="control-label">No. Periodo:</label>
-                                </td>
-                                <td style="width: 15%;">
-                                    <asp:Label ID="lblNoPeriodo" runat="server"></asp:Label>
                                 </td>
                                 <td style="width: 10%;" align="right">
                                     <label class="control-label">F. Inicial:</label>
@@ -195,19 +195,19 @@
                                     <label class="control-label">Sueldo Diario:</label>
                                 </td>
                                 <td>
-                                    <%--<asp:Label ID="lblCuotaDiaria" runat="server"></asp:Label>--%>
-                                    <telerik:RadNumericTextBox ID="txtCuotaDiaria" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
+                                    <asp:Label ID="lblCuotaDiaria" runat="server"></asp:Label>
+                                    <%--<telerik:RadNumericTextBox ID="txtCuotaDiaria" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
                                         <EnabledStyle HorizontalAlign="Right" />
-                                    </telerik:RadNumericTextBox>
+                                    </telerik:RadNumericTextBox>--%>
                                 </td>
                                 <td style="width: 10%;" align="right">
                                     <label class="control-label">Sueldo Diario Integrado:</label>
                                 </td>
                                 <td>
-                                    <%--<asp:Label ID="lblIntegradoImss" runat="server"></asp:Label>--%>
-                                    <telerik:RadNumericTextBox ID="txtIntegradoImss" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
+                                    <asp:Label ID="lblIntegradoImss" runat="server"></asp:Label>
+                                    <%--<telerik:RadNumericTextBox ID="txtIntegradoImss" runat="server" Value="0" MinValue="1" NumberFormat-DecimalDigits="5" Width="90px" Enabled="false" AutoPostBack="true">
                                         <EnabledStyle HorizontalAlign="Right" />
-                                    </telerik:RadNumericTextBox>
+                                    </telerik:RadNumericTextBox>--%>
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>

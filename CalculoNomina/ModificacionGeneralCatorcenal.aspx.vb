@@ -187,6 +187,8 @@ Public Class ModificacionGeneralCatorcenal
             cNomina = Nothing
             If dt.Rows.Count > 0 Then
                 For Each oDataRow In dt.Rows
+                    Me.lblTitulo.Text = oDataRow("RangoFecha")
+                    Me.lblNoNomina.Text = Session("Folio").ToString
                     Me.lblEjercicio.Text = oDataRow("Ejercicio")
                     Me.lblRazonSocial.Text = oDataRow("Cliente")
                     Me.lblNoPeriodo.Text = oDataRow("Periodo")
@@ -195,8 +197,10 @@ Public Class ModificacionGeneralCatorcenal
                     Me.lblFechaFinal.Text = oDataRow("FechaFinal")
                     Me.lblDias.Text = oDataRow("Dias")
                 Next
-                Call CargarGridEmpleadosCatorcenal()
+                Call CargarGridEmpleados()
             Else
+                Me.lblTitulo.Text = ""
+                Me.lblNoNomina.Text = ""
                 Me.lblEjercicio.Text = ""
                 Me.lblRazonSocial.Text = ""
                 Me.lblNoPeriodo.Text = ""
@@ -234,7 +238,7 @@ Public Class ModificacionGeneralCatorcenal
             Next
         End If
     End Sub
-    Private Sub CargarGridEmpleadosCatorcenal()
+    Private Sub CargarGridEmpleados()
 
         CargarVariablesGenerales()
 
@@ -2470,7 +2474,7 @@ Public Class ModificacionGeneralCatorcenal
     End Sub
     Private Sub btnEliminarEmpleado_Click(sender As Object, e As EventArgs) Handles btnEliminarEmpleado.Click
         Call EliminarTrabajador()
-        Call CargarGridEmpleadosCatorcenal()
+        Call CargarGridEmpleados()
     End Sub
     Private Sub EliminarTrabajador()
         Try
