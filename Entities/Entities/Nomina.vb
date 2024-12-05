@@ -9,6 +9,7 @@
     Private _Periodo As Integer
     Private _EsEspecial As Boolean
     Private _NoEmpleado As Integer
+    Private _NombreEmpleado As String
     Private _IdContrato As Integer
     Private _CvoConcepto As Integer
     Private _CvoSAT As String
@@ -59,6 +60,7 @@
         _Periodo = 0
         _EsEspecial = False
         _NoEmpleado = 0
+        _NombreEmpleado = String.Empty
         _CvoConcepto = 0
         _Cliente = 0
         _CvoSAT = String.Empty
@@ -161,6 +163,14 @@
         End Get
         Set(ByVal value As Integer)
             _NoEmpleado = value
+        End Set
+    End Property
+    Public Property NombreEmpleado() As String
+        Get
+            Return _NombreEmpleado
+        End Get
+        Set(ByVal value As String)
+            _NombreEmpleado = value
         End Set
     End Property
     Public Property IdContrato() As Integer

@@ -194,9 +194,17 @@ Partial Public Class Nomina
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pPeriodo", Periodo))
         p.Add(New SqlParameter("@pIdEmpresa", Cliente))
-        'p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
-        'p.Add(New SqlParameter("@pIdNomina", IdNomina))
+        p.Add(New SqlParameter("@pIdNomina", IdNomina))
+        p.Add(New SqlParameter("@pNombreEmpleado", NombreEmpleado))
         dt = db.ExecuteSP("pConsultarEmpleadosNoTimbrados", p)
+        Return dt
+    End Function
+    Public Function ConsultarFolioNomina() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@pEjercicio", Ejercicio))
+        p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        dt = db.ExecuteSP("pConsultarFolioNomina", p)
         Return dt
     End Function
     Public Function ConsultarDetalleNominaExtraordinariaFolio() As DataTable

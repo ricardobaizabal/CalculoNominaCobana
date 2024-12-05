@@ -36,6 +36,10 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <br />
+    <telerik:RadWindowManager ID="RadWindowManager2" runat="server">
+    </telerik:RadWindowManager>
+
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
         <asp:HiddenField ID="periodoID" runat="server" Value="0" Visible="False" />
         <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
@@ -50,13 +54,31 @@
                     <br />
                     <div class="form-horizontal">
                         <div class="form-group">
+                            <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
+                                <AjaxSettings>
+                                    <telerik:AjaxSetting AjaxControlID="btnBuscarEmpleados">
+                                        <UpdatedControls>
+                                            <telerik:AjaxUpdatedControl ControlID="cmbEmpresa" />
+                                            <telerik:AjaxUpdatedControl ControlID="btnBuscarEmpleados" />
+                                        </UpdatedControls>
+                                    </telerik:AjaxSetting>
+                                </AjaxSettings>
+                            </telerik:RadAjaxManager>
                             <table style="width: 100%; border-collapse: separate; border-spacing: 10px;">
                                 <tr>
                                     <td style="width: 20%;">
                                         <label class="control-label">Seleccionar Cliente</label>
                                     </td>
                                     <td>
-                                        <telerik:RadComboBox ID="cmbEmpresa" runat="server" Width="500px" AutoPostBack="false"></telerik:RadComboBox>
+                                        <telerik:RadComboBox ID="cmbEmpresa" runat="server" Width="500px" AutoPostBack="true"></telerik:RadComboBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <label class="control-label">Seleccionar Folio De Nomina</label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadComboBox ID="cmbFolioNomina" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
                                     </td>
                                 </tr>
                                 <tr>
@@ -66,7 +88,6 @@
                                     <td>
                                         <telerik:RadComboBox ID="cmbPeriodicidad" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
                                     </td>
-
                                 </tr>
                                 <tr>
                                     <td style="width: 20%;">
@@ -74,6 +95,14 @@
                                     </td>
                                     <td>
                                         <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <label class="control-label">Buscar por Nombre de Empleado</label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadTextBox ID="txtNombreEmpleado" runat="server" Width="300px"></telerik:RadTextBox>
                                     </td>
                                 </tr>
 
@@ -98,7 +127,7 @@
             <br />
             <div class="row">
                 <div class="col-lg-12">
-                    <telerik:RadGrid ID="GridEmpleadosNoTimbrados" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="False" ShowHeader="True" PageSize="50" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False">
+                    <telerik:RadGrid ID="GridEmpleadosNoTimbrados" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="False" ShowHeader="True" PageSize="20" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False">
                         <PagerStyle Mode="NumericPages" />
                         <ExportSettings IgnorePaging="True" FileName="ReporteEmpleadosNoTimbrados">
                             <Excel Format="Biff" />
