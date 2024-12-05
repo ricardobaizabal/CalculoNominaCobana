@@ -3199,6 +3199,7 @@
     <Content Include="RegimenContratacion.aspx" />
     <Content Include="Acumulados.aspx" />
     <Content Include="ReporteDeducciones.aspx" />
+    <Content Include="ReporteEmpleadosNotimbrados.aspx" />
     <Content Include="ReportePercepciones.aspx" />
     <Content Include="Reportes\css\animate.css" />
     <Content Include="Reportes\css\bootstrap.css" />
@@ -4167,6 +4168,13 @@
     <Compile Include="ReporteDeducciones.aspx.vb">
       <DependentUpon>ReporteDeducciones.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReporteEmpleadosNotimbrados.aspx.designer.vb">
+      <DependentUpon>ReporteEmpleadosNotimbrados.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReporteEmpleadosNotimbrados.aspx.vb">
+      <DependentUpon>ReporteEmpleadosNotimbrados.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="ReportePercepciones.aspx.designer.vb">
       <DependentUpon>ReportePercepciones.aspx</DependentUpon>
