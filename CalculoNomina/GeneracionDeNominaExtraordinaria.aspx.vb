@@ -12,7 +12,9 @@ Imports System.Web.Services.Protocols
 Imports System.Net.Security
 Imports System.Data.SqlClient
 Imports System.Data
+Imports System
 Imports System.Globalization
+Imports System.Threading
 
 Public Class GeneracionDeNominaExtraordinaria
     Inherits System.Web.UI.Page
@@ -195,7 +197,15 @@ Public Class GeneracionDeNominaExtraordinaria
     Private qrForeColor As Integer = System.Drawing.Color.FromArgb(255, 0, 0, 0).ToArgb
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-
+        ''
+        'Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US")
+        'Thread.CurrentThread.CurrentUICulture = New CultureInfo("en-US")
+        ''
+        'Response.Write(Format(Now()))
+        ''
+        'Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("es-MX")
+        'Thread.CurrentThread.CurrentUICulture = New CultureInfo("es-MX")
+        ''
         Me.WinPeriodoSave.VisibleOnPageLoad = False
         Me.WinImportarMonto.VisibleOnPageLoad = False
         Me.WinImportarMontoIndividual.VisibleOnPageLoad = False
@@ -2181,7 +2191,10 @@ Public Class GeneracionDeNominaExtraordinaria
                 End If
             Next
         End If
-
+        '
+        Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US")
+        Thread.CurrentThread.CurrentUICulture = New CultureInfo("en-US")
+        '
         Nodo.SetAttribute("xmlns:nomina12", "http://www.sat.gob.mx/nomina12")
         Nodo.SetAttribute("xmlns:cfdi", "http://www.sat.gob.mx/cfd/4")
         Nodo.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
@@ -2202,6 +2215,10 @@ Public Class GeneracionDeNominaExtraordinaria
         Nodo.SetAttribute("Folio", folio.Value)
         Nodo.SetAttribute("Exportacion", "01")
         Nodo.SetAttribute("Version", "4.0")
+        '
+        Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("es-MX")
+        Thread.CurrentThread.CurrentUICulture = New CultureInfo("es-MX")
+        '
     End Sub
     Private Sub AsignaSerieFolio(ByVal NoEmpleado As Integer)
         '
