@@ -77,15 +77,6 @@ Partial Public Class ReporteEmpleadosNotimbrados
     Protected WithEvents FolioUUID As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
-    '''Control RadAjaxManager1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RadAjaxManager1 As Global.Telerik.Web.UI.RadAjaxManager
-
-    '''<summary>
     '''Control cmbEmpresa.
     '''</summary>
     '''<remarks>

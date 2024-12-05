@@ -54,16 +54,6 @@
                     <br />
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
-                                <AjaxSettings>
-                                    <telerik:AjaxSetting AjaxControlID="btnBuscarEmpleados">
-                                        <UpdatedControls>
-                                            <telerik:AjaxUpdatedControl ControlID="cmbEmpresa" />
-                                            <telerik:AjaxUpdatedControl ControlID="btnBuscarEmpleados" />
-                                        </UpdatedControls>
-                                    </telerik:AjaxSetting>
-                                </AjaxSettings>
-                            </telerik:RadAjaxManager>
                             <table style="width: 100%; border-collapse: separate; border-spacing: 10px;">
                                 <tr>
                                     <td style="width: 20%;">
