@@ -196,6 +196,8 @@ Public Class GeneracionDeNominaExtraordinaria
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        Console.Write(Format(Now()))
+
         Me.WinPeriodoSave.VisibleOnPageLoad = False
         Me.WinImportarMonto.VisibleOnPageLoad = False
         Me.WinImportarMontoIndividual.VisibleOnPageLoad = False
@@ -3934,10 +3936,10 @@ Public Class GeneracionDeNominaExtraordinaria
                         System.Net.ServicePointManager.SecurityProtocol = DirectCast(3072, System.Net.SecurityProtocolType) Or DirectCast(768, System.Net.SecurityProtocolType) Or DirectCast(192, System.Net.SecurityProtocolType) Or DirectCast(48, System.Net.SecurityProtocolType)
 
                         'Pruebas
-                        Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
+                        'Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
 
                         'Producción
-                        'Dim TimbreSifei As New SIFEI33.SIFEIService()
+                        Dim TimbreSifei As New SIFEI33.SIFEIService()
                         Call Comprimir()
 
                         Dim bytes() As Byte
@@ -4047,10 +4049,10 @@ Public Class GeneracionDeNominaExtraordinaria
                             Dim SIFEIIdEquipo As String = System.Configuration.ConfigurationManager.AppSettings("SIFEIIdEquipo")
 
                             'Pruebas
-                            Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
+                            'Dim TimbreSifei As New SIFEIPruebasV33.SIFEIService()
 
                             'Producción
-                            'Dim TimbreSifei As New SIFEI33.SIFEIService()
+                            Dim TimbreSifei As New SIFEI33.SIFEIService()
                             Call Comprimir()
 
                             Dim bytes() As Byte
