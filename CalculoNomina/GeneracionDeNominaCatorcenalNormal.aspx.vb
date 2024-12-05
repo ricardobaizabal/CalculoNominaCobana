@@ -411,6 +411,7 @@ Public Class GeneracionDeNominaCatorcenal
 
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 2 'Catorcenal
         cPeriodo.ExtraordinarioBit = 0
@@ -2197,6 +2198,7 @@ Public Class GeneracionDeNominaCatorcenal
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 2 'Catorcenal
             cNomina.Periodo = cmbPeriodo.SelectedValue
+            cNomina.EsEspecial = False
             dt = cNomina.ConsultarDatosGeneralesNomina()
 
             Dim dt_Empleado As New DataTable()

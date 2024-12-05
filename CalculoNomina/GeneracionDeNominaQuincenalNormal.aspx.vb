@@ -406,13 +406,15 @@ Public Class GeneracionDeNominaQuincenalNormal
         Call CargarVariablesGenerales()
 
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 3 'Quincenal
         cPeriodo.ExtraordinarioBit = 0
         ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
         cmbPeriodo.SelectedValue = sel
         cPeriodo = Nothing
+
         If sel > 0 Then
             cmbPeriodo.SelectedValue = sel
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text

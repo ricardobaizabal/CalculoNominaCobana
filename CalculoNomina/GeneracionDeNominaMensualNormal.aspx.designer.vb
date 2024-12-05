@@ -257,22 +257,13 @@ Partial Public Class GeneracionDeNominaMensualNormal
     Protected WithEvents lblTitulo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblEjercicio.
+    '''Control lblNoNomina.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblRazonSocial.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblRazonSocial As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblNoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control lblNoPeriodo.
@@ -293,6 +284,33 @@ Partial Public Class GeneracionDeNominaMensualNormal
     Protected WithEvents lblTipoNomina As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control lblDias.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblDias As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblEjercicio.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control lblRazonSocial.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblRazonSocial As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control lblFechaInicial.
     '''</summary>
     '''<remarks>
@@ -309,24 +327,6 @@ Partial Public Class GeneracionDeNominaMensualNormal
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents lblFechaFinal As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblDias.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblDias As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control chkAplicaOrden.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents chkAplicaOrden As Global.System.Web.UI.WebControls.CheckBox
 
     '''<summary>
     '''Control lnkReporte.

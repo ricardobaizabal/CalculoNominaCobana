@@ -64,6 +64,7 @@ Partial Public Class Periodo
         Try
             p.Clear()
             p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pEjercicio", IdEjercicio))
             p.Add(New SqlParameter("@pIdTiponomina", IdTipoNomina))
             p.Add(New SqlParameter("@pFechainicial", FechaInicial))

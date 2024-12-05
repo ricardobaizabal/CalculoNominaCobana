@@ -39,7 +39,7 @@
             }
         }
         function OpenWindow(empresaid, ejercicioid, periodoid, periodicidad, esp) {
-            var oWnd = radopen("RptNominaSemanal.aspx?e=" + empresaid + "&ej=" + ejercicioid + "&p=" + periodoid + "&periodicidad=" + periodicidad + "&especial=" + esp, "wndReporte");
+            var oWnd = radopen("RptNominaMensual.aspx?e=" + empresaid + "&ej=" + ejercicioid + "&p=" + periodoid + "&periodicidad=" + periodicidad + "&especial=" + esp, "wndReporte");
             oWnd.set_modal(true);
             oWnd.set_centerIfModal(true);
             oWnd.setSize(1024, 768);
@@ -69,8 +69,8 @@
             display: none !important;
         }
 
-        .RadButton {
-            margin-left: 0px;
+        .RadWindow_Bootstrap .rwStatusBar {
+            display: none !important;
         }
     </style>
 </asp:Content>
@@ -242,6 +242,27 @@
                     <table style="width: 100%;" border="0">
                         <tr style="height: 30px;">
                             <td style="width: 10%;">
+                                <label class="control-label">Folio:</label>
+                            </td>
+                            <td style="width: 10%;">
+                                <asp:Label ID="lblNoNomina" runat="server"></asp:Label>
+                                <asp:Label ID="lblNoPeriodo" runat="server" Visible="false"></asp:Label>
+                            </td>
+                            <td style="width: 10%;">
+                                <label class="control-label">Tipo:</label>
+                            </td>
+                            <td>
+                                <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
+                            </td>
+                            <td style="width: 10%;">
+                                <%--<label class="control-label">Dias:</label>--%>
+                            </td>
+                            <td>
+                                <asp:Label ID="lblDias" runat="server" Visible="false"></asp:Label>
+                            </td>
+                        </tr>
+                        <tr style="height: 30px;">
+                            <td style="width: 10%;">
                                 <label class="control-label">Ejercicio:</label>
                             </td>
                             <td style="width: 10%;">
@@ -252,20 +273,6 @@
                             </td>
                             <td colspan="3">
                                 <asp:Label ID="lblRazonSocial" runat="server"></asp:Label>
-                            </td>
-                        </tr>
-                        <tr style="height: 30px;">
-                            <td style="width: 10%;">
-                                <label class="control-label">No. Periodo:</label>
-                            </td>
-                            <td style="width: 10%;">
-                                <asp:Label ID="lblNoPeriodo" runat="server"></asp:Label>
-                            </td>
-                            <td style="width: 10%;">
-                                <label class="control-label">Tipo:</label>
-                            </td>
-                            <td colspan="2">
-                                <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
                             </td>
                         </tr>
                         <tr style="height: 30px;">
@@ -281,21 +288,12 @@
                             <td style="width: 10%;">
                                 <asp:Label ID="lblFechaFinal" runat="server"></asp:Label>
                             </td>
-                            <td style="width: 10%;">
-                                <label class="control-label">Dias:</label>
-                            </td>
-                            <td>
-                                <asp:Label ID="lblDias" runat="server"></asp:Label>
-                            </td>
+                            <td>&nbsp;</td>
                         </tr>
                     </table>
-
                 </div>
                 <div class="form-group row">
-                    <div class="col-md-9 text-right">
-                        <asp:CheckBox ID="chkAplicaOrden" Text="Ordenar archivos por centro de costos" runat="server" Visible="false" />
-                    </div>
-                    <div class="col-md-3 text-right">
+                    <div class="col-md-12 text-right">
                         <asp:LinkButton ID="lnkReporte" runat="server">Ver Reporte Nómina</asp:LinkButton>
                     </div>
                 </div>

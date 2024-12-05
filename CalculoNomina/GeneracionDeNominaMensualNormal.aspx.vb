@@ -20,15 +20,14 @@ Public Class GeneracionDeNominaMensualNormal
     Private ImportePeriodo As Double
     Private ImporteSeguroVivienda As Double
     Private Subsidio As Double
+    Private SubsidioMes As Double
 
-    Private UMAMensual As Double
     Private UMA As Double
+    Private UMAMensual As Double
     Private UMI As Double
     Private SalarioDiarioIntegradoTrabajador As Double
     Private SalarioMinimoDiarioGeneral As Double
     Private IMSS As Double
-
-    Private FactorDiarioPromedio As Double
 
     Private Dias As Integer = 0
     Private DiasVacaciones As Integer
@@ -39,6 +38,8 @@ Public Class GeneracionDeNominaMensualNormal
     Private DiasDestajo As Integer
     Private DiasFaltasPermisosIncapacidades As Integer
     Private SubsidioAbsolutoTotal As Double
+
+    Private FactorDiarioPromedio As Double
 
     Private BaseGravableMensualSubsidioDiario As Double
     Private BaseGravableMensualSubsidioSemanal As Double
@@ -56,141 +57,144 @@ Public Class GeneracionDeNominaMensualNormal
     Private Mensaje As String
     Private MensajeNulo As String
 
-    Public CuotaPeriodo As Double
-    Public HorasTriples As Double
-    Public DescansoTrabajado As Double
-    Public PrimaDominical As Double
-    Public PrimaVacacional As Double
-    Public Vacaciones As Double
-    Public Aguinaldo As Double
-    Public RepartoUtilidades As Double
-    Public FondoAhorro As Double
-    Public AyudaFuneral As Double
-    Public PrevisionSocial As Double
-    Public GrupoPercepcionesGravadasTotalmenteSinExentos As Double
-    Public PagoPorHoras As Double
-    Public Comisiones As Double
-    Public Destajo As Double
-    Public FaltasPermisosIncapacidades As Double
-    Public NumeroDeDiasPagados As Double
+    Private CuotaPeriodo As Double
+    Private HorasTriples As Double
+    Private DescansoTrabajado As Double
+    Private PrimaDominical As Double
+    Private PrimaVacacional As Double
+    Private Vacaciones As Double
+    Private Aguinaldo As Double
+    Private RepartoUtilidades As Double
+    Private FondoAhorro As Double
+    Private AyudaFuneral As Double
+    Private PrevisionSocial As Double
+    Private GrupoPercepcionesGravadasTotalmenteSinExentos As Double
+    Private PagoPorHoras As Double
+    Private Comisiones As Double
+    Private Destajo As Double
+    Private FaltasPermisosIncapacidades As Double
+    Private NumeroDeDiasPagados As Double
 
-    Public TiempoExtraordinarioDentroDelMargenLegal As Double
-    Public TiempoExtraordinarioFueraDelMargenLegal As Double
-    Public HonorarioAsimilado As Double
+    Private TiempoExtraordinarioDentroDelMargenLegal As Double
+    Private TiempoExtraordinarioFueraDelMargenLegal As Double
+    Private HonorarioAsimilado As Double
 
-    Public HorasDoblesGravadas As Double
-    Public HorasDoblesExentas As Double
-    Public FestivoTrabajadoGravado As Double
-    Public FestivoTrabajadoExento As Double
-    Public DobleteGravado As Double
-    Public DobleteExento As Double
+    Private HorasDoblesGravadas As Double
+    Private HorasDoblesExentas As Double
+    Private FestivoTrabajadoGravado As Double
+    Private FestivoTrabajadoExento As Double
+    Private DobleteGravado As Double
+    Private DobleteExento As Double
 
-    Public ImporteExentoTiempoExtraordinarioDentroDelMargenLegal As Double
-    Public ImporteGravadoTiempoExtraordinarioDentroDelMargenLegal As Double
-    Public ImporteExentoPrimaDominical As Double
-    Public ImporteGravadoPrimaDominical As Double
-    Public ImporteExentoAguinaldo As Double
-    Public ImporteGravadoAguinaldo As Double
-    Public ImporteExentoPrimaVacacional As Double
-    Public ImporteGravadoPrimaVacacional As Double
-    Public ImporteExentoRepartoUtilidades As Double
-    Public ImporteGravadoRepartoUtilidades As Double
-    Public ImporteExentoPrevisionSocial As Double
-    Public ImporteGravadoPrevisionSocial As Double
+    Private ImporteExentoTiempoExtraordinarioDentroDelMargenLegal As Double
+    Private ImporteGravadoTiempoExtraordinarioDentroDelMargenLegal As Double
+    Private ImporteExentoPrimaDominical As Double
+    Private ImporteGravadoPrimaDominical As Double
+    Private ImporteExentoAguinaldo As Double
+    Private ImporteGravadoAguinaldo As Double
+    Private ImporteExentoPrimaVacacional As Double
+    Private ImporteGravadoPrimaVacacional As Double
+    Private ImporteExentoRepartoUtilidades As Double
+    Private ImporteGravadoRepartoUtilidades As Double
+    Private ImporteExentoPrevisionSocial As Double
+    Private ImporteGravadoPrevisionSocial As Double
 
-    Public AyudaCulturalExento As Double
-    Public AyudaCulturalGravado As Double
-    Public AyudaDeportivaExento As Double
-    Public AyudaDeportivaGravado As Double
-    Public AyudaEducacionalExento As Double
-    Public AyudaEducacionalGravado As Double
-    Public AyudaEscolarExento As Double
-    Public AyudaEscolarGravado As Double
-    Public AyudaComidaExento As Double
-    Public AyudaComidaGravado As Double
-    Public ValesDespensaExento As Double
-    Public ValesDespensaGravado As Double
-    Public AyudaUniformeExento As Double
-    Public AyudaUniformeGravado As Double
-    Public BecasExento As Double
-    Public BecasGravado As Double
-    Public SubsidioIncapacidadExento As Double
-    Public SubsidioIncapacidadGravado As Double
-    Public AyudaMatrimonioExento As Double
-    Public AyudaMatrimonioGravado As Double
-    Public AyudaNacimientoExento As Double
-    Public AyudaNacimientoGravado As Double
-    Public ValesComedorExento As Double
-    Public ValesComedorGravado As Double
-    Public AyudaMedicamentoExento As Double
-    Public AyudaMedicamentoGravado As Double
-    Public ImporteExentoFondoAhorro As Double
-    Public ImporteGravadoFondoAhorro As Double
-    Public ImporteExentoAyudaFuneral As Double
-    Public ImporteGravadoAyudaFuneral As Double
+    Private AyudaCulturalExento As Double
+    Private AyudaCulturalGravado As Double
+    Private AyudaDeportivaExento As Double
+    Private AyudaDeportivaGravado As Double
+    Private AyudaEducacionalExento As Double
+    Private AyudaEducacionalGravado As Double
+    Private AyudaEscolarExento As Double
+    Private AyudaEscolarGravado As Double
+    Private AyudaComidaExento As Double
+    Private AyudaComidaGravado As Double
+    Private ValesDespensaExento As Double
+    Private ValesDespensaGravado As Double
+    Private AyudaUniformeExento As Double
+    Private AyudaUniformeGravado As Double
+    Private BecasExento As Double
+    Private BecasGravado As Double
+    Private SubsidioIncapacidadExento As Double
+    Private SubsidioIncapacidadGravado As Double
+    Private AyudaMatrimonioExento As Double
+    Private AyudaMatrimonioGravado As Double
+    Private AyudaNacimientoExento As Double
+    Private AyudaNacimientoGravado As Double
+    Private ValesComedorExento As Double
+    Private ValesComedorGravado As Double
+    Private AyudaMedicamentoExento As Double
+    Private AyudaMedicamentoGravado As Double
+    Private ImporteExentoFondoAhorro As Double
+    Private ImporteGravadoFondoAhorro As Double
+    Private ImporteExentoAyudaFuneral As Double
+    Private ImporteGravadoAyudaFuneral As Double
 
-    Public Diferencias As Double
-    Public Gratificacion As Double
-    Public Bonificacion As Double
-    Public Retroactivo As Double
-    Public BonoProduccion As Double
-    Public PremioProductividad As Double
-    Public Incentivo As Double
-    Public PremioAsistencia As Double
-    Public PremioPuntualidad As Double
-    Public Premio As Double
-    Public Compensacion As Double
-    Public BonoAntiguedad As Double
-    Public Viaticos As Double
-    Public Pasajes As Double
-    Public AyudaTransporte As Double
-    Public AyudaRenta As Double
-    Public AyudaCarestia As Double
-    Public DespensaEfectivo As Double
-    Public HaberPorRetiro As Double
+    Private Diferencias As Double
+    Private Gratificacion As Double
+    Private Bonificacion As Double
+    Private Retroactivo As Double
+    Private BonoProduccion As Double
+    Private PremioProductividad As Double
+    Private Incentivo As Double
+    Private PremioAsistencia As Double
+    Private PremioPuntualidad As Double
+    Private Premio As Double
+    Private Compensacion As Double
+    Private BonoAntiguedad As Double
+    Private Viaticos As Double
+    Private Pasajes As Double
+    Private AyudaTransporte As Double
+    Private AyudaRenta As Double
+    Private AyudaCarestia As Double
+    Private DespensaEfectivo As Double
+    Private HaberPorRetiro As Double
 
     Private Impuesto As Double
-    Public IsrIndemnizacion As Double
-    Public SubsidioAplicado As Double
-    Public SubsidioEfectivo As Double
-    Public CuotaImss As Double
-    Public Faltas As Double
-    Public Permisos As Double
-    Public IncapacidadPorEnfermedad As Double
-    Public DiasHorasNoTrabajadas As Double
-    Public CuotaSindical As Double
-    Public PensionAlimenticia As Double
-    Public AdeudoFonacot As Double
-    Public CreditoInfonavit As Double
-    Public AdeudoCajaAhorro As Double
-    Public AdeudoFondoAhorro As Double
-    Public GastosSinComprobar As Double
-    Public PagoIndebido As Double
-    Public Anticipos As Double
-    Public AdeudoSindical As Double
-    Public AdeudoPatron As Double
-    Public ViaticosDeduccion As Double
-    Public AportacionCajaAhorro As Double
-    Public AportacionFondoAhorro As Double
-    Public AportacionDespensa As Double
-    Public AportacionComedor As Double
-    Public AportacionVoluntariaSar As Double
-    Public AportacionVoluntariaInfonavit As Double
-    Public FondoRetiro As Double
-    Public PrimaSeguroVida As Double
-    Public PrimaSeguroAuto As Double
-    Public PrimaGastosMedicos As Double
-    Public DevolucionIsr As Double
-    Public AjusteIsr As Double
-    Public AdeudoCuotaImss As Double
-    Public OtrasDeducciones As Double
-    Public IncapacidadPorMaternidad As Double
-    Public IncapacidadPorAccidente As Double
-    Public FolioXml As String
+    Private ImpuestoMes As Double
+    Private IsrIndemnizacion As Double
+    Private SubsidioAplicado As Double
+    Private SubsidioEfectivo As Double
+    Private CuotaImss As Double
+    Private Faltas As Double
+    Private Permisos As Double
+    Private IncapacidadPorEnfermedad As Double
+    Private DiasHorasNoTrabajadas As Double
+    Private CuotaSindical As Double
+    Private PensionAlimenticia As Double
+    Private AdeudoFonacot As Double
+    Private CreditoInfonavit As Double
+    Private AdeudoCajaAhorro As Double
+    Private AdeudoFondoAhorro As Double
+    Private GastosSinComprobar As Double
+    Private PagoIndebido As Double
+    Private Anticipos As Double
+    Private AdeudoSindical As Double
+    Private AdeudoPatron As Double
+    Private ViaticosDeduccion As Double
+    Private AportacionCajaAhorro As Double
+    Private AportacionFondoAhorro As Double
+    Private AportacionDespensa As Double
+    Private AportacionComedor As Double
+    Private AportacionVoluntariaSar As Double
+    Private AportacionVoluntariaInfonavit As Double
+    Private FondoRetiro As Double
+    Private PrimaSeguroVida As Double
+    Private PrimaSeguroAuto As Double
+    Private PrimaGastosMedicos As Double
+    Private DevolucionIsr As Double
+    Private AjusteIsr As Double
+    Private AdeudoCuotaImss As Double
+    Private OtrasDeducciones As Double
+    Private IncapacidadPorMaternidad As Double
+    Private IncapacidadPorAccidente As Double
+    Private FolioXml As String
 
     Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private Periodo As Integer = 0
+    Private MesAcumula As Integer = 0
+    Private FinMesBit As Boolean = False
     Private dtEmpleados As DataTable
 
     Const URI_SAT = "http://www.sat.gob.mx/cfd/4"
@@ -398,6 +402,7 @@ Public Class GeneracionDeNominaMensualNormal
 
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 4 'Mensual
         cPeriodo.ExtraordinarioBit = 0
@@ -502,10 +507,100 @@ Public Class GeneracionDeNominaMensualNormal
                     IMSS = Math.Round(IMSS, 6)
                 End If
 
-                'Impuesto = Impuesto * Dias
                 Impuesto = Math.Round(Impuesto, 6)
 
                 GuardarRegistro(oDataRow("NoEmpleado"), oDataRow("IdContrato"), Math.Round(ImporteDiario, 6), oDataRow("ClaveRegimenContratacion"), _Nominaid)
+
+                If FinMesBit = True Then
+
+                    'CÁLCULO DEL IMPUESTO/SUBSIDIO MENSUAL (OBJETIVO A LLEGAR) CUANDO ES FIN DE MES
+                    Call CalcularImpuestoFinMes(oDataRow("NoEmpleado"))
+                    Call CalcularSubsidioFinMes(oDataRow("NoEmpleado"))
+
+                    'ACUMULADOS DE LO QUE SE LLEVA EN EL MES (incluyendo el periodo vigente)
+                    Dim SubsidioCausado As Double = 0
+                    Dim ISRRetenido As Double = 0
+                    Dim SubsidioCausadoMayorAlQueLeCorrespondia As Double = 0
+                    Dim ISRAjusteMensual As Double = 0
+                    Dim ISRAjustadoPorSubsidio As Double = 0
+
+                    Dim dts As New DataTable()
+                    Dim cNomina As New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
+                    cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 4 'Mensual
+                    cNomina.MesAcumula = MesAcumula
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Tipo = "N"
+                    dts = cNomina.ConsultarSubsidioCausadoMesEmpleado()
+
+                    'Acumulado del mes (incluyendo periodo vigente) del Subsidio Causado
+                    If dts.Rows.Count > 0 Then
+                        SubsidioCausado = dts.Rows(0).Item("Importe")
+                    End If
+
+                    dts = New DataTable()
+                    cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = cmbCliente.SelectedValue
+                    cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 4 'Mensual
+                    cNomina.MesAcumula = MesAcumula
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Tipo = "N"
+                    dts = cNomina.ConsultarISRRetenidoMesEmpleado()
+
+                    'Acumulado del mes (incluyendo periodo vigente) del ISR retenido
+                    If dts.Rows.Count > 0 Then
+                        ISRRetenido = dts.Rows(0).Item("Importe")
+                    End If
+
+                    'CÁLCULO DE AJUSTES CUANDO ES FIN DE MES
+                    'Subsidio causado mayor al que le correspondía
+                    If SubsidioCausado > SubsidioMes Then
+                        SubsidioCausadoMayorAlQueLeCorrespondia = SubsidioCausado - SubsidioMes
+                    End If
+
+                    'ISR AJUSTADO POR SUBSIDIO
+                    If SubsidioCausadoMayorAlQueLeCorrespondia > 0 Then
+
+                        Dim cPeriodo As New Entities.Periodo()
+                        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+                        cPeriodo.ConsultarPeriodoID()
+
+                        cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = cmbCliente.SelectedValue
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 4 'Mensual
+                        cNomina.Periodo = Periodo
+                        cNomina.NoEmpleado = oDataRow("NoEmpleado")
+                        cNomina.CvoConcepto = 7
+                        cNomina.IdContrato = oDataRow("IdContrato")
+                        cNomina.TipoConcepto = "D"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = SubsidioCausadoMayorAlQueLeCorrespondia
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = SubsidioCausadoMayorAlQueLeCorrespondia
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.IdNomina = _Nominaid
+                        cNomina.GuadarNominaPeriodo()
+
+                        Call QuitarConcepto(54, oDataRow("NoEmpleado")) 'SUBSIDIO
+
+                    End If
+                End If
 
                 ''''''// Consultar SI tiene desuento de INFONAVIT //'''''''
                 Dim Valor As Decimal
@@ -638,6 +733,21 @@ Public Class GeneracionDeNominaMensualNormal
             Response.Redirect("~/GeneracionDeNominaMensualNormal.aspx?id=" & cmbPeriodo.SelectedValue.ToString, False)
 
         End If
+    End Sub
+    Private Sub QuitarConcepto(ByVal NumeroConcepto As Int32, ByVal NoEmpleado As Int32)
+
+        Call CargarVariablesGenerales()
+
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 4 'Mensual
+        cNomina.Periodo = periodoID.Value
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.CvoConcepto = NumeroConcepto
+        cNomina.TipoConcepto = "D"
+        cNomina.EliminaConceptoEmpleado()
     End Sub
     Private Sub AgregaConcepto(ByVal ImporteIncidencia, ByVal UnidadIncidencia, ByVal CuotaPeriodo, ByVal ImporteDiario, ByVal NoEmpleado, ByVal CvoConcepto, ByVal IdContrato, ByVal IdNomina)
         Try
@@ -1561,31 +1671,151 @@ Public Class GeneracionDeNominaMensualNormal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
+    'Private Sub CalcularImpuesto()
+    '    Try
+    '        Impuesto = 0
+    '        Dim dt As New DataTable()
+    '        Dim TarifaMensual As New TarifaMensual()
+    '        TarifaMensual.ImporteMensual = ImportePeriodo
+    '        dt = TarifaMensual.ConsultarTarifaMensual()
+
+    '        If dt.Rows.Count > 0 Then
+    '            Impuesto = ((ImportePeriodo - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+    '        End If
+
+    '    Catch oExcep As Exception
+    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+    '    End Try
+    'End Sub
     Private Sub CalcularImpuesto()
+
+        Call CargarVariablesGenerales()
+
+        Dim ImporteMensual As Decimal = 0
+        ImporteMensual = ImporteDiario * FactorDiarioPromedio
+
         Try
             Impuesto = 0
             Dim dt As New DataTable()
             Dim TarifaMensual As New TarifaMensual()
-            TarifaMensual.ImporteMensual = ImportePeriodo
+            TarifaMensual.ImporteMensual = ImporteMensual
             dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
-                Impuesto = ((ImportePeriodo - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = ((ImporteMensual - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                Impuesto = (Impuesto / FactorDiarioPromedio) * Dias
             End If
-
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
+    Private Sub CalcularImpuestoFinMes(ByVal NoEmpleado As Integer)
+
+        Call CargarVariablesGenerales()
+
+        Dim BaseGravadaMes As Decimal = 0
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 4 'Mensual
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            ImpuestoMes = 0
+            dt = New DataTable()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = BaseGravadaMes
+            dt = TarifaMensual.ConsultarTarifaMensual()
+
+            If dt.Rows.Count > 0 Then
+                ImpuestoMes = ((BaseGravadaMes - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    'Private Sub CalcularSubsidio()
+    '    Try
+    '        Subsidio = 0
+    '        Dim dt As New DataTable()
+    '        Dim TablaSubsidioDiario As New TablaSubsidioDiario()
+    '        TablaSubsidioDiario.Importe = ImportePeriodo
+    '        dt = TablaSubsidioDiario.ConsultarSubsidioDiario()
+    '        If dt.Rows.Count > 0 Then
+    '            Subsidio = dt.Rows(0).Item("Subsidio")
+    '        End If
+    '    Catch oExcep As Exception
+    '        rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+    '    End Try
+    'End Sub
     Private Sub CalcularSubsidio()
+
+        Call CargarVariablesGenerales()
+
+        Dim DiasTarifaSubsidio As Decimal = 30
+        Dim BaseGravadaPeriodo As Decimal = 0
+        Dim BaseCalculoSubsidio As Decimal = 0
+
+        BaseGravadaPeriodo = ImporteDiario * DiasTarifaSubsidio
+        BaseCalculoSubsidio = (BaseGravadaPeriodo / DiasTarifaSubsidio) * FactorDiarioPromedio
+
         Try
             Subsidio = 0
             Dim dt As New DataTable()
-            Dim TablaSubsidioDiario As New TablaSubsidioDiario()
-            TablaSubsidioDiario.Importe = ImportePeriodo
-            dt = TablaSubsidioDiario.ConsultarSubsidioDiario()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseCalculoSubsidio
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
+
             If dt.Rows.Count > 0 Then
                 Subsidio = dt.Rows(0).Item("Subsidio")
+                SubsidioAplicado = (Subsidio / FactorDiarioPromedio) * DiasTarifaSubsidio
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub CalcularSubsidioFinMes(ByVal NoEmpleado As Integer)
+
+        Call CargarVariablesGenerales()
+
+        Dim BaseGravadaMes As Decimal = 0
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.NoEmpleado = NoEmpleado
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 4 'Mensual
+        cNomina.MesAcumula = MesAcumula
+        cNomina.TipoConcepto = "P"
+        cNomina.Tipo = "N"
+        dt = cNomina.ConsultarPercepcionesGravadasMesEmpleado()
+
+        If dt.Rows.Count > 0 Then
+            BaseGravadaMes = dt.Rows(0).Item("Importe")
+        End If
+
+        Try
+            SubsidioMes = 0
+            dt = New DataTable()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseGravadaMes
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
+
+            If dt.Rows.Count > 0 Then
+                SubsidioMes = dt.Rows(0).Item("Subsidio")
             End If
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -1698,27 +1928,38 @@ Public Class GeneracionDeNominaMensualNormal
             cNomina.GuadarNominaPeriodo()
 
             SubsidioAplicado = 0
-            BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+            Call CalcularSubsidio()
+            SubsidioAplicado = Math.Round(SubsidioAplicado, 6)
 
-            If CuotaDiaria <= BaseGravableMensualSubsidioDiario Then
-                UMAMensual = UMA * FactorDiarioPromedio
-                SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
-                SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
-
-                If (Impuesto > 0 And (Impuesto < (SubsidioDiario * Dias))) Then
-                    SubsidioAplicado = Impuesto
-                Else
-                    SubsidioAplicado = (SubsidioDiario * Dias)
-                End If
-
-                If Impuesto > SubsidioAplicado Then
-                    Impuesto = Impuesto - SubsidioAplicado
-                ElseIf Impuesto < SubsidioAplicado Then
-                    SubsidioAplicado = SubsidioAplicado - Impuesto
-                    Impuesto = 0
-                End If
-
+            If Impuesto > SubsidioAplicado Then
+                Impuesto = Impuesto - SubsidioAplicado
+            ElseIf Impuesto < SubsidioAplicado Then
+                SubsidioAplicado = SubsidioAplicado - Impuesto
+                Impuesto = 0
             End If
+
+            'SubsidioAplicado = 0
+            'BaseGravableMensualSubsidioDiario = (BaseGravableMensualSubsidio / FactorDiarioPromedio)
+
+            'If CuotaDiaria <= BaseGravableMensualSubsidioDiario Then
+            '    UMAMensual = UMA * FactorDiarioPromedio
+            '    SubsidioMensual = UMAMensual * (FactorSubsidio / 100)
+            '    SubsidioDiario = SubsidioMensual / FactorDiarioPromedio
+
+            '    If (Impuesto > 0 And (Impuesto < (SubsidioDiario * Dias))) Then
+            '        SubsidioAplicado = Impuesto
+            '    Else
+            '        SubsidioAplicado = (SubsidioDiario * Dias)
+            '    End If
+
+            '    If Impuesto > SubsidioAplicado Then
+            '        Impuesto = Impuesto - SubsidioAplicado
+            '    ElseIf Impuesto < SubsidioAplicado Then
+            '        SubsidioAplicado = SubsidioAplicado - Impuesto
+            '        Impuesto = 0
+            '    End If
+
+            'End If
 
             If Impuesto > 0 Then
                 cNomina = New Nomina()
@@ -1813,6 +2054,8 @@ Public Class GeneracionDeNominaMensualNormal
     Private Sub cmbCliente_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbCliente.SelectedIndexChanged
 
         Call CargarVariablesGenerales()
+
+        Call CargaPeriodos(cmbPeriodicidad.SelectedValue)
 
         If cmbPeriodo.SelectedValue > 0 Then
             lblTitulo.Text = "Periodo " & cmbPeriodo.SelectedItem.Text
@@ -1913,30 +2156,25 @@ Public Class GeneracionDeNominaMensualNormal
 
             cNomina = Nothing
             If dt.Rows.Count > 0 And dt_Empleado.Rows.Count > 0 Then
+
                 panelDatos.Visible = True
                 btnExportar.Enabled = True
                 btnImportar.Enabled = True
 
+                Me.lblNoNomina.Text = Session("Folio").ToString
                 Me.lblEjercicio.Text = dt.Rows(0)("Ejercicio").ToString()
                 Me.lblRazonSocial.Text = dt.Rows(0)("Cliente").ToString()
                 Me.lblNoPeriodo.Text = dt.Rows(0)("Periodo").ToString()
-                Me.lblTipoNomina.Text = "Mensual"
+                Me.lblTipoNomina.Text = "Semanal"
                 Me.lblFechaInicial.Text = dt.Rows(0)("FechaInicial").ToString()
                 Me.lblFechaFinal.Text = dt.Rows(0)("FechaFinal").ToString()
                 Me.lblDias.Text = dt.Rows(0)("Dias").ToString()
 
-                'For Each oDataRow In dt.Rows
-                '    Me.lblEjercicio.Text = oDataRow("Ejercicio")
-                '    Me.lblRazonSocial.Text = oDataRow("Cliente")
-                '    Me.lblNoPeriodo.Text = oDataRow("Periodo")
-                '    Me.lblTipoNomina.Text = "Mensual"
-                '    Me.lblFechaInicial.Text = oDataRow("FechaInicial")
-                '    Me.lblFechaFinal.Text = oDataRow("FechaFinal")
-                '    Me.lblDias.Text = oDataRow("Dias")
-                'Next
                 Call CargarGridEmpleadosMensual()
+
             Else
                 panelDatos.Visible = False
+                Me.lblNoNomina.Text = ""
                 Me.lblEjercicio.Text = ""
                 Me.lblRazonSocial.Text = ""
                 Me.lblNoPeriodo.Text = ""
@@ -1970,6 +2208,9 @@ Public Class GeneracionDeNominaMensualNormal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                UMI = oDataRow("UMI")
+                FinMesBit = CBool(oDataRow("FinMesBit"))
+                MesAcumula = oDataRow("MesAcumula")
             Next
         End If
     End Sub
@@ -5768,6 +6009,7 @@ Public Class GeneracionDeNominaMensualNormal
         Call CargarVariablesGenerales()
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = IdTipoNomina
         cPeriodo.ExtraordinarioBit = False

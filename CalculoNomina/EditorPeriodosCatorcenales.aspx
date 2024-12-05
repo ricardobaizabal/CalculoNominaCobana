@@ -7,7 +7,7 @@
     <div class="ibox-content">
         <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
         <br />
-        <h3 class="m-t-none m-b">Edición Periodo Catorcenal</h3>
+        <h1 class="m-t-none m-b">Edición Periodo Catorcenal</h1>
         <hr class="demo-separator" />
         <br />
         <table style="width: 100%" border="0">

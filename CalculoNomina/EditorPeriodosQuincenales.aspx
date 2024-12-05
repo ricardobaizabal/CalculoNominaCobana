@@ -7,11 +7,35 @@
     <div class="ibox-content">
         <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
         <br />
-        <h3 class="m-t-none m-b">Edición Periodo Quincenal</h3>
+        <h1 class="m-t-none m-b">Edición Periodo Quincenal</h1>
         <hr class="demo-separator" />
         <br />
         <table style="width: 100%" border="0">
-            <tr valign="top">
+            <tr>
+                <td style="width: 15%;">
+                    <label class="control-label">No. Periodo</label>
+                </td>
+                <td style="width: 20%;">
+                    <asp:Label ID="lblNoPeriodo" runat="server" CssClass="item" Text=""></asp:Label>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="3">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width: 15%;">
+                    <label class="control-label">No. Periodo</label>
+                </td>
+                <td style="width: 20%;">
+                    <asp:Label ID="lblCliente" runat="server" CssClass="item" Text=""></asp:Label>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="3">&nbsp;</td>
+            </tr>
+            <tr>
                 <td style="width: 25%;">
                     <label class="control-label">Fecha Inicial</label>
                 </td>
@@ -46,6 +70,45 @@
                 </td>
                 <td>&nbsp;<asp:RequiredFieldValidator ID="valFechapago" runat="server" ControlToValidate="calfechaPago" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True" ValidationGroup="vgGuardar"></asp:RequiredFieldValidator>
                 </td>
+            </tr>
+            <tr>
+                <td colspan="3">&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width: 15%;">
+                    <label class="control-label">Inicio de mes</label>
+                </td>
+                <td style="width: 20%;">
+                    <asp:CheckBox ID="chkInicioMesBit" runat="server" />
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width: 15%;">
+                    <label class="control-label">Fin de mes</label>
+                </td>
+                <td style="width: 20%;">
+                    <asp:CheckBox ID="chkFinMesBit" runat="server" />
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width: 15%;">
+                    <label class="control-label">Inicio de ejercicio</label>
+                </td>
+                <td style="width: 20%;">
+                    <asp:CheckBox ID="chkInicioEjercicioBit" runat="server" />
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td style="width: 15%;">
+                    <label class="control-label">Fin de ejercicio</label>
+                </td>
+                <td style="width: 20%;">
+                    <asp:CheckBox ID="chkFinEjercicioBit" runat="server" />
+                </td>
+                <td>&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="3">&nbsp;</td>

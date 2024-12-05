@@ -11,13 +11,13 @@
             }
         }
         function OpenWindow(empresaid, ejercicioid, periodoid) {
-            var oWnd = radopen("RptNominaSemanal.aspx?e=" + empresaid + "&ej=" + ejercicioid + "&p=" + periodoid, "wndReporte");
+            var oWnd = radopen("RptNominaMensual.aspx?e=" + empresaid + "&ej=" + ejercicioid + "&p=" + periodoid, "wndReporte");
             oWnd.set_modal(true);
             oWnd.set_centerIfModal(true);
             oWnd.setSize(1024, 768);
             oWnd.set_behaviors(Telerik.Web.UI.WindowBehaviors.Close);
             oWnd.set_autoSize(false);
-            oWnd.set_title("Reporte Nómina Semanal")
+            oWnd.set_title("Reporte Nómina Mensual")
             oWnd.center();
             oWnd.show();
         }

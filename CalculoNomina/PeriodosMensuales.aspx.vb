@@ -6,6 +6,12 @@ Public Class PeriodosMensuales
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
+
+            Dim objCat As New DataControl()
+            Dim cConcepto As New Entities.Catalogos
+            objCat.CatalogoRad(cmbCliente, cConcepto.ConsultarMisClientes, True, False)
+            objCat = Nothing
+
             Call CargarVariablesGenerales()
             registroId.Value = 0
         End If
@@ -37,12 +43,10 @@ Public Class PeriodosMensuales
                 rwConfirmEliminaPeriodo.RadConfirm("¿Está seguro de eliminar el periodo mensual de la base de datos?", "confirmCallbackFn", 330, 180, Nothing, "Confirmar")
         End Select
     End Sub
-    Private Sub GridPeriodosMensuales_ItemDataBound(sender As Object, e As GridItemEventArgs) Handles GridPeriodosMensuales.ItemDataBound
-
-    End Sub
     Private Sub GridPeriodosMensuales_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridPeriodosMensuales.NeedDataSource
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEmpresa = Session("IdEmpresa")
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdTipoNomina = 4 'Mensual
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosMensuales.DataSource = cPeriodo.ConsultarPeriodo
@@ -55,9 +59,20 @@ Public Class PeriodosMensuales
 
         cPeriodo = New Entities.Periodo
         cPeriodo.IdEmpresa = Session("IdEmpresa")
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdTipoNomina = 4 'Mensual
         cPeriodo.IdEjercicio = ejercicioId.Value
         GridPeriodosMensuales.DataSource = cPeriodo.ConsultarPeriodo()
+        GridPeriodosMensuales.DataBind()
+        cPeriodo = Nothing
+    End Sub
+    Private Sub btnConsultar_Click(sender As Object, e As EventArgs) Handles btnConsultar.Click
+        Dim cPeriodo As New Entities.Periodo
+        cPeriodo.IdEmpresa = Session("IdEmpresa")
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
+        cPeriodo.IdTipoNomina = 4 'Mensual
+        cPeriodo.IdEjercicio = ejercicioId.Value
+        GridPeriodosMensuales.DataSource = cPeriodo.ConsultarPeriodo
         GridPeriodosMensuales.DataBind()
         cPeriodo = Nothing
     End Sub

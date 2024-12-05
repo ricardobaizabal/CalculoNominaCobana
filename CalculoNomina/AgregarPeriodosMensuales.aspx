@@ -2,15 +2,43 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <link href="styles.css" rel="stylesheet" />
+    <style type="text/css">
+        th, td {
+            padding: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        function clearFilters(sender, args) {
+            if ($("#ctl00_ContentPlaceHolder1_cmbCliente_Input").val() != "") {
+                var obj = jQuery.parseJSON($("#ctl00_ContentPlaceHolder1_cmbCliente_Input").val());
+                if (obj.text === "") {
+                    sender.set_cancel(true);
+                }
+            } else {
+                eventArgs.set_cancel(true);
+            }
+        }
+    </script>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="ibox-content">
         <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
         <br />
-        <h3 class="m-t-none m-b">Generación de Periodos Mensuales</h3>
+        <h1 class="m-t-none m-b">Generación de Periodos Mensuales</h1>
         <hr class="demo-separator" />
         <br />
         <table style="width: 100%" border="0">
+            <tr>
+                <td style="width: 25%;">
+                    <label class="control-label">Cliente</label>
+                </td>
+                <td style="width: 25%;">
+                    <telerik:RadComboBox ID="cmbCliente" runat="server" Filter="StartsWith" OnClientFocus="clearFilters" Width="500px" AutoPostBack="true"></telerik:RadComboBox>
+                </td>
+                <td>
+                    <asp:RequiredFieldValidator ID="valCliente" runat="server" ControlToValidate="cmbCliente" ValidationGroup="vPeriodo" InitialValue="--Seleccione--" CssClass="item" ForeColor="Red" ErrorMessage="* Requerido" SetFocusOnError="true"></asp:RequiredFieldValidator>
+                </td>
+            </tr>
             <tr valign="top">
                 <td style="width: 25%;">
                     <label class="control-label">Fecha inicial</label>
@@ -18,11 +46,8 @@
                 <td style="width: 20%;">
                     <telerik:RadDatePicker ID="calFechaInicio" CultureInfo="Español (México)" DateInput-DateFormat="dd/MM/yyyy" Width="100%" runat="server"></telerik:RadDatePicker>
                 </td>
-                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarFechaInicio" runat="server" ControlToValidate="calFechaInicio" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarFechaInicio" runat="server" ControlToValidate="calFechaInicio" ValidationGroup="vPeriodo" CssClass="Text" ErrorMessage="* Requerido" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="3">&nbsp;</td>
             </tr>
             <tr valign="top">
                 <td style="width: 25%;">
@@ -37,7 +62,7 @@
                         </Items>
                     </telerik:RadComboBox>
                 </td>
-                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarGeneraPeriodos" runat="server" ControlToValidate="cmbGeneraPeriodos" InitialValue="0" CssClass="Text" ErrorMessage="*" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
+                <td>&nbsp;<asp:RequiredFieldValidator ID="ValidarGeneraPeriodos" runat="server" ControlToValidate="cmbGeneraPeriodos" ValidationGroup="vPeriodo" InitialValue="--Seleccione--" CssClass="Text" ErrorMessage="* Requerido" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
                 </td>
             </tr>
             <tr>
@@ -50,7 +75,7 @@
                 <td align="right">
                     <telerik:RadButton ID="btnCancel" runat="server" Text="Cancelar" Width="90px" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
                     &nbsp;
-                    <telerik:RadButton ID="btnSave" RenderMode="Lightweight" runat="server" Width="90px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Guadar"></telerik:RadButton>
+                    <telerik:RadButton ID="btnSave" RenderMode="Lightweight" runat="server" ValidationGroup="vPeriodo" Width="90px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Guadar"></telerik:RadButton>
                 </td>
                 <td>&nbsp;</td>
             </tr>
