@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class RptNominaCatorcenal
+Partial Public Class RptNominaMensual
 
     '''<summary>
     '''Control form1.

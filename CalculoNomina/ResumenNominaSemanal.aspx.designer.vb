@@ -104,24 +104,6 @@ Partial Public Class ResumenNominaSemanal
     Protected WithEvents btnBuscarNominas As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control RadProgressManager1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RadProgressManager1 As Global.Telerik.Web.UI.RadProgressManager
-
-    '''<summary>
-    '''Control RadProgressArea1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RadProgressArea1 As Global.Telerik.Web.UI.RadProgressArea
-
-    '''<summary>
     '''Control btnGenerarPDF.
     '''</summary>
     '''<remarks>

@@ -17,16 +17,13 @@ Imports System.Linq
 Imports System.Drawing
 Imports Telerik.Charting
 
-
-
 Public Class ResumenNominaSemanal
     Inherits System.Web.UI.Page
-    Dim ObjData As New DataControl()
+
+    Private ObjData As New DataControl()
+    Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private dtEmpleados As DataTable
-
-
-    Public FolioXml As String
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
@@ -58,56 +55,33 @@ Public Class ResumenNominaSemanal
             Session("Folio") = Nothing
         End If
     End Sub
-
-
-    ' Al momento de seleccionar al cliente se obtiene las nominas que ha generado
     Protected Sub cmbCliente_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs)
-        ' Obtener el cliente seleccionado
-        Dim clienteSeleccionado As Integer = cmbCliente.SelectedValue
 
-        ' Filtrar el catálogo de folios de nómina según el cliente seleccionado
-        Dim objCat As New DataControl(1)
-        Dim cConcepto As New Entities.Catalogos
-
-        ' Limpiar el combo antes de agregar los nuevos elementos
-        'cmbFolioNomina.Items.Clear()
-        cmbPeriodo.Items.Clear()
-
-
-        ' Agregar el ítem predeterminado "Seleccionar Folio"
         Dim defaultItem As New Telerik.Web.UI.RadComboBoxItem("--Seleccione--", "")
-        'cmbFolioNomina.Items.Add(defaultItem)
-
-        ' Cargar los folios filtrados por el cliente seleccionado y nomina Semanal que su valor es 1
-        'objCat.CatalogoRad(cmbFolioNomina, cConcepto.ConsultarFolioNomina(clienteSeleccionado, 1), True, False)
-
-        ' Opcional: Recargar o actualizar otros controles según sea necesario
-        'CargarGridNominas()
-
+        cmbPeriodo.Items.Clear()
         cmbPeriodo.Items.Add(defaultItem)
 
-
-
         Call CargarVariablesGenerales()
+
+        Dim ObjData As New DataControl()
+        Dim cConcepto As New Entities.Catalogos
         Dim cPeriodo As New Entities.Periodo
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 1
         cPeriodo.ExtraordinarioBit = False
         cPeriodo.cmd = 1
-        cPeriodo.IdEmpresa = clienteSeleccionado
+        cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodosResumen(), True, False)
         ObjData = Nothing
 
-
     End Sub
-
-
-
     ' Declarar la tabla temporal en la clase
     Private dtTempNominas As DataTable
-
     Private Sub CargarGridNominas()
+
         Call CargarVariablesGenerales()
+
         Dim periodicidad, cliente, periodo As Integer
 
         If cmbPeriodicidad.SelectedValue.ToString() = "" Then
@@ -128,11 +102,8 @@ Public Class ResumenNominaSemanal
             periodo = cmbPeriodo.SelectedValue
         End If
 
-
         ' Obtener el periodo seleccionado (nombre)
         Dim periodoSeleccionado As String = cmbPeriodo.SelectedItem.Text
-
-
 
         ' Crear la tabla temporal
         dtTempNominas = New DataTable()
@@ -142,8 +113,8 @@ Public Class ResumenNominaSemanal
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = periodicidad
         cNomina.Periodo = periodo
-        cNomina.IdEmpresa = cliente
-
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cliente
         ' Obtener los datos de nómina
         dtTempNominas = cNomina.ConsultarResumenNominas()
 
@@ -170,7 +141,6 @@ Public Class ResumenNominaSemanal
             dtTempNominas.Rows.Add(totalRow)
         End If
 
-
         ' Asignar los datos al Grid
         GridNominas.DataSource = dtTempNominas
         GridNominas.DataBind()
@@ -182,9 +152,6 @@ Public Class ResumenNominaSemanal
             btnGenerarPDF.Enabled = False ' Deshabilitar el botón si no hay filas
         End If
     End Sub
-
-
-
     Private Sub GridNominas_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles GridNominas.NeedDataSource
         'Private Sub GridNominas_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs)
         Call CargarVariablesGenerales()
@@ -232,7 +199,6 @@ Public Class ResumenNominaSemanal
         End If
 
     End Sub
-
     Private Sub GridNominas_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles GridNominas.ItemCommand
         Select Case e.CommandName
             Case "cmdEdit"
@@ -241,66 +207,29 @@ Public Class ResumenNominaSemanal
                 Response.Redirect("GeneracionDeNominaNormal.aspx")
         End Select
     End Sub
-
-
     Private Sub btnBuscarNominas_Click(sender As Object, e As EventArgs) Handles btnBuscarNominas.Click
         CargarGridNominas()
     End Sub
-
-
     Private Sub CargarVariablesGenerales()
 
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
+                IdEmpresa = oDataRow("IdEmpresa")
                 IdEjercicio = oDataRow("IdEjercicio")
             Next
         End If
     End Sub
-
-
-
-    'Private Sub CargarCliente()
-    '    Dim conn As New SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-    '    Dim cmd As New SqlCommand("EXEC pCliente @cmd=3, @clienteId='" & Session("clienteid") & "'", conn)
-
-    '    conn.Open()
-
-    '    Dim rs As SqlDataReader
-    '    rs = cmd.ExecuteReader()
-
-    '    If rs.Read Then
-    '        Session("Cliente") = rs("razonsocial")
-    '        Session("representante_legal") = rs("representante_legal")
-    '        txtSocialReason.Text = rs("razonsocial")
-    '        estadoid.SelectedValue = rs("fac_municipio")
-    '        estadoid.SelectedValue = rs("fac_estadoid")
-
-    '    End If
-
-    '    conn.Close()
-    '    conn.Dispose()
-
-    'End Sub
-
-
-
-    '---------------------------------------------------------
-    '----------------- GENERAR EL PDF ------------------------
-    '---------------------------------------------------------
-
-
     Protected Sub btnGenerarPDF_Click(sender As Object, e As EventArgs) Handles btnGenerarPDF.Click
         CargarGridNominas() ' Asegúrate de que los datos se carguen primero
         GenerarPDF()
     End Sub
-
-
     Private Sub GenerarPDF()
 
 
@@ -571,6 +500,26 @@ Public Class ResumenNominaSemanal
             Response.End()
         End If
     End Sub
+    Private Sub cmbPeriodicidad_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles cmbPeriodicidad.SelectedIndexChanged
 
+        Dim defaultItem As New Telerik.Web.UI.RadComboBoxItem("--Seleccione--", "")
+        cmbPeriodo.Items.Clear()
+        cmbPeriodo.Items.Add(defaultItem)
+
+        Call CargarVariablesGenerales()
+
+        Dim ObjData As New DataControl()
+        Dim cConcepto As New Entities.Catalogos
+        Dim cPeriodo As New Entities.Periodo
+        cPeriodo.IdEjercicio = IdEjercicio
+        cPeriodo.IdTipoNomina = 1
+        cPeriodo.ExtraordinarioBit = False
+        cPeriodo.cmd = 1
+        cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
+        ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodosResumen(), True, False)
+        ObjData = Nothing
+
+    End Sub
 
 End Class

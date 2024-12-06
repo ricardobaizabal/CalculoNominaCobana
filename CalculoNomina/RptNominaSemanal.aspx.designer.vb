@@ -203,112 +203,22 @@ Partial Public Class RptNominaSemanal
     Protected WithEvents lblFechaFinal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control lblPercepciones.
+    '''Control btnGenerarPDF.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents lblPercepciones As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents btnGenerarPDF As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control grdPercepciones.
+    '''Control GridNominas.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents grdPercepciones As Global.Telerik.Web.UI.RadGrid
-
-    '''<summary>
-    '''Control lblTotalGravado.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblTotalGravado As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblTotalExento.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblTotalExento As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblDeducciones.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblDeducciones As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control grdDeducciones.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents grdDeducciones As Global.Telerik.Web.UI.RadGrid
-
-    '''<summary>
-    '''Control lblTotalNeto.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblTotalNeto As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control gridReporte.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents gridReporte As Global.Telerik.Web.UI.RadGrid
-
-    '''<summary>
-    '''Control lblPercepcionesTotales.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblPercepcionesTotales As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control lblDeduccionesTotales.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents lblDeduccionesTotales As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''Control RadListView1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RadListView1 As Global.Telerik.Web.UI.RadListView
-
-    '''<summary>
-    '''Control btnImprimir.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents btnImprimir As Global.Telerik.Web.UI.RadButton
+    Protected WithEvents GridNominas As Global.Telerik.Web.UI.RadGrid
 
     '''<summary>
     '''Control RadAjaxLoadingPanel1.

@@ -171,11 +171,11 @@ Partial Public Class Periodo
     Public Function ConsultarPeriodosResumen() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", cmd))
+        p.Add(New SqlParameter("@IdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@IdCliente", IdCliente))
         p.Add(New SqlParameter("@IdEjercicio", IdEjercicio))
         p.Add(New SqlParameter("@IdTipoNomina", IdTipoNomina))
         p.Add(New SqlParameter("@ExtraordinarioBit", ExtraordinarioBit))
-        p.Add(New SqlParameter("@IdEmpresa", IdEmpresa))
-
         dt = db.ExecuteSP("pConsultarPeriodosResumen", p)
         Return dt
     End Function

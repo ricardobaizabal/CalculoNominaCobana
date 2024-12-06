@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="RptNominaSemanal.aspx.vb" Inherits="CalculoNomina.RptNominaSemanal" %>
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="RptNominaMensual.aspx.vb" Inherits="CalculoNomina.RptNominaMensual" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 

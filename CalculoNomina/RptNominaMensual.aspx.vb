@@ -5,7 +5,8 @@ Imports Entities
 Imports System.IO
 Imports iTextSharp.text
 Imports iTextSharp.text.pdf
-Public Class RptNominaCatorcenal
+
+Public Class RptNominaMensual
     Inherits System.Web.UI.Page
 
     Private dtPercepciones As New DataTable
@@ -75,7 +76,7 @@ Public Class RptNominaCatorcenal
                     nomina_name = " EXTRAORDINARIA "
                 Else
                     If IdPeriodicidad.Value = "1" Then
-                        nomina_name = " SEMANAL "
+                        nomina_name = " Mensual "
                     ElseIf IdPeriodicidad.Value = "2" Then
                         nomina_name = " CATORCENAL "
                     ElseIf IdPeriodicidad.Value = "3" Then
@@ -90,7 +91,7 @@ Public Class RptNominaCatorcenal
                 cNomina.IdEmpresa = IdEmpresa.Value
                 cNomina.IdCliente = IdCliente.Value
                 cNomina.Ejercicio = IdEjercicio.Value
-                cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+                cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
                 cNomina.Periodo = IdPeriodo.Value
                 cNomina.EsEspecial = False
                 dt = cNomina.ConsultarDatosGeneralesNomina()
@@ -103,7 +104,7 @@ Public Class RptNominaCatorcenal
                     Me.lblEjercicio.Text = dt.Rows(0)("Ejercicio").ToString()
                     Me.lblRazonSocial.Text = dt.Rows(0)("Cliente").ToString()
                     Me.lblNoPeriodo.Text = dt.Rows(0)("Periodo").ToString()
-                    Me.lblTipoNomina.Text = "Catorcenal"
+                    Me.lblTipoNomina.Text = "Mensual"
                     Me.lblFechaInicial.Text = dt.Rows(0)("FechaInicial").ToString()
                     Me.lblFechaFinal.Text = dt.Rows(0)("FechaFinal").ToString()
                     Me.lblDias.Text = dt.Rows(0)("Dias").ToString()
@@ -136,16 +137,45 @@ Public Class RptNominaCatorcenal
     'End Sub
     Private Sub CargarGridNominas()
 
+        'Call CargarVariablesGenerales()
+
+        ' Crear la tabla temporal
         dtTempNominas = New DataTable()
 
         Dim cNomina As New Nomina()
         cNomina.cmd = 1
         cNomina.Ejercicio = IdEjercicio.Value
-        cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+        cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
         cNomina.Periodo = IdPeriodo.Value
         cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.IdCliente = IdCliente.Value
+        ' Obtener los datos de nómina
         dtTempNominas = cNomina.ConsultarResumenNominas()
+
+        'If dtTempNominas.Rows.Count <> 0 Then
+        '    ' Calcular la suma de las columnas, ignorando "Nombre" y "Clave"
+        '    Dim totalRow As DataRow = dtTempNominas.NewRow()
+        '    For Each col As DataColumn In dtTempNominas.Columns
+        '        If col.ColumnName <> "Nombre" And col.ColumnName <> "Clave" Then
+        '            Dim total As Decimal = 0
+        '            For Each row As DataRow In dtTempNominas.Rows
+        '                Dim cellValue As Decimal
+        '                ' Manejar valores null como 0.00
+        '                If Not IsDBNull(row(col)) Then
+        '                    cellValue = Convert.ToDecimal(row(col))
+        '                Else
+        '                    cellValue = 0.00D
+        '                End If
+        '                total += cellValue
+        '            Next
+        '            totalRow(col) = total ' Asignar el total a la nueva fila
+        '        End If
+        '    Next
+        '    ' Añadir la fila de totales al DataTable
+        '    dtTempNominas.Rows.Add(totalRow)
+        'End If
+
+        ' Asignar los datos al Grid
         GridNominas.DataSource = dtTempNominas
         GridNominas.DataBind()
 
@@ -173,7 +203,7 @@ Public Class RptNominaCatorcenal
         cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.IdCliente = IdCliente.Value
         cNomina.Ejercicio = IdEjercicio.Value
-        cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+        cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
         cNomina.Periodo = IdPeriodo.Value
         dt = cNomina.ConsultarDatosGeneralesNomina()
         cNomina = Nothing
@@ -190,7 +220,7 @@ Public Class RptNominaCatorcenal
         cNomina = New Nomina()
         cNomina.cmd = 1
         cNomina.Ejercicio = IdEjercicio.Value
-        cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+        cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
         cNomina.Periodo = IdPeriodo.Value
         cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.IdCliente = IdCliente.Value
@@ -235,14 +265,14 @@ Public Class RptNominaCatorcenal
 
         Dim FilePath As String
 
-        FilePath = Server.MapPath("~/ResumenNominaPDF/Catorcenal/")
+        FilePath = Server.MapPath("~/ResumenNominaPDF/Mensual/")
 
         ' Validar si la carpeta ya existe
         If Not Directory.Exists(FilePath) Then
             Directory.CreateDirectory(FilePath) ' Crear la carpeta si no existe
         End If
 
-        Dim archivoPdf As String = Path.Combine(FilePath, "ResumenNominaCatorcenal " + periodoSimboloCambiado + ".pdf")
+        Dim archivoPdf As String = Path.Combine(FilePath, "ResumenNominaMensual " + periodoSimboloCambiado + ".pdf")
 
         PdfWriter.GetInstance(documento, New FileStream(archivoPdf, FileMode.Create))
 
@@ -250,7 +280,7 @@ Public Class RptNominaCatorcenal
         documento.Open()
 
         ' Agregar un título
-        Dim titulo As New Paragraph("RESUMEN DE NÓMINA CATORCENAL", FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12, New BaseColor(23, 59, 95)))
+        Dim titulo As New Paragraph("RESUMEN DE NÓMINA MENSUAL", FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12, New BaseColor(23, 59, 95)))
         titulo.Alignment = Element.ALIGN_LEFT ' Alineación a la izquierda
         documento.Add(titulo)
 
@@ -277,11 +307,11 @@ Public Class RptNominaCatorcenal
         ' Añadir la información del cliente
         Dim paddingCliente As Single = 1.0F ' Ajusta el padding para que las celdas estén más juntas
 
-        tablaCliente.AddCell(New PdfPCell(New Phrase("PLAZA:", FontFactory.GetFont(FontFactory.HELVETICA, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .Padding = paddingCliente})
-        tablaCliente.AddCell(New PdfPCell(New Phrase("NUEVO LEON", FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .Padding = paddingCliente})
+        tablaCliente.AddCell(New PdfPCell(New Phrase("PLAZA:", FontFactory.GetFont(FontFactory.HELVETICA, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .padding = paddingCliente})
+        tablaCliente.AddCell(New PdfPCell(New Phrase("NUEVO LEON", FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .padding = paddingCliente})
 
-        tablaCliente.AddCell(New PdfPCell(New Phrase("SUCURSAL:", FontFactory.GetFont(FontFactory.HELVETICA, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .Padding = paddingCliente})
-        tablaCliente.AddCell(New PdfPCell(New Phrase("MONTERREY", FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .Padding = paddingCliente})
+        tablaCliente.AddCell(New PdfPCell(New Phrase("SUCURSAL:", FontFactory.GetFont(FontFactory.HELVETICA, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .padding = paddingCliente})
+        tablaCliente.AddCell(New PdfPCell(New Phrase("MONTERREY", FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10, New BaseColor(23, 59, 95)))) With {.BorderWidth = 0, .padding = paddingCliente})
 
         ' Agregar la tabla al documento
         documento.Add(tablaCliente)
@@ -532,7 +562,7 @@ Public Class RptNominaCatorcenal
         Dim cNomina As New Nomina()
         cNomina.cmd = 1
         cNomina.Ejercicio = IdEjercicio.Value
-        cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+        cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
         cNomina.Periodo = IdPeriodo.Value
         cNomina.IdEmpresa = IdEmpresa.Value
         cNomina.IdCliente = IdCliente.Value
@@ -545,7 +575,7 @@ Public Class RptNominaCatorcenal
     '    cNomina.IdEmpresa = IdEmpresa.Value
     '    cNomina.IdCliente = IdCliente.Value
     '    cNomina.Ejercicio = IdEjercicio.Value
-    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '    cNomina.Periodo = IdPeriodo.Value
     '    dtPercepciones = cNomina.ConsultarPercepcionesCorrida()
     '    grdPercepciones.DataSource = dtPercepciones
@@ -557,9 +587,9 @@ Public Class RptNominaCatorcenal
     '    cNomina.IdEmpresa = IdEmpresa.Value
     '    cNomina.IdCliente = IdCliente.Value
     '    cNomina.Ejercicio = IdEjercicio.Value
-    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '    cNomina.Periodo = IdPeriodo.Value
-    '    dtDeducciones = cNomina.ConsultarDeduccionesCorridaSemanal()
+    '    dtDeducciones = cNomina.ConsultarDeduccionesCorridaMensual()
     '    grdDeducciones.DataSource = dtDeducciones
     '    grdDeducciones.DataBind()
     '    cNomina = Nothing
@@ -575,7 +605,7 @@ Public Class RptNominaCatorcenal
     '    cNomina.IdEmpresa = IdEmpresa.Value
     '    cNomina.IdCliente = IdCliente.Value
     '    cNomina.Ejercicio = IdEjercicio.Value
-    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '    cNomina.Periodo = IdPeriodo.Value
     '    dtPercepciones = cNomina.ConsultarPercepcionesCorrida()
     '    grdPercepciones.DataSource = dtPercepciones
@@ -587,7 +617,7 @@ Public Class RptNominaCatorcenal
     '    cNomina.IdEmpresa = IdEmpresa.Value
     '    cNomina.IdCliente = IdCliente.Value
     '    cNomina.Ejercicio = IdEjercicio.Value
-    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '    cNomina.Periodo = IdPeriodo.Value
     '    dtDeducciones = cNomina.ConsultarDeduccionesCorrida()
     '    grdDeducciones.DataSource = dtDeducciones
@@ -598,7 +628,7 @@ Public Class RptNominaCatorcenal
     '    cNomina.IdEmpresa = IdEmpresa.Value
     '    cNomina.IdCliente = IdCliente.Value
     '    cNomina.Ejercicio = IdEjercicio.Value
-    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '    cNomina.Periodo = IdPeriodo.Value
     '    dtPercepciones = cNomina.ConsultarPercepcionesCorrida()
     '    grdPercepciones.DataSource = dtPercepciones
@@ -610,7 +640,7 @@ Public Class RptNominaCatorcenal
     '    cNomina.IdEmpresa = IdEmpresa.Value
     '    cNomina.IdCliente = IdCliente.Value
     '    cNomina.Ejercicio = IdEjercicio.Value
-    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '    cNomina.Periodo = IdPeriodo.Value
     '    dtDeducciones = cNomina.ConsultarDeduccionesCorrida()
     '    grdDeducciones.DataSource = dtDeducciones
@@ -662,9 +692,9 @@ Public Class RptNominaCatorcenal
     '    cNomina.IdEmpresa = IdEmpresa.Value
     '    cNomina.IdCliente = IdCliente.Value
     '    cNomina.Ejercicio = IdEjercicio.Value
-    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '    cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '    cNomina.Periodo = IdPeriodo.Value
-    '    dt = cNomina.ConsultarEmpleadosCorridaSemanal()
+    '    dt = cNomina.ConsultarEmpleadosCorridaMensual()
     '    RadListView1.DataSource = dt
     '    cNomina = Nothing
     'End Sub
@@ -723,7 +753,7 @@ Public Class RptNominaCatorcenal
     '            cNomina.IdEmpresa = IdEmpresa.Value
     '            cNomina.IdCliente = IdCliente.Value
     '            cNomina.Ejercicio = IdEjercicio.Value
-    '            cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '            cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '            cNomina.Periodo = IdPeriodo.Value
     '            cNomina.TipoConcepto = "P"
     '            cNomina.Tipo = "N"
@@ -737,7 +767,7 @@ Public Class RptNominaCatorcenal
     '            cNomina.IdEmpresa = IdEmpresa.Value
     '            cNomina.IdCliente = IdCliente.Value
     '            cNomina.Ejercicio = IdEjercicio.Value
-    '            cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '            cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '            cNomina.Periodo = IdPeriodo.Value
     '            cNomina.TipoConcepto = "D"
     '            cNomina.Tipo = "N"
@@ -750,7 +780,7 @@ Public Class RptNominaCatorcenal
     '            'cNomina = New Nomina()
     '            'cNomina.IdEmpresa = IdEmpresa.Value
     '            'cNomina.Ejercicio = IdEjercicio.Value
-    '            'cNomina.TipoNomina = 1 'Catorcenal
+    '            'cNomina.TipoNomina = 1 'Mensual
     '            'cNomina.Periodo = IdPeriodo.Value
     '            'cNomina.TipoConcepto = "DE"
     '            'cNomina.CvoConcepto = 87
@@ -766,7 +796,7 @@ Public Class RptNominaCatorcenal
     '            cNomina.IdEmpresa = IdEmpresa.Value
     '            cNomina.IdCliente = IdCliente.Value
     '            cNomina.Ejercicio = IdEjercicio.Value
-    '            cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '            cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '            cNomina.Periodo = IdPeriodo.Value
     '            cNomina.TipoConcepto = "DE"
     '            cNomina.CvoConcepto = 87
@@ -838,7 +868,7 @@ Public Class RptNominaCatorcenal
     '        cNomina.IdEmpresa = IdEmpresa.Value
     '        cNomina.IdCliente = IdCliente.Value
     '        cNomina.Ejercicio = IdEjercicio.Value
-    '        cNomina.TipoNomina = IdPeriodicidad.Value 'Catorcenal
+    '        cNomina.TipoNomina = IdPeriodicidad.Value 'Mensual
     '        cNomina.Periodo = IdPeriodo.Value
     '        cNomina.NoEmpleado = NoEmpleado
 

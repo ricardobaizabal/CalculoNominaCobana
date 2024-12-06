@@ -1155,10 +1155,11 @@ Partial Public Class Nomina
     Public Function ConsultarResumenNominas() As DataTable
         p.Clear()
         p.Add(New SqlParameter("@cmd", cmd))
+        p.Add(New SqlParameter("@IdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@IdCliente", IdCliente))
         p.Add(New SqlParameter("@Ejercicio", Ejercicio))
         p.Add(New SqlParameter("@TipoNomina", TipoNomina))
         p.Add(New SqlParameter("@Periodo", Periodo))
-        p.Add(New SqlParameter("@IdEmpresa", IdEmpresa))
         dt = db.ExecuteSP("pConsultarResumenNominas", p)
         Return dt
     End Function

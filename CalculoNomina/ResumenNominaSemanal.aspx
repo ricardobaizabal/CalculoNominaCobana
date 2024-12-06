@@ -64,21 +64,20 @@
                                         <label class="control-label">Seleccionar Cliente</label>
                                     </td>
                                     <td>
-                                        <telerik:RadComboBox ID="cmbCliente" runat="server" Filter="StartsWith" 
-                                                             OnClientFocus="clearFilters" Width="500px" 
-                                                             AutoPostBack="true" 
-                                                             OnSelectedIndexChanged="cmbCliente_SelectedIndexChanged">
+                                        <telerik:RadComboBox ID="cmbCliente" runat="server" Filter="StartsWith"
+                                            OnClientFocus="clearFilters" Width="500px"
+                                            AutoPostBack="true"
+                                            OnSelectedIndexChanged="cmbCliente_SelectedIndexChanged">
                                         </telerik:RadComboBox>
                                     </td>
                                 </tr>
                                 <%-- FILTRO POR FOLIO DE NOMINA --%>
-<%--                                <tr >
+                                <%--<tr >
                                     <td style="width: 20%;">
                                         <label class="control-label">Seleccionar Folio de Nómina</label>
                                     </td>
                                     <td>
-                                        <telerik:RadComboBox ID="cmbFolioNomina" runat="server" Filter="StartsWith" 
-                                                             OnClientFocus="clearFilters" Width="300px" AutoPostBack="true">
+                                        <telerik:RadComboBox ID="cmbFolioNomina" runat="server" Filter="StartsWith" OnClientFocus="clearFilters" Width="300px" AutoPostBack="true">
                                         </telerik:RadComboBox>
                                     </td>
                                 </tr>--%>
@@ -108,24 +107,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="demo-container size-narrow">
-                        <telerik:RadProgressManager ID="RadProgressManager1" runat="server" Skin="Bootstrap" />
-                        <telerik:RadProgressArea HeaderText="Favor de esperar..." RenderMode="Lightweight" Skin="Bootstrap" ID="RadProgressArea1" runat="server" Width="100%" />
-                    </div>
-                </div>
                 <div class="col-lg-12 text-right">
-<%--                    <telerik:RadButton ID="btnGenerarPDF" Enabled="false" RenderMode="Lightweight" runat="server" Skin="Silk" Text="Generar PDF" CssClass="rbPrimaryButton" Font-Bold="false" Width="115px" Height="50px">
-                    </telerik:RadButton>--%>
-
                     <telerik:RadButton ID="btnGenerarPDF" Enabled="false" runat="server" Text="Generar PDF" CssClass="rbPrimaryButton" CausesValidation="False"></telerik:RadButton>
-
                 </div>
             </div>
             <br />
             <div class="row">
                 <div class="col-lg-12">
-                    <%--<telerik:RadGrid ID="GridNominas" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="False" ShowHeader="True" PageSize="15" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False" OnPdfExporting="GridNominas_PdfExporting">--%>
                     <telerik:RadGrid ID="GridNominas" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="False" ShowHeader="True" PageSize="15" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False">
                         <PagerStyle Mode="NumericPages" />
                         <ExportSettings ExportOnlyData="True" IgnorePaging="True" OpenInNewWindow="True" FileName="ResumenNomina" />
@@ -134,7 +122,7 @@
                         <MasterTableView NoMasterRecordsText="No hay registros para mostrar." CommandItemDisplay="Top">
                             <CommandItemSettings ShowRefreshButton="false" ShowAddNewRecordButton="False" ShowExportToExcelButton="true" ShowExportToPdfButton="false" ExportToPdfText="Exportar a pdf" ExportToExcelText="Exportar a excel"></CommandItemSettings>
                             <Columns>
-<%--                                <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" HeaderText="Clave">
+                                <%--                                <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" HeaderText="Clave">
                                     <ItemTemplate>
                                         <asp:LinkButton ID="lnkEdit" Text='<%# Eval("Folio") %>' runat="server" CommandArgument='<%# Eval("Folio") %>' CommandName="cmdEdit" />
                                     </ItemTemplate>
@@ -179,9 +167,6 @@
                 </telerik:RadWindow>
             </Windows>
         </telerik:RadWindowManager>
-
-<%--        <telerik:RadWindowManager ID="RadWindowManager2" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
-        <telerik:RadWindowManager ID="rwConfirm" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>--%>
         <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
         <telerik:RadWindowManager ID="rwConfirmGeneraNomina" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
     </telerik:RadAjaxPanel>

@@ -3766,6 +3766,7 @@
     <Content Include="RiespoPuesto.aspx" />
     <Content Include="RptNominaCatorcenal.aspx" />
     <Content Include="RptNominaEspecial.aspx" />
+    <Content Include="RptNominaMensual.aspx" />
     <Content Include="RptNominaQuincenal.aspx" />
     <Content Include="RptNominaSemanal.aspx" />
     <Content Include="SalarioMinimo.aspx" />
@@ -4235,6 +4236,13 @@
     <Compile Include="RptNominaEspecial.aspx.vb">
       <DependentUpon>RptNominaEspecial.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RptNominaMensual.aspx.designer.vb">
+      <DependentUpon>RptNominaMensual.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RptNominaMensual.aspx.vb">
+      <DependentUpon>RptNominaMensual.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="RptNominaQuincenal.aspx.designer.vb">
       <DependentUpon>RptNominaQuincenal.aspx</DependentUpon>
@@ -4878,7 +4886,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="False" UseJQuerySupport="False" />
+      <UserProperties UseJQuerySupport="False" UseAjaxifiedTemplates="False" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
