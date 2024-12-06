@@ -144,7 +144,18 @@ Public Class AltaMasivaEmpleados
                     tblCTipoContratoTemp = ds.Tables(14)
                 End If
 
-
+                ' Limpiar los valores de la tabla tblMisClientesTemp eliminando las comas
+                If tblMisClientesTemp.Rows.Count > 0 Then
+                    For Each row As DataRow In tblMisClientesTemp.Rows
+                        For Each column As DataColumn In tblMisClientesTemp.Columns
+                            If row(column) IsNot DBNull.Value Then
+                                Dim valorOriginal As String = row(column).ToString()
+                                Dim valorLimpio As String = valorOriginal.Replace(",", "")
+                                row(column) = valorLimpio
+                            End If
+                        Next
+                    Next
+                End If
 
 
                 ' Lectura del archivo CSV
@@ -307,11 +318,11 @@ Public Class AltaMasivaEmpleados
                     If String.IsNullOrEmpty(rfc) Then errores.Add("RFC")
                     If String.IsNullOrEmpty(curp) Then errores.Add("Curp")
                     If String.IsNullOrEmpty(no_imss) Then errores.Add("NSS")
-                    If String.IsNullOrEmpty(municipio) Then errores.Add("Municipio")
+                    'If String.IsNullOrEmpty(municipio) Then errores.Add("Municipio")
                     If String.IsNullOrEmpty(codigo_postal) Then errores.Add("Codigo Postal")
                     If String.IsNullOrEmpty(estado) Then errores.Add("Estado")
                     If String.IsNullOrEmpty(pais) Then errores.Add("Pais")
-                    If String.IsNullOrEmpty(estado_civil) Then errores.Add("Estado Civil")
+                    'If String.IsNullOrEmpty(estado_civil) Then errores.Add("Estado Civil")
                     If String.IsNullOrEmpty(cliente) Then errores.Add("Cliente")
                     If String.IsNullOrEmpty(sueldos_y_salarios_str) Then errores.Add("Sueldos y Salarios")
                     If String.IsNullOrEmpty(excedente_str) Then errores.Add("Excedente")
@@ -488,8 +499,8 @@ Public Class AltaMasivaEmpleados
                             If rowMunicipio.Length > 0 Then
                                 municipioid = CInt(rowMunicipio(0)("id")) ' Asigna el ID encontrado
                             Else
-                                Dim msjErr_municipio As String = "- Municipio: favor de ingresar un municipio existente del catalogo"
-                                errores.Add(msjErr_municipio)
+                                'Dim msjErr_municipio As String = "- Municipio: favor de ingresar un municipio existente del catalogo"
+                                'errores.Add(msjErr_municipio)
                                 municipioid = 0 ' Asigna un valor por defecto si no se encuentra
                             End If
                         Catch ex As Exception
@@ -535,8 +546,8 @@ Public Class AltaMasivaEmpleados
                             If rowEstadoCivil.Length > 0 Then
                                 estadocivilid = CInt(rowEstadoCivil(0)("id")) ' Asigna el ID encontrado
                             Else
-                                Dim msjErr_estadocivil As String = "- Estado Civil: favor de ingresar un valor válido. Opciones: soltero, casado, divorciado, viudo, unión libre o separado"
-                                errores.Add(msjErr_estadocivil)
+                                'Dim msjErr_estadocivil As String = "- Estado Civil: favor de ingresar un valor válido. Opciones: soltero, casado, divorciado, viudo, unión libre o separado"
+                                'errores.Add(msjErr_estadocivil)
                                 estadocivilid = 0 ' Asigna un valor por defecto si no se encuentra
                             End If
                         Catch ex As Exception
