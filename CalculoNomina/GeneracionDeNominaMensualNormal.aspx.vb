@@ -2385,7 +2385,6 @@ Public Class GeneracionDeNominaMensualNormal
 
                 If (e.Item.DataItem("EstatusContrato") = "Baja") Then
                     e.Item.ForeColor = Drawing.Color.Red
-                    e.Item.Selected = True
                 End If
                 If (e.Item.DataItem("Generado") = "S") Then
                     imgGenerado.Visible = True
@@ -2400,12 +2399,18 @@ Public Class GeneracionDeNominaMensualNormal
                         imgAlert.Visible = True
                     End If
                 End If
+                If (e.Item.DataItem("Pdf") = "S") Then
+                    If CDbl(e.Item.DataItem("Neto")) = 0 Then
+                        imgPDF.Visible = True
+                    End If
+                    imgEnviar.Visible = True
+                End If
                 If (e.Item.DataItem("Enviado") = "S") Then
                     imgEnviar.ImageUrl = "~/images/envelopeok.jpg"
                 End If
-                If (e.Item.DataItem("Pdf") = "S") Then
-                    'imgPDF.Visible = True
-                    imgEnviar.Visible = True
+                If (CDbl(e.Item.DataItem("Neto")) <= 1) Then
+                    imgAlert.Visible = False
+                    e.Item.ForeColor = Drawing.Color.Blue
                 End If
             Case Telerik.Web.UI.GridItemType.Footer
                 'If Not IsNothing(dtEmpleados) Then
@@ -3873,6 +3878,9 @@ Public Class GeneracionDeNominaMensualNormal
 
         Dim reporte As New Formatos.formato_comisiones
 
+        Dim Serie As String = ""
+        Dim Folio As String = ""
+
         Dim plantillaid As Integer = 1
         Dim numero_empleado As String = ""
         Dim periodo_pago As String = ""
@@ -3937,6 +3945,8 @@ Public Class GeneracionDeNominaMensualNormal
             Next
         End If
 
+        Call CargarVariablesGenerales()
+
         Dim dt As DataTable = New DataTable()
 
         Dim cNomina As New Nomina()
@@ -3974,8 +3984,6 @@ Public Class GeneracionDeNominaMensualNormal
         total = total_percepciones - total_deducciones
 
         cNomina = New Nomina()
-        cNomina.IdEmpresa = IdEmpresa
-        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 4 'Mensual
@@ -3989,24 +3997,19 @@ Public Class GeneracionDeNominaMensualNormal
 
                     Call ConsultarNumeroDeDiasPagados(NoEmpleado)
 
+                    serie = row("Serie")
+                    folio = row("Folio")
+
                     numero_empleado = NoEmpleado
                     periodo_pago = row("periodo_pago")
                     fecha_inicial = row("fecha_inicial")
                     fecha_final = row("fecha_final")
-                    'regimen = row("regimen")
                     metodo_pago = row("metodo_pago")
-                    'lugar_expedicion1 = row("lugar_expedicion1")
-                    'lugar_expedicion2 = row("lugar_expedicion2")
-                    'lugar_expedicion3 = row("lugar_expedicion3")
-                    'razonsocial = row("razonsocial")
-                    'fac_rfc = row("fac_rfc")
-
                     emp_nombre = row("emp_nombre")
                     emp_fecha_ingreso = row("emp_fecha_ingreso")
                     emp_rfc = row("emp_rfc")
                     emp_curp = row("emp_curp")
                     emp_numero_seguro_social = row("emp_numero_seguro_social")
-                    'emp_registro_patronal = row("emp_registro_patronal")
                     emp_regimen_contratacion = row("emp_regimen_contratacion")
                     emp_riesgo_puesto = row("emp_riesgo_puesto")
                     emp_salario_base = row("emp_salario_base")
@@ -4026,23 +4029,20 @@ Public Class GeneracionDeNominaMensualNormal
 
                     'reporte.ReportParameters("IdEmpresa").Value = IdEmpresa
                     reporte.ReportParameters("conn").Value = ConfigurationManager.ConnectionStrings("conn").ConnectionString
+                    reporte.ReportParameters("txtNoNomina").Value = serie.ToString & " - " & folio.ToString
                     reporte.ReportParameters("NoEmpleado").Value = NoEmpleado
                     reporte.ReportParameters("Ejercicio").Value = IdEjercicio
-                    reporte.ReportParameters("TipoNomina").Value = 4 'Mensual
+                    reporte.ReportParameters("TipoNomina").Value = 1 'Semanal
                     reporte.ReportParameters("Periodo").Value = Periodo
                     reporte.ReportParameters("Tipo").Value = "N"
                     reporte.ReportParameters("plantillaId").Value = plantillaid
                     reporte.ReportParameters("empleadoid").Value = empleadoid.ToString
-                    reporte.ReportParameters("txtNoNomina").Value = "Recibo de pago"
                     reporte.ReportParameters("txtLugarExpedicion1").Value = lugar_expedicion
-                    'reporte.ReportParameters("txtLugarExpedicion2").Value = lugar_expedicion2.ToString
-                    'reporte.ReportParameters("txtLugarExpedicion3").Value = lugar_expedicion3.ToString
                     reporte.ReportParameters("txtRazonSocialEmisor").Value = razonsocial
                     reporte.ReportParameters("txtRFCEmisor").Value = fac_rfc
                     reporte.ReportParameters("txtRegistroPatronal").Value = registro_patronal
                     reporte.ReportParameters("txtTipoComprobante").Value = "N - Nómina"
                     reporte.ReportParameters("txtFormaPago").Value = "99 - Por definir"
-
                     reporte.ReportParameters("txtEmpleadoNo").Value = numero_empleado.ToString
                     reporte.ReportParameters("txtEmpleadoNombre").Value = emp_nombre.ToString
                     reporte.ReportParameters("txtEmpleadoDireccion").Value = emp_direccion.ToString
@@ -4054,11 +4054,10 @@ Public Class GeneracionDeNominaMensualNormal
                     reporte.ReportParameters("txtEmpleadoEstado").Value = emp_estado.ToString
                     reporte.ReportParameters("txtEmpleadoPais").Value = emp_pais.ToString
                     reporte.ReportParameters("txtEmpleadoFechaIngreso").Value = emp_fecha_ingreso.ToString
-                    'reporte.ReportParameters("txtEmpleadoAntiguedad").Value = emp_antiguedad.ToString
+                    reporte.ReportParameters("txtEmpleadoAntiguedad").Value = emp_antiguedad.ToString
                     reporte.ReportParameters("txtEmpleadoRFC").Value = emp_rfc.ToString
                     reporte.ReportParameters("txtEmpleadoCURP").Value = emp_curp.ToString
                     reporte.ReportParameters("txtEmpleadoNoSeguroSocial").Value = emp_numero_seguro_social.ToString
-
                     reporte.ReportParameters("txtEmpleadoRegimen").Value = emp_regimen_contratacion.ToString
                     reporte.ReportParameters("txtEmpleadoTipoRiesgo").Value = emp_riesgo_puesto.ToString
                     reporte.ReportParameters("txtEmpleadoDepartamento").Value = emp_departamento.ToString
@@ -4067,14 +4066,12 @@ Public Class GeneracionDeNominaMensualNormal
                     'reporte.ReportParameters("txtEmpleadoSalarioDiarioIntegrado").Value = FormatCurrency(emp_salario_diario_integrado, 2).ToString
                     reporte.ReportParameters("txtTipoJornada").Value = emp_tipo_jornada.ToString
                     reporte.ReportParameters("txtDiasPagados").Value = NumeroDeDiasPagados.ToString
-
                     reporte.ReportParameters("txtPeriocidadPago").Value = periodo_pago.ToString
                     reporte.ReportParameters("txtFechaInicial").Value = fecha_inicial.ToString
                     reporte.ReportParameters("txtFechaFinal").Value = fecha_final.ToString
                     reporte.ReportParameters("txtMetodoPago").Value = "PUE - Pago en una sola exhibición"
                     reporte.ReportParameters("txtBanco").Value = emp_banco.ToString
                     reporte.ReportParameters("txtClabe").Value = emp_clabe.ToString
-
                     reporte.ReportParameters("txtTotalPercepciones").Value = FormatCurrency(total_percepciones, 2).ToString
                     reporte.ReportParameters("txtTotalDeducciones").Value = FormatCurrency(total_deducciones, 2).ToString
                     reporte.ReportParameters("txtTotal").Value = FormatCurrency(total, 2).ToString
@@ -5072,22 +5069,26 @@ Public Class GeneracionDeNominaMensualNormal
                 progress.Speed = "N/A"
                 Dim i As Integer = 0
 
+                Dim cPeriodo As New Entities.Periodo()
+                cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+                cPeriodo.ConsultarPeriodoID()
+
                 For Each row As DataRow In dt.Rows
                     i += 1
 
                     Dim rutaEmpresa As String = ""
                     Dim FilePath As String = ""
-                    'rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\M\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
+                    rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\M\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
 
-                    'Dim FilePath = rutaEmpresa & "\" & row("RFC").ToString & ".pdf"
+                    FilePath = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & ".pdf"
 
-                    'If Not Directory.Exists(rutaEmpresa) Then
-                    '    Directory.CreateDirectory(rutaEmpresa)
-                    'End If
+                    If Not Directory.Exists(rutaEmpresa) Then
+                        Directory.CreateDirectory(rutaEmpresa)
+                    End If
 
-                    'If Not Directory.Exists(FilePath) Then
-                    '    GuardaPDF(GeneraPDFNoTimbrado(CInt(row("NoEmpleado"))), FilePath)
-                    'End If
+                    If Not Directory.Exists(FilePath) Then
+                        GuardaPDF(GeneraPDFNoTimbrado(CInt(row("NoEmpleado"))), FilePath)
+                    End If
 
                     If row("UUID").ToString.Length > 0 Then
 
@@ -5096,10 +5097,6 @@ Public Class GeneracionDeNominaMensualNormal
                         If Not Directory.Exists(rutaEmpresa) Then
                             Directory.CreateDirectory(rutaEmpresa)
                         End If
-
-                        Dim cPeriodo As New Entities.Periodo()
-                        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
-                        cPeriodo.ConsultarPeriodoID()
 
                         FilePath = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID") & ".pdf"
                         If Not File.Exists(FilePath) Then
@@ -5141,9 +5138,9 @@ Public Class GeneracionDeNominaMensualNormal
                 Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
                 Call DownloadXML(RFC, NoEmpleado, e.CommandArgument)
             Case "cmdPDF"
-                'Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
-                'Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
-                'Call DownloadPDF(RFC, e.CommandArgument.ToString)
+                Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
+                Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
+                Call DownloadPDF(RFC, e.CommandArgument.ToString)
             Case "cmdPDFTimbrado"
                 Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
                 Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
@@ -5210,63 +5207,67 @@ Public Class GeneracionDeNominaMensualNormal
             Response.End()
         End If
     End Sub
-    'Private Sub DownloadPDF(ByVal NoEmpleado As Long)
+    Private Sub DownloadPDF(ByVal RFC As String, ByVal NoEmpleado As Integer)
 
-    '    Dim RfcEmisor As String = ""
-    '    Dim RfcCliente As String = ""
+        Dim RfcEmisor As String = ""
+        Dim RfcCliente As String = ""
 
-    '    Call CargarVariablesGenerales()
+        Call CargarVariablesGenerales()
 
-    '    Dim dtEmisor As New DataTable
-    '    Dim cNomina As New Entities.Nomina()
-    '    cNomina.IdEmpresa = Session("IdEmpresa")
-    '    dtEmisor = cNomina.ConsultarDatosEmisor()
+        Dim dtEmisor As New DataTable
+        Dim cNomina As New Entities.Nomina()
+        cNomina.IdEmpresa = Session("IdEmpresa")
+        dtEmisor = cNomina.ConsultarDatosEmisor()
 
-    '    If dtEmisor.Rows.Count > 0 Then
-    '        For Each oDataRow In dtEmisor.Rows
-    '            RfcEmisor = oDataRow("RFC")
-    '        Next
-    '    End If
+        If dtEmisor.Rows.Count > 0 Then
+            For Each oDataRow In dtEmisor.Rows
+                RfcEmisor = oDataRow("RFC")
+            Next
+        End If
 
-    '    Dim dtCliente As New DataTable
-    '    cNomina = New Nomina()
-    '    cNomina.Id = cmbCliente.SelectedValue
-    '    dtCliente = cNomina.ConsultarDatosCliente()
+        Dim dtCliente As New DataTable
+        cNomina = New Nomina()
+        cNomina.Id = cmbCliente.SelectedValue
+        dtCliente = cNomina.ConsultarDatosCliente()
 
-    '    If dtCliente.Rows.Count > 0 Then
-    '        For Each oDataRow In dtCliente.Rows
-    '            RfcCliente = oDataRow("RFC")
-    '        Next
-    '    End If
+        If dtCliente.Rows.Count > 0 Then
+            For Each oDataRow In dtCliente.Rows
+                RfcCliente = oDataRow("RFC")
+            Next
+        End If
 
-    '    Dim rutaEmpresa As String = ""
-    '    rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\M\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
+        Dim rutaEmpresa As String = ""
+        rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\M\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
 
-    '    If Not Directory.Exists(rutaEmpresa) Then
-    '        Directory.CreateDirectory(rutaEmpresa)
-    '    End If
+        If Not Directory.Exists(rutaEmpresa) Then
+            Directory.CreateDirectory(rutaEmpresa)
+        End If
 
-    '    Dim FilePath = rutaEmpresa & "\" & Periodo.ToString & NoEmpleado.ToString & ".pdf"
+        Dim cPeriodo As New Entities.Periodo()
+        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+        cPeriodo.ConsultarPeriodoID()
 
-    '    If File.Exists(FilePath) Then
-    '        Dim FileName As String = Path.GetFileName(FilePath)
-    '        Response.Clear()
-    '        Response.ContentType = "application/octet-stream"
-    '        Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
-    '        Response.Flush()
-    '        Response.WriteFile(FilePath)
-    '        Response.End()
-    '    Else
-    '        Call GuardaPDF(GeneraPDFNoTimbrado(NoEmpleado), FilePath)
-    '        Dim FileName As String = Path.GetFileName(FilePath)
-    '        Response.Clear()
-    '        Response.ContentType = "application/octet-stream"
-    '        Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
-    '        Response.Flush()
-    '        Response.WriteFile(FilePath)
-    '        Response.End()
-    '    End If
-    'End Sub
+        Dim FilePathPDF = rutaEmpresa & "\" & RFC.ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & ".pdf"
+
+        If File.Exists(FilePathPDF) Then
+            Dim FileName As String = Path.GetFileName(FilePathPDF)
+            Response.Clear()
+            Response.ContentType = "application/octet-stream"
+            Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
+            Response.Flush()
+            Response.WriteFile(FilePathPDF)
+            Response.End()
+        Else
+            Call GuardaPDF(GeneraPDFNoTimbrado(NoEmpleado), FilePathPDF)
+            Dim FileName As String = Path.GetFileName(FilePathPDF)
+            Response.Clear()
+            Response.ContentType = "application/octet-stream"
+            Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
+            Response.Flush()
+            Response.WriteFile(FilePathPDF)
+            Response.End()
+        End If
+    End Sub
     Private Sub DownloadPDFTimbrado(ByVal RFC As String, ByVal NoEmpleado As Int64, ByVal UUID As String)
 
         Dim RfcEmisor As String = ""

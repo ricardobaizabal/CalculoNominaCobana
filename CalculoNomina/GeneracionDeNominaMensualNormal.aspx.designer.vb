@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class GeneracionDeNominaMensualNormal
 
     '''<summary>
+    '''Control RadAjaxPanel1.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
+
+    '''<summary>
     '''Control periodoID.
     '''</summary>
     '''<remarks>
@@ -383,15 +392,6 @@ Partial Public Class GeneracionDeNominaMensualNormal
     Protected WithEvents rwConfirmGeneraNomina As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
-    '''Control RadAjaxLoadingPanel1.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
-
-    '''<summary>
     '''Control btnConfirmarGeneraNomina.
     '''</summary>
     '''<remarks>
@@ -570,4 +570,22 @@ Partial Public Class GeneracionDeNominaMensualNormal
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents btnSalirImportar As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control RadAjaxLoadingPanel1.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
+
+    '''<summary>
+    '''Control RadAjaxLoadingPanel2.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadAjaxLoadingPanel2 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
 End Class

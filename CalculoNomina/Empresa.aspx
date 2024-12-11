@@ -292,7 +292,7 @@
                         <asp:Label ID="lblCertificados" runat="server" CssClass="item"></asp:Label>
                     </td>
                     <td style="width: 28%;">
-                        <telerik:RadTextBox ID="txtContrasena" runat="server" Width="85%">
+                        <telerik:RadTextBox ID="txtContrasena" runat="server" TextMode="Password" Width="85%">
                         </telerik:RadTextBox>
                     </td>
                 </tr>

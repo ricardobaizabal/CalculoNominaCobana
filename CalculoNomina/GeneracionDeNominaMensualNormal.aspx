@@ -4,7 +4,7 @@
     <link href="styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function OnRequestStart(target, arguments) {
-            if ((arguments.get_eventTarget().indexOf("grdEmpleadosMensual") > -1)) {
+            if ((arguments.get_eventTarget().indexOf("grdEmpleadosMensual") > -1) || (arguments.get_eventTarget().indexOf("imgEnviar") > -1)) {
                 arguments.set_enableAjax(false);
             }
         }
@@ -75,7 +75,7 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <%--<telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">--%>
+    <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
     <asp:HiddenField ID="periodoID" runat="server" Value="0" Visible="False" />
     <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
     <asp:HiddenField ID="serie" runat="server" Value="" />
@@ -361,9 +361,8 @@
     </telerik:RadWindowManager>
     <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
     <telerik:RadWindowManager ID="rwConfirmGeneraNomina" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
-    <%--</telerik:RadAjaxPanel>--%>
-    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Bootstrap" Width="100%">
-    </telerik:RadAjaxLoadingPanel>
+    </telerik:RadAjaxPanel>
+    
     <asp:Button ID="btnConfirmarGeneraNomina" Text="" Style="display: none;" runat="server" />
     <asp:Button ID="btnConfirmarBorrarNomina" Text="" Style="display: none;" runat="server" />
     <asp:Button ID="btnConfirmarGeneraNominaElectronica" Text="" Style="display: none;" runat="server" />
@@ -375,7 +374,7 @@
     <telerik:RadWindow ID="WinPeriodoSave" Title="" runat="server" Modal="true" CenterIfModal="true"
         AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400px" Height="260px">
         <ContentTemplate>
-            <telerik:RadAjaxPanel runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
+            <telerik:RadAjaxPanel runat="server" LoadingPanelID="RadAjaxLoadingPanel2">
 
                 <table style="width: 98%; border-collapse: separate; border-spacing: 10px;">
                     <tr>
@@ -433,4 +432,8 @@
         <Localization />
     </telerik:RadWindow>
     <!-- End Start Modal Importar -->
+    <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Skin="Bootstrap" Width="100%">
+    </telerik:RadAjaxLoadingPanel>
+    <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel2" Skin="Bootstrap" Width="100%">
+    </telerik:RadAjaxLoadingPanel>
 </asp:Content>

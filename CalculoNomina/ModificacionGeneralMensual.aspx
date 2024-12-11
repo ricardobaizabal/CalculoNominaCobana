@@ -144,7 +144,7 @@
                                     <telerik:GridTemplateColumn UniqueName="Faltas" AllowFiltering="false">
                                         <HeaderTemplate>Faltas</HeaderTemplate>
                                         <ItemTemplate>
-                                            <telerik:RadNumericTextBox ID="txtFaltas" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtFaltas_TextChanged" AutoPostBack="true" Text='<%# Eval("Faltas") %>' Skin="Default" Width="80px" TabIndex="1" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <telerik:RadNumericTextBox ID="txtFaltas" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtFaltas_TextChanged" AutoPostBack="true" Text='<%# Eval("Faltas") %>' Skin="Default" Width="80px" TabIndex="1" MaxValue="31" MaxLength="2" AllowFiltering="false">
                                                 <NumberFormat DecimalDigits="2" GroupSeparator="," />
                                                 <EnabledStyle HorizontalAlign="Right" />
                                             </telerik:RadNumericTextBox>
@@ -154,7 +154,7 @@
                                     <telerik:GridTemplateColumn UniqueName="IncapacidadEG" AllowFiltering="false">
                                         <HeaderTemplate>Incapacidad EG</HeaderTemplate>
                                         <ItemTemplate>
-                                            <telerik:RadNumericTextBox ID="txtIncapacidadEG" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadEG_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadEG") %>' Skin="Default" Width="80px" TabIndex="2" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <telerik:RadNumericTextBox ID="txtIncapacidadEG" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadEG_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadEG") %>' Skin="Default" Width="80px" TabIndex="2" MaxValue="31" MaxLength="2" AllowFiltering="false">
                                                 <NumberFormat DecimalDigits="2" GroupSeparator="," />
                                                 <EnabledStyle HorizontalAlign="Right" />
                                             </telerik:RadNumericTextBox>
@@ -164,7 +164,7 @@
                                     <telerik:GridTemplateColumn UniqueName="IncapacidadRT" AllowFiltering="false">
                                         <HeaderTemplate>Incapacidad RT</HeaderTemplate>
                                         <ItemTemplate>
-                                            <telerik:RadNumericTextBox ID="txtIncapacidadRT" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadRT_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadRT") %>' Skin="Default" Width="80px" TabIndex="3" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <telerik:RadNumericTextBox ID="txtIncapacidadRT" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="txtIncapacidadRT_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadRT") %>' Skin="Default" Width="80px" TabIndex="3" MaxValue="31" MaxLength="2" AllowFiltering="false">
                                                 <NumberFormat DecimalDigits="2" GroupSeparator="," />
                                                 <EnabledStyle HorizontalAlign="Right" />
                                             </telerik:RadNumericTextBox>
@@ -174,7 +174,7 @@
                                     <telerik:GridTemplateColumn UniqueName="IncapacidadMaterna" AllowFiltering="false">
                                         <HeaderTemplate>Incapacidad Materna</HeaderTemplate>
                                         <ItemTemplate>
-                                            <telerik:RadNumericTextBox ID="txtIncapacidadMaterna" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="IncapacidadMaterna_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadMaterna") %>' Skin="Default" Width="80px" TabIndex="4" MaxValue="7" MaxLength="1" AllowFiltering="false">
+                                            <telerik:RadNumericTextBox ID="txtIncapacidadMaterna" runat="server" MinValue="0" Value="0" Type="Number" NumberFormat-DecimalDigits="2" OnTextChanged="IncapacidadMaterna_TextChanged" AutoPostBack="true" Text='<%# Eval("IncapacidadMaterna") %>' Skin="Default" Width="80px" TabIndex="4" MaxValue="31" MaxLength="2" AllowFiltering="false">
                                                 <NumberFormat DecimalDigits="2" GroupSeparator="," />
                                                 <EnabledStyle HorizontalAlign="Right" />
                                             </telerik:RadNumericTextBox>

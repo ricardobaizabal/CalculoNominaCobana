@@ -4,7 +4,7 @@
     <link href="styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function OnRequestStart(target, arguments) {
-            if ((arguments.get_eventTarget().indexOf("grdEmpleadosCatorcenal") > -1)) {
+            if (arguments.get_eventTarget().indexOf("grdEmpleadosCatorcenal") > -1) {
                 arguments.set_enableAjax(false);
             }
         }
@@ -76,296 +76,295 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <%--<telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1">--%>
-    <asp:HiddenField ID="periodoID" runat="server" Value="0" Visible="False" />
-    <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
-    <asp:HiddenField ID="serie" runat="server" Value="" />
-    <asp:HiddenField ID="folio" runat="server" Value="0" />
-    <asp:HiddenField ID="FolioUUID" runat="server" Value="" />
-    <div class="ibox-content" style="border: solid 0px">
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class="m-t-none m-b">Generación de nómina ordinaria catorcenal</h1>
-                <hr class="demo-separator" />
-                <br />
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <table border="0" style="width: 100%; border-collapse: separate; border-spacing: 5px;">
-                            <tr>
-                                <td style="width: 20%;">
-                                    <label class="control-label">Seleccionar Cliente</label>
-                                </td>
-                                <td>
-                                    <telerik:RadComboBox ID="cmbCliente" runat="server" Filter="StartsWith" OnClientFocus="clearFilters" Width="500px" AutoPostBack="true"></telerik:RadComboBox>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;">
-                                    <label class="control-label">Seleccionar Periodicidad</label>
-                                </td>
-                                <td>
-                                    <telerik:RadComboBox ID="cmbPeriodicidad" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;">
-                                    <label class="control-label">Seleccionar Periodo</label><br>
-                                </td>
-                                <td>
-                                    <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
-                                    &nbsp;&nbsp;&nbsp;
+    <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" Width="100%" HorizontalAlign="NotSet" LoadingPanelID="RadAjaxLoadingPanel1" ClientEvents-OnRequestStart="OnRequestStart">
+        <asp:HiddenField ID="periodoID" runat="server" Value="0" Visible="False" />
+        <asp:HiddenField ID="registroId" runat="server" Value="0" Visible="False" />
+        <asp:HiddenField ID="serie" runat="server" Value="" />
+        <asp:HiddenField ID="folio" runat="server" Value="0" />
+        <asp:HiddenField ID="FolioUUID" runat="server" Value="" />
+        <div class="ibox-content" style="border: solid 0px">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="m-t-none m-b">Generación de nómina ordinaria catorcenal</h1>
+                    <hr class="demo-separator" />
+                    <br />
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <table border="0" style="width: 100%; border-collapse: separate; border-spacing: 5px;">
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <label class="control-label">Seleccionar Cliente</label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadComboBox ID="cmbCliente" runat="server" Filter="StartsWith" OnClientFocus="clearFilters" Width="500px" AutoPostBack="true"></telerik:RadComboBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <label class="control-label">Seleccionar Periodicidad</label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadComboBox ID="cmbPeriodicidad" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <label class="control-label">Seleccionar Periodo</label><br>
+                                    </td>
+                                    <td>
+                                        <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
+                                        &nbsp;&nbsp;&nbsp;
                                     <telerik:RadButton ID="btnCrearPeriodoID" Text="Crear Periodo" runat="server" RenderMode="Lightweight" CssClass="rbPrimaryButton" Visible="false" CausesValidation="true"></telerik:RadButton>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">
+                                        <label class="control-label">Fecha Pago</label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadDatePicker ID="fchPago" runat="server" DateFormat="dd/MM/yyyy" MinDate="01/01/1900">
+                                        </telerik:RadDatePicker>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">&nbsp;</td>
+                                    <td>
+                                        <telerik:RadButton ID="btnRegresar" Text="Regresar" runat="server" CssClass="rbPrimaryButton" Skin="Bootstrap" RenderMode="Lightweight" Width="90px">
+                                        </telerik:RadButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnGeneraNomina" RenderMode="Lightweight" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/GENERAR-NOM.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnModificacionDeNomina" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/INCIDENCIAS.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnBorrarNomina" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/BORRAR-NOM.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnGenerarNominaElectronica" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/GENERAR-NOM-ELECT.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnTimbrarNominaCatorcenal" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/TIMBRAR-NOM.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnGenerarPDF" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/GENERAR-COMPROBANTES.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnGeneraTxtDispersion" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Genera TXT Dispersion" Font-Bold="false" Width="100%" Height="50px" Visible="false">
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnExportar" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" Text="Exportar" Font-Bold="false" Width="100%" Height="50px" Visible="false">
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnImportar" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" Text="Importar" Font-Bold="false" Width="100%" Height="50px" Visible="false">
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnDescargarPDFS" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/DESCARGAR-PDF.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnDescargarXMLS" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/DESCARGAR-XML.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="form-group">
+                        <telerik:RadButton ID="btnEnvioComprobantes" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
+                            <Image IsBackgroundImage="true" ImageUrl="images/ENVIAR-COMPROBANTES.png"></Image>
+                        </telerik:RadButton>
+                    </div>
+                </div>
+            </div>
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="col-md-12">
+                    <telerik:RadProgressManager ID="RadProgressManager1" runat="server" Skin="Bootstrap" />
+                    <telerik:RadProgressArea HeaderText="Favor de esperar..." RenderMode="Lightweight" Skin="Bootstrap" ID="RadProgressArea1" runat="server" Width="100%" />
+                    <br />
+                </div>
+            </div>
+            <div class="row">&nbsp;</div>
+            <asp:Panel runat="server" ID="panelDatos" Visible="false">
+                <br />
+                <fieldset>
+                    <legend>
+                        <asp:Label ID="lblTitulo" CssClass="control-label" runat="server" />
+                    </legend>
+                    <div class="form-group row">
+                        <table style="width: 100%;" border="0">
+                            <tr style="height: 30px;">
+                                <td style="width: 10%;">
+                                    <label class="control-label">Folio:</label>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 20%;">
-                                    <label class="control-label">Fecha Pago</label>
+                                <td style="width: 10%;">
+                                    <asp:Label ID="lblNoNomina" runat="server"></asp:Label>
+                                    <asp:Label ID="lblNoPeriodo" runat="server" Visible="false"></asp:Label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <label class="control-label">Tipo:</label>
                                 </td>
                                 <td>
-                                    <telerik:RadDatePicker ID="fchPago" runat="server" DateFormat="dd/MM/yyyy" MinDate="01/01/1900">
-                                    </telerik:RadDatePicker>
+                                    <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <%--<label class="control-label">Dias:</label>--%>
+                                </td>
+                                <td>
+                                    <asp:Label ID="lblDias" runat="server" Visible="false"></asp:Label>
                                 </td>
                             </tr>
-                            <tr>
-                                <td style="width: 20%;">&nbsp;</td>
-                                <td>
-                                    <telerik:RadButton ID="btnRegresar" Text="Regresar" runat="server" CssClass="rbPrimaryButton" Skin="Bootstrap" RenderMode="Lightweight" Width="90px">
-                                    </telerik:RadButton>
+                            <tr style="height: 30px;">
+                                <td style="width: 10%;">
+                                    <label class="control-label">Ejercicio:</label>
                                 </td>
+                                <td style="width: 10%;">
+                                    <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <label class="control-label">Cliente:</label>
+                                </td>
+                                <td colspan="3">
+                                    <asp:Label ID="lblRazonSocial" runat="server"></asp:Label>
+                                </td>
+                            </tr>
+                            <tr style="height: 30px;">
+                                <td style="width: 10%;">
+                                    <label class="control-label">F. Inicial:</label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <asp:Label ID="lblFechaInicial" runat="server"></asp:Label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <label class="control-label">F. Final:</label>
+                                </td>
+                                <td style="width: 10%;">
+                                    <asp:Label ID="lblFechaFinal" runat="server"></asp:Label>
+                                </td>
+                                <td>&nbsp;</td>
                             </tr>
                         </table>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnGeneraNomina" RenderMode="Lightweight" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/GENERAR-NOM.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnModificacionDeNomina" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/INCIDENCIAS.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnBorrarNomina" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/BORRAR-NOM.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnGenerarNominaElectronica" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/GENERAR-NOM-ELECT.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnTimbrarNominaCatorcenal" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/TIMBRAR-NOM.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnGenerarPDF" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/GENERAR-COMPROBANTES.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnGeneraTxtDispersion" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Genera TXT Dispersion" Font-Bold="false" Width="100%" Height="50px" Visible="false">
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnExportar" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" Text="Exportar" Font-Bold="false" Width="100%" Height="50px" Visible="false">
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnImportar" RenderMode="Lightweight" Enabled="false" runat="server" Skin="Bootstrap" Text="Importar" Font-Bold="false" Width="100%" Height="50px" Visible="false">
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnDescargarPDFS" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/DESCARGAR-PDF.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnDescargarXMLS" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/DESCARGAR-XML.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-2 col-sm-2">
-                <div class="form-group">
-                    <telerik:RadButton ID="btnEnvioComprobantes" RenderMode="Lightweight" Enabled="false" runat="server" Width="141px" Height="50px">
-                        <Image IsBackgroundImage="true" ImageUrl="images/ENVIAR-COMPROBANTES.png"></Image>
-                    </telerik:RadButton>
-                </div>
-            </div>
-        </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-md-12">
-                <telerik:RadProgressManager ID="RadProgressManager1" runat="server" Skin="Bootstrap" />
-                <telerik:RadProgressArea HeaderText="Favor de esperar..." RenderMode="Lightweight" Skin="Bootstrap" ID="RadProgressArea1" runat="server" Width="100%" />
-                <br />
-            </div>
-        </div>
-        <div class="row">&nbsp;</div>
-        <asp:Panel runat="server" ID="panelDatos" Visible="false">
-            <br />
-            <fieldset>
-                <legend>
-                    <asp:Label ID="lblTitulo" CssClass="control-label" runat="server" />
-                </legend>
-                <div class="form-group row">
-                    <table style="width: 100%;" border="0">
-                        <tr style="height: 30px;">
-                            <td style="width: 10%;">
-                                <label class="control-label">Folio:</label>
-                            </td>
-                            <td style="width: 10%;">
-                                <asp:Label ID="lblNoNomina" runat="server"></asp:Label>
-                                <asp:Label ID="lblNoPeriodo" runat="server" Visible="false"></asp:Label>
-                            </td>
-                            <td style="width: 10%;">
-                                <label class="control-label">Tipo:</label>
-                            </td>
-                            <td>
-                                <asp:Label ID="lblTipoNomina" runat="server"></asp:Label>
-                            </td>
-                            <td style="width: 10%;">
-                                <%--<label class="control-label">Dias:</label>--%>
-                            </td>
-                            <td>
-                                <asp:Label ID="lblDias" runat="server" Visible="false"></asp:Label>
-                            </td>
-                        </tr>
-                        <tr style="height: 30px;">
-                            <td style="width: 10%;">
-                                <label class="control-label">Ejercicio:</label>
-                            </td>
-                            <td style="width: 10%;">
-                                <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
-                            </td>
-                            <td style="width: 10%;">
-                                <label class="control-label">Cliente:</label>
-                            </td>
-                            <td colspan="3">
-                                <asp:Label ID="lblRazonSocial" runat="server"></asp:Label>
-                            </td>
-                        </tr>
-                        <tr style="height: 30px;">
-                            <td style="width: 10%;">
-                                <label class="control-label">F. Inicial:</label>
-                            </td>
-                            <td style="width: 10%;">
-                                <asp:Label ID="lblFechaInicial" runat="server"></asp:Label>
-                            </td>
-                            <td style="width: 10%;">
-                                <label class="control-label">F. Final:</label>
-                            </td>
-                            <td style="width: 10%;">
-                                <asp:Label ID="lblFechaFinal" runat="server"></asp:Label>
-                            </td>
-                            <td>&nbsp;</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="form-group row">
-                    <div class="col-md-12 text-right">
-                        <asp:LinkButton ID="lnkReporte" runat="server">Ver Reporte Nómina</asp:LinkButton>
+                    <div class="form-group row">
+                        <div class="col-md-12 text-right">
+                            <asp:LinkButton ID="lnkReporte" runat="server">Ver Reporte Nómina</asp:LinkButton>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <telerik:RadGrid ID="grdEmpleadosCatorcenal" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="True" ShowHeader="True" PageSize="100" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False">
-                        <PagerStyle Mode="NumericPages" />
-                        <ExportSettings IgnorePaging="True" FileName="ReporteNominaCatorcenal">
-                            <Excel Format="Biff" />
-                        </ExportSettings>
-                        <MasterTableView NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado,RFC" CommandItemDisplay="Top">
-                            <CommandItemSettings ShowAddNewRecordButton="False" ShowExportToExcelButton="True" ShowExportToPdfButton="False" ExportToPdfText="Exportar a pdf" ExportToExcelText="Exportar a excel"></CommandItemSettings>
-                            <Columns>
-                                <telerik:GridBoundColumn DataField="NoEmpleado" ItemStyle-HorizontalAlign="Left" HeaderText="No. Empleado" UniqueName="NoEmpleado">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="Empleado" ItemStyle-HorizontalAlign="Left" HeaderText="Empleado" UniqueName="Empleado">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="TotalPercepciones" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Total Percepciones" UniqueName="TotalPercepciones" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="TotalDucciones" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Total Ducciones" UniqueName="TotalDucciones" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="Neto" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Neto" UniqueName="Neto" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="MetodoPago" ItemStyle-HorizontalAlign="Left" HeaderText="Método Pago" UniqueName="MetodoPago">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="Banco" ItemStyle-HorizontalAlign="Left" HeaderText="Banco" UniqueName="Banco">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn DataField="EstatusContrato" ItemStyle-HorizontalAlign="Left" HeaderText="Estatus" UniqueName="EstatusContrato" AllowFiltering="false">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridTemplateColumn HeaderText="Generado" UniqueName="Generado">
-                                    <ItemTemplate>
-                                        <asp:Image ID="imgGenerado" Visible="false" runat="server" ImageUrl="~/images/action_check.gif" />
-                                    </ItemTemplate>
-                                    <ItemStyle HorizontalAlign="Center" Width="50px" />
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn HeaderText="" UniqueName="Timbrado">
-                                    <ItemTemplate>
-                                        <asp:ImageButton ID="imgTimbrado" Visible="false" runat="server" ImageUrl="~/images/action_check.gif"></asp:ImageButton>
-                                        <asp:ImageButton ID="imgAlert" Visible="false" runat="server" ImageUrl="~/images/alert.png"></asp:ImageButton>
-                                        <asp:ImageButton ID="imgXML" Visible="false" runat="server" CommandName="cmdXML" CommandArgument='<%# Eval("UUID") %>' ImageUrl="~/images/xml.png"></asp:ImageButton>
-                                        <asp:ImageButton ID="imgPDF" Visible="false" runat="server" CommandName="cmdPDF" CommandArgument='<%# Eval("NoEmpleado") %>' ImageUrl="~/images/pdf.png"></asp:ImageButton>
-                                        <asp:ImageButton ID="imgPDFTimbrado" Visible="false" runat="server" CommandName="cmdPDFTimbrado" CommandArgument='<%# Eval("UUID") %>' ImageUrl="~/images/pdf.png"></asp:ImageButton>
-                                        <telerik:RadToolTip ID="RadToolTip1" runat="server" TargetControlID="imgAlert" RelativeTo="Element" Position="BottomCenter" RenderInPageRoot="true" Text='<%#Eval("error")%>' ManualClose="true"></telerik:RadToolTip>
-                                    </ItemTemplate>
-                                    <ItemStyle HorizontalAlign="Center" Width="50px" />
-                                </telerik:GridTemplateColumn>
-                                <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="" UniqueName="">
-                                    <ItemTemplate>
-                                        <asp:ImageButton ID="imgEnviar" Visible="false" runat="server" CommandName="cmdSend" CommandArgument='<%# Eval("NoEmpleado") %>' ImageUrl="~/images/envelope.jpg"></asp:ImageButton>
-                                    </ItemTemplate>
-                                    <ItemStyle HorizontalAlign="Center" />
-                                </telerik:GridTemplateColumn>
-                            </Columns>
-                        </MasterTableView>
-                    </telerik:RadGrid>
-                </div>
-            </fieldset>
-        </asp:Panel>
-        <div class="row">&nbsp;</div>
-    </div>
+                    <div class="form-group row">
+                        <telerik:RadGrid ID="grdEmpleadosCatorcenal" runat="server" AutoGenerateColumns="False" AllowPaging="True" AllowSorting="True" ShowFooter="True" ShowHeader="True" PageSize="100" CellSpacing="0" GridLines="None" Skin="Bootstrap" ExportSettings-ExportOnlyData="False">
+                            <PagerStyle Mode="NumericPages" />
+                            <ExportSettings IgnorePaging="True" FileName="ReporteNominaCatorcenal">
+                                <Excel Format="Biff" />
+                            </ExportSettings>
+                            <MasterTableView NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado,RFC" CommandItemDisplay="Top">
+                                <CommandItemSettings ShowAddNewRecordButton="False" ShowExportToExcelButton="True" ShowExportToPdfButton="False" ExportToPdfText="Exportar a pdf" ExportToExcelText="Exportar a excel"></CommandItemSettings>
+                                <Columns>
+                                    <telerik:GridBoundColumn DataField="NoEmpleado" ItemStyle-HorizontalAlign="Left" HeaderText="No. Empleado" UniqueName="NoEmpleado">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="Empleado" ItemStyle-HorizontalAlign="Left" HeaderText="Empleado" UniqueName="Empleado">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="TotalPercepciones" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Total Percepciones" UniqueName="TotalPercepciones" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="TotalDucciones" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Total Ducciones" UniqueName="TotalDucciones" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="Neto" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" HeaderText="Neto" UniqueName="Neto" Aggregate="Sum" FooterStyle-Font-Bold="true" FooterStyle-HorizontalAlign="Right">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="MetodoPago" ItemStyle-HorizontalAlign="Left" HeaderText="Método Pago" UniqueName="MetodoPago">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="Banco" ItemStyle-HorizontalAlign="Left" HeaderText="Banco" UniqueName="Banco">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn DataField="EstatusContrato" ItemStyle-HorizontalAlign="Left" HeaderText="Estatus" UniqueName="EstatusContrato" AllowFiltering="false">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridTemplateColumn HeaderText="Generado" UniqueName="Generado">
+                                        <ItemTemplate>
+                                            <asp:Image ID="imgGenerado" Visible="false" runat="server" ImageUrl="~/images/action_check.gif" />
+                                        </ItemTemplate>
+                                        <ItemStyle HorizontalAlign="Center" Width="50px" />
+                                    </telerik:GridTemplateColumn>
+                                    <telerik:GridTemplateColumn HeaderText="" UniqueName="Timbrado">
+                                        <ItemTemplate>
+                                            <asp:ImageButton ID="imgTimbrado" Visible="false" runat="server" ImageUrl="~/images/action_check.gif"></asp:ImageButton>
+                                            <asp:ImageButton ID="imgAlert" Visible="false" runat="server" ImageUrl="~/images/alert.png"></asp:ImageButton>
+                                            <asp:ImageButton ID="imgXML" Visible="false" runat="server" CommandName="cmdXML" CommandArgument='<%# Eval("UUID") %>' ImageUrl="~/images/xml.png"></asp:ImageButton>
+                                            <asp:ImageButton ID="imgPDF" Visible="false" runat="server" CommandName="cmdPDF" CommandArgument='<%# Eval("NoEmpleado") %>' ImageUrl="~/images/pdf.png"></asp:ImageButton>
+                                            <asp:ImageButton ID="imgPDFTimbrado" Visible="false" runat="server" CommandName="cmdPDFTimbrado" CommandArgument='<%# Eval("UUID") %>' ImageUrl="~/images/pdf.png"></asp:ImageButton>
+                                            <telerik:RadToolTip ID="RadToolTip1" runat="server" TargetControlID="imgAlert" RelativeTo="Element" Position="BottomCenter" RenderInPageRoot="true" Text='<%#Eval("error")%>' ManualClose="true"></telerik:RadToolTip>
+                                        </ItemTemplate>
+                                        <ItemStyle HorizontalAlign="Center" Width="50px" />
+                                    </telerik:GridTemplateColumn>
+                                    <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="" UniqueName="">
+                                        <ItemTemplate>
+                                            <asp:ImageButton ID="imgEnviar" Visible="false" runat="server" CommandName="cmdSend" CommandArgument='<%# Eval("NoEmpleado") %>' ImageUrl="~/images/envelope.jpg"></asp:ImageButton>
+                                        </ItemTemplate>
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </telerik:GridTemplateColumn>
+                                </Columns>
+                            </MasterTableView>
+                        </telerik:RadGrid>
+                    </div>
+                </fieldset>
+            </asp:Panel>
+            <div class="row">&nbsp;</div>
+        </div>
 
-    <telerik:RadWindowManager ID="RadWindowManager1" runat="server">
-        <Windows>
-            <telerik:RadWindow ID="wndReporte" runat="server">
-            </telerik:RadWindow>
-        </Windows>
-    </telerik:RadWindowManager>
-    <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
-    <telerik:RadWindowManager ID="rwConfirmGeneraNomina" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
-    <%--</telerik:RadAjaxPanel>--%>
-    <%--<telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Bootstrap" Width="100%">
-    </telerik:RadAjaxLoadingPanel>--%>
+        <telerik:RadWindowManager ID="RadWindowManager1" runat="server">
+            <Windows>
+                <telerik:RadWindow ID="wndReporte" runat="server">
+                </telerik:RadWindow>
+            </Windows>
+        </telerik:RadWindowManager>
+        <telerik:RadWindowManager ID="rwAlerta" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
+        <telerik:RadWindowManager ID="rwConfirmGeneraNomina" runat="server" Skin="Bootstrap" EnableShadow="false" Localization-OK="Aceptar" Localization-Cancel="Cancelar" RenderMode="Lightweight"></telerik:RadWindowManager>
+    </telerik:RadAjaxPanel>
+
     <asp:Button ID="btnConfirmarGeneraNomina" Text="" Style="display: none;" runat="server" />
     <asp:Button ID="btnConfirmarBorrarNomina" Text="" Style="display: none;" runat="server" />
     <asp:Button ID="btnConfirmarGeneraNominaElectronica" Text="" Style="display: none;" runat="server" />
@@ -377,7 +376,7 @@
     <telerik:RadWindow ID="WinPeriodoSave" Title="" runat="server" Modal="true" CenterIfModal="true"
         AutoSize="false" Behaviors="Close" VisibleOnPageLoad="False" Width="400px" Height="260px">
         <ContentTemplate>
-            <telerik:RadAjaxPanel runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
+            <telerik:RadAjaxPanel runat="server" LoadingPanelID="RadAjaxLoadingPanel2">
 
                 <table style="width: 98%; border-collapse: separate; border-spacing: 10px;">
                     <tr>
@@ -434,5 +433,8 @@
         <Localization />
     </telerik:RadWindow>
     <!-- End Start Modal Importar -->
-    <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1"></telerik:RadAjaxLoadingPanel>
+    <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel1" Skin="Bootstrap" Width="100%">
+    </telerik:RadAjaxLoadingPanel>
+    <telerik:RadAjaxLoadingPanel runat="server" ID="RadAjaxLoadingPanel2" Skin="Bootstrap" Width="100%">
+    </telerik:RadAjaxLoadingPanel>
 </asp:Content>

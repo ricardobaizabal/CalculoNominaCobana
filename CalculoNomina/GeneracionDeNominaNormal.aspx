@@ -4,7 +4,7 @@
     <link href="styles.css" rel="stylesheet" />
     <script type="text/javascript">
         function OnRequestStart(target, arguments) {
-            if ((arguments.get_eventTarget().indexOf("grdEmpleadosSemanal") > -1) || (arguments.get_eventTarget().indexOf("imgEnviar") > -1)) {
+            if (arguments.get_eventTarget().indexOf("grdEmpleadosSemanal") > -1) {
                 arguments.set_enableAjax(false);
             }
         }
@@ -306,7 +306,7 @@
                             <ExportSettings IgnorePaging="True" FileName="ReporteNominaSemanal">
                                 <Excel Format="Biff" />
                             </ExportSettings>
-                            <MasterTableView NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado,RFC" CommandItemDisplay="Top">
+                            <MasterTableView NoMasterRecordsText="No hay registros para mostrar." DataKeyNames="NoEmpleado,RFC,Neto" CommandItemDisplay="Top">
                                 <CommandItemSettings ShowRefreshButton="false" ShowAddNewRecordButton="False" ShowExportToExcelButton="true" ShowExportToPdfButton="False" ExportToPdfText="Exportar a pdf" ExportToExcelText="Exportar a excel"></CommandItemSettings>
                                 <Columns>
                                     <telerik:GridBoundColumn DataField="NoEmpleado" ItemStyle-HorizontalAlign="Left" HeaderText="No. Empleado" UniqueName="NoEmpleado">

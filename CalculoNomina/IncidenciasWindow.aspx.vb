@@ -2289,22 +2289,22 @@ Public Class IncidenciasWindow
                 Exit Sub
             End If
 
-            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            If cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
-                'si es descuento ya sea por falta, permiso o incapacidad checar si existe el concepto de cuota del periodo ya que de el se debe descontar estas deducciones
-                If ChecarQueExistaLaCuotaPeriodo(empleadoId.Value) = False Then
-                    rwAlerta.RadAlert("No existe la cuota del periodo o el importe del mismo es menor al importe de la deduccion o los dias a descontar son menores a los existentes, no se puede agregar esta deduccion!!", 330, 180, "Alerta", "", "")
-                    Exit Sub
-                    'Dim Respuesta As Integer
-                    'Respuesta = MsgBox("No existe la cuota del periodo o el importe del mismo es menor al importe de la deduccion o los dias a descontar son menores a los existentes, no se puede agregar esta deduccion a menos que desee dejar el sobre en ceros, No=SALIR Y RECTIFICAR, Si=DEJAR SOBRE EN CEROS", vbYesNo + vbExclamation + vbDefaultButton2, "Alerta")
-                    'If Respuesta = vbNo Then
-                    '    Exit Sub
-                    'End If
-                End If
-            End If
-            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            'oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            ''oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            ''oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            'If cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
+            '    'si es descuento ya sea por falta, permiso o incapacidad checar si existe el concepto de cuota del periodo ya que de el se debe descontar estas deducciones
+            '    If ChecarQueExistaLaCuotaPeriodo(empleadoId.Value) = False Then
+            '        rwAlerta.RadAlert("No existe la cuota del periodo o el importe del mismo es menor al importe de la deduccion o los dias a descontar son menores a los existentes, no se puede agregar esta deduccion!!", 330, 180, "Alerta", "", "")
+            '        Exit Sub
+            '        'Dim Respuesta As Integer
+            '        'Respuesta = MsgBox("No existe la cuota del periodo o el importe del mismo es menor al importe de la deduccion o los dias a descontar son menores a los existentes, no se puede agregar esta deduccion a menos que desee dejar el sobre en ceros, No=SALIR Y RECTIFICAR, Si=DEJAR SOBRE EN CEROS", vbYesNo + vbExclamation + vbDefaultButton2, "Alerta")
+            '        'If Respuesta = vbNo Then
+            '        '    Exit Sub
+            '        'End If
+            '    End If
+            'End If
+            ''oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            ''oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
             ImporteDiario = 0
             ImportePeriodo = 0
@@ -2322,6 +2322,7 @@ Public Class IncidenciasWindow
             'cargar las nuevas percepciones y deducciones
 
             ChecarSiExistenDiasEnPercepciones(empleadoId.Value, cmbConcepto.SelectedValue)
+
             If DiasCuotaPeriodo = 0 And DiasVacaciones = 0 And DiasComision = 0 And DiasPagoPorHoras = 0 And DiasDestajo = 0 And DiasHonorarioAsimilado = 0 Then
                 'en este caso, si se pagan conceptos tales como comisiones, en teoria estas se generan posterior a que el trabajador tiene un sueldo, es decir una cuaota del periodo actual, ese es el motivo del mensaje.
                 '    MsgBox("Esta percepcion no puede agregarse sin que exista alguna de las siguientes:" + vbCrLf + "CuotaPeriodo" + vbCrLf + "Vacaciones" + vbCrLf + "HonorarioAsimilado" + vbCrLf + "PagoPorHoras" + vbCrLf + "Comision" + vbCrLf + "Destajo" + vbCrLf + "pues estas van acompañadas implicitamente por los 7 dias correspondientes al periodo semanal lo cual es base necesaria para el calculo del impuesto,  lo que si puede hacer es cambiar el numero de dias o eliminar completamente el empleado en este periodo!!!")
@@ -2334,6 +2335,7 @@ Public Class IncidenciasWindow
                     Call BorrarDeducciones(empleadoId.Value)
                     Call GuardarRegistro(CuotaDiaria, 1)
 
+                    Call QuitarConcepto(7, "") 'ISR AJUSTADO POR SUBSIDIO
                     Call QuitarConcepto(52, "") 'IMPUESTO
                     Call QuitarConcepto(54, "") 'SUBSIDIO
                     Call QuitarConcepto(56, "") 'CUOTA IMSS
@@ -2342,41 +2344,44 @@ Public Class IncidenciasWindow
                     Call ChecarYGrabarPercepcionesExentasYGravadas(empleadoId.Value, 0)
                     Call ChecarPercepcionesExentasYGravadas()
 
-                    Call CalcularImss(CuotaDiaria)
-
-                    IMSS = IMSS * 7
-                    IMSS = Math.Round(IMSS, 6)
-
                     Dim cPeriodo As New Entities.Periodo()
                     cPeriodo.IdPeriodo = periodoId.Value
                     cPeriodo.ConsultarPeriodoID()
 
-                    If IMSS > 0 Then
-                        Dim cNomina = New Nomina()
-                        cNomina.IdEmpresa = IdEmpresa
-                        cNomina.IdCliente = clienteId.Value
-                        cNomina.Ejercicio = IdEjercicio
-                        cNomina.TipoNomina = 1 'Semanal
-                        cNomina.Periodo = Periodo
-                        cNomina.NoEmpleado = empleadoId.Value
-                        cNomina.CvoConcepto = 56
-                        cNomina.IdContrato = contratoId.Value
-                        cNomina.TipoConcepto = "D"
-                        cNomina.Unidad = 1
-                        cNomina.Importe = IMSS
-                        cNomina.ImporteGravado = 0
-                        cNomina.ImporteExento = IMSS
-                        cNomina.Generado = ""
-                        cNomina.Timbrado = ""
-                        cNomina.Enviado = ""
-                        cNomina.Situacion = "A"
-                        cNomina.EsEspecial = False
-                        cNomina.FechaIni = cPeriodo.FechaInicialDate
-                        cNomina.FechaFin = cPeriodo.FechaFinalDate
-                        cNomina.FechaPago = cPeriodo.FechaPago
-                        cNomina.DiasPagados = cPeriodo.Dias
-                        cNomina.IdNomina = nominaId.Value
-                        cNomina.GuadarNominaPeriodo()
+                    If ChecarQueExistaLaCuotaPeriodo(empleadoId.Value) = True Then
+
+                        Call CalcularImss(CuotaDiaria)
+
+                        IMSS = IMSS * 7
+                        IMSS = Math.Round(IMSS, 6)
+
+                        If IMSS > 0 Then
+                            Dim cNomina = New Nomina()
+                            cNomina.IdEmpresa = IdEmpresa
+                            cNomina.IdCliente = clienteId.Value
+                            cNomina.Ejercicio = IdEjercicio
+                            cNomina.TipoNomina = 1 'Semanal
+                            cNomina.Periodo = Periodo
+                            cNomina.NoEmpleado = empleadoId.Value
+                            cNomina.CvoConcepto = 56
+                            cNomina.IdContrato = contratoId.Value
+                            cNomina.TipoConcepto = "D"
+                            cNomina.Unidad = 1
+                            cNomina.Importe = IMSS
+                            cNomina.ImporteGravado = 0
+                            cNomina.ImporteExento = IMSS
+                            cNomina.Generado = ""
+                            cNomina.Timbrado = ""
+                            cNomina.Enviado = ""
+                            cNomina.Situacion = "A"
+                            cNomina.EsEspecial = False
+                            cNomina.FechaIni = cPeriodo.FechaInicialDate
+                            cNomina.FechaFin = cPeriodo.FechaFinalDate
+                            cNomina.FechaPago = cPeriodo.FechaPago
+                            cNomina.DiasPagados = cPeriodo.Dias
+                            cNomina.IdNomina = nominaId.Value
+                            cNomina.GuadarNominaPeriodo()
+                        End If
                     End If
 
                     Impuesto = 0
@@ -3721,6 +3726,7 @@ Public Class IncidenciasWindow
             'If cmbConcepto.SelectedValue.ToString < 52 Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Then
             If NumeroConcepto < 52 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Then
 
+                Call QuitarConcepto(7, "") 'ISR AJUSTADO POR SUBSIDIO
                 Call QuitarConcepto(52, "") 'IMPUESTO
                 Call QuitarConcepto(54, "") 'SUBSIDIO
                 Call QuitarConcepto(56, "") 'CUOTA IMSS

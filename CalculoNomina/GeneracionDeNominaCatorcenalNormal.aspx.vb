@@ -2459,7 +2459,9 @@ Public Class GeneracionDeNominaCatorcenal
                     End If
                 End If
                 If (e.Item.DataItem("Pdf") = "S") Then
-                    'imgPDF.Visible = True
+                    If CDbl(e.Item.DataItem("Neto")) = 0 Then
+                        imgPDF.Visible = True
+                    End If
                     imgEnviar.Visible = True
                 End If
                 If (e.Item.DataItem("Enviado") = "S") Then
@@ -3141,7 +3143,7 @@ Public Class GeneracionDeNominaCatorcenal
 
                 Emisor = CrearNodo("nomina12:Emisor")
 
-                Dim ObjData As New DataControl(0)
+                Dim ObjData As New DataControl()
                 Dim ds As New DataSet
                 Dim registro_patronal As String = ""
                 Dim fac_rfc As String = ""
@@ -3698,7 +3700,7 @@ Public Class GeneracionDeNominaCatorcenal
         Dim Deducciones As Decimal = 0
         Dim Neto As Decimal = 0
 
-        Dim ObjData As New DataControl(0)
+        Dim ObjData As New DataControl()
         Dim ds As New DataSet
 
         ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
@@ -3975,7 +3977,7 @@ Public Class GeneracionDeNominaCatorcenal
         Dim total As Decimal = 0
         Dim lugar_expedicion As String = ""
 
-        Dim ObjData As New DataControl(0)
+        Dim ObjData As New DataControl()
         Dim ds As New DataSet
 
         ds = ObjData.FillDataSet("exec pCliente @cmd=3, @clienteid='" & Session("IdEmpresa") & "'")
@@ -3989,6 +3991,8 @@ Public Class GeneracionDeNominaCatorcenal
                 plantillaid = row("plantillaid")
             Next
         End If
+
+        Call CargarVariablesGenerales()
 
         Dim dt As DataTable = New DataTable()
 
@@ -4071,14 +4075,12 @@ Public Class GeneracionDeNominaCatorcenal
                     reporte.ReportParameters("txtNoNomina").Value = Serie.ToString & " - " & Folio.ToString
                     reporte.ReportParameters("NoEmpleado").Value = NoEmpleado
                     reporte.ReportParameters("Ejercicio").Value = IdEjercicio
-                    reporte.ReportParameters("TipoNomina").Value = 2 'Catorcenal
+                    reporte.ReportParameters("TipoNomina").Value = 1 'Semanal
                     reporte.ReportParameters("Periodo").Value = Periodo
                     reporte.ReportParameters("Tipo").Value = "N"
                     reporte.ReportParameters("plantillaId").Value = plantillaid
                     reporte.ReportParameters("empleadoid").Value = empleadoid.ToString
                     reporte.ReportParameters("txtLugarExpedicion1").Value = lugar_expedicion
-                    'reporte.ReportParameters("txtLugarExpedicion2").Value = lugar_expedicion2.ToString
-                    'reporte.ReportParameters("txtLugarExpedicion3").Value = lugar_expedicion3.ToString
                     reporte.ReportParameters("txtRazonSocialEmisor").Value = razonsocial
                     reporte.ReportParameters("txtRFCEmisor").Value = fac_rfc
                     reporte.ReportParameters("txtRegistroPatronal").Value = registro_patronal
@@ -5073,13 +5075,18 @@ Public Class GeneracionDeNominaCatorcenal
                 progress.Speed = "N/A"
                 Dim i As Integer = 0
 
+                Dim cPeriodo As New Entities.Periodo()
+                cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+                cPeriodo.ConsultarPeriodoID()
+
                 For Each row As DataRow In dt.Rows
                     i += 1
 
                     Dim rutaEmpresa As String = ""
+                    Dim FilePath As String = ""
                     rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
 
-                    Dim FilePath = rutaEmpresa & "\" & row("RFC").ToString & ".pdf"
+                    FilePath = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & ".pdf"
 
                     If Not Directory.Exists(rutaEmpresa) Then
                         Directory.CreateDirectory(rutaEmpresa)
@@ -5096,10 +5103,6 @@ Public Class GeneracionDeNominaCatorcenal
                         If Not Directory.Exists(rutaEmpresa) Then
                             Directory.CreateDirectory(rutaEmpresa)
                         End If
-
-                        Dim cPeriodo As New Entities.Periodo()
-                        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
-                        cPeriodo.ConsultarPeriodoID()
 
                         FilePath = rutaEmpresa & "\" & row("RFC").ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & "_" & row("UUID") & ".pdf"
                         If Not File.Exists(FilePath) Then
@@ -5141,9 +5144,9 @@ Public Class GeneracionDeNominaCatorcenal
                 Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
                 Call DownloadXML(RFC, NoEmpleado, e.CommandArgument)
             Case "cmdPDF"
-                'Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
-                'Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
-                'Call DownloadPDF(RFC, e.CommandArgument.ToString)
+                Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
+                Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
+                Call DownloadPDF(RFC, e.CommandArgument.ToString)
             Case "cmdPDFTimbrado"
                 Dim NoEmpleado As Int64 = Convert.ToInt64(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("NoEmpleado"))
                 Dim RFC As String = Convert.ToString(e.Item.OwnerTableView.DataKeyValues(e.Item.ItemIndex)("RFC"))
@@ -5211,54 +5214,59 @@ Public Class GeneracionDeNominaCatorcenal
             Response.End()
         End If
     End Sub
-    'Private Sub DownloadPDF(ByVal NoEmpleado As Long)
+    Private Sub DownloadPDF(ByVal RFC As String, ByVal NoEmpleado As Integer)
 
-    '    Call CargarVariablesGenerales()
+        Call CargarVariablesGenerales()
 
-    '    Dim RfcEmisor As String = ""
-    '    Dim RfcCliente As String = ""
+        Dim RfcEmisor As String = ""
+        Dim RfcCliente As String = ""
 
-    '    Dim dtEmisor As New DataTable
-    '    Dim cNomina = New Nomina()
-    '    cNomina = New Nomina()
-    '    cNomina.IdEmpresa = Session("IdEmpresa")
-    '    dtEmisor = cNomina.ConsultarDatosEmisor()
+        Dim dtEmisor As New DataTable
+        Dim cNomina = New Nomina()
+        cNomina = New Nomina()
+        cNomina.IdEmpresa = Session("IdEmpresa")
+        dtEmisor = cNomina.ConsultarDatosEmisor()
 
-    '    Dim dtCliente As New DataTable
-    '    cNomina = New Nomina()
-    '    cNomina.Id = cmbCliente.SelectedValue
-    '    dtCliente = cNomina.ConsultarDatosCliente()
+        Dim dtCliente As New DataTable
+        cNomina = New Nomina()
+        cNomina.Id = cmbCliente.SelectedValue
+        dtCliente = cNomina.ConsultarDatosCliente()
 
-    '    If dtCliente.Rows.Count > 0 Then
-    '        For Each oDataRow In dtCliente.Rows
-    '            RfcCliente = oDataRow("RFC")
-    '        Next
-    '    End If
+        If dtCliente.Rows.Count > 0 Then
+            For Each oDataRow In dtCliente.Rows
+                RfcCliente = oDataRow("RFC")
+            Next
+        End If
 
-    '    If dtEmisor.Rows.Count > 0 Then
-    '        For Each oDataRow In dtEmisor.Rows
-    '            RfcEmisor = oDataRow("RFC")
-    '        Next
-    '    End If
+        If dtEmisor.Rows.Count > 0 Then
+            For Each oDataRow In dtEmisor.Rows
+                RfcEmisor = oDataRow("RFC")
+            Next
+        End If
 
-    '    Dim rutaEmpresa As String = ""
-    '    rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
+        Dim rutaEmpresa As String = ""
+        rutaEmpresa = Server.MapPath("~\PDF\").ToString & RfcEmisor.ToString & "\" & RfcCliente.ToString & "\C\" & IdEjercicio.ToString & "\" & cmbPeriodo.SelectedValue.ToString & "\ST"
 
-    '    If Not Directory.Exists(rutaEmpresa) Then
-    '        Directory.CreateDirectory(rutaEmpresa)
-    '    End If
+        If Not Directory.Exists(rutaEmpresa) Then
+            Directory.CreateDirectory(rutaEmpresa)
+        End If
 
-    '    Dim FilePath = rutaEmpresa & "\" & NoEmpleado.ToString & ".pdf"
-    '    If File.Exists(FilePath) Then
-    '        Dim FileName As String = Path.GetFileName(FilePath)
-    '        Response.Clear()
-    '        Response.ContentType = "application/octet-stream"
-    '        Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
-    '        Response.Flush()
-    '        Response.WriteFile(FilePath)
-    '        Response.End()
-    '    End If
-    'End Sub
+        Dim cPeriodo As New Entities.Periodo()
+        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+        cPeriodo.ConsultarPeriodoID()
+
+        Dim FilePathPDF = rutaEmpresa & "\" & RFC.ToString & "_" & Format(cPeriodo.FechaInicialDate, "dd-MM-yyyy").ToString & "_" & Format(cPeriodo.FechaFinalDate, "dd-MM-yyyy").ToString & ".pdf"
+
+        If File.Exists(FilePathPDF) Then
+            Dim FileName As String = Path.GetFileName(FilePathPDF)
+            Response.Clear()
+            Response.ContentType = "application/octet-stream"
+            Response.AddHeader("Content-Disposition", "attachment; filename=""" & FileName & """")
+            Response.Flush()
+            Response.WriteFile(FilePathPDF)
+            Response.End()
+        End If
+    End Sub
     Private Sub DownloadPDFTimbrado(ByVal RFC As String, ByVal NoEmpleado As Int64, ByVal UUID As String)
 
         Call CargarVariablesGenerales()

@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class GeneracionDeNominaQuincenalNormal
 
     '''<summary>
+    '''Control RadAjaxPanel1.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
+
+    '''<summary>
     '''Control periodoID.
     '''</summary>
     '''<remarks>
@@ -572,11 +581,20 @@ Partial Public Class GeneracionDeNominaQuincenalNormal
     Protected WithEvents btnSalirImportar As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control RadAjaxLoadingPanel1.
+    '''Control RadAjaxLoadingPanel2.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
+    Protected WithEvents RadAjaxLoadingPanel2 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
+
+    '''<summary>
+    '''Control RadAjaxLoadingPanel3.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadAjaxLoadingPanel3 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
 End Class
