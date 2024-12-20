@@ -59,6 +59,15 @@ Partial Public Class FiniquitosGeneradosSemanal
     Protected WithEvents lblEjercicio As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control cmbCliente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbCliente As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
     '''Control cmbPeriodo.
     '''</summary>
     '''<remarks>

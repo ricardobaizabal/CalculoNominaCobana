@@ -41,9 +41,15 @@ Public Class FiniquitosGeneradosSemanal
 
         If Not IsPostBack Then
 
-            Call LlenaComboPeriodos(0)
-            Call CargarGridEmpleados()
+            Dim objCat As New DataControl()
+            Dim cConcepto As New Entities.Catalogos
+            objCat.CatalogoRad(cmbCliente, cConcepto.ConsultarMisClientes, True, False)
+            'objCat.CatalogoRad(cmbPeriodicidad, cConcepto.ConsultarPeriodoPago2, True, False)
+            objCat = Nothing
+
             Call CargarVariablesGenerales()
+            Call CargaPeriodos(1)
+            Call CargarGridEmpleados()
 
             lblEjercicio.Text = IdEjercicio.ToString
 
@@ -54,21 +60,15 @@ Public Class FiniquitosGeneradosSemanal
         RadProgressArea1.Localization.CurrentFileName = "Calculando: "
 
     End Sub
-    Private Sub LlenaComboPeriodos(ByVal sel As Integer)
-
+    Private Sub CargaPeriodos(Optional ByVal IdTipoNomina As Integer = 0)
         Call CargarVariablesGenerales()
-
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = cmbCliente.SelectedValue
         cPeriodo.IdEjercicio = IdEjercicio
-        cPeriodo.IdTipoNomina = 1 'Semanal
+        cPeriodo.IdTipoNomina = IdTipoNomina
         cPeriodo.ExtraordinarioBit = False
         ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
-        cmbPeriodo.SelectedValue = sel
-        cPeriodo = Nothing
-
-        cmbPeriodo.SelectedValue = sel
-
     End Sub
     Private Sub CargarGridEmpleados()
 
@@ -76,6 +76,8 @@ Public Class FiniquitosGeneradosSemanal
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
@@ -130,8 +132,10 @@ Public Class FiniquitosGeneradosSemanal
         End Select
     End Sub
     Private Sub CargarVariablesGenerales()
+
         Dim dt As New DataTable()
         Dim cConfiguracion = New Configuracion()
+        cConfiguracion.IdEmpresa = Session("IdEmpresa")
         cConfiguracion.IdUsuario = Session("usuarioid")
         dt = cConfiguracion.ConsultarConfiguracion()
         cConfiguracion = Nothing
@@ -144,17 +148,7 @@ Public Class FiniquitosGeneradosSemanal
         End If
     End Sub
     Private Sub cmbPeriodo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmbPeriodo.SelectedIndexChanged
-
         Call CargarGridEmpleados()
-
-        'If cmbPeriodo.SelectedValue > 0 Then
-        '    btnGenerarNominaElectronica.Visible = True
-        '    btnTimbrarNomina.Visible = True
-        'Else
-        '    btnGenerarNominaElectronica.Visible = False
-        '    btnTimbrarNomina.Visible = False
-        'End If
-
     End Sub
     Public Sub BloquearBotones()
 
@@ -1512,6 +1506,7 @@ Public Class FiniquitosGeneradosSemanal
                 Dim NoEmpleado As Integer = CInt(commandArgs(0))
                 Dim IdMovimiento As String = CInt(commandArgs(1))
                 Dim IdCliente As String = CInt(commandArgs(2))
+                Dim Periodo As String = CInt(commandArgs(3))
 
                 Call CargarVariablesGenerales()
 
@@ -1542,13 +1537,13 @@ Public Class FiniquitosGeneradosSemanal
                 End If
 
                 Dim DirectorioExtraccion As String = ""
-                DirectorioExtraccion = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString
+                DirectorioExtraccion = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & Periodo.ToString
 
                 If Not Directory.Exists(DirectorioExtraccion) Then
                     Directory.CreateDirectory(DirectorioExtraccion)
                 End If
 
-                Dim FilePath = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString & "/" & "F" & String.Format("{0:00}", NoEmpleado) & ".pdf"
+                Dim FilePath = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & Periodo.ToString & "/" & "F" & String.Format("{0:00}", NoEmpleado) & ".pdf"
 
                 If Not File.Exists(FilePath) Then
                     GuardaPDF(GeneraPDFFiniquito(NoEmpleado, IdMovimiento, IdCliente), FilePath)
@@ -1568,6 +1563,7 @@ Public Class FiniquitosGeneradosSemanal
                 Dim NoEmpleado As Integer = CInt(commandArgs(0))
                 Dim IdMovimiento As String = CInt(commandArgs(1))
                 Dim IdCliente As String = CInt(commandArgs(2))
+                Dim Periodo As String = CInt(commandArgs(3))
 
                 Call CargarVariablesGenerales()
 
@@ -1598,13 +1594,13 @@ Public Class FiniquitosGeneradosSemanal
                 End If
 
                 Dim DirectorioExtraccion As String = ""
-                DirectorioExtraccion = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString
+                DirectorioExtraccion = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & Periodo.ToString
 
                 If Not Directory.Exists(DirectorioExtraccion) Then
                     Directory.CreateDirectory(DirectorioExtraccion)
                 End If
 
-                Dim FilePath = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & cmbPeriodo.SelectedValue.ToString & "/" & "R" & String.Format("{0:00}", NoEmpleado) & ".pdf"
+                Dim FilePath = Server.MapPath("~/PDF/").ToString & RfcEmisor.ToString & "/" & RfcCliente.ToString & "/S/" & IdEjercicio.ToString & "/F/" & Periodo.ToString & "/" & "R" & String.Format("{0:00}", NoEmpleado) & ".pdf"
 
                 If Not File.Exists(FilePath) Then
                     GuardaPDF(GeneraPDFRenuncia(NoEmpleado, IdMovimiento), FilePath)
@@ -2749,179 +2745,6 @@ Public Class FiniquitosGeneradosSemanal
             End If
         End If
     End Sub
-    'Private Function GeneraPDFFiniquito(ByVal NoEmpleado As Integer, ByVal IdMovimiento As Integer) As Telerik.Reporting.Report
-
-    '    Call CargarVariablesGenerales()
-
-    '    Dim reporte As New Formatos.formato_finiquito
-    '    Dim CantidadTexto As String = ""
-    '    Dim RazonSocial As String = ""
-    '    Dim Municipio As String = ""
-    '    Dim Estado As String = ""
-    '    Dim NombreEmpleado As String = ""
-    '    Dim Puesto As String = ""
-    '    Dim FechaIngreso As String = ""
-    '    Dim FechaBaja As String = ""
-
-    '    Dim DiasLaborados As String = ""
-    '    Dim DiasLaboradosAnio As String = ""
-    '    Dim DiasVacacionesProporcionales As String = ""
-    '    Dim ProporcionalVacaciones As String = ""
-    '    Dim PorcentajePrimaVacacional As String = ""
-    '    Dim PrimaVacaciones As String = ""
-    '    Dim DiasAguinaldoAnio As String = ""
-    '    Dim ProporcionalAguinaldo As String = ""
-    '    Dim DiasPendientesPago As Decimal = 0
-    '    Dim OtrasPercepcionesPendientes As Decimal = 0
-    '    Dim SubsidioEmpleo As Decimal = 0
-    '    Dim CuotasIMSS As Decimal = 0
-    '    Dim ImpuestoISR As Decimal = 0
-
-    '    Dim dt As New DataTable()
-    '    Dim cNomina = New Nomina()
-    '    cNomina.IdEmpresa = Session("IdEmpresa")
-    '    dt = cNomina.ConsultarDatosEmisor()
-
-    '    If dt.Rows.Count > 0 Then
-    '        For Each oDataRow In dt.Rows
-    '            RazonSocial = oDataRow("RazonSocial")
-    '            Municipio = oDataRow("Municipio")
-    '            Estado = oDataRow("Estado")
-    '        Next
-    '    End If
-
-    '    Dim dtEmpleado As New DataTable
-    '    Dim cEmpleado As New Entities.Empleado
-    '    cEmpleado.IdEmpleado = NoEmpleado
-    '    'cEmpleado.IdEmpresa = IdEmpresa
-    '    cEmpleado.IdMovimiento = IdMovimiento
-    '    dtEmpleado = cEmpleado.ConsultarEmpleados()
-
-    '    If dtEmpleado.Rows.Count > 0 Then
-    '        For Each oDataRow In dtEmpleado.Rows
-    '            NombreEmpleado = oDataRow("nombre")
-    '            Puesto = oDataRow("puesto")
-    '        Next
-    '    End If
-
-    '    cNomina = New Nomina()
-    '    cNomina.IdEmpresa = IdEmpresa
-    '    cNomina.TipoNomina = 1 'Semanal
-    '    cNomina.Id = IdMovimiento
-    '    dt = cNomina.ConsultarEmpleadosFiniquito()
-
-    '    If dt.Rows.Count > 0 Then
-    '        For Each oDataRow In dt.Rows
-    '            FechaIngreso = oDataRow("FechaIngreso").ToString
-    '            FechaBaja = oDataRow("FechaBaja").ToString
-    '            CuotaDiaria = FormatCurrency(oDataRow("CuotaDiaria"), 2)
-    '            SalarioDiarioIntegradoTrabajador = oDataRow("IntegradoIMSS")
-    '        Next
-    '    End If
-
-    '    cNomina = New Nomina()
-    '    cNomina.Id = IdMovimiento
-    '    'cNomina.IdEmpresa = Session("clienteid")
-    '    cNomina.TipoNomina = 1 'Semanal
-    '    dt = cNomina.ConsultarDesgloseFiniquitoGenerado()
-
-    '    If dt.Rows.Count > 0 Then
-    '        For Each oDataRow In dt.Rows
-    '            DiasLaborados = oDataRow("DiasLaborados").ToString
-    '            DiasLaboradosAnio = oDataRow("DiasLaboradosAnio").ToString
-    '            DiasVacacionesProporcionales = Math.Round(oDataRow("DiasProporcionalVacaciones"), 2).ToString
-    '            ProporcionalVacaciones = FormatCurrency(oDataRow("ProporcionalVacaciones"), 2).ToString
-    '            PorcentajePrimaVacacional = oDataRow("PorcentajePrimaVacacional").ToString
-    '            PrimaVacaciones = FormatCurrency(oDataRow("PrimaVacaciones"), 2).ToString
-    '            DiasAguinaldoAnio = oDataRow("DiasAguinaldoAnio").ToString
-    '            ProporcionalAguinaldo = FormatCurrency(oDataRow("ProporcionalAguinaldo"), 2).ToString
-    '        Next
-    '    End If
-
-    '    cNomina = New Nomina()
-    '    cNomina.IdEmpresa = IdEmpresa
-    '    cNomina.Ejercicio = IdEjercicio
-    '    cNomina.TipoNomina = 1 'Semanal
-    '    cNomina.Tipo = "F"
-    '    cNomina.TipoConcepto = "P"
-    '    cNomina.IdMovimiento = IdMovimiento
-    '    dt = cNomina.ConsultarPercepcionesDeduccionesFiniquitoGenerado()
-
-    '    If dt.Rows.Count > 0 Then
-    '        If dt.Compute("Sum(Unidad)", "CvoConcepto=85 OR CvoConcepto=51") IsNot DBNull.Value Then
-    '            DiasPendientesPago = dt.Compute("Sum(Unidad)", "CvoConcepto=85 OR CvoConcepto=51")
-    '        End If
-    '        If dt.Compute("Sum(Importe)", "CvoConcepto=55") IsNot DBNull.Value Then
-    '            SubsidioEmpleo = dt.Compute("Sum(Importe)", "CvoConcepto=55")
-    '        End If
-    '        If dt.Compute("Sum(Importe)", "CvoConcepto<>2 AND CvoConcepto<>14 AND CvoConcepto<>15 AND CvoConcepto<>16 AND CvoConcepto<>55") IsNot DBNull.Value Then
-    '            OtrasPercepcionesPendientes = dt.Compute("Sum(Importe)", "CvoConcepto<>2 AND CvoConcepto<>14 AND CvoConcepto<>15 AND CvoConcepto<>16 AND CvoConcepto<>55")
-    '        End If
-    '    End If
-
-    '    cNomina = New Nomina()
-    '    cNomina.IdEmpresa = IdEmpresa
-    '    cNomina.Ejercicio = IdEjercicio
-    '    cNomina.TipoNomina = 1 'Semanal
-    '    cNomina.Tipo = "F"
-    '    cNomina.TipoConcepto = "D"
-    '    cNomina.IdMovimiento = IdMovimiento
-    '    dt = cNomina.ConsultarPercepcionesDeduccionesFiniquitoGenerado()
-
-    '    If dt.Rows.Count > 0 Then
-    '        If dt.Compute("Sum(Importe)", "CvoConcepto=86") IsNot DBNull.Value Then
-    '            ImpuestoISR = dt.Compute("Sum(Importe)", "CvoConcepto=86")
-    '        End If
-    '        If dt.Compute("Sum(Importe)", "CvoConcepto=56") IsNot DBNull.Value Then
-    '            CuotasIMSS = dt.Compute("Sum(Importe)", "CvoConcepto=56")
-    '        End If
-    '    End If
-
-    '    TotalPercepciones = 0
-    '    TotalDeducciones = 0
-    '    NetoAPagar = 0
-    '    PercepcionesGravadas = 0
-    '    PercepcionesExentas = 0
-
-    '    Call MostrarPercepciones(NoEmpleado, IdMovimiento)
-    '    Call MostrarDeducciones(NoEmpleado, IdMovimiento)
-
-    '    NetoAPagar = (TotalPercepciones - TotalDeducciones)
-
-    '    Dim largo = Len(CStr(Format(CDbl(NetoAPagar), "#,###.00")))
-    '    Dim decimales = Mid(CStr(Format(CDbl(NetoAPagar), "#,###.00")), largo - 2)
-    '    CantidadTexto = "( " + Num2Text(NetoAPagar - decimales) & " pesos " & Mid(decimales, Len(decimales) - 1) & "/100 M.N. )"
-
-    '    reporte.ReportParameters("LugarExpedicion").Value = Municipio.ToUpper & " " & Estado.ToUpper & ", " & "a " & CDate(FechaBaja).Day.ToString & " de " & MonthName(CDate(FechaBaja).Month).ToString & " de " & CDate(FechaBaja).Year.ToString
-    '    reporte.ReportParameters("ImporteNeto").Value = FormatCurrency(NetoAPagar, 2).ToString
-    '    reporte.ReportParameters("Texto1").Value = "Recibí de " & RazonSocial.ToUpper & " la cantidad de " & CantidadTexto.ToUpper.ToString & " por concepto de saldo finiquito por el trabajo prestado a esta empresa."
-    '    reporte.ReportParameters("Texto2").Value = "Así mismo manifiesto que por así convenir a mis intereses renuncio voluntariamente y de manera irrevocable al puesto de " & Puesto & " que venía desempeñando en esta empresa; además hago constar que no se me adeuda ninguna cantidad por concepto de salarios, horas extras, bonos, comisiones, premios, séptimos dias, vacaciones, prima vacacional, accidentes o enfermedades profesionales, prima de antigüedad, reparto de utilidades, aguinaldo, ni por otro concepto nacido de la Ley o de mi contrato de trabajo, motivo por el cual la libero de toda responsabilidad, otorgandole el mas amplio finiquito y manifiesto que no me reservo ninguna acción o derecho en contra de " & RazonSocial.ToUpper & " o quien resulte responsable o propietario de la fuente de trabajo."
-    '    reporte.ReportParameters("FechaAlta").Value = FechaIngreso
-    '    reporte.ReportParameters("FechaBaja").Value = FechaBaja
-    '    reporte.ReportParameters("SueldoDiario").Value = FormatCurrency(CuotaDiaria, 2).ToString
-    '    reporte.ReportParameters("SueldoDiarioIntegrado").Value = FormatCurrency(SalarioDiarioIntegradoTrabajador, 2).ToString
-    '    reporte.ReportParameters("DiasPendientesPago").Value = DiasPendientesPago
-    '    reporte.ReportParameters("OtrasPercepcionesPendientes").Value = FormatCurrency(OtrasPercepcionesPendientes, 2).ToString
-    '    reporte.ReportParameters("DiasLaborados").Value = DiasLaboradosAnio
-    '    reporte.ReportParameters("AnosAntiguedadIndemnizacion").Value = 1
-    '    reporte.ReportParameters("DiasVacacionesProporcionales").Value = DiasVacacionesProporcionales
-    '    reporte.ReportParameters("VacacionesProporcionales").Value = ProporcionalVacaciones
-    '    reporte.ReportParameters("PorcentajePrimaVacacional").Value = 25
-    '    reporte.ReportParameters("PrimaVacacional").Value = PrimaVacaciones
-    '    reporte.ReportParameters("DiasAguinaldoAnio").Value = 15
-    '    reporte.ReportParameters("AguinaldoProporcional").Value = ProporcionalAguinaldo
-
-    '    reporte.ReportParameters("TotalPercepciones").Value = FormatCurrency(TotalPercepciones - SubsidioEmpleo, 2).ToString
-    '    reporte.ReportParameters("ImpuestoRetener").Value = FormatCurrency(ImpuestoISR, 2).ToString
-    '    reporte.ReportParameters("SubsidioEmpleo").Value = FormatCurrency(SubsidioEmpleo, 2).ToString
-    '    reporte.ReportParameters("CuotasIMSS").Value = FormatCurrency(CuotasIMSS, 2).ToString
-    '    reporte.ReportParameters("TotalDeducciones").Value = FormatCurrency(TotalDeducciones, 2).ToString
-    '    reporte.ReportParameters("NetoPagar").Value = FormatCurrency(NetoAPagar, 2).ToString
-    '    reporte.ReportParameters("NombreEmpleado").Value = NombreEmpleado
-
-    '    Return reporte
-
-    'End Function
     Private Function GeneraPDFFiniquito(ByVal NoEmpleado As Integer, ByVal IdMovimiento As Integer, ByVal IdCliente As Integer) As Telerik.Reporting.Report
         Dim reporte As New Formatos.formato_finiquito
         Dim CantidadTexto As String = ""
@@ -2932,6 +2755,7 @@ Public Class FiniquitosGeneradosSemanal
         Dim Puesto As String = ""
         Dim FechaIngreso As String = ""
         Dim FechaBaja As String = ""
+        Dim DiasPagadosVacaciones As Decimal = 0
 
         Dim DiasLaborados As String = ""
         Dim DiasLaboradosAnio As String = ""
@@ -2963,7 +2787,7 @@ Public Class FiniquitosGeneradosSemanal
 
         Dim dtEmpleado As New DataTable
         Dim cEmpleado As New Entities.Empleado
-        cEmpleado.IdEmpleado = empleadoId.Value
+        cEmpleado.IdEmpleado = NoEmpleado
         'cEmpleado.IdEmpresa = IdEmpresa
         cEmpleado.IdMovimiento = IdMovimiento
         dtEmpleado = cEmpleado.ConsultarEmpleados()
@@ -2975,6 +2799,7 @@ Public Class FiniquitosGeneradosSemanal
             Next
         End If
 
+        cNomina = New Nomina()
         cNomina.IdEmpresa = IdEmpresa
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Id = IdMovimiento
@@ -2986,13 +2811,16 @@ Public Class FiniquitosGeneradosSemanal
                 FechaBaja = oDataRow("FechaBaja").ToString
                 CuotaDiaria = FormatCurrency(oDataRow("CuotaDiaria"), 2)
                 SalarioDiarioIntegradoTrabajador = oDataRow("IntegradoIMSS")
+                DiasPagadosVacaciones = oDataRow("DiasPagadosVacaciones")
             Next
         End If
 
+        cNomina = New Nomina()
         cNomina.Id = IdMovimiento
         'cNomina.IdEmpresa = Session("clienteid")
         cNomina.TipoNomina = 1 'Semanal
-        dt = cNomina.ConsultarDesgloseFiniquitoGenerado()
+        cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
+        dt = cNomina.ConsultarDesgloseFiniquito()
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
@@ -3008,39 +2836,41 @@ Public Class FiniquitosGeneradosSemanal
             Next
         End If
 
+        cNomina = New Nomina()
         cNomina.IdEmpresa = IdEmpresa
-        cNomina.Ejercicio = IdEjercicio
+        cNomina.IdCliente = IdCliente
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
         cNomina.TipoConcepto = "P"
         cNomina.NoEmpleado = NoEmpleado
         cNomina.IdMovimiento = IdMovimiento
-        dt = cNomina.ConsultarPercepcionesDeduccionesFiniquito()
+        dt = cNomina.ConsultarPercepcionesDeduccionesFiniquitoGenerado()
 
         If dt.Rows.Count > 0 Then
             If dt.Compute("Sum(Unidad)", "CvoConcepto=51") IsNot DBNull.Value Then
                 DiasPendientesPago = dt.Compute("Sum(Unidad)", "CvoConcepto=51")
             End If
-            If dt.Compute("Sum(Importe)", "CvoConcepto=55") IsNot DBNull.Value Then
-                SubsidioEmpleo = dt.Compute("Sum(Importe)", "CvoConcepto=55")
+            If dt.Compute("Sum(Importe)", "CvoConcepto=54") IsNot DBNull.Value Then
+                SubsidioEmpleo = dt.Compute("Sum(Importe)", "CvoConcepto=54")
             End If
             If dt.Compute("Sum(Importe)", "CvoConcepto<>2 AND CvoConcepto<>14 AND CvoConcepto<>15 AND CvoConcepto<>16 AND CvoConcepto<>55") IsNot DBNull.Value Then
                 OtrasPercepcionesPendientes = dt.Compute("Sum(Importe)", "CvoConcepto<>2 AND CvoConcepto<>14 AND CvoConcepto<>15 AND CvoConcepto<>16 AND CvoConcepto<>55")
             End If
         End If
 
+        cNomina = New Nomina()
         cNomina.IdEmpresa = IdEmpresa
-        cNomina.Ejercicio = IdEjercicio
+        cNomina.IdCliente = IdCliente
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
         cNomina.TipoConcepto = "D"
         cNomina.NoEmpleado = NoEmpleado
         cNomina.IdMovimiento = IdMovimiento
-        dt = cNomina.ConsultarPercepcionesDeduccionesFiniquito()
+        dt = cNomina.ConsultarPercepcionesDeduccionesFiniquitoGenerado()
 
         If dt.Rows.Count > 0 Then
-            If dt.Compute("Sum(Importe)", "CvoConcepto=86") IsNot DBNull.Value Then
-                ImpuestoISR = dt.Compute("Sum(Importe)", "CvoConcepto=86")
+            If dt.Compute("Sum(Importe)", "CvoConcepto=52") IsNot DBNull.Value Then
+                ImpuestoISR = dt.Compute("Sum(Importe)", "CvoConcepto=52")
             End If
             If dt.Compute("Sum(Importe)", "CvoConcepto=56") IsNot DBNull.Value Then
                 CuotasIMSS = dt.Compute("Sum(Importe)", "CvoConcepto=56")
@@ -3053,8 +2883,8 @@ Public Class FiniquitosGeneradosSemanal
         PercepcionesGravadas = 0
         PercepcionesExentas = 0
 
-        Call MostrarPercepciones(NoEmpleado, IdMovimiento)
-        Call MostrarDeducciones(NoEmpleado, IdMovimiento)
+        Call MostrarPercepciones(NoEmpleado, IdCliente, IdMovimiento)
+        Call MostrarDeducciones(NoEmpleado, IdCliente, IdMovimiento)
 
         NetoAPagar = (TotalPercepciones - TotalDeducciones)
 
@@ -3133,7 +2963,7 @@ Public Class FiniquitosGeneradosSemanal
         cNomina.Id = IdMovimiento
         'cNomina.IdEmpresa = Session("clienteid")
         cNomina.TipoNomina = 1 'Semanal
-        dt = cNomina.ConsultarDesgloseFiniquitoGenerado()
+        dt = cNomina.ConsultarDesgloseFiniquito()
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
@@ -3149,14 +2979,14 @@ Public Class FiniquitosGeneradosSemanal
 
         Return reporte
     End Function
-    Private Sub MostrarPercepciones(ByVal NoEmpleado As Integer, ByVal IdMovimiento As Integer)
+    Private Sub MostrarPercepciones(ByVal NoEmpleado As Integer, ByVal IdCliente As Integer, ByVal IdMovimiento As Integer)
 
         Call CargarVariablesGenerales()
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa
-        cNomina.Ejercicio = IdEjercicio
+        cNomina.IdCliente = IdCliente
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
         cNomina.TipoConcepto = "P"
@@ -3174,13 +3004,14 @@ Public Class FiniquitosGeneradosSemanal
             End If
         End If
     End Sub
-    Private Sub MostrarDeducciones(ByVal NoEmpleado As Integer, ByVal IdMovimiento As Integer)
+    Private Sub MostrarDeducciones(ByVal NoEmpleado As Integer, ByVal IdCliente As Integer, ByVal IdMovimiento As Integer)
+
         Call CargarVariablesGenerales()
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa
-        cNomina.Ejercicio = IdEjercicio
+        cNomina.IdCliente = IdCliente
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Tipo = "F"
         cNomina.TipoConcepto = "D"
@@ -3195,6 +3026,26 @@ Public Class FiniquitosGeneradosSemanal
                 TotalDeducciones = 0
             End If
         End If
+    End Sub
+    Private Sub cmbCliente_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles cmbCliente.SelectedIndexChanged
+        Call CargarVariablesGenerales()
+        Call CargaPeriodos(1)
+        Call CargarGridEmpleados()
+    End Sub
+    Private Sub grdEmpleados_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles grdEmpleados.NeedDataSource
+        Call CargarVariablesGenerales()
+
+        Dim dt As New DataTable()
+        Dim cNomina As New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = cmbCliente.SelectedValue
+        cNomina.Ejercicio = IdEjercicio
+        cNomina.TipoNomina = 1 'Semanal
+        cNomina.Tipo = "F"
+        cNomina.Periodo = cmbPeriodo.SelectedValue
+        dt = cNomina.ConsultarEmpleadosGeneradosFiniquito()
+        grdEmpleados.DataSource = dt
+        cNomina = Nothing
     End Sub
 
 End Class

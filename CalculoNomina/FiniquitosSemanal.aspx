@@ -3,7 +3,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="head" runat="server">
     <script type="text/javascript">
         function OnRequestStart(target, arguments) {
-            if ((arguments.get_eventTarget().indexOf("btnSearch") > -1) || (arguments.get_eventTarget().indexOf("btnAll") > -1)) {
+            if ((arguments.get_eventTarget().indexOf("btnSearch") > -1) || (arguments.get_eventTarget().indexOf("btnAll") > -1) || (arguments.get_eventTarget().indexOf("grdEmpleadosSemanal") > -1)) {
                 arguments.set_enableAjax(false);
             }
         }

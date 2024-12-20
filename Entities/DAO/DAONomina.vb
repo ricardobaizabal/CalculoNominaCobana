@@ -73,7 +73,9 @@ Partial Public Class Nomina
             p.Add(New SqlParameter("@pEsEspecial", EsEspecial))
             p.Add(New SqlParameter("@FechaInicialPago", FechaIni))
             p.Add(New SqlParameter("@FechaFinalPago", FechaFin))
-            p.Add(New SqlParameter("@FechaPago", FechaPago))
+            If FechaPago.ToShortDateString <> "01/01/0001" Then
+                p.Add(New SqlParameter("@FechaPago", FechaPago))
+            End If
             p.Add(New SqlParameter("@DiasPagados", DiasPagados))
             p.Add(New SqlParameter("@IdNomina", IdNomina))
 
@@ -332,7 +334,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarPercepcionesDeduccionesFiniquitoGenerado() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         p.Add(New SqlParameter("@pTipo", Tipo))
         p.Add(New SqlParameter("@pTipoConcepto", TipoConcepto))
@@ -393,10 +396,11 @@ Partial Public Class Nomina
     End Sub
     Public Sub EliminaConceptosFiniquito()
         p.Clear()
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pTipo", Tipo))
         p.Add(New SqlParameter("@pIdMovimiento", IdMovimiento))
         p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
         If CvoConcepto > 0 Then
@@ -579,11 +583,14 @@ Partial Public Class Nomina
             p.Add(New SqlParameter("@pImporte", Importe))
             p.Add(New SqlParameter("@pImporteGravado", ImporteGravado))
             p.Add(New SqlParameter("@pImporteExento", ImporteExento))
+            p.Add(New SqlParameter("@pSituacion", Situacion))
             p.Add(New SqlParameter("@pGenerado", Generado))
             p.Add(New SqlParameter("@pIdMovimiento", IdMovimiento))
             p.Add(New SqlParameter("@pFechaInicialPago", FechaIni))
             p.Add(New SqlParameter("@pFechaFinalPago", FechaFin))
-            p.Add(New SqlParameter("@pFechaPago", FechaPago))
+            If FechaPago.ToShortDateString <> "01/01/0001" Then
+                p.Add(New SqlParameter("@pFechaPago", FechaPago))
+            End If
             db.ExecuteSPWithParams("pGuardarExentoYGravadoFiniquito", p)
         Catch ex As Exception
             Throw ex
@@ -613,7 +620,8 @@ Partial Public Class Nomina
     Public Sub ActualizarExentoYGravadoFiniquito()
         Try
             p.Clear()
-            'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
             p.Add(New SqlParameter("@pEjercicio", Ejercicio))
             p.Add(New SqlParameter("@pCvoConcepto", CvoConcepto))
@@ -918,13 +926,14 @@ Partial Public Class Nomina
         Try
             p.Clear()
             p.Add(New SqlParameter("@pTipo", Tipo))
+            p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+            p.Add(New SqlParameter("@pIdCliente", IdCliente))
             p.Add(New SqlParameter("@pIdMovimiento", IdMovimiento))
             p.Add(New SqlParameter("@pNoEmpleado", NoEmpleado))
-            'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
             p.Add(New SqlParameter("@pEjercicio", Ejercicio))
             p.Add(New SqlParameter("@pTipoNomina", TipoNomina))
             p.Add(New SqlParameter("@pIdEstatus", IdEstatus))
-
+            p.Add(New SqlParameter("@pDiasPagadosVacaciones", DiasPagadosVacaciones))
             db.ExecuteSP("pActualizarEstatusFiniquitoGenerado", p)
 
         Catch ex As Exception
@@ -1023,7 +1032,8 @@ Partial Public Class Nomina
     End Function
     Public Function ConsultarEmpleadosGeneradosFiniquito() As DataTable
         p.Clear()
-        'p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@pIdCliente", IdCliente))
         p.Add(New SqlParameter("@pEjercicio", Ejercicio))
         p.Add(New SqlParameter("@pTipo", Tipo))
         p.Add(New SqlParameter("@pTipoNomina", TipoNomina))

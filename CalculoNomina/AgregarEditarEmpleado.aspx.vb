@@ -465,6 +465,10 @@ Public Class AgregarEditarEmpleado
                 txtValorDescuento.Text = rs("valor_descuento")
                 txtComentarioImss.Text = rs("comentarioBaja")
 
+                If rs("comentarioBaja").ToString.Length > 0 Then
+                    txtComentarioImss.Enabled = False
+                End If
+
                 panelEmployeeRegistration.Visible = True
 
                 panel1.Visible = True
@@ -883,26 +887,26 @@ Public Class AgregarEditarEmpleado
     End Sub
     Private Sub btnGuardarContrato_Click(sender As Object, e As EventArgs) Handles btnGuardarContrato.Click
         If Page.IsValid Then
+            Call SaveContrato()
+            'Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
+            'Try
+            '    Dim cmd As New SqlCommand("EXEC pPersonalAdministrado @cmd=22, @empleadoid='" & EmployeeID.Value.ToString & "'", conn)
+            '    conn.Open()
 
-            Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-            Try
-                Dim cmd As New SqlCommand("EXEC pPersonalAdministrado @cmd=22, @empleadoid='" & EmployeeID.Value.ToString & "'", conn)
-                conn.Open()
+            '    Dim rs As SqlDataReader
+            '    rs = cmd.ExecuteReader()
 
-                Dim rs As SqlDataReader
-                rs = cmd.ExecuteReader()
-
-                If rs.Read Then
-                    SaveContrato()
-                Else
-                    RadWindowManager2.RadAlert("Es Requerido Registrar un Beneficiario antes de Registrar un Contrato.", 330, 180, "Alert", "", "")
-                End If
-            Catch ex As Exception
-                Response.Write(ex.Message.ToString)
-            Finally
-                conn.Close()
-                conn.Dispose()
-            End Try
+            '    If rs.Read Then
+            '        SaveContrato()
+            '    Else
+            '        RadWindowManager2.RadAlert("Es requerido registrar un beneficiario antes de guardar los datos del contrato.", 330, 180, "Alert", "", "")
+            '    End If
+            'Catch ex As Exception
+            '    Response.Write(ex.Message.ToString)
+            'Finally
+            '    conn.Close()
+            '    conn.Dispose()
+            'End Try
         End If
     End Sub
     Private Sub contratosList_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles contratosList.ItemCommand
@@ -1048,10 +1052,19 @@ Public Class AgregarEditarEmpleado
                 End If
 
                 If rs("fecha_baja").ToString.Length > 0 Then
+                    calFechaBaja.Enabled = False
                     calFechaBaja.SelectedDate = CDate(rs("fecha_baja"))
                     HFechaBaja.Value = 1
                 Else
                     HFechaBaja.Value = 0
+                End If
+
+                If rs("tipo_baja") > 0 Then
+                    ddlTipoBaja.Enabled = False
+                End If
+
+                If rs("motivoid") > 0 Then
+                    ddlMotivoNoRecomendable.Enabled = False
                 End If
 
                 txtAnosAntiguedad.Text = rs("anos_antiguedad")
@@ -1601,23 +1614,24 @@ Public Class AgregarEditarEmpleado
                     Dim maxDate As DateTime = DateTime.Today.ToShortDateString
                     Dim dt As DateTime = calFechaBaja.SelectedDate.Value.ToShortDateString
 
-                    'Dim ValidaFechaBaja As Boolean = True
+                    ValidaFechaBaja = True
 
-                    If HFechaBaja.Value = 0 Then
-                        If (dt >= minDate And dt <= maxDate) Then
-                            ValidaFechaBaja = True
-                        Else
-                            ValidaFechaBaja = False
-                        End If
-                    Else
-                        ValidaFechaBaja = True
-                    End If
+                    'If HFechaBaja.Value = 0 Then
+                    '    If (dt >= minDate And dt <= maxDate) Then
+                    '        ValidaFechaBaja = True
+                    '    Else
+                    '        ValidaFechaBaja = False
+                    '    End If
+                    'Else
+                    '    ValidaFechaBaja = True
+                    'End If
 
                     If ValidaFechaBaja = True Then
                         'lblValidaFechaBaja.Text = "La fecha de baja es válida"
                         ObjData.RunSQLScalarQuery("EXEC pContrato @cmd=3, @contratoid='" & ContratoID.Value.ToString & "', @clienteid='" & Session("clienteid") & "', @ejecutivoid='" & ddlEjecutivo.SelectedValue.ToString & "', @tipo_jornadaid='" & ddlTipoJornada.SelectedValue.ToString & "', @tipo_salarioid='" & ddlTipoSalario.SelectedValue.ToString & "', @tipo_contratoid='" & ddlTipoContrato.SelectedValue.ToString & "', @mesesid='" & dllMesesEventual.SelectedValue.ToString & "', @departamentoid='" & ddlDepartamento.SelectedValue.ToString & "', @puestoid='" & ddlPuesto.SelectedValue.ToString & "', @fecha_alta='" & FechaAlta.ToString("yyyyMMdd") & "', @fecha_baja='" & FechaBaja.ToString("yyyyMMdd") & "', @anos_antiguedad='" & txtAnosAntiguedad.Text & "', @tipo_baja='" & ddlTipoBaja.SelectedValue.ToString & "', @sueldo_diario='" & txtSueldoDiario.Text.ToString & "', @sueldo_diario_integrado='" & txtSueldoDiarioIntegrado.Text.ToString & "', @otras_percepciones_asimilables='" & txtPercepcionesAsimilables.Text.ToString & "', @regimencontratacionnominaid='" & ddlRegimenContratacionnomina.SelectedValue.ToString & "', @tipo_jornadanominaid='" & ddlTipoJornadanomina.SelectedValue.ToString & "', @tipo_contratonominaid='" & ddlTipoContratonomina.SelectedValue.ToString & "', @no_recomendableBit='" & NoRecomendableBit.ToString & "', @motivoid='" & ddlMotivoNoRecomendable.SelectedValue.ToString & "', @comentario='" & txtComentariosNoRecomendable.Text.ToString & "',@comentarioAlta='" & txtComentariosAlta.Text & "', @riesgopuestoid='" & ddlRiesgoPuesto.SelectedValue.ToString & "',@tiponominaid='" & ddlTipoNomina.SelectedValue.ToString & "', @periodopagoid='" & ddlPeriodoPago.SelectedValue.ToString & "', @RelojChecadorId='" & txtRelojChecadorId.Text & "', @IdHorario='" & ddlHorario.SelectedValue.ToString & "',@IdUsuario='" & userid.ToString & "',@comentarioImss='" & txtComentarioImss.Text & "',@Descansosxsemana='" & txtDescansosxsemana.Text & "',@Asimiladototalsemanal='" & txtAsimiladoTotalS.Text & "',@Porcentajeimptocedularestatal='" & txtImptoCedular.Text & "',@Pagoxhora='" & txtPagoxHora.Text & "',@Factorcomision='" & txtFactorComision.Text & "',@Promediocuotavariable='" & txtPromCuotaV.Text & "', @Factordestajo='" & txtFactorDestajo.Text & "',@Integradotipo='" & txtIntegradoTipo.Text & "',@Horasaldia='" & txtHorasDia.Text & "',@Promediopercepcionesvariables='" & txtPromedioPercepV.Text & "', @salario_diario_jornada_reducida='" & txtSalarioDiarioSJornadaReducida.Text & "'")
                     Else
-                        lblValidaFechaBaja.Text = "La fecha de baja debe ser menor máximo 7 dias al día de hoy"
+                        'lblValidaFechaBaja.Text = "La fecha de baja debe ser menor máximo 7 dias al día de hoy"
+                        rwAlerta.RadAlert("La fecha de baja no debe ser posterior a 7 días a partir de la fecha actual.", 330, 180, "Alert", "", "")
                     End If
                 Else
                     ObjData.RunSQLScalarQuery("EXEC pContrato @cmd=3, @contratoid='" & ContratoID.Value.ToString & "', @clienteid='" & Session("clienteid") & "', @ejecutivoid='" & ddlEjecutivo.SelectedValue.ToString & "', @tipo_jornadaid='" & ddlTipoJornada.SelectedValue.ToString & "', @tipo_salarioid='" & ddlTipoSalario.SelectedValue.ToString & "', @tipo_contratoid='" & ddlTipoContrato.SelectedValue.ToString & "', @mesesid='" & dllMesesEventual.SelectedValue.ToString & "', @departamentoid='" & ddlDepartamento.SelectedValue.ToString & "', @puestoid='" & ddlPuesto.SelectedValue.ToString & "', @fecha_alta='" & FechaAlta.ToString("yyyyMMdd") & "', @anos_antiguedad='" & txtAnosAntiguedad.Text & "', @tipo_baja='" & ddlTipoBaja.SelectedValue.ToString & "', @sueldo_diario='" & txtSueldoDiario.Text.ToString & "', @sueldo_diario_integrado='" & txtSueldoDiarioIntegrado.Text.ToString & "', @otras_percepciones_asimilables='" & txtPercepcionesAsimilables.Text.ToString & "', @regimencontratacionnominaid='" & ddlRegimenContratacionnomina.SelectedValue.ToString & "', @tipo_jornadanominaid='" & ddlTipoJornadanomina.SelectedValue.ToString & "', @tipo_contratonominaid='" & ddlTipoContratonomina.SelectedValue.ToString & "', @no_recomendableBit='" & NoRecomendableBit.ToString & "', @motivoid='" & ddlMotivoNoRecomendable.SelectedValue.ToString & "', @comentario='" & txtComentariosNoRecomendable.Text.ToString & "',@comentarioAlta='" & txtComentariosAlta.Text & "', @riesgopuestoid='" & ddlRiesgoPuesto.SelectedValue.ToString & "', @tiponominaid='" & ddlTipoNomina.SelectedValue.ToString & "', @periodopagoid='" & ddlPeriodoPago.SelectedValue.ToString & "',  @RelojChecadorId='" & txtRelojChecadorId.Text & "', @IdHorario='" & ddlHorario.SelectedValue.ToString & "',@IdUsuario='" & userid.ToString & "',@comentarioImss='" & txtComentarioImss.Text & "',@Descansosxsemana='" & txtDescansosxsemana.Text & "',@Asimiladototalsemanal='" & txtAsimiladoTotalS.Text & "',@Porcentajeimptocedularestatal='" & txtImptoCedular.Text & "',@Pagoxhora='" & txtPagoxHora.Text & "',@Factorcomision='" & txtFactorComision.Text & "',@Promediocuotavariable='" & txtPromCuotaV.Text & "', @Factordestajo='" & txtFactorDestajo.Text & "',@Integradotipo='" & txtIntegradoTipo.Text & "',@Horasaldia='" & txtHorasDia.Text & "',@Promediopercepcionesvariables='" & txtPromedioPercepV.Text & "', @salario_diario_jornada_reducida='" & txtSalarioDiarioSJornadaReducida.Text & "'")

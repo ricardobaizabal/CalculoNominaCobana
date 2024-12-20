@@ -1485,7 +1485,7 @@
                                                 <asp:CheckBox ID="chkRecomendable" Text="No es recomendable" CssClass="item" Font-Bold="True" runat="server" />
                                             </td>
                                             <td style="width: 25%;">
-                                                <asp:Label ID="lblMotivoNoRecomendable" runat="server" CssClass="item" Font-Bold="True" Text="Motivo:"></asp:Label>
+                                                <asp:Label ID="lblMotivoNoRecomendable" runat="server" CssClass="item" Font-Bold="True" Text="Motivo no es recomendable:"></asp:Label>
                                             </td>
                                         </tr>
                                         <tr>

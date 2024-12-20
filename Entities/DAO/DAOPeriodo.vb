@@ -162,10 +162,18 @@ Partial Public Class Periodo
         p.Add(New SqlParameter("@IdEjercicio", IdEjercicio))
         p.Add(New SqlParameter("@IdTipoNomina", IdTipoNomina))
         p.Add(New SqlParameter("@ExtraordinarioBit", ExtraordinarioBit))
-        'If ExtraordinarioBit <> Nothing Then
-        '    p.Add(New SqlParameter("@ExtraordinarioBit", ExtraordinarioBit))
-        'End If
         dt = db.ExecuteSP("pConsultarPeriodos", p)
+        Return dt
+    End Function
+    Public Function ConsultarPeriodoFechaBaja() As DataTable
+        p.Clear()
+        p.Add(New SqlParameter("@IdEmpresa", IdEmpresa))
+        p.Add(New SqlParameter("@IdCliente", IdCliente))
+        p.Add(New SqlParameter("@IdEjercicio", IdEjercicio))
+        p.Add(New SqlParameter("@IdTipoNomina", IdTipoNomina))
+        p.Add(New SqlParameter("@ExtraordinarioBit", ExtraordinarioBit))
+        p.Add(New SqlParameter("@FechaBaja", FechaBaja))
+        dt = db.ExecuteSP("pConsultarPeriodoFechaBaja", p)
         Return dt
     End Function
     Public Function ConsultarPeriodosResumen() As DataTable

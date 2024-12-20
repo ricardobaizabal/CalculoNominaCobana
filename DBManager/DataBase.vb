@@ -44,7 +44,7 @@ Public Class DataBase
 
             For Each param As SqlParameter In params
                 command.Parameters.Add(param)
-                parms += param.ParameterName.ToString() + "=" + param.SqlValue.ToString() + ","
+                parms += param.ParameterName.ToString() + "='" + param.SqlValue.ToString() + "',"
             Next
 
             parmsC = parms
@@ -105,7 +105,7 @@ Public Class DataBase
 
             For Each param As SqlParameter In params
                 command.Parameters.Add(param)
-                parms += param.ParameterName.ToString() + "=" + param.SqlValue.ToString() + ","
+                parms += param.ParameterName.ToString() + "='" + param.SqlValue.ToString() + "',"
             Next
 
             parmsC = parms

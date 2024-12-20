@@ -12,6 +12,8 @@ Public Class GeneracionDeFiniquitosSemanal
     Private IdEmpresa As Integer = 0
     Private IdEjercicio As Integer = 0
     Private IdPeriodo As Integer = 0
+    Private MesAcumula As Integer = 0
+    Private FinMesBit As Boolean = False
     Private SalarioMinimoDiarioGeneral As Decimal = 0
     Private ImporteSeguroVivienda As Decimal = 0
 
@@ -21,7 +23,7 @@ Public Class GeneracionDeFiniquitosSemanal
     Private ImporteGravado As Decimal = 0
     Private Subsidio As Decimal = 0
     Private Impuesto As Decimal = 0
-    Private SubsidioEfectivo As Decimal = 0
+    Private SubsidioAplicado As Decimal = 0
     Private SalarioDiarioIntegradoTrabajador As Decimal = 0
     Private DiasTrabajados As Decimal = 0
     Private FactorDiario As Decimal = 0
@@ -30,6 +32,7 @@ Public Class GeneracionDeFiniquitosSemanal
     Private CuotaPeriodo As Decimal = 0
     Private HorasTriples As Decimal = 0
     Private DescansoTrabajado As Decimal = 0
+    Private PrimaAntiguedad As Decimal = 0
     Private PrimaDominical As Decimal = 0
     Private PrimaVacacional As Decimal = 0
     Private Vacaciones As Decimal = 0
@@ -65,6 +68,8 @@ Public Class GeneracionDeFiniquitosSemanal
     Private ImporteGravadoAguinaldo As Decimal = 0
     Private ImporteExentoPrimaVacacional As Decimal = 0
     Private ImporteGravadoPrimaVacacional As Decimal = 0
+    Private ImporteExentoPrimaAntiguedad As Decimal = 0
+    Private ImporteGravadoPrimaAntiguedad As Decimal = 0
     Private ImporteExentoRepartoUtilidades As Decimal = 0
     Private ImporteGravadoRepartoUtilidades As Decimal = 0
     Private ImporteExentoPrevisionSocial As Decimal = 0
@@ -142,9 +147,13 @@ Public Class GeneracionDeFiniquitosSemanal
     Private DiasProporcionalVacaciones As Decimal
     Private ProporcionalVacaciones As Decimal
 
+    Private ImpuestoUSMO As Decimal = 0
+
     Private ImpuestoVacaciones As Decimal = 0
     Private SubsidioVacaciones As Decimal = 0
     Private SubsidioEfectivoVacaciones As Decimal = 0
+
+    Private ImpuestoPrimaVacacional As Decimal = 0
 
     Private ImpuestoAguinaldo As Decimal = 0
     Private SubsidioAguinaldo As Decimal = 0
@@ -164,19 +173,19 @@ Public Class GeneracionDeFiniquitosSemanal
     Private ImpuestoPorPagarSueldos As Decimal = 0
 
     Private DiasMes As Integer = 0
-    Private ImporteGravadoFiniquito As Decimal = 0
-    Private ImporteGravadoVacaciones As Decimal = 0
 
-    Private UMA As Double = 0
+    Private UMA As Double
+    Private UMAMensual As Double
+    Private UMI As Double
     Private BaseGravableMensualSubsidio As Double = 0
     Private FactorSubsidio As Double = 0
     Private FactorDiarioPromedio As Double
+    Private AntiguedadAnios As Decimal = 0
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
             If Not String.IsNullOrEmpty(Request("id")) Then
 
-                Call LlenaComboPeriodos(0)
                 Call MostrarDatosFiniquito()
                 Call LlenaCmbConcepto(0, "P")
 
@@ -217,7 +226,7 @@ Public Class GeneracionDeFiniquitosSemanal
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
-                'IdEmpresa = oDataRow("IdEmpresa")
+                IdEmpresa = oDataRow("IdEmpresa")
                 IdEjercicio = oDataRow("IdEjercicio")
                 IdPeriodo = oDataRow("IdPeriodo")
                 SalarioMinimoDiarioGeneral = oDataRow("SalarioMinimoDiarioGeneral")
@@ -226,6 +235,9 @@ Public Class GeneracionDeFiniquitosSemanal
                 FactorSubsidio = oDataRow("FactorSubsidio")
                 FactorDiarioPromedio = oDataRow("FactorDiarioPromedio")
                 UMA = oDataRow("UMA")
+                UMI = oDataRow("UMI")
+                FinMesBit = CBool(oDataRow("FinMesBit"))
+                MesAcumula = oDataRow("MesAcumula")
             Next
         End If
     End Sub
@@ -264,8 +276,10 @@ Public Class GeneracionDeFiniquitosSemanal
                 lblFechaBaja.Text = oDataRow("FechaBaja").ToString
                 lblSueldoDiario.Text = FormatCurrency(oDataRow("CuotaDiaria"), 2).ToString
                 lblSueldoDiarioIntegrado.Text = FormatCurrency(oDataRow("IntegradoIMSS"), 2).ToString
-                'txtUltimoSueldomensual.Text = oDataRow("CuotaDiaria") * FactorDiarioPromedio
                 SalarioDiarioIntegradoTrabajador = oDataRow("IntegradoIMSS")
+
+                Call LlenaComboPeriodos(oDataRow("Periodo"), CDate(oDataRow("FechaBaja")))
+                Call MostrarDesgloceFiniquito()
             Next
         End If
     End Sub
@@ -301,9 +315,9 @@ Public Class GeneracionDeFiniquitosSemanal
         End If
     End Sub
     Private Sub MostrarDesgloceFiniquito()
-        Dim DiasPagadosVacaciones As Integer = 0
+        Dim DiasPagadosVacaciones As Decimal = 0
         Try
-            DiasPagadosVacaciones = Convert.ToInt32(txtDiasPagadosVacaciones.Text)
+            DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
         Catch ex As Exception
             DiasPagadosVacaciones = 0
         End Try
@@ -318,11 +332,14 @@ Public Class GeneracionDeFiniquitosSemanal
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
+
+                txtDiasPagadosVacaciones.MaxValue = Math.Round(oDataRow("DiasProporcionalVacaciones2"), 2)
+
                 lblAntiguedadDias.Text = oDataRow("DiasLaborados").ToString
                 lblDiasLaboradosAnio.Text = oDataRow("DiasLaboradosAnio").ToString
                 lblDiasVacacionesProporcionales.Text = Math.Round(oDataRow("DiasProporcionalVacaciones"), 2).ToString
                 lblVacacionesProporcionales.Text = FormatCurrency(oDataRow("ProporcionalVacaciones"), 2).ToString
-                lblPorcentajePrimaVacacional.Text = oDataRow("PorcentajePrimaVacacional").ToString
+                lblPorcentajePrimaVacacional.Text = oDataRow("PorcentajePrimaVacacional").ToString & " %"
                 lblPrimaVacacionalProporcional.Text = FormatCurrency(oDataRow("PrimaVacaciones"), 2).ToString
                 lblDiasAguinaldoProporcionales.Text = oDataRow("DiasAguinaldoProporcionales").ToString
                 lblAguinaldoProporcional.Text = FormatCurrency(oDataRow("ProporcionalAguinaldo"), 2).ToString
@@ -330,15 +347,17 @@ Public Class GeneracionDeFiniquitosSemanal
         End If
 
     End Sub
-    Private Sub LlenaComboPeriodos(ByVal sel As Integer)
+    Private Sub LlenaComboPeriodos(ByVal sel As Integer, ByVal FechaBaja As Date)
         Call CargarVariablesGenerales()
         Dim ObjData As New DataControl()
         Dim cPeriodo As New Entities.Periodo
-        'cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdEmpresa = IdEmpresa
+        cPeriodo.IdCliente = clienteId.Value
         cPeriodo.IdEjercicio = IdEjercicio
         cPeriodo.IdTipoNomina = 1 'Semanal
         cPeriodo.ExtraordinarioBit = False
-        ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodos(), True, False)
+        cPeriodo.FechaBaja = FechaBaja
+        ObjData.CatalogoRad(cmbPeriodo, cPeriodo.ConsultarPeriodoFechaBaja(), True, False)
         cmbPeriodo.SelectedValue = sel
         cPeriodo = Nothing
     End Sub
@@ -363,13 +382,13 @@ Public Class GeneracionDeFiniquitosSemanal
         ImportePeriodo = 0
         Subsidio = 0
         Impuesto = 0
-        SubsidioEfectivo = 0
+        SubsidioAplicado = 0
         DiasTrabajados = 0
         ImporteGravado = 0
-        ImporteGravadoVacaciones = 0
-        ImporteGravadoFiniquito = 0
 
+        ImpuestoUSMO = 0
         ImpuestoVacaciones = 0
+        ImpuestoPrimaVacacional = 0
         SubsidioVacaciones = 0
         SubsidioEfectivoVacaciones = 0
 
@@ -395,6 +414,7 @@ Public Class GeneracionDeFiniquitosSemanal
         Dim ImporteGravadoAguinaldo As Decimal = 0
         Dim ImporteExentoPrimaVacacional As Decimal = 0
         Dim ImporteGravadoPrimaVacacional As Decimal = 0
+        Dim USMO As Decimal = 0
 
         Dim DiferenciaSubsidioImpuestoVacaciones As Decimal = 0
         Dim FactorImpuestoSubsidioVacaciones As Decimal = 0
@@ -404,22 +424,32 @@ Public Class GeneracionDeFiniquitosSemanal
         Dim FactorImpuestoSubsidioAguinaldo As Decimal = 0
         Dim TasaSubsidioImpuestoAguinaldo As Decimal = 0
 
+        Dim DiasPagadosVacaciones As Decimal = 0
+        Try
+            DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
+        Catch ex As Exception
+            DiasPagadosVacaciones = 0
+        End Try
+
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
         cNomina.Id = Request("id")
         'cNomina.IdEmpresa = Session("clienteid")
         cNomina.TipoNomina = 1 'Semanal
+        cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
         dt = cNomina.ConsultarDesgloseFiniquito()
         cNomina = Nothing
 
         If dt.Rows.Count > 0 Then
             For Each oDataRow In dt.Rows
+                AntiguedadAnios = Math.Round(oDataRow("AntiguedadAnios"), 2)
                 ImporteDiario = oDataRow("SueldoDiario")
                 Aguinaldo = oDataRow("ProporcionalAguinaldo")
                 Vacaciones = oDataRow("ProporcionalVacaciones")
                 PrimaVacacional = oDataRow("PrimaVacaciones")
                 DiasProporcionalVacaciones = Math.Round(oDataRow("DiasProporcionalVacaciones"), 2)
                 DiasAguinaldoProporcionales = Math.Round(oDataRow("DiasAguinaldoProporcionales"), 2)
+                USMO = ImporteDiario * FactorDiarioPromedio 'USMO(base para ISR mensual) = Cuota Diaria * FactorDiarioPromedio (Por defecto, el valor de esta variable es 30, pero se puede modificar a 31 o 30.4)
             Next
         End If
 
@@ -443,158 +473,178 @@ Public Class GeneracionDeFiniquitosSemanal
         cNomina.Generado = ""
         cNomina.Timbrado = ""
         cNomina.Enviado = ""
-        cNomina.Situacion = ""
+        cNomina.Situacion = "A"
+        cNomina.EsEspecial = False
         cNomina.IdMovimiento = Request("id")
         cNomina.FechaIni = cPeriodo.FechaInicialDate
         cNomina.FechaFin = cPeriodo.FechaFinalDate
-        cNomina.FechaPago = cPeriodo.FechaPago
+        If Not cPeriodo.FechaPago = "" Then
+            cNomina.FechaPago = cPeriodo.FechaPago
+        End If
         cNomina.DiasPagados = cPeriodo.Dias
-        cNomina.GuadarNomina()
+        cNomina.GuadarNominaPeriodo()
 
-        'Call CargarVariablesGenerales()
-
+        'La parte exenta del aguinaldo es de 30 Unidades de Medida y Actualización (UMAs)
         If Aguinaldo > 0 Then
-            If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+            If Aguinaldo > 0 And Aguinaldo <= (UMA * 30) Then
                 ImporteExento = ImporteExento + Aguinaldo
                 ImporteExentoAguinaldo = Aguinaldo
                 ImporteGravadoAguinaldo = 0
-            ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
-                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
-                ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
-                ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
-                ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+            ElseIf Aguinaldo > 0 And Aguinaldo > (UMA * 30) Then
+                ImporteExento = ImporteExento + (UMA * 30)
+                ImporteExentoAguinaldo = UMA * 30
+                ImporteGravadoAguinaldo = Aguinaldo - (UMA * 30)
             End If
             GuardarExentoYGravado(14, DiasAguinaldoProporcionales, Aguinaldo, ImporteGravadoAguinaldo, ImporteExentoAguinaldo, "P")
         End If
 
+        'Vacaciones gravan al 100% para ISR
         If Vacaciones > 0 Then
-            ImporteGravadoVacaciones = Vacaciones
-            ImporteGravadoFiniquito = ImporteGravadoFiniquito + Vacaciones
             GuardarExentoYGravado(15, DiasProporcionalVacaciones, Vacaciones, Vacaciones, 0, "P")
         End If
 
+        'La parte exenta de la prima vacacional es de 15 Unidades de Medida y Actualización (UMAs)
         If PrimaVacacional > 0 Then
-            If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
+            If PrimaVacacional > 0 And PrimaVacacional < (UMA * 15) Then 'Exención 15 UMAs
                 ImporteExento = ImporteExento + PrimaVacacional
                 ImporteExentoPrimaVacacional = PrimaVacacional
                 ImporteGravadoPrimaVacacional = 0
-            ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
-                ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-                ImporteGravadoFiniquito = ImporteGravadoFiniquito + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
-                ImporteExentoPrimaVacacional = SalarioMinimoDiarioGeneral * 15
-                ImporteGravadoPrimaVacacional = PrimaVacacional - (SalarioMinimoDiarioGeneral * 15)
+            ElseIf PrimaVacacional > 0 And PrimaVacacional > (UMA * 15) Then
+                ImporteExento = ImporteExento + (UMA * 15)
+                ImporteExentoPrimaVacacional = UMA * 15
+                ImporteGravadoPrimaVacacional = PrimaVacacional - (UMA * 15) 'Remuneración
             End If
             GuardarExentoYGravado(16, 1, PrimaVacacional, ImporteGravadoPrimaVacacional, ImporteExentoPrimaVacacional, "P")
         End If
 
-        '1 Impuesto / Subsidio proporcional vacaciones
-        Dim ImporteProporcionalVacaciones As Decimal
-        Dim IngresoMensualOrdinario As Decimal
-        Dim IngresoGravadoMes As Decimal
+        'Impuesto USMO
+        ImpuestoUSMO = 0
+        Call CalcularImpuestoUSMO(USMO)
 
-        Call ConsultarDiasMes()
+        Dim Fraccion1 As Decimal = 0
+        Dim Fraccion2 As Decimal = 0
+        Dim Fraccion3 As Decimal = 0
+        Dim Fraccion4 As Decimal = 0
+        Dim Fraccion5 As Decimal = 0 '(ISR a retener)
 
-        ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * FactorDiarioPromedio
-        IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-        IngresoGravadoMes = ImporteProporcionalVacaciones + IngresoMensualOrdinario
+        'VACACIONES
+        If Vacaciones > 0 Then
+            'Fracción I.
+            '(Remuneración / 365) * 30.4
+            'Remuneración = ImporteGravadoVacaciones
+            Fraccion1 = (Vacaciones / 365) * FactorDiarioPromedio
 
-        Call CalcularImpuestoVacaciones(IngresoGravadoMes)
-        Call CalcularSubsidioVacaciones(IngresoGravadoMes)
+            'Fracción II.
+            'Fracción I + USMO = Base -->Tabla
+            Fraccion2 = Fraccion1 + USMO
 
-        If ImpuestoVacaciones > SubsidioVacaciones Then
-            SubsidioEfectivoVacaciones = 0
-            ImpuestoVacaciones = ImpuestoVacaciones - SubsidioVacaciones
-        ElseIf ImpuestoVacaciones < SubsidioVacaciones Then
-            SubsidioEfectivoVacaciones = SubsidioVacaciones - ImpuestoVacaciones
-            ImpuestoVacaciones = 0
+            ' Impuesto prima vacacional
+            Call CalcularImpuestoVacaciones(Fraccion2)
+
+            'Fracción III.
+            'ISR Fracción II - ISR USMO
+            Fraccion3 = ImpuestoVacaciones - ImpuestoUSMO
+
+            'Fracción IV
+            'Fraccion III/Fraccion I
+            Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
+
+            'Fracción V
+            'Remuneración * Tasa Fracción IV
+            Fraccion5 = Vacaciones * Fraccion4
+            Impuesto = Impuesto + Fraccion5
         End If
 
-        ImpuestoVacaciones = Math.Round(ImpuestoVacaciones, 6)
-        SubsidioEfectivoVacaciones = Math.Round(SubsidioEfectivoVacaciones, 6)
+        'PRIMA VACACIONAL
+        If ImporteGravadoPrimaVacacional > 0 Then
+            'Fracción I.
+            '(Remuneración / 365) * 30.4
+            'Remuneración = ImporteGravadoPrimaVacacional
+            Fraccion1 = 0
+            Fraccion1 = (ImporteGravadoPrimaVacacional / 365) * FactorDiarioPromedio
 
-        '2 Impuesto / Subsidio por sueldo ordinario
-        Call CalcularImpuestoSueldoMesAnterior(IngresoMensualOrdinario)
-        Call CalcularSubsidioSueldoMesAnterior(IngresoMensualOrdinario)
+            'Fracción II.
+            'Fracción I + USMO = Base -->Tabla
+            Fraccion2 = 0
+            Fraccion2 = Fraccion1 + USMO
 
-        If ImpuestoSueldoMesAnterior > SubsidioSueldoMesAnterior Then
-            SubsidioEfectivoSueldoMesAnterior = 0
-            ImpuestoSueldoMesAnterior = ImpuestoSueldoMesAnterior - SubsidioSueldoMesAnterior
-        ElseIf ImpuestoSueldoMesAnterior < SubsidioSueldoMesAnterior Then
-            SubsidioEfectivoSueldoMesAnterior = SubsidioSueldoMesAnterior - ImpuestoSueldoMesAnterior
-            ImpuestoSueldoMesAnterior = 0
+            ' Impuesto prima vacacional
+            Call CalcularImpuestoPrimaVacacional(Fraccion2)
+
+            'Fracción III.
+            'ISR Fracción II - ISR USMO
+            Fraccion3 = 0
+            Fraccion3 = ImpuestoPrimaVacacional - ImpuestoUSMO
+
+            'Fracción IV
+            'Fraccion III/Fraccion I
+            Fraccion4 = 0
+            Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
+
+            'Fracción V
+            'Remuneración * Tasa Fracción IV
+            Fraccion5 = ImporteGravadoPrimaVacacional * Fraccion4
+            Impuesto = Impuesto + Fraccion5
         End If
 
-        ImpuestoSueldoMesAnterior = Math.Round(ImpuestoSueldoMesAnterior, 6)
-        SubsidioEfectivoSueldoMesAnterior = Math.Round(SubsidioEfectivoSueldoMesAnterior, 6)
+        'PRIMA DE ANTIGÜEDAD
+        If AntiguedadAnios >= 15 Then
+            'De acuerdo con el artículo 162 de la LFT, tienen derecho a la prima de antigüedad los trabajadores que:
+            'Sean despedidos sin causa justificada.
+            'Renuncien voluntariamente después de al menos 15 años de servicio.
+            'Sean terminadas sus labores por muerte del trabajador.
 
-        If SubsidioEfectivoVacaciones > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
+            'La prima de antigüedad corresponde a 12 días de salario por cada año trabajado.
+            PrimaAntiguedad = (ImporteDiario * 12) * AntiguedadAnios
 
-            DiferenciaSubsidioImpuestoVacaciones = SubsidioEfectivoVacaciones - SubsidioEfectivoSueldoMesAnterior
+            'Pendiente
+            If PrimaAntiguedad > 0 Then
 
-            If DiferenciaSubsidioImpuestoVacaciones < 0 Then
-                DiferenciaSubsidioImpuestoVacaciones = DiferenciaSubsidioImpuestoVacaciones * -1
             End If
 
-            FactorImpuestoSubsidioVacaciones = DiferenciaSubsidioImpuestoVacaciones / ImporteProporcionalVacaciones
-            TasaSubsidioImpuestoVacaciones = FactorImpuestoSubsidioVacaciones * 1 ' El 1 representa 100%
-            SubsidioVacaciones = ImporteGravadoVacaciones * TasaSubsidioImpuestoVacaciones
-        Else
-            DiferenciaSubsidioImpuestoVacaciones = ImpuestoVacaciones - ImpuestoSueldoMesAnterior
-
-            FactorImpuestoSubsidioVacaciones = DiferenciaSubsidioImpuestoVacaciones / ImporteProporcionalVacaciones
-            TasaSubsidioImpuestoVacaciones = FactorImpuestoSubsidioVacaciones * 1 ' El 1 representa 100%
-            ImpuestoVacaciones = ImporteGravadoVacaciones * TasaSubsidioImpuestoVacaciones
         End If
 
+        'AGUINALDO
         If ImporteGravadoAguinaldo > 0 Then
+            'Fracción I.
+            '(Remuneración / 365) * 30.4
+            'Remuneración = ImporteGravadoAguinaldo
+            Fraccion1 = 0
+            Fraccion1 = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
 
-            Dim ImporteProporcionalAguinaldo As Decimal
+            'Fracción II.
+            'Fracción I + USMO = Base -->Tabla
+            Fraccion2 = 0
+            Fraccion2 = Fraccion1 + USMO
 
-            Call ConsultarDiasMes()
+            ' Impuesto aguinaldo
+            Call CalcularImpuestoAguinaldo(Fraccion2)
 
-            ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
-            IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-            IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
+            'Fracción III.
+            'ISR Fracción II - ISR USMO
+            Fraccion3 = 0
+            Fraccion3 = ImpuestoAguinaldo - ImpuestoUSMO
 
-            '1 Impuesto / Subsidio proporcional aguinaldo
-            Call CalcularImpuestoAguinaldo(IngresoGravadoMes)
-            Call CalcularSubsidioAguinaldo(IngresoGravadoMes)
+            'Fracción IV
+            'Fraccion III/Fraccion I
+            Fraccion4 = 0
+            Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
 
-            If ImpuestoAguinaldo > SubsidioAguinaldo Then
-                SubsidioEfectivoAguinaldo = 0
-                ImpuestoAguinaldo = ImpuestoAguinaldo - SubsidioAguinaldo
-            ElseIf ImpuestoAguinaldo < SubsidioAguinaldo Then
-                SubsidioEfectivoAguinaldo = SubsidioAguinaldo - ImpuestoAguinaldo
-                ImpuestoAguinaldo = 0
-            End If
-
-            ImpuestoAguinaldo = Math.Round(ImpuestoAguinaldo, 6)
-            SubsidioEfectivoAguinaldo = Math.Round(SubsidioEfectivoAguinaldo, 6)
-
-            If SubsidioEfectivoAguinaldo > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-                DiferenciaSubsidioImpuestoAguinaldo = SubsidioEfectivoAguinaldo - SubsidioEfectivoSueldoMesAnterior
-                If DiferenciaSubsidioImpuestoAguinaldo < 0 Then
-                    DiferenciaSubsidioImpuestoAguinaldo = DiferenciaSubsidioImpuestoAguinaldo * -1
-                End If
-
-                FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                SubsidioAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-            Else
-                DiferenciaSubsidioImpuestoAguinaldo = ImpuestoAguinaldo - ImpuestoSueldoMesAnterior
-
-                FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                ImpuestoAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-            End If
+            'Fracción V
+            'Remuneración * Tasa Fracción IV
+            Fraccion5 = ImporteGravadoAguinaldo * Fraccion4
+            Impuesto = Impuesto + Fraccion5
         End If
 
-        If ImpuestoVacaciones > 0 And ImpuestoAguinaldo > 0 Then
-            Impuesto = Math.Round(ImpuestoVacaciones + ImpuestoAguinaldo, 6)
-        End If
+        'PRIMA DE ANTIGÜEDAD (Pendiente)
 
-        If SubsidioEfectivoVacaciones > 0 And SubsidioEfectivoAguinaldo > 0 Then
-            SubsidioEfectivo = Math.Round(SubsidioEfectivoVacaciones + SubsidioEfectivoAguinaldo, 6)
+        'CÁLCULO DE IMPUESTOS  A RETENER
+        If Impuesto > SubsidioAplicado Then
+            Impuesto = Impuesto - SubsidioAplicado
+            SubsidioAplicado = 0
+        ElseIf Impuesto < SubsidioAplicado Then
+            SubsidioAplicado = SubsidioAplicado - Impuesto
+            Impuesto = 0
         End If
 
         If Impuesto > 0 Then
@@ -616,15 +666,23 @@ Public Class GeneracionDeFiniquitosSemanal
             cNomina.Generado = ""
             cNomina.Timbrado = ""
             cNomina.Enviado = ""
-            cNomina.Situacion = ""
+            cNomina.Situacion = "A"
+            cNomina.EsEspecial = False
             cNomina.IdMovimiento = Request("id")
             cNomina.FechaIni = cPeriodo.FechaInicialDate
             cNomina.FechaFin = cPeriodo.FechaFinalDate
             cNomina.FechaPago = cPeriodo.FechaPago
             cNomina.DiasPagados = cPeriodo.Dias
-            cNomina.GuadarNomina()
+            cNomina.FechaIni = cPeriodo.FechaInicialDate
+            cNomina.FechaFin = cPeriodo.FechaFinalDate
+            If Not cPeriodo.FechaPago = "" Then
+                cNomina.FechaPago = cPeriodo.FechaPago
+            End If
+            cNomina.DiasPagados = cPeriodo.Dias
+            cNomina.GuadarNominaPeriodo()
         End If
-        If SubsidioEfectivo > 0 Then
+
+        If SubsidioAplicado > 0 Then
             cNomina = New Nomina()
             cNomina.IdEmpresa = IdEmpresa
             cNomina.IdCliente = clienteId.Value
@@ -637,19 +695,26 @@ Public Class GeneracionDeFiniquitosSemanal
             cNomina.Tipo = "F"
             cNomina.TipoConcepto = "P"
             cNomina.Unidad = 1
-            cNomina.Importe = SubsidioEfectivo
+            cNomina.Importe = SubsidioAplicado
             cNomina.ImporteGravado = 0
-            cNomina.ImporteExento = SubsidioEfectivo
+            cNomina.ImporteExento = SubsidioAplicado
             cNomina.Generado = ""
             cNomina.Timbrado = ""
             cNomina.Enviado = ""
-            cNomina.Situacion = ""
+            cNomina.Situacion = "A"
+            cNomina.EsEspecial = False
             cNomina.IdMovimiento = Request("id")
             cNomina.FechaIni = cPeriodo.FechaInicialDate
             cNomina.FechaFin = cPeriodo.FechaFinalDate
             cNomina.FechaPago = cPeriodo.FechaPago
             cNomina.DiasPagados = cPeriodo.Dias
-            cNomina.GuadarNomina()
+            cNomina.FechaIni = cPeriodo.FechaInicialDate
+            cNomina.FechaFin = cPeriodo.FechaFinalDate
+            If Not cPeriodo.FechaPago Is Nothing Then
+                cNomina.FechaPago = cPeriodo.FechaPago
+            End If
+            cNomina.DiasPagados = cPeriodo.Dias
+            cNomina.GuadarNominaPeriodo()
         End If
 
         Call MostrarPercepciones()
@@ -670,6 +735,7 @@ Public Class GeneracionDeFiniquitosSemanal
             cPeriodo.ConsultarPeriodoID()
 
             Dim cNomina = New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
@@ -684,10 +750,16 @@ Public Class GeneracionDeFiniquitosSemanal
             cNomina.ImporteGravado = ImporteGravado
             cNomina.ImporteExento = ImporteExento
             cNomina.Generado = ""
+            cNomina.Timbrado = ""
+            cNomina.Enviado = ""
+            cNomina.Situacion = "A"
+            cNomina.EsEspecial = False
             cNomina.IdMovimiento = Request("id")
             cNomina.FechaIni = cPeriodo.FechaInicialDate
             cNomina.FechaFin = cPeriodo.FechaFinalDate
-            cNomina.FechaPago = cPeriodo.FechaPago
+            If Not cPeriodo.FechaPago = "" Then
+                cNomina.FechaPago = cPeriodo.FechaPago
+            End If
             cNomina.DiasPagados = cPeriodo.Dias
             cNomina.GuardarExentoYGravadoFiniquito()
 
@@ -756,12 +828,19 @@ Public Class GeneracionDeFiniquitosSemanal
         End If
     End Sub
     Private Sub ConsultarProporcionalesVacaciones()
+        Dim DiasPagadosVacaciones As Decimal = 0
+        Try
+            DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
+        Catch ex As Exception
+            DiasPagadosVacaciones = 0
+        End Try
 
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
         cNomina.Id = Request("id")
         'cNomina.IdEmpresa = Session("clienteid")
         cNomina.TipoNomina = 1 'Semanal
+        cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
         dt = cNomina.ConsultarDesgloseFiniquito()
         cNomina = Nothing
 
@@ -773,47 +852,17 @@ Public Class GeneracionDeFiniquitosSemanal
         End If
 
     End Sub
-    Private Sub CalcularImpuesto()
-        Call ConsultarCuotaDiaria()
-        Call ConsultarDiasMes()
-
-        ImportePeriodo = 0
-        ImportePeriodo = CuotaDiaria * DiasMes
+    Private Sub CalcularImpuestoUSMO(ByVal Importe As Decimal)
 
         Try
-            Impuesto = 0
-            ImportePeriodo = ImporteGravadoFiniquito + ImportePeriodo
+            ImpuestoUSMO = 0
             Dim dt As New DataTable()
             Dim TarifaMensual As New TarifaMensual()
-            TarifaMensual.ImporteMensual = ImportePeriodo
+            TarifaMensual.ImporteMensual = Importe
             dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
-                Impuesto = ((ImportePeriodo - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
-            End If
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        End Try
-    End Sub
-    Private Sub CalcularSubsidio()
-
-        Call ConsultarCuotaDiaria()
-        Call ConsultarDiasMes()
-
-        ImportePeriodo = 0
-        ImportePeriodo = CuotaDiaria * DiasMes
-
-        Try
-
-            Subsidio = 0
-            ImportePeriodo = ImporteGravadoFiniquito + ImportePeriodo
-            Dim dt As New DataTable()
-            Dim TablaSubsidioDiario As New TablaSubsidioDiario
-            TablaSubsidioDiario.Importe = ImportePeriodo
-            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
-
-            If dt.Rows.Count > 0 Then
-                Subsidio = dt.Rows(0).Item("Subsidio")
+                ImpuestoUSMO = ((Importe - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
             End If
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -829,6 +878,36 @@ Public Class GeneracionDeFiniquitosSemanal
 
             If dt.Rows.Count > 0 Then
                 ImpuestoVacaciones = ((Importe - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub CalcularImpuestoPrimaVacacional(ByVal Importe As Decimal)
+        Try
+            ImpuestoPrimaVacacional = 0
+            Dim dt As New DataTable()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = Importe
+            dt = TarifaMensual.ConsultarTarifaMensual()
+
+            If dt.Rows.Count > 0 Then
+                ImpuestoPrimaVacacional = ((Importe - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+            End If
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+    Private Sub CalcularImpuestoAguinaldo(ByVal Importe As Decimal)
+        Try
+            ImpuestoAguinaldo = 0
+            Dim dt As New DataTable()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = Importe
+            dt = TarifaMensual.ConsultarTarifaMensual()
+
+            If dt.Rows.Count > 0 Then
+                ImpuestoAguinaldo = ((Importe - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
             End If
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -881,79 +960,6 @@ Public Class GeneracionDeFiniquitosSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub CalcularImpuestoSueldosPagados(ByVal valida As Integer)
-
-        Call ConsultarCuotaDiaria()
-        Call ConsultarDiasMes()
-
-        ImportePeriodo = 0
-        ImportePeriodo = CuotaDiaria * DiasMes
-        'If valida = 0 Then
-        '    ImportePeriodo = ImportePeriodo + ImporteGravadoFiniquito
-        'Else
-        '    ImportePeriodo = ImportePeriodo + ImporteGravado - ImporteGravadoFiniquito
-        'End If
-        If valida = 1 Then
-            ImportePeriodo = ImportePeriodo + ImporteGravado - ImporteGravadoFiniquito
-        End If
-
-        'Try
-        '    ImpuestoSueldoPagado = 0
-        '    Dim dt As New DataTable()
-        '    Dim TarifaMensual As New TarifaMensual()
-        '    TarifaMensual.CuotaFija = ImportePeriodo
-        '    dt = TarifaMensual.ConsultarTarifaMensual()
-
-        '    If dt.Rows.Count > 0 Then
-        '        ImpuestoSueldoPagado = ((ImportePeriodo - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
-        '    End If
-        'Catch oExcep As Exception
-        '    rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        'End Try
-    End Sub
-    Private Sub CalcularSubsidioSueldoPagados(ByVal valida As Integer)
-
-        Call ConsultarCuotaDiaria()
-        Call ConsultarDiasMes()
-
-        ImportePeriodo = 0
-        ImportePeriodo = CuotaDiaria * DiasMes
-        If valida = 0 Then
-            ImportePeriodo = ImportePeriodo + ImporteGravadoFiniquito
-        Else
-            ImportePeriodo = ImportePeriodo + ImporteGravado - ImporteGravadoFiniquito
-        End If
-
-        'Try
-
-        '    SubsidioSueldoPagado = 0
-        '    Dim dt As New DataTable()
-        '    Dim TablaSubsidioDiario As New TablaSubsidioDiario
-        '    TablaSubsidioDiario.Importe = ImportePeriodo
-        '    dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
-
-        '    If dt.Rows.Count > 0 Then
-        '        SubsidioSueldoPagado = dt.Rows(0).Item("Subsidio")
-        '    End If
-        'Catch oExcep As Exception
-        '    rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        'End Try
-    End Sub
-    Private Sub CalcularImpuestoAguinaldo(ByVal Importe As Decimal)
-        Try
-            ImpuestoAguinaldo = 0
-            Dim dt As New DataTable()
-            Dim TarifaMensual As New TarifaMensual()
-            TarifaMensual.ImporteMensual = Importe
-            dt = TarifaMensual.ConsultarTarifaMensual()
-
-            If dt.Rows.Count > 0 Then
-                ImpuestoAguinaldo = ((Importe - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
-            End If
-        Catch oExcep As Exception
-            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
-        End Try
-    End Sub
     Private Sub CalcularSubsidioAguinaldo(ByVal Importe As Decimal)
         Try
             SubsidioAguinaldo = 0
@@ -970,50 +976,62 @@ Public Class GeneracionDeFiniquitosSemanal
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub CalcularImpuestoIncidencias(ByVal Importe As Decimal)
+    Private Sub CalcularImpuestoDiasPendientes(ByVal BaseGravadaPeriodo As Decimal)
+
+        Dim DiasTarifaISR As Decimal = 7
+        'Dim DiasTarifaISR As Decimal = FactorDiarioPromedio
+        Dim BaseCalculoISR As Decimal = 0
+
+        BaseCalculoISR = (BaseGravadaPeriodo / DiasTarifaISR) * FactorDiarioPromedio
+
         Try
             ImpuestoIncidencias = 0
             Dim dt As New DataTable()
-            Dim TarifaDiaria As New TarifaDiaria()
-            TarifaDiaria.ImporteDiario = Importe
-            dt = TarifaDiaria.ConsultarValoresTarifaDiaria()
+            Dim TarifaMensual As New TarifaMensual()
+            TarifaMensual.ImporteMensual = BaseCalculoISR
+            dt = TarifaMensual.ConsultarTarifaMensual()
 
             If dt.Rows.Count > 0 Then
-                ImpuestoIncidencias = ((Importe - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                ImpuestoIncidencias = ((BaseCalculoISR - dt.Rows(0).Item("LimiteInferior")) * (dt.Rows(0).Item("PorcSobreExcli") / 100)) + dt.Rows(0).Item("CuotaFija")
+                ImpuestoIncidencias = (ImpuestoIncidencias / FactorDiarioPromedio) * DiasTarifaISR
             End If
-
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub CalcularSubsidioIncidencias(ByVal Importe As Decimal)
+    Private Sub CalcularSubsidioDiasPendientes(ByVal BaseGravadaPeriodo As Decimal)
+
+        Dim DiasTarifaSubsidio As Decimal = 7
+        'Dim DiasTarifaSubsidio As Decimal = FactorDiarioPromedio
+        Dim BaseCalculoSubsidio As Decimal = 0
+
+        BaseCalculoSubsidio = (BaseGravadaPeriodo / DiasTarifaSubsidio) * FactorDiarioPromedio
+
         Try
             SubsidioIncidencias = 0
             Dim dt As New DataTable()
-            Dim TablaSubsidioDiario As New TablaSubsidioDiario()
-            TablaSubsidioDiario.Importe = Importe
-            dt = TablaSubsidioDiario.ConsultarSubsidioDiario()
+            Dim TablaSubsidioDiario As New TablaSubsidioDiario
+            TablaSubsidioDiario.Importe = BaseCalculoSubsidio
+            dt = TablaSubsidioDiario.ConsultarSubsidioMensual()
 
             If dt.Rows.Count > 0 Then
                 SubsidioIncidencias = dt.Rows(0).Item("Subsidio")
+                SubsidioIncidencias = (SubsidioIncidencias / FactorDiarioPromedio) * DiasTarifaSubsidio
             End If
-
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
     End Sub
-    Private Sub CalcularImss()
+    Private Sub CalcularIMSS(ByVal CuotaDiaria)
         IMSS = 0
-        Call ConsultarSalarioDiarioIntegradoTrabajador()
-
-        If ImporteDiario <= SalarioMinimoDiarioGeneral Then
+        If CuotaDiaria <= SalarioMinimoDiarioGeneral Then
             IMSS = 0
-        ElseIf ImporteDiario > SalarioMinimoDiarioGeneral And ImporteDiario < (SalarioMinimoDiarioGeneral * 3) Then
+        ElseIf CuotaDiaria > SalarioMinimoDiarioGeneral And CuotaDiaria < (SalarioMinimoDiarioGeneral * 3) Then
             IMSS = SalarioDiarioIntegradoTrabajador * 0.02375
-        ElseIf ImporteDiario > (SalarioMinimoDiarioGeneral * 3) And ImporteDiario < (SalarioMinimoDiarioGeneral * 25) Then
-            IMSS = SalarioDiarioIntegradoTrabajador * 0.02775
-            'IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 3)) * 0.004)
-        ElseIf ImporteDiario > (SalarioMinimoDiarioGeneral * 25) Then
+        ElseIf CuotaDiaria > (SalarioMinimoDiarioGeneral * 3) And CuotaDiaria < (SalarioMinimoDiarioGeneral * 25) Then
+            IMSS = SalarioDiarioIntegradoTrabajador * 0.02375
+            IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 3)) * 0.004)
+        ElseIf CuotaDiaria > (SalarioMinimoDiarioGeneral * 25) Then
             IMSS = (SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 25)) * 0.02375
             IMSS = IMSS + ((SalarioDiarioIntegradoTrabajador - (SalarioMinimoDiarioGeneral * 22)) * 0.004)
         End If
@@ -1062,6 +1080,7 @@ Public Class GeneracionDeFiniquitosSemanal
 
     End Sub
     Private Sub MostrarPercepciones()
+
         Call CargarVariablesGenerales()
 
         Dim dt As New DataTable()
@@ -1090,6 +1109,7 @@ Public Class GeneracionDeFiniquitosSemanal
         End If
     End Sub
     Private Sub MostrarDeducciones()
+
         Call CargarVariablesGenerales()
 
         Dim dt As New DataTable()
@@ -1165,10 +1185,11 @@ Public Class GeneracionDeFiniquitosSemanal
         Call CargarVariablesGenerales()
         Try
             Dim cNomina As New Nomina()
+            cNomina.IdEmpresa = IdEmpresa
+            cNomina.IdCliente = clienteId.Value
             cNomina.Tipo = "F"
             cNomina.IdMovimiento = IdMovimiento
             cNomina.NoEmpleado = empleadoId.Value
-            cNomina.IdEmpresa = IdEmpresa
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
             If CvoConcepto > 0 Then
@@ -1276,6 +1297,8 @@ Public Class GeneracionDeFiniquitosSemanal
             cEmpleado.ConsultarEmpleadoID()
             If cEmpleado.IdEmpleado > 0 Then
                 ClaveRegimenContratacion = cEmpleado.IdRegimenContratacion
+                SalarioDiarioIntegradoTrabajador = cEmpleado.IntegradoImss
+                CuotaDiaria = cEmpleado.CuotaDiaria
             End If
 
             'If cmbConcepto.SelectedValue.ToString = "5" And ClaveRegimenContratacion <> 9 Then
@@ -1314,7 +1337,7 @@ Public Class GeneracionDeFiniquitosSemanal
             ImporteExento = 0
             ImporteGravado = 0
             ImporteGravado = 0
-            SubsidioEfectivo = 0
+            SubsidioAplicado = 0
             ImpuestoVacaciones = 0
             SubsidioVacaciones = 0
             SubsidioEfectivoVacaciones = 0
@@ -1329,18 +1352,30 @@ Public Class GeneracionDeFiniquitosSemanal
             ImpuestoPorPagarSueldos = 0
             Agregar = 1
 
-            If cmbConcepto.SelectedValue.ToString < 52 Then
+            Dim cNomina As New Nomina()
+
+            Dim cPeriodo As New Entities.Periodo()
+            cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+            cPeriodo.ConsultarPeriodoID()
+
+            If cmbConcepto.SelectedValue.ToString < 52 Or cmbConcepto.SelectedValue.ToString = "169" Then
                 'En este bloque no entran las deducciones por adeudos que no cambian la base del impuesto y por lo tanto no lo calculan, ejemplos de esto serian, adeudos por credito infonavit, cuotas sindicales, adeudos fonacot, adeudos con el patron, etc, (conceptos del 61 al 86)
                 Call BorrarDeduccionesFiniquito()
+
+                Call EliminaConceptosFiniquito(Request("id"), 52) 'IMPUESTO
+                Call EliminaConceptosFiniquito(Request("id"), 54) 'SUBSIDIO
+                Call EliminaConceptosFiniquito(Request("id"), 56) 'IMSS
 
                 Dim Aguinaldo As Decimal = 0
                 Dim Vacaciones As Decimal = 0
                 Dim DiasProporcionalVacaciones As Decimal = 0
+                Dim DiasAguinaldoProporcionales As Decimal = 0
                 Dim PrimaVacacional As Decimal = 0
                 Dim ImporteExentoAguinaldo As Decimal = 0
                 Dim ImporteGravadoAguinaldo As Decimal = 0
                 Dim ImporteExentoPrimaVacacional As Decimal = 0
                 Dim ImporteGravadoPrimaVacacional As Decimal = 0
+                Dim USMO As Decimal = 0
 
                 Dim DiferenciaSubsidioImpuestoVacaciones As Decimal = 0
                 Dim FactorImpuestoSubsidioVacaciones As Decimal = 0
@@ -1354,11 +1389,18 @@ Public Class GeneracionDeFiniquitosSemanal
                 Dim FactorImpuestoSubsidioIncidencias As Decimal = 0
                 Dim TasaSubsidioImpuestoIncidencias As Decimal = 0
 
+                Dim DiasPagadosVacaciones As Decimal = 0
+                Try
+                    DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
+                Catch ex As Exception
+                    DiasPagadosVacaciones = 0
+                End Try
+
                 Dim dt As New DataTable()
-                Dim cNomina As New Nomina()
                 cNomina.Id = Request("id")
                 'cNomina.IdEmpresa = Session("clienteid")
                 cNomina.TipoNomina = 1 'Semanal
+                cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
                 dt = cNomina.ConsultarDesgloseFiniquito()
                 cNomina = Nothing
 
@@ -1369,292 +1411,184 @@ Public Class GeneracionDeFiniquitosSemanal
                         Vacaciones = oDataRow("ProporcionalVacaciones")
                         PrimaVacacional = oDataRow("PrimaVacaciones")
                         DiasProporcionalVacaciones = Math.Round(oDataRow("DiasProporcionalVacaciones"), 2)
+                        DiasAguinaldoProporcionales = Math.Round(oDataRow("DiasAguinaldoProporcionales"), 2)
+                        USMO = ImporteDiario * FactorDiarioPromedio 'USMO(base para ISR mensual) = Cuota Diaria * FactorDiarioPromedio (Por defecto, el valor de esta variable es 30, pero se puede modificar a 31 o 30.4)
                     Next
                 End If
 
                 Call CargarVariablesGenerales()
 
+                'La parte exenta del aguinaldo es de 30 Unidades de Medida y Actualización (UMAs)
                 If Aguinaldo > 0 Then
-                    If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                    If Aguinaldo > 0 And Aguinaldo <= (UMA * 30) Then
                         ImporteExento = ImporteExento + Aguinaldo
                         ImporteExentoAguinaldo = Aguinaldo
                         ImporteGravadoAguinaldo = 0
-                    ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
-                        ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
-                        ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
-                        ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
-                        ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                    ElseIf Aguinaldo > 0 And Aguinaldo > (UMA * 30) Then
+                        ImporteExento = ImporteExento + (UMA * 30)
+                        ImporteExentoAguinaldo = UMA * 30
+                        ImporteGravadoAguinaldo = Aguinaldo - (UMA * 30)
                     End If
+                    GuardarExentoYGravado(14, DiasAguinaldoProporcionales, Aguinaldo, ImporteGravadoAguinaldo, ImporteExentoAguinaldo, "P")
                 End If
 
+                'Vacaciones gravan al 100% para ISR
                 If Vacaciones > 0 Then
-                    ImporteGravadoVacaciones = Vacaciones
-                    ImporteGravadoFiniquito = ImporteGravadoFiniquito + Vacaciones
+                    GuardarExentoYGravado(15, DiasProporcionalVacaciones, Vacaciones, Vacaciones, 0, "P")
                 End If
 
+                'La parte exenta de la prima vacacional es de 15 Unidades de Medida y Actualización (UMAs)
                 If PrimaVacacional > 0 Then
-                    If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
+                    If PrimaVacacional > 0 And PrimaVacacional < (UMA * 15) Then 'Exención 15 UMAs
                         ImporteExento = ImporteExento + PrimaVacacional
                         ImporteExentoPrimaVacacional = PrimaVacacional
                         ImporteGravadoPrimaVacacional = 0
-                    ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
-                        ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-                        ImporteGravadoFiniquito = ImporteGravadoFiniquito + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
-                        ImporteExentoPrimaVacacional = SalarioMinimoDiarioGeneral * 15
-                        ImporteGravadoPrimaVacacional = PrimaVacacional - (SalarioMinimoDiarioGeneral * 15)
+                    ElseIf PrimaVacacional > 0 And PrimaVacacional > (UMA * 15) Then
+                        ImporteExento = ImporteExento + (UMA * 15)
+                        ImporteExentoPrimaVacacional = UMA * 15
+                        ImporteGravadoPrimaVacacional = PrimaVacacional - (UMA * 15) 'Remuneración
                     End If
+                    GuardarExentoYGravado(16, 1, PrimaVacacional, ImporteGravadoPrimaVacacional, ImporteExentoPrimaVacacional, "P")
                 End If
 
-                '/*-------------------------*/
-                '1 Impuesto / Subsidio proporcional vacaciones
-                Dim ImporteProporcionalVacaciones As Decimal
-                Dim IngresoMensualOrdinario As Decimal
-                Dim IngresoGravadoMes As Decimal
+                'Impuesto USMO
+                ImpuestoUSMO = 0
+                Call CalcularImpuestoUSMO(USMO)
 
-                Call ConsultarDiasMes()
+                Dim Fraccion1 As Decimal = 0
+                Dim Fraccion2 As Decimal = 0
+                Dim Fraccion3 As Decimal = 0
+                Dim Fraccion4 As Decimal = 0
+                Dim Fraccion5 As Decimal = 0 '(ISR a retener)
 
-                ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * FactorDiarioPromedio
-                IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-                IngresoGravadoMes = ImporteProporcionalVacaciones + IngresoMensualOrdinario
+                'VACACIONES
+                If Vacaciones > 0 Then
+                    'Fracción I.
+                    '(Remuneración / 365) * 30.4
+                    'Remuneración = ImporteGravadoVacaciones
+                    Fraccion1 = (Vacaciones / 365) * FactorDiarioPromedio
 
-                Call CalcularImpuestoVacaciones(IngresoGravadoMes)
-                Call CalcularSubsidioVacaciones(IngresoGravadoMes)
+                    'Fracción II.
+                    'Fracción I + USMO = Base -->Tabla
+                    Fraccion2 = Fraccion1 + USMO
 
-                If ImpuestoVacaciones > SubsidioVacaciones Then
-                    SubsidioEfectivoVacaciones = 0
-                    ImpuestoVacaciones = ImpuestoVacaciones - SubsidioVacaciones
-                ElseIf ImpuestoVacaciones < SubsidioVacaciones Then
-                    SubsidioEfectivoVacaciones = SubsidioVacaciones - ImpuestoVacaciones
-                    ImpuestoVacaciones = 0
+                    ' Impuesto prima vacacional
+                    Call CalcularImpuestoVacaciones(Fraccion2)
+
+                    'Fracción III.
+                    'ISR Fracción II - ISR USMO
+                    Fraccion3 = ImpuestoVacaciones - ImpuestoUSMO
+
+                    'Fracción IV
+                    'Fraccion III/Fraccion I
+                    Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
+
+                    'Fracción V
+                    'Remuneración * Tasa Fracción IV
+                    Fraccion5 = Vacaciones * Fraccion4
+                    Impuesto = Impuesto + Fraccion5
                 End If
 
-                ImpuestoVacaciones = Math.Round(ImpuestoVacaciones, 6)
-                SubsidioEfectivoVacaciones = Math.Round(SubsidioEfectivoVacaciones, 6)
+                'PRIMA VACACIONAL
+                If ImporteGravadoPrimaVacacional > 0 Then
+                    'Fracción I.
+                    '(Remuneración / 365) * 30.4
+                    'Remuneración = ImporteGravadoPrimaVacacional
+                    Fraccion1 = 0
+                    Fraccion1 = (ImporteGravadoPrimaVacacional / 365) * FactorDiarioPromedio
 
-                '2 Impuesto / Subsidio por sueldo ordinario
-                Call CalcularImpuestoSueldoMesAnterior(IngresoMensualOrdinario)
-                Call CalcularSubsidioSueldoMesAnterior(IngresoMensualOrdinario)
+                    'Fracción II.
+                    'Fracción I + USMO = Base -->Tabla
+                    Fraccion2 = 0
+                    Fraccion2 = Fraccion1 + USMO
 
-                If ImpuestoSueldoMesAnterior > SubsidioSueldoMesAnterior Then
-                    SubsidioEfectivoSueldoMesAnterior = 0
-                    ImpuestoSueldoMesAnterior = ImpuestoSueldoMesAnterior - SubsidioSueldoMesAnterior
-                ElseIf ImpuestoSueldoMesAnterior < SubsidioSueldoMesAnterior Then
-                    SubsidioEfectivoSueldoMesAnterior = SubsidioSueldoMesAnterior - ImpuestoSueldoMesAnterior
-                    ImpuestoSueldoMesAnterior = 0
+                    ' Impuesto prima vacacional
+                    Call CalcularImpuestoPrimaVacacional(Fraccion2)
+
+                    'Fracción III.
+                    'ISR Fracción II - ISR USMO
+                    Fraccion3 = 0
+                    Fraccion3 = ImpuestoPrimaVacacional - ImpuestoUSMO
+
+                    'Fracción IV
+                    'Fraccion III/Fraccion I
+                    Fraccion4 = 0
+                    Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
+
+                    'Fracción V
+                    'Remuneración * Tasa Fracción IV
+                    Fraccion5 = ImporteGravadoPrimaVacacional * Fraccion4
+                    Impuesto = Impuesto + Fraccion5
                 End If
 
-                ImpuestoSueldoMesAnterior = Math.Round(ImpuestoSueldoMesAnterior, 6)
-                SubsidioEfectivoSueldoMesAnterior = Math.Round(SubsidioEfectivoSueldoMesAnterior, 6)
-
-                If SubsidioEfectivoVacaciones > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-
-                    DiferenciaSubsidioImpuestoVacaciones = SubsidioEfectivoVacaciones - SubsidioEfectivoSueldoMesAnterior
-
-                    If DiferenciaSubsidioImpuestoVacaciones < 0 Then
-                        DiferenciaSubsidioImpuestoVacaciones = DiferenciaSubsidioImpuestoVacaciones * -1
-                    End If
-
-                    FactorImpuestoSubsidioVacaciones = DiferenciaSubsidioImpuestoVacaciones / ImporteProporcionalVacaciones
-                    TasaSubsidioImpuestoVacaciones = FactorImpuestoSubsidioVacaciones * 1 ' El 1 representa 100%
-                    SubsidioVacaciones = ImporteGravadoVacaciones * TasaSubsidioImpuestoVacaciones
-                Else
-                    DiferenciaSubsidioImpuestoVacaciones = ImpuestoVacaciones - ImpuestoSueldoMesAnterior
-
-                    FactorImpuestoSubsidioVacaciones = DiferenciaSubsidioImpuestoVacaciones / ImporteProporcionalVacaciones
-                    TasaSubsidioImpuestoVacaciones = FactorImpuestoSubsidioVacaciones * 1 ' El 1 representa 100%
-                    ImpuestoVacaciones = ImporteGravadoVacaciones * TasaSubsidioImpuestoVacaciones
-                End If
-
-                '/*------------------ Cambios 29/01/2018 ------------------*/
-                'If ImporteGravadoAguinaldo > 0 Then
-
-                '    Dim ImporteProporcionalAguinaldo As Decimal
-
-                '    Call ConsultarDiasMes()
-
-                '    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
-                '    IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-                '    IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
-
-                '    '1 Impuesto / Subsidio proporcional aguinaldo
-                '    Call CalcularImpuestoAguinaldo(IngresoGravadoMes)
-                '    Call CalcularSubsidioAguinaldo(IngresoGravadoMes)
-
-                '    If ImpuestoAguinaldo > SubsidioIncidencias Then
-                '        SubsidioEfectivoAguinaldo = 0
-                '        ImpuestoAguinaldo = ImpuestoAguinaldo - SubsidioIncidencias
-                '    ElseIf ImpuestoAguinaldo < SubsidioIncidencias Then
-                '        SubsidioEfectivoAguinaldo = SubsidioIncidencias - ImpuestoAguinaldo
-                '        ImpuestoAguinaldo = 0
-                '    End If
-
-                '    ImpuestoAguinaldo = Math.Round(ImpuestoAguinaldo, 6)
-                '    SubsidioEfectivoAguinaldo = Math.Round(SubsidioEfectivoAguinaldo, 6)
-
-                '    If SubsidioEfectivoAguinaldo > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-                '        DiferenciaSubsidioImpuestoAguinaldo = SubsidioEfectivoAguinaldo - SubsidioEfectivoSueldoMesAnterior
-                '        If DiferenciaSubsidioImpuestoAguinaldo < 0 Then
-                '            DiferenciaSubsidioImpuestoAguinaldo = DiferenciaSubsidioImpuestoAguinaldo * -1
-                '        End If
-
-                '        FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                '        TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                '        SubsidioIncidencias = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-                '    Else
-                '        DiferenciaSubsidioImpuestoAguinaldo = ImpuestoAguinaldo - ImpuestoSueldoMesAnterior
-
-                '        FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                '        TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                '        ImpuestoAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-                '    End If
-                'End If
-                '/*-------------------------*/
-
-                '/*------------------ Reemplazo 29/01/2018 ------------------*/
+                'AGUINALDO
                 If ImporteGravadoAguinaldo > 0 Then
+                    'Fracción I.
+                    '(Remuneración / 365) * 30.4
+                    'Remuneración = ImporteGravadoAguinaldo
+                    Fraccion1 = 0
+                    Fraccion1 = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
 
-                    Dim ImporteProporcionalAguinaldo As Decimal
+                    'Fracción II.
+                    'Fracción I + USMO = Base -->Tabla
+                    Fraccion2 = 0
+                    Fraccion2 = Fraccion1 + USMO
 
-                    Call ConsultarDiasMes()
+                    ' Impuesto aguinaldo
+                    Call CalcularImpuestoAguinaldo(Fraccion2)
 
-                    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
-                    IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-                    IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
+                    'Fracción III.
+                    'ISR Fracción II - ISR USMO
+                    Fraccion3 = 0
+                    Fraccion3 = ImpuestoAguinaldo - ImpuestoUSMO
 
-                    '1 Impuesto / Subsidio proporcional aguinaldo
-                    Call CalcularImpuestoAguinaldo(IngresoGravadoMes)
-                    Call CalcularSubsidioAguinaldo(IngresoGravadoMes)
+                    'Fracción IV
+                    'Fraccion III/Fraccion I
+                    Fraccion4 = 0
+                    Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
 
-                    If ImpuestoAguinaldo > SubsidioAguinaldo Then
-                        SubsidioEfectivoAguinaldo = 0
-                        ImpuestoAguinaldo = ImpuestoAguinaldo - SubsidioAguinaldo
-                    ElseIf ImpuestoAguinaldo < SubsidioAguinaldo Then
-                        SubsidioEfectivoAguinaldo = SubsidioAguinaldo - ImpuestoAguinaldo
-                        ImpuestoAguinaldo = 0
-                    End If
-
-                    ImpuestoAguinaldo = Math.Round(ImpuestoAguinaldo, 6)
-                    SubsidioEfectivoAguinaldo = Math.Round(SubsidioEfectivoAguinaldo, 6)
-
-                    If SubsidioEfectivoAguinaldo > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-                        DiferenciaSubsidioImpuestoAguinaldo = SubsidioEfectivoAguinaldo - SubsidioEfectivoSueldoMesAnterior
-                        If DiferenciaSubsidioImpuestoAguinaldo < 0 Then
-                            DiferenciaSubsidioImpuestoAguinaldo = DiferenciaSubsidioImpuestoAguinaldo * -1
-                        End If
-
-                        FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                        TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                        SubsidioAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-                    Else
-                        DiferenciaSubsidioImpuestoAguinaldo = ImpuestoAguinaldo - ImpuestoSueldoMesAnterior
-
-                        FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                        TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                        ImpuestoAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-                    End If
-                End If
-                '/*-------------------------*/
-
-                If ImpuestoVacaciones > 0 And ImpuestoAguinaldo > 0 Then
-                    Impuesto = Math.Round(ImpuestoVacaciones + ImpuestoAguinaldo, 6)
+                    'Fracción V
+                    'Remuneración * Tasa Fracción IV
+                    Fraccion5 = ImporteGravadoAguinaldo * Fraccion4
+                    Impuesto = Impuesto + Fraccion5
                 End If
 
-                If SubsidioEfectivoVacaciones > 0 And SubsidioEfectivoAguinaldo > 0 Then
-                    SubsidioEfectivo = Math.Round(SubsidioEfectivoVacaciones + SubsidioEfectivoAguinaldo, 6)
-                End If
+                'PRIMA DE ANTIGÜEDAD (Pendiente)
 
                 Call ChecarPercepcionesGravadas(cmbConcepto.SelectedValue)
 
+                'DIAS PENDIENTES DE PAGO
+                If DiasCuotaPeriodo > 0 Then
+
+                    Call CalcularIMSS(CuotaDiaria)
+
+                    IMSS = IMSS * DiasCuotaPeriodo
+                    IMSS = Math.Round(IMSS, 6)
+                End If
+
                 If ImporteGravado > 0 Then
+                    'Impuesto / Subsidio Dias Pendientes
+                    Call CalcularImpuestoDiasPendientes(ImporteGravado)
+                    Call CalcularSubsidioDiasPendientes(ImporteGravado)
 
-                    Dim ImporteImpuestoIncidencias As Decimal = 0
-                    Dim ImporteSubsidioIncidencias As Decimal = 0
-
-                    '1 Impuesto / Subsidio Dias Pendientes
-                    Call CalcularImpuestoIncidencias(ImporteDiario)
-                    Call CalcularSubsidioIncidencias(ImporteDiario)
-
-                    ImporteImpuestoIncidencias = Math.Round(ImpuestoIncidencias, 6) * DiasCuotaPeriodo
-                    ImporteSubsidioIncidencias = Math.Round(SubsidioIncidencias, 6) * DiasCuotaPeriodo
-
-                    If ImporteImpuestoIncidencias > ImporteSubsidioIncidencias Then
-                        ImpuestoIncidencias = ImporteImpuestoIncidencias - ImporteSubsidioIncidencias
+                    If ImpuestoIncidencias > SubsidioIncidencias Then
+                        ImpuestoIncidencias = ImpuestoIncidencias - SubsidioIncidencias
                         SubsidioIncidencias = 0
-                    ElseIf ImporteImpuestoIncidencias < ImporteSubsidioIncidencias Then
-                        SubsidioIncidencias = ImporteSubsidioIncidencias - ImporteImpuestoIncidencias
+                    ElseIf ImpuestoIncidencias < SubsidioIncidencias Then
+                        SubsidioIncidencias = SubsidioIncidencias - ImpuestoIncidencias
                         ImpuestoIncidencias = 0
                     End If
-
-                    '1 Impuesto / Subsidio proporcional incidencias
-                    'Dim ImporteProporcionalIncidencias As Decimal
-                    'Dim ImporteSubsidioIncidencias As Decimal = 0
-                    'Dim ImporteImpuestoIncidencias As Decimal = 0
-
-                    'Dim ImporteSubsidioIncidenciasOrdinario As Decimal = 0
-                    'Dim ImporteImpuestoIncidenciasOrdinario As Decimal = 0
-
-                    'Dim DiferenciaimpuestoSubsidio As Decimal = 0
-
-                    'Call ConsultarDiasMes()
-
-                    'ImporteProporcionalIncidencias = (ImporteGravado / 365) * FactorDiarioPromedio
-                    'IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-                    'IngresoGravadoMes = ImporteProporcionalIncidencias + IngresoMensualOrdinario
-
-                    ''1 Impuesto / Subsidio Gravado mes
-                    'Call CalcularImpuestoIncidencias(IngresoGravadoMes)
-                    'Call CalcularSubsidioIncidencias(IngresoGravadoMes)
-
-                    'If ImpuestoIncidencias > SubsidioIncidencias Then
-                    '    SubsidioEfectivoIncidencias = 0
-                    '    ImpuestoIncidencias = ImpuestoIncidencias - SubsidioIncidencias
-                    'ElseIf ImpuestoIncidencias < SubsidioIncidencias Then
-                    '    SubsidioEfectivoIncidencias = SubsidioIncidencias - ImpuestoIncidencias
-                    '    ImpuestoIncidencias = 0
-                    'End If
-
-                    'ImporteImpuestoIncidencias = Math.Round(ImpuestoIncidencias, 6)
-                    'ImporteSubsidioIncidencias = Math.Round(SubsidioEfectivoIncidencias, 6)
-
-                    ''2 Impuesto / Subsidio Mensual Ordinario
-                    'Call CalcularImpuestoIncidencias(IngresoMensualOrdinario)
-                    'Call CalcularSubsidioIncidencias(IngresoMensualOrdinario)
-
-                    'If ImpuestoIncidencias > SubsidioIncidencias Then
-                    '    SubsidioEfectivoIncidencias = 0
-                    '    ImpuestoIncidencias = ImpuestoIncidencias - SubsidioIncidencias
-                    'ElseIf ImpuestoIncidencias < SubsidioIncidencias Then
-                    '    SubsidioEfectivoIncidencias = SubsidioIncidencias - ImpuestoIncidencias
-                    '    ImpuestoIncidencias = 0
-                    'End If
-
-                    'ImporteImpuestoIncidenciasOrdinario = Math.Round(ImpuestoIncidencias, 6)
-                    'ImporteSubsidioIncidenciasOrdinario = Math.Round(SubsidioEfectivoIncidencias, 6)
-
-                    'If ImporteImpuestoIncidencias > 0 And ImporteImpuestoIncidenciasOrdinario > 0 Then
-                    '    DiferenciaimpuestoSubsidio = ImporteImpuestoIncidencias - ImporteImpuestoIncidenciasOrdinario
-                    '    TasaSubsidioImpuestoIncidencias = DiferenciaimpuestoSubsidio / ImporteProporcionalIncidencias
-                    '    ImpuestoIncidencias = (TasaSubsidioImpuestoIncidencias * 0.1) * IngresoGravadoMes
-                    '    SubsidioIncidencias = 0
-                    'End If
-
-                    'If ImporteImpuestoIncidencias > 0 And ImporteSubsidioIncidenciasOrdinario > 0 Then
-                    '    DiferenciaimpuestoSubsidio = ImporteImpuestoIncidencias - ImporteSubsidioIncidenciasOrdinario
-                    '    TasaSubsidioImpuestoIncidencias = DiferenciaimpuestoSubsidio / ImporteProporcionalIncidencias
-                    '    SubsidioIncidencias = (TasaSubsidioImpuestoIncidencias * 0.1) * IngresoGravadoMes
-                    '    ImpuestoIncidencias = 0
-                    'End If
                 End If
             End If
 
             Impuesto = Impuesto + ImpuestoIncidencias
-            SubsidioEfectivo = SubsidioEfectivo + SubsidioIncidencias
+            SubsidioAplicado = SubsidioAplicado + SubsidioIncidencias
 
-            If Impuesto > SubsidioEfectivo Then
-                Impuesto = Impuesto - SubsidioEfectivo
-                SubsidioEfectivo = 0
-            ElseIf Impuesto < SubsidioEfectivo Then
-                SubsidioEfectivo = SubsidioEfectivo - Impuesto
+            'CÁLCULO DE IMPUESTOS  A RETENER
+            If Impuesto > SubsidioAplicado Then
+                Impuesto = Impuesto - SubsidioAplicado
+            ElseIf Impuesto < SubsidioAplicado Then
+                SubsidioAplicado = SubsidioAplicado - Impuesto
                 Impuesto = 0
             End If
 
@@ -1664,11 +1598,12 @@ Public Class GeneracionDeFiniquitosSemanal
             Call MostrarDeducciones()
             Call ChecarPercepcionesExentasYGravadasFiniquito()
 
-            txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
-            txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
+            Me.txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
+            Me.txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
 
-            txtImporteIncidencia.Text = ""
-            txtUnidadIncidencia.Text = ""
+            Me.cmbConcepto.SelectedValue = 0
+            Me.txtImporteIncidencia.Text = ""
+            Me.txtUnidadIncidencia.Text = ""
 
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message, 330, 180, "Alerta", "", "")
@@ -1769,7 +1704,7 @@ Public Class GeneracionDeFiniquitosSemanal
             cNomina.EliminaConceptoEmpleado()
 
             cNomina = New Nomina()
-            'cNomina.IdCliente = empresaId.Value
+            cNomina.IdEmpresa = IdEmpresa
             cNomina.IdCliente = clienteId.Value
             cNomina.Ejercicio = IdEjercicio
             cNomina.TipoNomina = 1 'Semanal
@@ -1789,14 +1724,16 @@ Public Class GeneracionDeFiniquitosSemanal
             cNomina.IdMovimiento = Request("id")
             cNomina.FechaIni = cPeriodo.FechaInicialDate
             cNomina.FechaFin = cPeriodo.FechaFinalDate
-            cNomina.FechaPago = cPeriodo.FechaPago
+            If Not cPeriodo.FechaPago = "" Then
+                cNomina.FechaPago = cPeriodo.FechaPago
+            End If
             cNomina.DiasPagados = cPeriodo.Dias
             cNomina.GuadarNominaPeriodo()
 
             If ConImpuesto = 1 Then
-                If cmbConcepto.SelectedValue <= 51 Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Or cmbConcepto.SelectedValue = 167 Or cmbConcepto.SelectedValue = 168 Or cmbConcepto.SelectedValue = 169 Or cmbConcepto.SelectedValue = 170 Or cmbConcepto.SelectedValue = 171 Then
+                If (cmbConcepto.SelectedValue > 0 And cmbConcepto.SelectedValue < 52) Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Or cmbConcepto.SelectedValue = 167 Or cmbConcepto.SelectedValue = 168 Or cmbConcepto.SelectedValue = 169 Or cmbConcepto.SelectedValue = 170 Or cmbConcepto.SelectedValue = 171 Then
                     cNomina = New Nomina()
-                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
@@ -1808,7 +1745,11 @@ Public Class GeneracionDeFiniquitosSemanal
                     cNomina.TipoConcepto = "P"
                     cNomina.Unidad = UnidadIncidencia
                     cNomina.Importe = ImporteIncidencia
-                    cNomina.ImporteGravado = 0
+                    If cmbConcepto.SelectedValue = 51 Or cmbConcepto.SelectedValue = 169 Then
+                        cNomina.ImporteGravado = ImporteIncidencia
+                    Else
+                        cNomina.ImporteGravado = 0
+                    End If
                     If cmbConcepto.SelectedValue = 32 Or cmbConcepto.SelectedValue = 165 Or cmbConcepto.SelectedValue = 166 Then
                         cNomina.ImporteExento = ImporteIncidencia
                     Else
@@ -1818,20 +1759,18 @@ Public Class GeneracionDeFiniquitosSemanal
                     cNomina.Timbrado = ""
                     cNomina.Enviado = ""
                     cNomina.Situacion = "A"
-                    'If cmbConcepto.SelectedValue = 10 Then
-                    '    cNomina.DiasHorasExtra = txtDiasHorasExtra.Text
-                    '    cNomina.TipoHorasExtra = cmbTipoHorasExtra.SelectedValue
-                    'End If
                     cNomina.EsEspecial = False
                     cNomina.IdMovimiento = Request("id")
                     cNomina.FechaIni = cPeriodo.FechaInicialDate
                     cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
+                    If Not cPeriodo.FechaPago = "" Then
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                    End If
                     cNomina.DiasPagados = cPeriodo.Dias
                     cNomina.GuadarNominaPeriodo()
                 ElseIf cmbConcepto.SelectedValue = 82 Then
                     cNomina = New Nomina()
-                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
@@ -1852,13 +1791,15 @@ Public Class GeneracionDeFiniquitosSemanal
                     cNomina.IdMovimiento = Request("id")
                     cNomina.FechaIni = cPeriodo.FechaInicialDate
                     cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
+                    If Not cPeriodo.FechaPago = "" Then
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                    End If
                     cNomina.DiasPagados = cPeriodo.Dias
                     cNomina.GuadarNominaPeriodo()
                     cNomina = Nothing
                 ElseIf cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Then
                     cNomina = New Nomina()
-                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
@@ -1880,12 +1821,14 @@ Public Class GeneracionDeFiniquitosSemanal
                     cNomina.IdMovimiento = Request("id")
                     cNomina.FechaIni = cPeriodo.FechaInicialDate
                     cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
+                    If Not cPeriodo.FechaPago = "" Then
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                    End If
                     cNomina.DiasPagados = cPeriodo.Dias
                     cNomina.GuadarNominaPeriodo()
                 ElseIf cmbConcepto.SelectedValue.ToString >= 61 Then
                     cNomina = New Nomina()
-                    'cNomina.IdCliente = empresaId.Value
+                    cNomina.IdEmpresa = IdEmpresa
                     cNomina.IdCliente = clienteId.Value
                     cNomina.Ejercicio = IdEjercicio
                     cNomina.TipoNomina = 1 'Semanal
@@ -1907,19 +1850,21 @@ Public Class GeneracionDeFiniquitosSemanal
                     cNomina.IdMovimiento = Request("id")
                     cNomina.FechaIni = cPeriodo.FechaInicialDate
                     cNomina.FechaFin = cPeriodo.FechaFinalDate
-                    cNomina.FechaPago = cPeriodo.FechaPago
+                    If Not cPeriodo.FechaPago = "" Then
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                    End If
                     cNomina.DiasPagados = cPeriodo.Dias
                     cNomina.GuadarNominaPeriodo()
                 End If
             End If
 
             'Aqui se guarda el impuesto, el total Gravado y el total exento, tanto cuando viene de agregar un concepto como cuando viene de quitar un concepto ya que de ambas maneras se recalcula
-            'solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
+            'Solo no entra en este bloque de codigo cuando viene de agregar una deduccion que no implica recalcular gravado, exento o impuesto(las unicas deducciones que recalculan gravado, exento e impuesto son la faltas, permisos e incapacidades, las demas deduccioens haciendo hincapie, no entran en este bloque)
             If ConImpuesto = 1 Then
-                If cmbConcepto.SelectedValue < 52 Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Or cmbConcepto.SelectedValue.ToString = "167" Or cmbConcepto.SelectedValue.ToString = "168" Or cmbConcepto.SelectedValue.ToString = "169" Or cmbConcepto.SelectedValue.ToString = "170" Or cmbConcepto.SelectedValue.ToString = "171" Then
+                If (cmbConcepto.SelectedValue > 0 And cmbConcepto.SelectedValue < 52) Or cmbConcepto.SelectedValue.ToString = "57" Or cmbConcepto.SelectedValue.ToString = "58" Or cmbConcepto.SelectedValue.ToString = "59" Or cmbConcepto.SelectedValue.ToString = "161" Or cmbConcepto.SelectedValue.ToString = "162" Or cmbConcepto.SelectedValue.ToString = "167" Or cmbConcepto.SelectedValue.ToString = "168" Or cmbConcepto.SelectedValue.ToString = "169" Or cmbConcepto.SelectedValue.ToString = "170" Or cmbConcepto.SelectedValue.ToString = "171" Then
                     If Impuesto > 0 Then
                         cNomina = New Nomina()
-                        'cNomina.IdCliente = empresaId.Value
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
@@ -1941,14 +1886,47 @@ Public Class GeneracionDeFiniquitosSemanal
                         cNomina.IdMovimiento = Request("id")
                         cNomina.FechaIni = cPeriodo.FechaInicialDate
                         cNomina.FechaFin = cPeriodo.FechaFinalDate
-                        cNomina.FechaPago = cPeriodo.FechaPago
+                        If Not cPeriodo.FechaPago = "" Then
+                            cNomina.FechaPago = cPeriodo.FechaPago
+                        End If
+                        cNomina.DiasPagados = cPeriodo.Dias
+                        cNomina.GuadarNominaPeriodo()
+                    End If
+
+                    If SubsidioAplicado > 0 Then
+                        cNomina = New Nomina()
+                        cNomina.IdEmpresa = IdEmpresa
+                        cNomina.IdCliente = clienteId.Value
+                        cNomina.Ejercicio = IdEjercicio
+                        cNomina.TipoNomina = 1 'Semanal
+                        cNomina.Periodo = cmbPeriodo.SelectedValue
+                        cNomina.NoEmpleado = empleadoId.Value
+                        cNomina.CvoConcepto = 54
+                        cNomina.IdContrato = contratoId.Value
+                        cNomina.Tipo = "F"
+                        cNomina.TipoConcepto = "P"
+                        cNomina.Unidad = 1
+                        cNomina.Importe = SubsidioAplicado
+                        cNomina.ImporteGravado = 0
+                        cNomina.ImporteExento = SubsidioAplicado
+                        cNomina.Generado = ""
+                        cNomina.Timbrado = ""
+                        cNomina.Enviado = ""
+                        cNomina.Situacion = "A"
+                        cNomina.EsEspecial = False
+                        cNomina.IdMovimiento = Request("id")
+                        cNomina.FechaIni = cPeriodo.FechaInicialDate
+                        cNomina.FechaFin = cPeriodo.FechaFinalDate
+                        If Not cPeriodo.FechaPago = "" Then
+                            cNomina.FechaPago = cPeriodo.FechaPago
+                        End If
                         cNomina.DiasPagados = cPeriodo.Dias
                         cNomina.GuadarNominaPeriodo()
                     End If
 
                     If IMSS > 0 Then
                         cNomina = New Nomina()
-                        'cNomina.IdCliente = empresaId.Value
+                        cNomina.IdEmpresa = IdEmpresa
                         cNomina.IdCliente = clienteId.Value
                         cNomina.Ejercicio = IdEjercicio
                         cNomina.TipoNomina = 1 'Semanal
@@ -1970,13 +1948,108 @@ Public Class GeneracionDeFiniquitosSemanal
                         cNomina.IdMovimiento = Request("id")
                         cNomina.FechaIni = cPeriodo.FechaInicialDate
                         cNomina.FechaFin = cPeriodo.FechaFinalDate
-                        cNomina.FechaPago = cPeriodo.FechaPago
+                        If Not cPeriodo.FechaPago = "" Then
+                            cNomina.FechaPago = cPeriodo.FechaPago
+                        End If
                         cNomina.DiasPagados = cPeriodo.Dias
                         cNomina.GuadarNominaPeriodo()
                     End If
                 End If
             ElseIf ConImpuesto = 2 Then
+                If Impuesto > 0 Then
+                    cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.Periodo = cmbPeriodo.SelectedValue
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = 52
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.Tipo = "F"
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = Impuesto
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = Impuesto
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.IdMovimiento = Request("id")
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    If Not cPeriodo.FechaPago = "" Then
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                    End If
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.GuadarNominaPeriodo()
+                End If
+
+                If SubsidioAplicado > 0 Then
+                    cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.Periodo = cmbPeriodo.SelectedValue
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = 54
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.TipoConcepto = "P"
+                    cNomina.Tipo = "F"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = SubsidioAplicado
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = SubsidioAplicado
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.IdMovimiento = Request("id")
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    If Not cPeriodo.FechaPago = "" Then
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                    End If
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.GuadarNominaPeriodo()
+                End If
+
+                If IMSS > 0 Then
+                    cNomina = New Nomina()
+                    cNomina.IdEmpresa = IdEmpresa
+                    cNomina.IdCliente = clienteId.Value
+                    cNomina.Ejercicio = IdEjercicio
+                    cNomina.TipoNomina = 1 'Semanal
+                    cNomina.Periodo = cmbPeriodo.SelectedValue
+                    cNomina.NoEmpleado = empleadoId.Value
+                    cNomina.CvoConcepto = 56
+                    cNomina.IdContrato = contratoId.Value
+                    cNomina.Tipo = "F"
+                    cNomina.TipoConcepto = "D"
+                    cNomina.Unidad = 1
+                    cNomina.Importe = IMSS
+                    cNomina.ImporteGravado = 0
+                    cNomina.ImporteExento = IMSS
+                    cNomina.Generado = ""
+                    cNomina.Timbrado = ""
+                    cNomina.Enviado = ""
+                    cNomina.Situacion = "A"
+                    cNomina.EsEspecial = False
+                    cNomina.IdMovimiento = Request("id")
+                    cNomina.FechaIni = cPeriodo.FechaInicialDate
+                    cNomina.FechaFin = cPeriodo.FechaFinalDate
+                    If Not cPeriodo.FechaPago = "" Then
+                        cNomina.FechaPago = cPeriodo.FechaPago
+                    End If
+                    cNomina.DiasPagados = cPeriodo.Dias
+                    cNomina.GuadarNominaPeriodo()
+                End If
             End If
+
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
         End Try
@@ -1986,12 +2059,8 @@ Public Class GeneracionDeFiniquitosSemanal
             Call CargarVariablesGenerales()
 
             Call EliminaConceptosFiniquito(Request("id"), 52) 'IMPUESTO
-
-            Call EliminaConceptosFiniquito(Request("id"), 54) 'SUBSIDIO APLICADO
-
-            Call EliminaConceptosFiniquito(Request("id"), 55) 'SUBSIDIO EFECTIVO
-
-            Call EliminaConceptosFiniquito(Request("id"), 56) 'CUOTA IMSS
+            Call EliminaConceptosFiniquito(Request("id"), 54) 'SUBSIDIO
+            Call EliminaConceptosFiniquito(Request("id"), 56) 'IMSS
 
         Catch oExcep As Exception
             rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
@@ -1999,7 +2068,6 @@ Public Class GeneracionDeFiniquitosSemanal
     End Sub
     Private Sub ChecarPercepcionesGravadas(ByVal CvoConcepto As Int32)
         Try
-            Dim CuotaPeriodo As Decimal = 0
             Dim PrimaDominical As Decimal = 0
             Dim PrimaVacacional As Decimal = 0
             Dim Vacaciones As Decimal = 0
@@ -2013,6 +2081,7 @@ Public Class GeneracionDeFiniquitosSemanal
             Dim Comisiones As Decimal = 0
             Dim Destajo As Decimal = 0
             Dim FaltasPermisosIncapacidades As Decimal = 0
+
             HonorarioAsimilado = 0
             DiasVacaciones = 0
             DiasCuotaPeriodo = 0
@@ -2024,6 +2093,7 @@ Public Class GeneracionDeFiniquitosSemanal
             TiempoExtraordinarioDentroDelMargenLegal = 0
             TiempoExtraordinarioFueraDelMargenLegal = 0
             ImporteGravado = 0
+            CuotaPeriodo = 0
 
             Call CargarVariablesGenerales()
 
@@ -2072,12 +2142,15 @@ Public Class GeneracionDeFiniquitosSemanal
                 If dt.Compute("Sum(Importe)", "CvoConcepto=14") IsNot DBNull.Value Then
                     Aguinaldo = dt.Compute("Sum(Importe)", "CvoConcepto=14")
                 End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=16") IsNot DBNull.Value Then
-                    PrimaVacacional = dt.Compute("Sum(Importe)", "CvoConcepto=16")
-                End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=15") IsNot DBNull.Value Then
                     DiasVacaciones = dt.Compute("Sum(UNIDAD)", "CvoConcepto=15")
                     Vacaciones = dt.Compute("Sum(Importe)", "CvoConcepto=15")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=17") IsNot DBNull.Value Then
+                    PrimaAntiguedad = dt.Compute("Sum(Importe)", "CvoConcepto=17")
+                End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=16") IsNot DBNull.Value Then
+                    PrimaVacacional = dt.Compute("Sum(Importe)", "CvoConcepto=16")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=50") IsNot DBNull.Value Then
                     RepartoUtilidades = dt.Compute("Sum(Importe)", "CvoConcepto=50")
@@ -2092,9 +2165,9 @@ Public Class GeneracionDeFiniquitosSemanal
                 If dt.Compute("Sum(Importe)", "CvoConcepto=33 OR CvoConcepto=34 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48") IsNot DBNull.Value Then
                     PrevisionSocial = dt.Compute("Sum(Importe)", "CvoConcepto=33 OR CvoConcepto=34 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48")
                 End If
-                '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49,51
-                If dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=51") IsNot DBNull.Value Then
-                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=51")
+                '12,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49,169
+                If dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=169") IsNot DBNull.Value Then
+                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49 OR CvoConcepto=169")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") IsNot DBNull.Value Then
                     DiasFaltasPermisosIncapacidades = dt.Compute("Sum(UNIDAD)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162")
@@ -2145,11 +2218,13 @@ Public Class GeneracionDeFiniquitosSemanal
                     PrimaDominical = PrimaDominical + ImporteIncidencia
                 ElseIf CvoConcepto.ToString = "14" Then
                     Aguinaldo = Aguinaldo + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "16" Then
-                    PrimaVacacional = PrimaVacacional + ImporteIncidencia
                 ElseIf CvoConcepto.ToString = "15" Then
                     DiasVacaciones = DiasVacaciones + UnidadIncidencia
                     Vacaciones = Vacaciones + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "16" Then
+                    PrimaVacacional = PrimaVacacional + ImporteIncidencia
+                ElseIf CvoConcepto.ToString = "17" Then
+                    PrimaAntiguedad = PrimaAntiguedad + ImporteIncidencia
                 ElseIf CvoConcepto.ToString = "50" Then
                     RepartoUtilidades = RepartoUtilidades + ImporteIncidencia
                 ElseIf CvoConcepto.ToString = "42" Then
@@ -2161,8 +2236,8 @@ Public Class GeneracionDeFiniquitosSemanal
                     CuotaPeriodo = CuotaPeriodo + ImporteIncidencia
                 ElseIf CvoConcepto.ToString = "33" Or CvoConcepto.ToString = "34" Or CvoConcepto.ToString = "35" Or CvoConcepto.ToString = "36" Or CvoConcepto.ToString = "37" Or CvoConcepto.ToString = "38" Or CvoConcepto.ToString = "40" Or CvoConcepto.ToString = "41" Or CvoConcepto.ToString = "43" Or CvoConcepto.ToString = "45" Or CvoConcepto.ToString = "46" Or CvoConcepto.ToString = "47" Or CvoConcepto.ToString = "48" Then
                     PrevisionSocial = PrevisionSocial + ImporteIncidencia
-                ElseIf CvoConcepto.ToString = "12" Or CvoConcepto.ToString = "17" Or CvoConcepto.ToString = "18" Or CvoConcepto.ToString = "19" Or CvoConcepto.ToString = "20" Or CvoConcepto.ToString = "21" Or CvoConcepto.ToString = "22" Or CvoConcepto.ToString = "23" Or CvoConcepto.ToString = "24" Or CvoConcepto.ToString = "25" Or CvoConcepto.ToString = "26" Or CvoConcepto.ToString = "27" Or CvoConcepto.ToString = "28" Or CvoConcepto.ToString = "29" Or CvoConcepto.ToString = "30" Or CvoConcepto.ToString = "31" Or CvoConcepto.ToString = "32" Or CvoConcepto.ToString = "39" Or CvoConcepto.ToString = "49" Then
-                    '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49
+                ElseIf CvoConcepto.ToString = "12" Or CvoConcepto.ToString = "18" Or CvoConcepto.ToString = "19" Or CvoConcepto.ToString = "20" Or CvoConcepto.ToString = "21" Or CvoConcepto.ToString = "22" Or CvoConcepto.ToString = "23" Or CvoConcepto.ToString = "24" Or CvoConcepto.ToString = "25" Or CvoConcepto.ToString = "26" Or CvoConcepto.ToString = "27" Or CvoConcepto.ToString = "28" Or CvoConcepto.ToString = "29" Or CvoConcepto.ToString = "30" Or CvoConcepto.ToString = "31" Or CvoConcepto.ToString = "32" Or CvoConcepto.ToString = "39" Or CvoConcepto.ToString = "49" Or CvoConcepto.ToString = "169" Then
+                    '12,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49,169
                     GrupoPercepcionesGravadasTotalmenteSinExentos = GrupoPercepcionesGravadasTotalmenteSinExentos + ImporteIncidencia
                 ElseIf CvoConcepto.ToString = "57" Or CvoConcepto.ToString = "58" Or CvoConcepto.ToString = "59" Or CvoConcepto.ToString = "161" Or CvoConcepto.ToString = "162" Then
                     'deducciones
@@ -2218,18 +2293,36 @@ Public Class GeneracionDeFiniquitosSemanal
                     ImporteGravado = ImporteGravado + (ImporteIncidencia - SalarioMinimoDiarioGeneral)
                 End If
             End If
-            'If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
-            '    ImporteExento = ImporteExento + Aguinaldo
-            'ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
-            '    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
-            '    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
-            'End If
-            'If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
-            '    ImporteExento = ImporteExento + PrimaVacacional
-            'ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
-            '    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-            '    ImporteGravado = ImporteGravado + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
-            'End If
+
+            Dim datos As New DataTable()
+            cNomina = New Nomina()
+            cNomina.Id = Request("id")
+            'cNomina.IdEmpresa = Session("clienteid")
+            cNomina.TipoNomina = 1 'Semanal
+            datos = cNomina.ConsultarDesgloseFiniquito()
+
+            If datos.Rows.Count > 0 Then
+                For Each oDataRow In datos.Rows
+                    AntiguedadAnios = Math.Round(oDataRow("AntiguedadAnios"), 2)
+                Next
+            End If
+
+            'La parte exenta de la prima de antigüedad es de 90 Unidades de Medida y Actualización (UMAs) por cada año trabajado
+            If PrimaAntiguedad > 0 Then
+                'ImporteExento = (AntiguedadAnios * 90) * UMA
+                'ImporteGravado = PrimaAntiguedad - ImporteExento
+
+                Dim UMAs As Decimal = 0
+                UMAs = AntiguedadAnios * 90
+
+                If PrimaAntiguedad > 0 And PrimaAntiguedad < (UMA * UMAs) Then 'Exención 90 UMAs
+                    ImporteExento = ImporteExento + PrimaAntiguedad
+                ElseIf PrimaAntiguedad > 0 And PrimaAntiguedad > (UMA * UMAs) Then
+                    ImporteExento = ImporteExento + (UMA * UMAs)
+                    ImporteGravado = ImporteGravado + (PrimaAntiguedad - (UMA * UMAs))
+                End If
+            End If
+
             If RepartoUtilidades > 0 And RepartoUtilidades < (SalarioMinimoDiarioGeneral * 15) Then
                 ImporteExento = ImporteExento + RepartoUtilidades
             ElseIf RepartoUtilidades > 0 And RepartoUtilidades > (SalarioMinimoDiarioGeneral * 15) Then
@@ -2237,8 +2330,8 @@ Public Class GeneracionDeFiniquitosSemanal
                 ImporteGravado = ImporteGravado + (RepartoUtilidades - (SalarioMinimoDiarioGeneral * 15))
             End If
             'El tiempo extraordinario2 es gravado al 100%, no tiene nada exento igual que las vacaciones y la Cuota del periodo
-            ImporteGravado = ImporteGravado + TiempoExtraordinarioFueraDelMargenLegal + CuotaPeriodo
             'ImporteGravado = ImporteGravado + TiempoExtraordinarioFueraDelMargenLegal + Vacaciones + CuotaPeriodo
+            ImporteGravado = ImporteGravado + TiempoExtraordinarioFueraDelMargenLegal + CuotaPeriodo
             'El fondo de ahorro y ayuda para funeral son exentos total siempre asi que se van directo a ImporteExento sin ningun chequeo mas
             ImporteExento = ImporteExento + FondoAhorro + AyudaFuneral
 
@@ -2307,9 +2400,7 @@ Public Class GeneracionDeFiniquitosSemanal
             TiempoExtraordinarioDentroDelMargenLegal = 0
             TiempoExtraordinarioFueraDelMargenLegal = 0
             NumeroDeDiasPagados = 0
-
-            'SubsidioAplicado = 0
-            SubsidioEfectivo = 0
+            SubsidioAplicado = 0
 
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             ImporteExentoTiempoExtraordinarioDentroDelMargenLegal = 0
@@ -2433,6 +2524,9 @@ Public Class GeneracionDeFiniquitosSemanal
                 If dt.Compute("Sum(Importe)", "CvoConcepto=16") IsNot DBNull.Value Then
                     PrimaVacacional = dt.Compute("Sum(Importe)", "CvoConcepto=16")
                 End If
+                If dt.Compute("Sum(Importe)", "CvoConcepto=17") IsNot DBNull.Value Then
+                    PrimaAntiguedad = dt.Compute("Sum(Importe)", "CvoConcepto=17")
+                End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=15") IsNot DBNull.Value Then
                     DiasVacaciones = dt.Compute("Sum(UNIDAD)", "CvoConcepto=15")
                     Vacaciones = dt.Compute("Sum(Importe)", "CvoConcepto=15")
@@ -2450,22 +2544,19 @@ Public Class GeneracionDeFiniquitosSemanal
                 If dt.Compute("Sum(Importe)", "CvoConcepto=33 OR CvoConcepto=34 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48") IsNot DBNull.Value Then
                     PrevisionSocial = dt.Compute("Sum(Importe)", "CvoConcepto=33 OR CvoConcepto=34 OR CvoConcepto=35 OR CvoConcepto=36 OR CvoConcepto=37 OR CvoConcepto=38 OR CvoConcepto=40 OR CvoConcepto=41 OR CvoConcepto=43 OR CvoConcepto=45 OR CvoConcepto=46 OR CvoConcepto=47 OR CvoConcepto=48")
                 End If
-                '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49,51
-                If dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49") IsNot DBNull.Value Then
-                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=17 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49")
+                '12,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49,51,169
+                If dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49") IsNot DBNull.Value Then
+                    GrupoPercepcionesGravadasTotalmenteSinExentos = dt.Compute("Sum(Importe)", "CvoConcepto=12 OR CvoConcepto=18 OR CvoConcepto=19 OR CvoConcepto=20 OR CvoConcepto=21 OR CvoConcepto=22 OR CvoConcepto=23 OR CvoConcepto=24 OR CvoConcepto=25 OR CvoConcepto=26 OR CvoConcepto=27 OR CvoConcepto=28 OR CvoConcepto=29 OR CvoConcepto=30 OR CvoConcepto=31 OR CvoConcepto=32 OR CvoConcepto=39 OR CvoConcepto=49")
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162") IsNot DBNull.Value Then
                     DiasFaltasPermisosIncapacidades = dt.Compute("Sum(UNIDAD)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162")
                     FaltasPermisosIncapacidades = dt.Compute("Sum(Importe)", "CvoConcepto=57 OR CvoConcepto=58 OR CvoConcepto=59 OR CvoConcepto=161 OR CvoConcepto=162")
                 End If
-
-                'If dt.Compute("Sum(Importe)", "CvoConcepto=54") IsNot DBNull.Value Then
-                '    SubsidioAplicado = dt.Compute("Sum(Importe)", "CvoConcepto=54")
-                'End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=55") IsNot DBNull.Value Then
-                    SubsidioEfectivo = dt.Compute("Sum(Importe)", "CvoConcepto=55")
+                If dt.Compute("Sum(Importe)", "CvoConcepto=54") IsNot DBNull.Value Then
+                    SubsidioAplicado = dt.Compute("Sum(Importe)", "CvoConcepto=54")
                 End If
             End If
+
             If DiasCuotaPeriodo > 0 Then
                 DiasPagoPorHoras = 0
                 DiasComision = 0
@@ -2483,7 +2574,22 @@ Public Class GeneracionDeFiniquitosSemanal
                 DiasPagoPorHoras = 0
                 DiasCuotaPeriodo = 0
             End If
+
             NumeroDeDiasPagados = DiasCuotaPeriodo + DiasVacaciones + DiasComision + DiasPagoPorHoras + DiasDestajo + DiasHonorarioAsimilado - DiasFaltasPermisosIncapacidades
+
+            Dim datos As New DataTable()
+            cNomina = New Nomina()
+            cNomina.Id = Request("id")
+            'cNomina.IdEmpresa = Session("clienteid")
+            cNomina.TipoNomina = 1 'Semanal
+            datos = cNomina.ConsultarDesgloseFiniquito()
+
+            If datos.Rows.Count > 0 Then
+                For Each oDataRow In datos.Rows
+                    AntiguedadAnios = Math.Round(oDataRow("AntiguedadAnios"), 2)
+                Next
+            End If
+
             If TiempoExtraordinarioDentroDelMargenLegal > 0 Then
                 If (TiempoExtraordinarioDentroDelMargenLegal / 2) < (SalarioMinimoDiarioGeneral * 5) Then
                     ImporteExento = TiempoExtraordinarioDentroDelMargenLegal / 2
@@ -2497,10 +2603,6 @@ Public Class GeneracionDeFiniquitosSemanal
                     ImporteGravadoTiempoExtraordinarioDentroDelMargenLegal = TiempoExtraordinarioDentroDelMargenLegal - (SalarioMinimoDiarioGeneral * 5)
                 End If
             End If
-
-            'If CuotaPeriodo > 0 Then
-            '    GuardarExentoYGravado(2, CuotaPeriodo - FaltasPermisosIncapacidades, FaltasPermisosIncapacidades, NoEmpleado)
-            'End If
 
             If CuotaPeriodo > 0 Then
                 If dt.Compute("Sum(Importe)", "CvoConcepto=51") IsNot DBNull.Value Then
@@ -2525,32 +2627,52 @@ Public Class GeneracionDeFiniquitosSemanal
                 GuardarExentoYGravado(13, ImporteGravadoPrimaDominical, ImporteExentoPrimaDominical, NoEmpleado)
             End If
 
+            'La parte exenta del aguinaldo es de 30 Unidades de Medida y Actualización (UMAs)
             If Aguinaldo > 0 Then
-                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                If Aguinaldo > 0 And Aguinaldo <= (UMA * 30) Then
                     ImporteExento = ImporteExento + Aguinaldo
                     ImporteExentoAguinaldo = Aguinaldo
                     ImporteGravadoAguinaldo = 0
-                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
-                    ImporteGravado = ImporteGravado + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
-                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
-                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                ElseIf Aguinaldo > 0 And Aguinaldo > (UMA * 30) Then
+                    ImporteExento = ImporteExento + (UMA * 30)
+                    ImporteExentoAguinaldo = UMA * 30
+                    ImporteGravadoAguinaldo = Aguinaldo - (UMA * 30)
                 End If
                 GuardarExentoYGravado(14, ImporteGravadoAguinaldo, ImporteExentoAguinaldo, NoEmpleado)
             End If
 
+            'La parte exenta de la prima vacacional es de 15 Unidades de Medida y Actualización (UMAs)
             If PrimaVacacional > 0 Then
-                If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
+                If PrimaVacacional > 0 And PrimaVacacional < (UMA * 15) Then 'Exención 15 UMAs
                     ImporteExento = ImporteExento + PrimaVacacional
                     ImporteExentoPrimaVacacional = PrimaVacacional
                     ImporteGravadoPrimaVacacional = 0
-                ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-                    ImporteGravado = ImporteGravado + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
-                    ImporteExentoPrimaVacacional = SalarioMinimoDiarioGeneral * 15
-                    ImporteGravadoPrimaVacacional = PrimaVacacional - (SalarioMinimoDiarioGeneral * 15)
+                ElseIf PrimaVacacional > 0 And PrimaVacacional > (UMA * 15) Then
+                    ImporteExento = ImporteExento + (UMA * 15)
+                    ImporteExentoPrimaVacacional = UMA * 15
+                    ImporteGravadoPrimaVacacional = PrimaVacacional - (UMA * 15) 'Remuneración
                 End If
                 GuardarExentoYGravado(16, ImporteGravadoPrimaVacacional, ImporteExentoPrimaVacacional, NoEmpleado)
+            End If
+
+            'La parte exenta de la prima de antigüedad es de 90 Unidades de Medida y Actualización (UMAs) por cada año trabajado
+            If PrimaAntiguedad > 0 Then
+                'ImporteExento = (AntiguedadAnios * 90) * UMA
+                'ImporteGravado = PrimaAntiguedad - ImporteExento
+
+                Dim UMAs As Decimal = 0
+                UMAs = AntiguedadAnios * 90
+
+                If PrimaAntiguedad > 0 And PrimaAntiguedad < (UMA * UMAs) Then 'Exención 90 UMAs
+                    ImporteExento = ImporteExento + PrimaAntiguedad
+                    ImporteExentoPrimaAntiguedad = PrimaAntiguedad
+                    ImporteGravadoPrimaAntiguedad = 0
+                ElseIf PrimaAntiguedad > 0 And PrimaAntiguedad > (UMA * UMAs) Then
+                    ImporteExento = ImporteExento + (UMA * UMAs)
+                    ImporteExentoPrimaAntiguedad = UMA * UMAs
+                    ImporteGravadoPrimaAntiguedad = PrimaAntiguedad - (UMA * UMAs) 'Remuneración
+                End If
+                GuardarExentoYGravado(17, ImporteGravadoPrimaAntiguedad, ImporteExentoPrimaAntiguedad, NoEmpleado)
             End If
 
             If RepartoUtilidades > 0 Then
@@ -2629,18 +2751,13 @@ Public Class GeneracionDeFiniquitosSemanal
                     ImporteGravadoPrevisionSocial = 0
                 End If
             End If
-
-            'distribuyendo las percepciones del GrupoPercepcionesGravadasTotalmenteSinExentos
+            'Distribuyendo las percepciones del GrupoPercepcionesGravadasTotalmenteSinExentos
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-            '12,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49
+            '12,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,39,49,169
             If GrupoPercepcionesGravadasTotalmenteSinExentos > 0 Then
                 If dt.Compute("Sum(Importe)", "CvoConcepto=12") IsNot DBNull.Value Then
                     Diferencias = dt.Compute("Sum(Importe)", "CvoConcepto=12")
                     GuardarExentoYGravado(12, Diferencias, 0, NoEmpleado)
-                End If
-                If dt.Compute("Sum(Importe)", "CvoConcepto=17") IsNot DBNull.Value Then
-                    Gratificacion = dt.Compute("Sum(Importe)", "CvoConcepto=17")
-                    GuardarExentoYGravado(17, Gratificacion, 0, NoEmpleado)
                 End If
                 If dt.Compute("Sum(Importe)", "CvoConcepto=18") IsNot DBNull.Value Then
                     Bonificacion = dt.Compute("Sum(Importe)", "CvoConcepto=18")
@@ -2712,8 +2829,7 @@ Public Class GeneracionDeFiniquitosSemanal
                 End If
             End If
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-
-            'distribuyendo las horas extras fuera del margen legal
+            'Distribuyendo las horas extras fuera del margen legal
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             If TiempoExtraordinarioFueraDelMargenLegal > 0 Then
                 If dt.Compute("Sum(Importe)", "CvoConcepto=7") IsNot DBNull.Value Then
@@ -2726,8 +2842,7 @@ Public Class GeneracionDeFiniquitosSemanal
                 End If
             End If
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-
-            'distribuyendo lo exento del grupo de percepciones TiempoExtraordinarioDentroDelMargenLegal en cada uno de sus elementos(6, 9 y 10)
+            'Distribuyendo lo exento del grupo de percepciones TiempoExtraordinarioDentroDelMargenLegal en cada uno de sus elementos(6, 9 y 10)
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             If TiempoExtraordinarioDentroDelMargenLegal > 0 Then
                 'HorasDoblesGravadas = 0
@@ -2780,8 +2895,7 @@ Public Class GeneracionDeFiniquitosSemanal
                 End If
             End If
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-
-            'distribuyendo lo exento del grupo de percepciones PrevisionSocial en cada uno de sus elementos(33,34,35,36,37,38,40,41,43,45,46,47,48)
+            'Distribuyendo lo exento del grupo de percepciones PrevisionSocial en cada uno de sus elementos(33,34,35,36,37,38,40,41,43,45,46,47,48)
             'ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
             If PrevisionSocial > 0 Then
                 'If ImporteGravado + ImporteExento + PrevisionSocial < (SalarioMinimoDiarioGeneral * 7) Then
@@ -3032,6 +3146,7 @@ Public Class GeneracionDeFiniquitosSemanal
         Dim dt As New DataTable()
         Dim cNomina As New Nomina()
         cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = clienteId.Value
         cNomina.NoEmpleado = NoEmpleado
         cNomina.Ejercicio = IdEjercicio
         cNomina.CvoConcepto = CvoConcepto
@@ -3068,28 +3183,40 @@ Public Class GeneracionDeFiniquitosSemanal
         ImportePeriodo = 0
         ImporteExento = 0
         ImporteGravado = 0
-        SubsidioEfectivo = 0
+        SubsidioAplicado = 0
         Agregar = 0
 
         'En esta parte se checa si el concepto que se esta agregando es percepcion(menor que 51) o es falta, permiso o incapacidad(57,58,59), siempre se borran los impuestos actuales y se recalculan, la demas deduccioen no entran aqui ya que no recalculan impuestos, simplemente se restan.
-        If NumeroConcepto < 52 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Then
-            BorrarDeduccionesFiniquito()
-        End If
+        'If NumeroConcepto < 52 Or NumeroConcepto = "57" Or NumeroConcepto = "58" Or NumeroConcepto = "59" Or NumeroConcepto = "161" Or NumeroConcepto = "162" Or NumeroConcepto = "169" Then
+        '    BorrarDeduccionesFiniquito()
+        'End If
 
         Call EliminaConceptosFiniquito(Request("id"), NumeroConcepto)
 
-        If cmbConcepto.SelectedValue.ToString < 52 Then
+        Dim cNomina As New Nomina()
+
+        Dim cPeriodo As New Entities.Periodo()
+        cPeriodo.IdPeriodo = cmbPeriodo.SelectedValue
+        cPeriodo.ConsultarPeriodoID()
+
+        If NumeroConcepto.ToString < 52 Or NumeroConcepto.ToString = "169" Then
             'En este bloque no entran las deducciones por adeudos que no cambian la base del impuesto y por lo tanto no lo calculan, ejemplos de esto serian, adeudos por credito infonavit, cuotas sindicales, adeudos fonacot, adeudos con el patron, etc, (conceptos del 61 al 86)
-            BorrarDeduccionesFiniquito()
+            Call BorrarDeduccionesFiniquito()
+
+            Call EliminaConceptosFiniquito(Request("id"), 52) 'IMPUESTO
+            Call EliminaConceptosFiniquito(Request("id"), 54) 'SUBSIDIO
+            Call EliminaConceptosFiniquito(Request("id"), 56) 'IMSS
 
             Dim Aguinaldo As Decimal = 0
             Dim Vacaciones As Decimal = 0
             Dim DiasProporcionalVacaciones As Decimal = 0
+            Dim DiasAguinaldoProporcionales As Decimal = 0
             Dim PrimaVacacional As Decimal = 0
             Dim ImporteExentoAguinaldo As Decimal = 0
             Dim ImporteGravadoAguinaldo As Decimal = 0
             Dim ImporteExentoPrimaVacacional As Decimal = 0
             Dim ImporteGravadoPrimaVacacional As Decimal = 0
+            Dim USMO As Decimal = 0
 
             Dim DiferenciaSubsidioImpuestoVacaciones As Decimal = 0
             Dim FactorImpuestoSubsidioVacaciones As Decimal = 0
@@ -3103,11 +3230,18 @@ Public Class GeneracionDeFiniquitosSemanal
             Dim FactorImpuestoSubsidioIncidencias As Decimal = 0
             Dim TasaSubsidioImpuestoIncidencias As Decimal = 0
 
+            Dim DiasPagadosVacaciones As Decimal = 0
+            Try
+                DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
+            Catch ex As Exception
+                DiasPagadosVacaciones = 0
+            End Try
+
             Dim dt As New DataTable()
-            Dim cNomina As New Nomina()
             cNomina.Id = Request("id")
             'cNomina.IdEmpresa = Session("clienteid")
             cNomina.TipoNomina = 1 'Semanal
+            cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
             dt = cNomina.ConsultarDesgloseFiniquito()
             cNomina = Nothing
 
@@ -3118,251 +3252,185 @@ Public Class GeneracionDeFiniquitosSemanal
                     Vacaciones = oDataRow("ProporcionalVacaciones")
                     PrimaVacacional = oDataRow("PrimaVacaciones")
                     DiasProporcionalVacaciones = Math.Round(oDataRow("DiasProporcionalVacaciones"), 2)
+                    DiasAguinaldoProporcionales = Math.Round(oDataRow("DiasAguinaldoProporcionales"), 2)
+                    USMO = ImporteDiario * FactorDiarioPromedio 'USMO(base para ISR mensual) = Cuota Diaria * FactorDiarioPromedio (Por defecto, el valor de esta variable es 30, pero se puede modificar a 31 o 30.4)
                 Next
             End If
 
+            'La parte exenta del aguinaldo es de 30 Unidades de Medida y Actualización (UMAs)
             If Aguinaldo > 0 Then
-                If Aguinaldo > 0 And Aguinaldo < (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
+                If Aguinaldo > 0 And Aguinaldo <= (UMA * 30) Then
                     ImporteExento = ImporteExento + Aguinaldo
                     ImporteExentoAguinaldo = Aguinaldo
                     ImporteGravadoAguinaldo = 0
-                ElseIf Aguinaldo > 0 And Aguinaldo > (SalarioMinimoDiarioGeneral * FactorDiarioPromedio) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
-                    ImporteGravadoFiniquito = ImporteGravadoFiniquito + (Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio))
-                    ImporteExentoAguinaldo = SalarioMinimoDiarioGeneral * FactorDiarioPromedio
-                    ImporteGravadoAguinaldo = Aguinaldo - (SalarioMinimoDiarioGeneral * FactorDiarioPromedio)
+                ElseIf Aguinaldo > 0 And Aguinaldo > (UMA * 30) Then
+                    ImporteExento = ImporteExento + (UMA * 30)
+                    ImporteExentoAguinaldo = UMA * 30
+                    ImporteGravadoAguinaldo = Aguinaldo - (UMA * 30)
                 End If
+                GuardarExentoYGravado(14, DiasAguinaldoProporcionales, Aguinaldo, ImporteGravadoAguinaldo, ImporteExentoAguinaldo, "P")
             End If
 
+            'Vacaciones gravan al 100% para ISR
             If Vacaciones > 0 Then
-                ImporteGravadoVacaciones = Vacaciones
-                ImporteGravadoFiniquito = ImporteGravadoFiniquito + Vacaciones
+                GuardarExentoYGravado(15, DiasProporcionalVacaciones, Vacaciones, Vacaciones, 0, "P")
             End If
 
+            'La parte exenta de la prima vacacional es de 15 Unidades de Medida y Actualización (UMAs)
             If PrimaVacacional > 0 Then
-                If PrimaVacacional > 0 And PrimaVacacional < (SalarioMinimoDiarioGeneral * 15) Then
+                If PrimaVacacional > 0 And PrimaVacacional < (UMA * 15) Then 'Exención 15 UMAs
                     ImporteExento = ImporteExento + PrimaVacacional
                     ImporteExentoPrimaVacacional = PrimaVacacional
                     ImporteGravadoPrimaVacacional = 0
-                ElseIf PrimaVacacional > 0 And PrimaVacacional > (SalarioMinimoDiarioGeneral * 15) Then
-                    ImporteExento = ImporteExento + (SalarioMinimoDiarioGeneral * 15)
-                    ImporteGravadoFiniquito = ImporteGravadoFiniquito + (PrimaVacacional - (SalarioMinimoDiarioGeneral * 15))
-                    ImporteExentoPrimaVacacional = SalarioMinimoDiarioGeneral * 15
-                    ImporteGravadoPrimaVacacional = PrimaVacacional - (SalarioMinimoDiarioGeneral * 15)
+                ElseIf PrimaVacacional > 0 And PrimaVacacional > (UMA * 15) Then
+                    ImporteExento = ImporteExento + (UMA * 15)
+                    ImporteExentoPrimaVacacional = UMA * 15
+                    ImporteGravadoPrimaVacacional = PrimaVacacional - (UMA * 15) 'Remuneración
                 End If
+                GuardarExentoYGravado(16, 1, PrimaVacacional, ImporteGravadoPrimaVacacional, ImporteExentoPrimaVacacional, "P")
             End If
 
-            '/*-------------------------*/
-            '1 Impuesto / Subsidio proporcional vacaciones
-            Dim ImporteProporcionalVacaciones As Decimal
-            Dim IngresoMensualOrdinario As Decimal
-            Dim IngresoGravadoMes As Decimal
+            'Impuesto USMO
+            ImpuestoUSMO = 0
+            Call CalcularImpuestoUSMO(USMO)
 
-            Call ConsultarDiasMes()
+            Dim Fraccion1 As Decimal = 0
+            Dim Fraccion2 As Decimal = 0
+            Dim Fraccion3 As Decimal = 0
+            Dim Fraccion4 As Decimal = 0
+            Dim Fraccion5 As Decimal = 0 '(ISR a retener)
 
-            ImporteProporcionalVacaciones = (ImporteGravadoVacaciones / 365) * FactorDiarioPromedio
-            IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-            IngresoGravadoMes = ImporteProporcionalVacaciones + IngresoMensualOrdinario
+            'VACACIONES
+            If Vacaciones > 0 Then
+                'Fracción I.
+                '(Remuneración / 365) * 30.4
+                'Remuneración = ImporteGravadoVacaciones
+                Fraccion1 = (Vacaciones / 365) * FactorDiarioPromedio
 
-            Call CalcularImpuestoVacaciones(IngresoGravadoMes)
-            Call CalcularSubsidioVacaciones(IngresoGravadoMes)
+                'Fracción II.
+                'Fracción I + USMO = Base -->Tabla
+                Fraccion2 = Fraccion1 + USMO
 
-            If ImpuestoVacaciones > SubsidioVacaciones Then
-                SubsidioEfectivoVacaciones = 0
-                ImpuestoVacaciones = ImpuestoVacaciones - SubsidioVacaciones
-            ElseIf ImpuestoVacaciones < SubsidioVacaciones Then
-                SubsidioEfectivoVacaciones = SubsidioVacaciones - ImpuestoVacaciones
-                ImpuestoVacaciones = 0
+                ' Impuesto prima vacacional
+                Call CalcularImpuestoVacaciones(Fraccion2)
+
+                'Fracción III.
+                'ISR Fracción II - ISR USMO
+                Fraccion3 = ImpuestoVacaciones - ImpuestoUSMO
+
+                'Fracción IV
+                'Fraccion III/Fraccion I
+                Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
+
+                'Fracción V
+                'Remuneración * Tasa Fracción IV
+                Fraccion5 = Vacaciones * Fraccion4
+                Impuesto = Impuesto + Fraccion5
             End If
 
-            ImpuestoVacaciones = Math.Round(ImpuestoVacaciones, 6)
-            SubsidioEfectivoVacaciones = Math.Round(SubsidioEfectivoVacaciones, 6)
+            'PRIMA VACACIONAL
+            If ImporteGravadoPrimaVacacional > 0 Then
+                'Fracción I.
+                '(Remuneración / 365) * 30.4
+                'Remuneración = ImporteGravadoPrimaVacacional
+                Fraccion1 = 0
+                Fraccion1 = (ImporteGravadoPrimaVacacional / 365) * FactorDiarioPromedio
 
-            '2 Impuesto / Subsidio por sueldo ordinario
-            Call CalcularImpuestoSueldoMesAnterior(IngresoMensualOrdinario)
-            Call CalcularSubsidioSueldoMesAnterior(IngresoMensualOrdinario)
+                'Fracción II.
+                'Fracción I + USMO = Base -->Tabla
+                Fraccion2 = 0
+                Fraccion2 = Fraccion1 + USMO
 
-            If ImpuestoSueldoMesAnterior > SubsidioSueldoMesAnterior Then
-                SubsidioEfectivoSueldoMesAnterior = 0
-                ImpuestoSueldoMesAnterior = ImpuestoSueldoMesAnterior - SubsidioSueldoMesAnterior
-            ElseIf ImpuestoSueldoMesAnterior < SubsidioSueldoMesAnterior Then
-                SubsidioEfectivoSueldoMesAnterior = SubsidioSueldoMesAnterior - ImpuestoSueldoMesAnterior
-                ImpuestoSueldoMesAnterior = 0
+                ' Impuesto prima vacacional
+                Call CalcularImpuestoPrimaVacacional(Fraccion2)
+
+                'Fracción III.
+                'ISR Fracción II - ISR USMO
+                Fraccion3 = 0
+                Fraccion3 = ImpuestoPrimaVacacional - ImpuestoUSMO
+
+                'Fracción IV
+                'Fraccion III/Fraccion I
+                Fraccion4 = 0
+                Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
+
+                'Fracción V
+                'Remuneración * Tasa Fracción IV
+                Fraccion5 = ImporteGravadoPrimaVacacional * Fraccion4
+                Impuesto = Impuesto + Fraccion5
             End If
 
-            ImpuestoSueldoMesAnterior = Math.Round(ImpuestoSueldoMesAnterior, 6)
-            SubsidioEfectivoSueldoMesAnterior = Math.Round(SubsidioEfectivoSueldoMesAnterior, 6)
-
-            If SubsidioEfectivoVacaciones > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-
-                DiferenciaSubsidioImpuestoVacaciones = SubsidioEfectivoVacaciones - SubsidioEfectivoSueldoMesAnterior
-
-                If DiferenciaSubsidioImpuestoVacaciones < 0 Then
-                    DiferenciaSubsidioImpuestoVacaciones = DiferenciaSubsidioImpuestoVacaciones * -1
-                End If
-
-                FactorImpuestoSubsidioVacaciones = DiferenciaSubsidioImpuestoVacaciones / ImporteProporcionalVacaciones
-                TasaSubsidioImpuestoVacaciones = FactorImpuestoSubsidioVacaciones * 1 ' El 1 representa 100%
-                SubsidioVacaciones = ImporteGravadoVacaciones * TasaSubsidioImpuestoVacaciones
-            Else
-                DiferenciaSubsidioImpuestoVacaciones = ImpuestoVacaciones - ImpuestoSueldoMesAnterior
-
-                FactorImpuestoSubsidioVacaciones = DiferenciaSubsidioImpuestoVacaciones / ImporteProporcionalVacaciones
-                TasaSubsidioImpuestoVacaciones = FactorImpuestoSubsidioVacaciones * 1 ' El 1 representa 100%
-                ImpuestoVacaciones = ImporteGravadoVacaciones * TasaSubsidioImpuestoVacaciones
-            End If
-
-            '/*------------------ Cambios 29/01/2018 ------------------*/
-            'If ImporteGravadoAguinaldo > 0 Then
-
-            '    Dim ImporteProporcionalAguinaldo As Decimal
-
-            '    Call ConsultarDiasMes()
-
-            '    ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
-            '    IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-            '    IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
-
-            '    '1 Impuesto / Subsidio proporcional aguinaldo
-            '    Call CalcularImpuestoAguinaldo(IngresoGravadoMes)
-            '    Call CalcularSubsidioAguinaldo(IngresoGravadoMes)
-
-            '    If ImpuestoAguinaldo > SubsidioIncidencias Then
-            '        SubsidioEfectivoAguinaldo = 0
-            '        ImpuestoAguinaldo = ImpuestoAguinaldo - SubsidioIncidencias
-            '    ElseIf ImpuestoAguinaldo < SubsidioIncidencias Then
-            '        SubsidioEfectivoAguinaldo = SubsidioIncidencias - ImpuestoAguinaldo
-            '        ImpuestoAguinaldo = 0
-            '    End If
-
-            '    ImpuestoAguinaldo = Math.Round(ImpuestoAguinaldo, 6)
-            '    SubsidioEfectivoAguinaldo = Math.Round(SubsidioEfectivoAguinaldo, 6)
-
-            '    If SubsidioEfectivoAguinaldo > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-            '        DiferenciaSubsidioImpuestoAguinaldo = SubsidioEfectivoAguinaldo - SubsidioEfectivoSueldoMesAnterior
-            '        If DiferenciaSubsidioImpuestoAguinaldo < 0 Then
-            '            DiferenciaSubsidioImpuestoAguinaldo = DiferenciaSubsidioImpuestoAguinaldo * -1
-            '        End If
-
-            '        FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-            '        TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-            '        SubsidioIncidencias = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-            '    Else
-            '        DiferenciaSubsidioImpuestoAguinaldo = ImpuestoAguinaldo - ImpuestoSueldoMesAnterior
-
-            '        FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-            '        TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-            '        ImpuestoAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-            '    End If
-            'End If
-            '/*-------------------------*/
-
-            '/*------------------ Reemplazo 29/01/2018 ------------------*/
+            'AGUINALDO
             If ImporteGravadoAguinaldo > 0 Then
+                'Fracción I.
+                '(Remuneración / 365) * 30.4
+                'Remuneración = ImporteGravadoAguinaldo
+                Fraccion1 = 0
+                Fraccion1 = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
 
-                Dim ImporteProporcionalAguinaldo As Decimal
+                'Fracción II.
+                'Fracción I + USMO = Base -->Tabla
+                Fraccion2 = 0
+                Fraccion2 = Fraccion1 + USMO
 
-                Call ConsultarDiasMes()
+                ' Impuesto aguinaldo
+                Call CalcularImpuestoAguinaldo(Fraccion2)
 
-                ImporteProporcionalAguinaldo = (ImporteGravadoAguinaldo / 365) * FactorDiarioPromedio
-                IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-                IngresoGravadoMes = ImporteProporcionalAguinaldo + IngresoMensualOrdinario
+                'Fracción III.
+                'ISR Fracción II - ISR USMO
+                Fraccion3 = 0
+                Fraccion3 = ImpuestoAguinaldo - ImpuestoUSMO
 
-                '1 Impuesto / Subsidio proporcional aguinaldo
-                Call CalcularImpuestoAguinaldo(IngresoGravadoMes)
-                Call CalcularSubsidioAguinaldo(IngresoGravadoMes)
+                'Fracción IV
+                'Fraccion III/Fraccion I
+                Fraccion4 = 0
+                Fraccion4 = Math.Round(Fraccion3 / Fraccion1, 4)
 
-                If ImpuestoAguinaldo > SubsidioAguinaldo Then
-                    SubsidioEfectivoAguinaldo = 0
-                    ImpuestoAguinaldo = ImpuestoAguinaldo - SubsidioAguinaldo
-                ElseIf ImpuestoAguinaldo < SubsidioAguinaldo Then
-                    SubsidioEfectivoAguinaldo = SubsidioAguinaldo - ImpuestoAguinaldo
-                    ImpuestoAguinaldo = 0
-                End If
-
-                ImpuestoAguinaldo = Math.Round(ImpuestoAguinaldo, 6)
-                SubsidioEfectivoAguinaldo = Math.Round(SubsidioEfectivoAguinaldo, 6)
-
-                If SubsidioEfectivoAguinaldo > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-                    DiferenciaSubsidioImpuestoAguinaldo = SubsidioEfectivoAguinaldo - SubsidioEfectivoSueldoMesAnterior
-                    If DiferenciaSubsidioImpuestoAguinaldo < 0 Then
-                        DiferenciaSubsidioImpuestoAguinaldo = DiferenciaSubsidioImpuestoAguinaldo * -1
-                    End If
-
-                    FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                    TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                    SubsidioAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-                Else
-                    DiferenciaSubsidioImpuestoAguinaldo = ImpuestoAguinaldo - ImpuestoSueldoMesAnterior
-
-                    FactorImpuestoSubsidioAguinaldo = DiferenciaSubsidioImpuestoAguinaldo / ImporteProporcionalAguinaldo
-                    TasaSubsidioImpuestoAguinaldo = FactorImpuestoSubsidioAguinaldo * 1 ' El 1 representa 100%
-                    ImpuestoAguinaldo = ImporteGravadoAguinaldo * TasaSubsidioImpuestoAguinaldo
-                End If
-            End If
-            '/*-------------------------*/
-
-            If ImpuestoVacaciones > 0 And ImpuestoAguinaldo > 0 Then
-                Impuesto = Math.Round(ImpuestoVacaciones + ImpuestoAguinaldo, 6)
+                'Fracción V
+                'Remuneración * Tasa Fracción IV
+                Fraccion5 = ImporteGravadoAguinaldo * Fraccion4
+                Impuesto = Impuesto + Fraccion5
             End If
 
-            If SubsidioEfectivoVacaciones > 0 And SubsidioEfectivoAguinaldo > 0 Then
-                SubsidioEfectivo = Math.Round(SubsidioEfectivoVacaciones + SubsidioEfectivoAguinaldo, 6)
-            End If
-            '/*-------------------------*/
+            'PRIMA DE ANTIGÜEDAD (Pendiente)
 
-            Call ChecarPercepcionesGravadas(cmbConcepto.SelectedValue)
+            Call ChecarPercepcionesGravadas(NumeroConcepto)
+
+            'DIAS PENDIENTES DE PAGO
+            If DiasCuotaPeriodo > 0 Then
+
+                Call CalcularIMSS(CuotaDiaria)
+
+                IMSS = IMSS * DiasCuotaPeriodo
+                IMSS = Math.Round(IMSS, 6)
+            End If
 
             If ImporteGravado > 0 Then
-
-                Dim ImporteProporcionalIncidencias As Decimal
-
-                Call ConsultarDiasMes()
-
-                ImporteProporcionalIncidencias = (ImporteGravado / 365) * FactorDiarioPromedio
-                IngresoMensualOrdinario = (ImporteDiario * DiasMes)
-                IngresoGravadoMes = ImporteProporcionalIncidencias + IngresoMensualOrdinario
-
-                '1 Impuesto / Subsidio proporcional incidencias
-                Call CalcularImpuestoIncidencias(IngresoGravadoMes)
-                Call CalcularSubsidioIncidencias(IngresoGravadoMes)
+                'Impuesto / Subsidio Dias Pendientes
+                Call CalcularImpuestoDiasPendientes(ImporteGravado)
+                Call CalcularSubsidioDiasPendientes(ImporteGravado)
 
                 If ImpuestoIncidencias > SubsidioIncidencias Then
-                    SubsidioEfectivoIncidencias = 0
                     ImpuestoIncidencias = ImpuestoIncidencias - SubsidioIncidencias
+                    SubsidioIncidencias = 0
                 ElseIf ImpuestoIncidencias < SubsidioIncidencias Then
-                    SubsidioEfectivoIncidencias = SubsidioIncidencias - ImpuestoIncidencias
+                    SubsidioIncidencias = SubsidioIncidencias - ImpuestoIncidencias
                     ImpuestoIncidencias = 0
                 End If
-
-                ImpuestoIncidencias = Math.Round(ImpuestoIncidencias, 6)
-                SubsidioEfectivoIncidencias = Math.Round(SubsidioEfectivoIncidencias, 6)
-
-                If SubsidioEfectivoIncidencias > 0 And SubsidioEfectivoSueldoMesAnterior > 0 Then
-                    DiferenciaSubsidioImpuestoIncidencias = SubsidioEfectivoIncidencias - SubsidioEfectivoSueldoMesAnterior
-                    If DiferenciaSubsidioImpuestoIncidencias < 0 Then
-                        DiferenciaSubsidioImpuestoIncidencias = DiferenciaSubsidioImpuestoIncidencias * -1
-                    End If
-
-                    FactorImpuestoSubsidioIncidencias = DiferenciaSubsidioImpuestoIncidencias / ImporteProporcionalIncidencias
-                    TasaSubsidioImpuestoIncidencias = FactorImpuestoSubsidioIncidencias * 1 ' El 1 representa 100%
-                    SubsidioIncidencias = ImporteGravado * TasaSubsidioImpuestoIncidencias
-                Else
-                    DiferenciaSubsidioImpuestoIncidencias = ImpuestoIncidencias - ImpuestoSueldoMesAnterior
-
-                    FactorImpuestoSubsidioIncidencias = DiferenciaSubsidioImpuestoIncidencias / ImporteProporcionalIncidencias
-                    TasaSubsidioImpuestoIncidencias = FactorImpuestoSubsidioIncidencias * 1 ' El 1 representa 100%
-                    ImpuestoIncidencias = ImporteGravado * TasaSubsidioImpuestoIncidencias
-                End If
             End If
+
         End If
 
         Impuesto = Impuesto + ImpuestoIncidencias
-        SubsidioEfectivo = SubsidioEfectivo + SubsidioIncidencias
+        SubsidioAplicado = SubsidioAplicado + SubsidioIncidencias
 
-        If NumeroConcepto = 2 Then
-            Call EliminaConceptosFiniquito(Request("id"), 56) 'IMSS
-            Call EliminaConceptosFiniquito(Request("id"), 64) 'Infonavit
+        'CÁLCULO DE IMPUESTOS  A RETENER
+        If Impuesto > SubsidioAplicado Then
+            Impuesto = Impuesto - SubsidioAplicado
+            SubsidioAplicado = 0
+        ElseIf Impuesto < SubsidioAplicado Then
+            SubsidioAplicado = SubsidioAplicado - Impuesto
+            Impuesto = 0
         End If
 
         Call GuardarRegistro(ImporteDiario, 2)
@@ -3371,8 +3439,12 @@ Public Class GeneracionDeFiniquitosSemanal
         Call MostrarDeducciones()
         Call ChecarPercepcionesExentasYGravadasFiniquito()
 
-        txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
-        txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
+        Me.txtGravadoISR.Text = Math.Round(PercepcionesGravadas, 6)
+        Me.txtExentoISR.Text = Math.Round(PercepcionesExentas, 6)
+
+        Me.cmbConcepto.SelectedValue = 0
+        Me.txtImporteIncidencia.Text = ""
+        Me.txtUnidadIncidencia.Text = ""
 
     End Sub
     Private Sub ChecarSiExistenDiasEnPercepciones(ByVal NoEmpleado As Int64, ByVal CvoConcepto As Int32)
@@ -3924,9 +3996,17 @@ Public Class GeneracionDeFiniquitosSemanal
             Next
         End If
 
+        Dim DiasPagadosVacaciones As Decimal = 0
+        Try
+            DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
+        Catch ex As Exception
+            DiasPagadosVacaciones = 0
+        End Try
+
         cNomina.Id = Request("id")
         'cNomina.IdEmpresa = Session("clienteid")
         cNomina.TipoNomina = 1 'Semanal
+        cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
         dt = cNomina.ConsultarDesgloseFiniquito()
 
         If dt.Rows.Count > 0 Then
@@ -4070,10 +4150,18 @@ Public Class GeneracionDeFiniquitosSemanal
             Next
         End If
 
+        Dim DiasPagadosVacaciones As Decimal = 0
+        Try
+            DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
+        Catch ex As Exception
+            DiasPagadosVacaciones = 0
+        End Try
+
         cNomina = New Nomina()
         cNomina.Id = Request("id")
         'cNomina.IdEmpresa = Session("clienteid")
         cNomina.TipoNomina = 1 'Semanal
+        cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
         dt = cNomina.ConsultarDesgloseFiniquito()
 
         If dt.Rows.Count > 0 Then
@@ -4110,15 +4198,24 @@ Public Class GeneracionDeFiniquitosSemanal
     Private Sub GrabarEstatusFiniquito(ByVal IdEstatus As Integer)
         Call CargarVariablesGenerales()
 
+        Dim DiasPagadosVacaciones As Decimal = 0
+        Try
+            DiasPagadosVacaciones = Convert.ToDecimal(txtDiasPagadosVacaciones.Text)
+        Catch ex As Exception
+            DiasPagadosVacaciones = 0
+        End Try
+
         Dim cNomina = New Nomina()
+        cNomina.IdEmpresa = IdEmpresa
+        cNomina.IdCliente = clienteId.Value
         cNomina.Tipo = "F"
         cNomina.IdMovimiento = Request("id")
         cNomina.NoEmpleado = empleadoId.Value
-        cNomina.IdEmpresa = IdEmpresa
         cNomina.Ejercicio = IdEjercicio
         cNomina.TipoNomina = 1 'Semanal
         cNomina.Periodo = cmbPeriodo.SelectedValue
         cNomina.IdEstatus = IdEstatus
+        cNomina.DiasPagadosVacaciones = DiasPagadosVacaciones
         cNomina.ActualizarEstatusFiniquitoGenerado()
     End Sub
     Private Sub btnDescargarPDFFiniquito_Click(sender As Object, e As EventArgs) Handles btnDescargarPDFFiniquito.Click
@@ -4216,6 +4313,9 @@ Public Class GeneracionDeFiniquitosSemanal
             Response.WriteFile(FilePath)
             Response.End()
         End If
+    End Sub
+    Private Sub txtDiasPagadosVacaciones_TextChanged(sender As Object, e As EventArgs) Handles txtDiasPagadosVacaciones.TextChanged
+        Call MostrarDesgloceFiniquito()
     End Sub
 
 End Class

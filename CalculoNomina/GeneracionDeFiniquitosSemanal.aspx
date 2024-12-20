@@ -140,7 +140,7 @@
                             <label class="control-label">Dias pagados vacaciones:</label>
                         </td>
                         <td align="left" style="width: 20%;">
-                            <telerik:RadNumericTextBox ID="txtDiasPagadosVacaciones" runat="server" Value="0" MinValue="0" NumberFormat-DecimalDigits="0" Type="Number" Width="100px" AutoPostBack="false"></telerik:RadNumericTextBox>
+                            <telerik:RadNumericTextBox ID="txtDiasPagadosVacaciones" runat="server" Value="0" MinValue="0" NumberFormat-DecimalDigits="2" Type="Number" Width="100px" MaxLength="4" AutoPostBack="true"></telerik:RadNumericTextBox>
                         </td>
                         <td align="right" style="width: 30%;">
                             <label class="control-label">Dias de aguinaldo proporcionales:</label>
@@ -155,7 +155,7 @@
                             <label class="control-label">Periodo:</label>
                         </td>
                         <td align="left" style="width: 20%;">
-                            <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
+                            <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Enabled="false" Width="300px"></telerik:RadComboBox>
                         </td>
                         <td align="right" style="width: 30%;">
                             <label class="control-label">Aguinaldo proporcional:</label>
@@ -167,10 +167,10 @@
                     </tr>
                     <tr style="height: 40px;">
                         <td style="width: 20%;">
-                            <label class="control-label" style="display: none;">Tipo Finiquito:</label>
+                            <label class="control-label">Tipo Finiquito:</label>
                         </td>
                         <td align="left" style="width: 20%;">
-                            <telerik:RadComboBox ID="cmbTipoFiniquito" runat="server" AutoPostBack="true" Width="235px" Visible="false">
+                            <telerik:RadComboBox ID="cmbTipoFiniquito" runat="server" AutoPostBack="true" Width="235px" Visible="true">
                                 <Items>
                                     <telerik:RadComboBoxItem Text="--Seleccione--" Value="0" />
                                     <telerik:RadComboBoxItem Text="Renuncia Voluntaria" Value="1" Selected="True" />
@@ -333,7 +333,7 @@
                                 <label class="control-label">Importe</label>
                             </td>
                             <td style="width: 15%;">
-                                <telerik:RadNumericTextBox ID="txtImporteIncidencia" runat="server" Value="0" MinValue="0" NumberFormat-DecimalDigits="4" Type="Currency" Width="100px" AutoPostBack="false"></telerik:RadNumericTextBox>
+                                <telerik:RadNumericTextBox ID="txtImporteIncidencia" runat="server" Value="0" MinValue="0" NumberFormat-DecimalDigits="2" Type="Currency" Width="100px" AutoPostBack="false"></telerik:RadNumericTextBox>
                             </td>
                             <td style="width: 18%;">&nbsp;</td>
                         </tr>

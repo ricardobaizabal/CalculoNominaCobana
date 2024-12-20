@@ -2210,19 +2210,9 @@ Public Class GeneracionDeNominaNormal
             cNomina.Periodo = cmbPeriodo.SelectedValue
             cNomina.EsEspecial = False
             dt = cNomina.ConsultarDatosGeneralesNomina()
-
-            Dim dt_Empleado As New DataTable()
-            cNomina = New Nomina()
-            cNomina.IdEmpresa = IdEmpresa
-            cNomina.IdCliente = cmbCliente.SelectedValue
-            cNomina.Ejercicio = IdEjercicio
-            cNomina.TipoNomina = 1 'Semanal
-            cNomina.Periodo = cmbPeriodo.SelectedValue
-            cNomina.EsEspecial = False
-            dt_Empleado = cNomina.ConsultarDetalleNomina()
             cNomina = Nothing
 
-            If dt.Rows.Count > 0 And dt_Empleado.Rows.Count > 0 Then
+            If dt.Rows.Count > 0 Then
 
                 panelDatos.Visible = True
                 btnExportar.Enabled = True

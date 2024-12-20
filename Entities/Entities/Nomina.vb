@@ -33,7 +33,7 @@
     Private _UUID As String
     Private _Mes As Integer
     Private _IdRegistroPatronal As Integer
-    Private _DiasPagadosVacaciones As Integer
+    Private _DiasPagadosVacaciones As Double
     Private _FechaIni As Date
     Private _FechaFin As Date
     Private _IdCreditoFonacot As Integer
@@ -360,11 +360,11 @@
             _IdRegistroPatronal = value
         End Set
     End Property
-    Public Property DiasPagadosVacaciones() As Integer
+    Public Property DiasPagadosVacaciones() As Double
         Get
             Return _DiasPagadosVacaciones
         End Get
-        Set(ByVal value As Integer)
+        Set(ByVal value As Double)
             _DiasPagadosVacaciones = value
         End Set
     End Property

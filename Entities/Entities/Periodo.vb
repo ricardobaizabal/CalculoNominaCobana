@@ -22,6 +22,7 @@
     Private _FinMesBit As Boolean
     Private _InicioEjercicioBit As Boolean
     Private _FinEjercicioBit As Boolean
+    Private _FechaBaja As Date
 
     Public Sub New()
         _cmd = 0
@@ -44,6 +45,7 @@
         _FinMesBit = False
         _InicioEjercicioBit = False
         _FinEjercicioBit = False
+        _FechaBaja = Nothing
     End Sub
     Public Property cmd As Integer
         Get
@@ -219,6 +221,14 @@
         End Get
         Set(ByVal value As Boolean)
             _FinEjercicioBit = value
+        End Set
+    End Property
+    Public Property FechaBaja() As Date
+        Get
+            Return _FechaBaja
+        End Get
+        Set(ByVal value As Date)
+            _FechaBaja = value
         End Set
     End Property
 

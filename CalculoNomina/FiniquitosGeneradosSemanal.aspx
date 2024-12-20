@@ -55,6 +55,16 @@
                 //document.location.href = document.location.href;
             }, 0);
         }
+        function clearFilters(sender, args) {
+            if ($("#ctl00_ContentPlaceHolder1_cmbCliente_Input").val() != "") {
+                var obj = jQuery.parseJSON($("#ctl00_ContentPlaceHolder1_cmbCliente_Input").val());
+                if (obj.text === "") {
+                    sender.set_cancel(true);
+                }
+            } else {
+                eventArgs.set_cancel(true);
+            }
+        }
     </script>
     <style type="text/css">
         .ruFileProgress {
@@ -87,13 +97,20 @@
                         <td style="width: 8%;">
                             <asp:Label ID="lblEjercicio" runat="server"></asp:Label>
                         </td>
-                        <td style="width: 20%;">
-                            <label class="control-label">Seleccionar Periodo</label>
-                        </td>
-                        <td>
-                            <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td style="width: 8%;">
+                                <label class="control-label">Cliente</label>
+                            </td>
+                            <td style="width: 20%;">
+                                <telerik:RadComboBox ID="cmbCliente" runat="server" Filter="StartsWith" OnClientFocus="clearFilters" Width="500px" AutoPostBack="true"></telerik:RadComboBox>
+                            </td>
+                            <td style="width: 8%;">
+                                <label class="control-label">Periodo</label>
+                            </td>
+                            <td style="width: 20%;">
+                                <telerik:RadComboBox ID="cmbPeriodo" runat="server" AutoPostBack="true" Width="300px"></telerik:RadComboBox>
+                            </td>
+                        </tr>
                 </table>
             </div>
         </div>
@@ -208,14 +225,14 @@
                                         </telerik:GridTemplateColumn>
                                         <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="" UniqueName="Finiquito">
                                             <ItemTemplate>
-                                                <asp:LinkButton ID="lnkFiniquito" runat="server" Text="Finiquito" CommandArgument='<%# Eval("NoEmpleado").ToString() & "|" & Eval("IdMovimiento").ToString() & "|" & Eval("IdCliente").ToString() %>' CommandName="cmdFiniquito" CausesValidation="false">
+                                                <asp:LinkButton ID="lnkFiniquito" runat="server" Text="Finiquito" CommandArgument='<%# Eval("NoEmpleado").ToString() & "|" & Eval("IdMovimiento").ToString() & "|" & Eval("IdCliente").ToString() & "|" & Eval("Periodo").ToString() %>' CommandName="cmdFiniquito" CausesValidation="false">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                             <ItemStyle HorizontalAlign="Center" />
                                         </telerik:GridTemplateColumn>
                                         <telerik:GridTemplateColumn AllowFiltering="false" HeaderText="" UniqueName="Renuncia">
                                             <ItemTemplate>
-                                                <asp:LinkButton ID="lnkRenuncia" runat="server" Text="Renuncia" CommandArgument='<%# Eval("NoEmpleado").ToString() & "|" & Eval("IdMovimiento").ToString() & "|" & Eval("IdCliente").ToString() %>' CommandName="cmdRenuncia" CausesValidation="false">
+                                                <asp:LinkButton ID="lnkRenuncia" runat="server" Text="Renuncia" CommandArgument='<%# Eval("NoEmpleado").ToString() & "|" & Eval("IdMovimiento").ToString() & "|" & Eval("IdCliente").ToString() & "|" & Eval("Periodo").ToString() %>' CommandName="cmdRenuncia" CausesValidation="false">
                                                 </asp:LinkButton>
                                             </ItemTemplate>
                                             <ItemStyle HorizontalAlign="Center" />
