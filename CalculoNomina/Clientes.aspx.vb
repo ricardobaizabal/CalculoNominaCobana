@@ -87,25 +87,20 @@ Public Class clientes
             ObjData = Nothing
 
             Dim ObjData2 As New DataControl(1)
-            ObjData2.Catalogo(concepto_base, "select id, nombre from tblConceptoBase", 0)
-            ObjData2.Catalogo(calculo_comision, "select id, nombre from tblCalculoComision", 0)
-            ObjData2.Catalogo(condicionIMSS, "select id, nombre from tblCondicionIMSSCliente", 0)
-            ObjData2.Catalogo(condicionIMSSPatronal, "select id, nombre from tblCondicionPatronalIMSSCliente", 0)
-            ObjData2.Catalogo(CondicionISR, "select id, nombre from tblCondicionISRCliente", 0)
-            ObjData2.Catalogo(CondicionISN, "select id, nombre from tblCondicionISNCliente", 0)
-            ObjData2.Catalogo(CondicionIMSSEmpleado, "select id, nombre from tblCondicionIMSSEmpleado", 0)
-            ObjData2.Catalogo(CondicionIMSSPatronalEmpleado, "select id, nombre from tblCondicionPatronalIMSSEmpleado", 0)
-            ObjData2.Catalogo(CondicionISREmpleado, "select id, nombre from tblCondicionISREmpleado", 0)
-            ObjData2 = Nothing
+            ObjData2.CatalogoRad(concepto_base, "select id, nombre from tblConceptoBase", True)
+            ObjData2.CatalogoRad(calculo_comision, "select id, nombre from tblCalculoComision", True)
+            ObjData2.CatalogoRad(condicionIMSS, "select id, nombre from tblCondicionIMSSCliente", True)
+            ObjData2.CatalogoRad(condicionIMSSPatronal, "select id, nombre from tblCondicionPatronalIMSSCliente", True)
+            ObjData2.CatalogoRad(CondicionISR, "select id, nombre from tblCondicionISRCliente", True)
+            ObjData2.CatalogoRad(CondicionISN, "select id, nombre from tblCondicionISNCliente", True)
+            ObjData2.CatalogoRad(CondicionIMSSEmpleado, "select id, nombre from tblCondicionIMSSEmpleado", True)
+            ObjData2.CatalogoRad(CondicionIMSSPatronalEmpleado, "select id, nombre from tblCondicionPatronalIMSSEmpleado", True)
+            ObjData2.CatalogoRad(CondicionISREmpleado, "select id, nombre from tblCondicionISREmpleado", True)
 
-            DetallesClienteList.DataSource = ObtenerDetallesClientes()
-            DetallesClienteList.DataBind()
-            ListadoIMSSISR.DataSource = ObtenerIMSSISR()
-            ListadoIMSSISR.DataBind()
-            ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados()
-            ListIMSSISREmpleado.DataBind()
-            ListTasaIva.DataSource = ObtenerTasaIVA()
-            ListTasaIva.DataBind()
+            'ObjData2.CatalogoRad(TipoConceptoid, "select IdTipoConcepto, Descripcion from tblTipoConcepto", True)
+            'ObjData2.CatalogoRad(CvoSATid, "select id,  from tblCondicionISREmpleado", True)
+
+            ObjData2 = Nothing
 
         End If
 
@@ -275,6 +270,28 @@ Public Class clientes
             Case "cmdEdit"
                 EditClient(e.CommandArgument)
 
+                cuentasList.DataSource = ObtenerCuentas(e.CommandArgument)
+                cuentasList.DataBind()
+
+                DetallesClienteList.DataSource = ObtenerDetallesClientes(e.CommandArgument)
+                DetallesClienteList.DataBind()
+
+                ListadoIMSSISR.DataSource = ObtenerIMSSISR(e.CommandArgument)
+                ListadoIMSSISR.DataBind()
+
+                ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados(e.CommandArgument)
+                ListIMSSISREmpleado.DataBind()
+
+                ListTasaIva.DataSource = ObtenerTasaIVA(e.CommandArgument)
+                ListTasaIva.DataBind()
+
+                ConceptosClienteList.DataSource = ObtenerConceptosCliete(e.CommandArgument)
+                ConceptosClienteList.DataBind()
+
+                Call LlenacmbCvoSAT(0, "P")
+                Page.SetFocus(cmbCvoSAT)
+
+
             Case "cmdDelete"
                 DeleteClient(e.CommandArgument)
 
@@ -378,9 +395,10 @@ Public Class clientes
                 RadTabStrip1.Tabs(3).Enabled = True
                 RadTabStrip1.Tabs(4).Enabled = True
                 RadTabStrip1.Tabs(5).Enabled = True
+                RadTabStrip1.Tabs(6).Enabled = True
 
                 cuentasList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-                cuentasList.DataSource = ObtenerCuentas()
+                cuentasList.DataSource = ObtenerCuentas(id)
                 cuentasList.DataBind()
 
             End If
@@ -634,15 +652,15 @@ Public Class clientes
             End If
 
             cuentasList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            cuentasList.DataSource = ObtenerCuentas()
+            cuentasList.DataSource = ObtenerCuentas(ClientsID.Value)
             cuentasList.DataBind()
         End If
     End Sub
 
-    Function ObtenerCuentas() As DataSet
+    Function ObtenerCuentas(ByVal id As Integer) As DataSet
 
         Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        Dim qry As String = "EXEC pCatalogoCuentas @cmd=5, @clienteid='" & ClientsID.Value & "'"
+        Dim qry As String = "EXEC pCatalogoCuentas @cmd=5, @clienteid='" & id & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
 
@@ -684,7 +702,7 @@ Public Class clientes
             conn.Close()
 
             cuentasList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            cuentasList.DataSource = ObtenerCuentas()
+            cuentasList.DataSource = ObtenerCuentas(ClientsID.Value)
             cuentasList.DataBind()
 
         Catch ex As Exception
@@ -762,7 +780,7 @@ Public Class clientes
 
     Private Sub cuentasList_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles cuentasList.NeedDataSource
         cuentasList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-        cuentasList.DataSource = ObtenerCuentas()
+        cuentasList.DataSource = ObtenerCuentas(ClientsID.Value)
     End Sub
 
     Private Sub SetCmbRegFiscal(Optional ByVal contribuyenteid As Integer = 0, Optional ByVal sel As Integer = 0)
@@ -787,10 +805,10 @@ Public Class clientes
         SetCmbRegFiscal(tipoContribuyenteid.SelectedValue)
     End Sub
 
-    Function ObtenerDetallesClientes() As DataSet
+    Function ObtenerDetallesClientes(ByVal id As Integer) As DataSet
 
         Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        Dim qry As String = "SELECT A.id, A.concepto_base, A.calculo_comision, A.comision_cliente, A.comision_empleado, CB.nombre AS concepto_base_descripcion, CAL.nombre AS calculo_comision_descripcion FROM tblDetallesCliente AS A LEFT JOIN tblConceptoBase CB ON A.concepto_base = CB.id LEFT JOIN tblCalculoComision CAL ON A.calculo_comision = CAL.id WHERE A.borradoBit = 0 AND A.cliente_detalle='" & ClientsID.Value & "'"
+        Dim qry As String = "SELECT A.id, A.concepto_base, A.calculo_comision, A.comision_cliente, A.comision_empleado, CB.nombre AS concepto_base_descripcion, CAL.nombre AS calculo_comision_descripcion FROM tblDetallesCliente AS A LEFT JOIN tblConceptoBase CB ON A.concepto_base = CB.id LEFT JOIN tblCalculoComision CAL ON A.calculo_comision = CAL.id WHERE A.borradoBit = 0 AND A.cliente_detalle='" & id & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
         Dim ds As DataSet = New DataSet
@@ -808,10 +826,10 @@ Public Class clientes
         Return ds
     End Function
 
-    Function ObtenerIMSSISR() As DataSet
+    Function ObtenerIMSSISR(ByVal id As Integer) As DataSet
 
         Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        Dim qry As String = "SELECT A.id, A.condicion_imss_id, A.cobro_imss, A.condicion_patronal_imss_id, A.cobro_patronal_imss, A.condicion_isr_id, A.cobro_isr, A.condicion_isn_id, CIM.nombre AS condicion_imss_descripcion, CPIM.nombre AS condicion_patronal_imss_descripcion, CI.nombre AS condicion_isr_descripcion, CISN.nombre AS condicion_isn_descripcion FROM tblClienteDetallesIMSS AS A LEFT JOIN tblCondicionIMSSCliente CIM ON A.condicion_imss_id = CIM.id  LEFT JOIN tblCondicionPatronalIMSSCliente CPIM ON A.condicion_patronal_imss_id = CPIM.id LEFT JOIN tblCondicionISRCliente CI ON A.condicion_isr_id = CI.id LEFT JOIN tblCondicionISNCliente CISN ON A.condicion_isn_id = CISN.id WHERE A.borradoBit = 0 AND A.cliente_id='" & ClientsID.Value & "'"
+        Dim qry As String = "SELECT A.id, A.condicion_imss_id, A.cobro_imss, A.condicion_patronal_imss_id, A.cobro_patronal_imss, A.condicion_isr_id, A.cobro_isr, A.condicion_isn_id, CIM.nombre AS condicion_imss_descripcion, CPIM.nombre AS condicion_patronal_imss_descripcion, CI.nombre AS condicion_isr_descripcion, CISN.nombre AS condicion_isn_descripcion FROM tblClienteDetallesIMSS AS A LEFT JOIN tblCondicionIMSSCliente CIM ON A.condicion_imss_id = CIM.id  LEFT JOIN tblCondicionPatronalIMSSCliente CPIM ON A.condicion_patronal_imss_id = CPIM.id LEFT JOIN tblCondicionISRCliente CI ON A.condicion_isr_id = CI.id LEFT JOIN tblCondicionISNCliente CISN ON A.condicion_isn_id = CISN.id WHERE A.borradoBit = 0 AND A.cliente_id='" & id & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
         Dim ds As DataSet = New DataSet
@@ -829,10 +847,10 @@ Public Class clientes
         Return ds
     End Function
 
-    Function ObtenerIMSSISREmpleados() As DataSet
+    Function ObtenerIMSSISREmpleados(ByVal id As Integer) As DataSet
 
         Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        Dim qry As String = "SELECT A.id, A.condicion_imss_id, A.cobro_imss, A.condicion_patronal_imss_id, A.cobro_patronal_imss, A.condicion_isr_id, A.cobro_isr, CIM.nombre AS condicion_imss_descripcion, CPIM.nombre AS condicion_patronal_imss_descripcion, CI.nombre AS condicion_isr_descripcion FROM tblEmpleadoDetallesIMSS AS A LEFT JOIN tblCondicionIMSSEmpleado CIM ON A.condicion_imss_id = CIM.id  LEFT JOIN tblCondicionPatronalIMSSEmpleado CPIM ON A.condicion_patronal_imss_id = CPIM.id LEFT JOIN tblCondicionISREmpleado CI ON A.condicion_isr_id = CI.id WHERE A.borradoBit = 0 AND A.cliente_id='" & ClientsID.Value & "'"
+        Dim qry As String = "SELECT A.id, A.condicion_imss_id, A.cobro_imss, A.condicion_patronal_imss_id, A.cobro_patronal_imss, A.condicion_isr_id, A.cobro_isr, CIM.nombre AS condicion_imss_descripcion, CPIM.nombre AS condicion_patronal_imss_descripcion, CI.nombre AS condicion_isr_descripcion FROM tblEmpleadoDetallesIMSS AS A LEFT JOIN tblCondicionIMSSEmpleado CIM ON A.condicion_imss_id = CIM.id  LEFT JOIN tblCondicionPatronalIMSSEmpleado CPIM ON A.condicion_patronal_imss_id = CPIM.id LEFT JOIN tblCondicionISREmpleado CI ON A.condicion_isr_id = CI.id WHERE A.borradoBit = 0 AND A.cliente_id='" & id & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
         Dim ds As DataSet = New DataSet
@@ -850,10 +868,10 @@ Public Class clientes
         Return ds
     End Function
 
-    Function ObtenerTasaIVA() As DataSet
+    Function ObtenerTasaIVA(ByVal id As Integer) As DataSet
 
         Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
-        Dim qry As String = "SELECT id, TIRemuneracion, TIComision, TICuotaObrera, TICuotaPatronal, TIISN, TIInfonavit, TIISR FROM tblTasaIVA WHERE borradoBit = 0 AND cliente_id='" & ClientsID.Value & "'"
+        Dim qry As String = "SELECT id, TIRemuneracion, TIComision, TICuotaObrera, TICuotaPatronal, TIISN, TIInfonavit, TIISR FROM tblTasaIVA WHERE borradoBit = 0 AND cliente_id='" & id & "'"
 
         Dim cmd As New SqlDataAdapter(qry, conn)
         Dim ds As DataSet = New DataSet
@@ -894,7 +912,7 @@ Public Class clientes
             comision_empleado.Text = ""
 
             DetallesClienteList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            DetallesClienteList.DataSource = ObtenerDetallesClientes()
+            DetallesClienteList.DataSource = ObtenerDetallesClientes(ClientsID.Value)
             DetallesClienteList.DataBind()
         End If
     End Sub
@@ -925,7 +943,7 @@ Public Class clientes
             CobroISR.Text = ""
 
             ListadoIMSSISR.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            ListadoIMSSISR.DataSource = ObtenerIMSSISR()
+            ListadoIMSSISR.DataSource = ObtenerIMSSISR(ClientsID.Value)
             ListadoIMSSISR.DataBind()
         End If
     End Sub
@@ -955,7 +973,7 @@ Public Class clientes
             CobroISREmpleado.Text = ""
 
             ListIMSSISREmpleado.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados()
+            ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados(ClientsID.Value)
             ListIMSSISREmpleado.DataBind()
         End If
     End Sub
@@ -986,36 +1004,36 @@ Public Class clientes
             TIISR.Text = ""
 
             ListTasaIva.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            ListTasaIva.DataSource = ObtenerTasaIVA()
+            ListTasaIva.DataSource = ObtenerTasaIVA(ClientsID.Value)
             ListTasaIva.DataBind()
         End If
     End Sub
 
-    Private Sub DetallesClienteList_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles DetallesClienteList.NeedDataSource
-        DetallesClienteList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-        DetallesClienteList.DataSource = ObtenerDetallesClientes()
-    End Sub
+    'Private Sub DetallesClienteList_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles DetallesClienteList.NeedDataSource
+    '    DetallesClienteList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
+    '    DetallesClienteList.DataSource = ObtenerDetallesClientes(ClientsID.Value)
+    'End Sub
 
-    Private Sub ListadoIMSSISR_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles ListadoIMSSISR.NeedDataSource
-        ListadoIMSSISR.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-        ListadoIMSSISR.DataSource = ObtenerIMSSISR()
-    End Sub
+    'Private Sub ListadoIMSSISR_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles ListadoIMSSISR.NeedDataSource
+    '    ListadoIMSSISR.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
+    '    ListadoIMSSISR.DataSource = ObtenerIMSSISR(ClientsID.Value)
+    'End Sub
 
-    Private Sub ListIMSSISREmpleado_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles ListIMSSISREmpleado.NeedDataSource
-        ListIMSSISREmpleado.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-        ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados()
-    End Sub
+    'Private Sub ListIMSSISREmpleado_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles ListIMSSISREmpleado.NeedDataSource
+    '    ListIMSSISREmpleado.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
+    '    ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados(ClientsID.Value)
+    'End Sub
 
-    Private Sub ListTasaIva_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles ListTasaIva.NeedDataSource
-        ListTasaIva.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-        ListTasaIva.DataSource = ObtenerTasaIVA()
-    End Sub
+    'Private Sub ListTasaIva_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridNeedDataSourceEventArgs) Handles ListTasaIva.NeedDataSource
+    '    ListTasaIva.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
+    '    ListTasaIva.DataSource = ObtenerTasaIVA(ClientsID.Value)
+    'End Sub
 
     Private Sub DetallesClienteList_ItemCommand(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridCommandEventArgs) Handles DetallesClienteList.ItemCommand
         Select Case e.CommandName
             Case "cmdEditDetalle"
                 Session("DetalleClienteID") = e.CommandArgument
-                CargarDetalleCliente()
+                CargarDetalleCliente(e.CommandArgument)
                 btnCancelar.Visible = True
             Case "cmdDeleteDetalle"
                 DeleteDetalleCliente(e.CommandArgument)
@@ -1065,7 +1083,7 @@ Public Class clientes
             rs.Close()
             conn.Close()
             DetallesClienteList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            DetallesClienteList.DataSource = ObtenerDetallesClientes()
+            DetallesClienteList.DataSource = ObtenerDetallesClientes(ClientsID.Value)
             DetallesClienteList.DataBind()
         Catch ex As Exception
             Response.Write(ex.Message.ToString)
@@ -1085,7 +1103,7 @@ Public Class clientes
             rs.Close()
             conn.Close()
             ListadoIMSSISR.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            ListadoIMSSISR.DataSource = ObtenerIMSSISR()
+            ListadoIMSSISR.DataSource = ObtenerIMSSISR(ClientsID.Value)
             ListadoIMSSISR.DataBind()
         Catch ex As Exception
             Response.Write(ex.Message.ToString)
@@ -1105,7 +1123,7 @@ Public Class clientes
             rs.Close()
             conn.Close()
             ListIMSSISREmpleado.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados()
+            ListIMSSISREmpleado.DataSource = ObtenerIMSSISREmpleados(ClientsID.Value)
             ListIMSSISREmpleado.DataBind()
         Catch ex As Exception
             Response.Write(ex.Message.ToString)
@@ -1125,7 +1143,7 @@ Public Class clientes
             rs.Close()
             conn.Close()
             ListTasaIva.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
-            ListTasaIva.DataSource = ObtenerTasaIVA()
+            ListTasaIva.DataSource = ObtenerTasaIVA(ClientsID.Value)
             ListTasaIva.DataBind()
         Catch ex As Exception
             Response.Write(ex.Message.ToString)
@@ -1135,10 +1153,10 @@ Public Class clientes
         End Try
     End Sub
 
-    Private Sub CargarDetalleCliente()
+    Private Sub CargarDetalleCliente(ByVal id As Integer)
         Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
         Try
-            Dim cmd As New SqlCommand("SELECT id, concepto_base, calculo_comision, comision_cliente, comision_empleado FROM tblDetallesCliente WHERE id='" & Session("DetalleClienteID") & "'", conn)
+            Dim cmd As New SqlCommand("SELECT id, concepto_base, calculo_comision, comision_cliente, comision_empleado FROM tblDetallesCliente WHERE id='" & id & "'", conn)
             conn.Open()
             Dim rs As SqlDataReader
             rs = cmd.ExecuteReader()
@@ -1256,5 +1274,217 @@ Public Class clientes
     Protected Sub btnCancelarTasaIVA_Click(sender As Object, e As EventArgs) Handles btnCancelarTasaIVA.Click
         CancelarEdicion()
     End Sub
+
+
+
+
+
+
+    ' ===========================================
+    ' ---------- CONCEPTOS DEL CLIENTE ----------
+    ' ===========================================
+
+    Private Sub rdoDeduccion_CheckedChanged(sender As Object, e As EventArgs) Handles rdoDeduccion.CheckedChanged
+        LlenacmbCvoSAT(0, "D")
+    End Sub
+    Private Sub rdoPercepcion_CheckedChanged(sender As Object, e As EventArgs) Handles rdoPercepcion.CheckedChanged
+        LlenacmbCvoSAT(0, "P")
+    End Sub
+
+    Protected Sub btnCancelarConcepto_Click(sender As Object, e As EventArgs) Handles btnCancelarConcepto.Click
+        CancelarEdicion()
+    End Sub
+
+    Private Sub LlenacmbCvoSAT(ByVal sel As Integer, ByVal Tipo As String)
+        Try
+            Dim cConcepto As New Entities.Concepto
+            If Tipo.Length > 0 Then
+                cConcepto.Tipo = Tipo
+            End If
+
+            Dim objData As New DataControl
+            objData.CatalogoRad(cmbCvoSAT, cConcepto.ConsultarConceptosCliente, True, False)
+            objData = Nothing
+            cConcepto = Nothing
+
+            cmbCvoSAT.SelectedValue = sel
+
+
+        Catch oExcep As Exception
+            rwAlerta.RadAlert(oExcep.Message.ToString, 330, 180, "Alerta", "", "")
+        End Try
+    End Sub
+
+
+    Protected Sub btnGuardarConcepto_Click(sender As Object, e As EventArgs) Handles btnGuardarConcepto.Click
+
+        If Page.IsValid Then
+            Dim objData As New DataControl(1)
+            Dim sql As String = ""
+            Dim IdCuentas As Integer = 0
+
+            Dim Tipo_P As String = rdoPercepcion.Checked
+            Dim Tipo_D As String = rdoDeduccion.Checked
+            Dim CvoSAT As String = cmbCvoSAT.SelectedValue
+            Dim Concepto As String = txtNombreConcepto.Text.ToUpper
+            Dim IdCliente As Int32 = ClientsID.Value
+
+
+            Dim TipoConcepto As String = ""
+
+
+            If Tipo_P = True Then
+                TipoConcepto = "P"
+            ElseIf Tipo_D = True Then
+                TipoConcepto = "D"
+            End If
+
+
+            If Session("id") = 0 Then
+                IdCuentas = objData.RunSQLScalarQuery("EXEC pConceptosCliente @cmd=1, @pTipo='" & TipoConcepto & "', @pCvoSAT='" & CvoSAT & "',@pConcepto='" & Concepto & "',@pIdCLiente='" & IdCliente & "'")
+                clearItems()
+            Else
+                objData.RunSQLScalarQuery("EXEC pConceptosCliente @cmd=4, @pTipo='" & TipoConcepto & "', @pCvoSAT='" & CvoSAT & "',@pConcepto='" & Concepto & "',@pIdCLiente='" & IdCliente & "',@Id_ConceptoCliente='" & Session("id") & "'")
+                Session("id") = Nothing
+                clearItems()
+                objData = Nothing
+            End If
+
+
+            cmbCvoSAT.SelectedValue = 0
+            txtNombreConcepto.Text = ""
+
+            ConceptosClienteList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
+            ConceptosClienteList.DataSource = ObtenerConceptosCliete(ClientsID.Value)
+            ConceptosClienteList.DataBind()
+        End If
+
+    End Sub
+
+
+    Function ObtenerConceptosCliete(ByVal id As Integer) As DataSet
+
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
+        Dim qry As String = "EXEC pConceptosCliente @cmd=2, @pIdCliente='" & id & "'"
+
+        Dim cmd As New SqlDataAdapter(qry, conn)
+
+        Dim ds As DataSet = New DataSet
+
+        Try
+
+            conn.Open()
+            cmd.Fill(ds)
+            conn.Close()
+            conn.Dispose()
+
+        Catch ex As Exception
+            Throw New Exception(ex.Message)
+        Finally
+            conn.Close()
+            conn.Dispose()
+        End Try
+
+        Return ds
+    End Function
+
+
+    Private Sub ConceptosClienteList_ItemCommand(ByVal sender As Object, ByVal e As Telerik.Web.UI.GridCommandEventArgs) Handles ConceptosClienteList.ItemCommand
+        Select Case e.CommandName
+            Case "cmdEditConcepto"
+                Session("id") = e.CommandArgument
+                CargarConceptoCliente(e.CommandArgument)
+                btnCancelar.Visible = True
+            Case "cmdDeleteConcepto"
+                DeleteConceptoCliente(e.CommandArgument)
+        End Select
+    End Sub
+
+
+    Private Sub CargarConceptoCliente(ByVal id As Integer)
+        ' Establecer la conexión a la base de datos
+        Using conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
+            ' Crear la consulta usando parámetros
+            Dim qry As String = "EXEC pConceptosCliente @cmd=3, @pIdCliente = @pIdCliente, @Id_ConceptoCliente = @Id_ConceptoCliente"
+
+            ' Configurar el comando SQL
+            Using cmd As New SqlCommand(qry, conn)
+                ' Añadir parámetros para evitar inyecciones SQL
+                cmd.Parameters.AddWithValue("@pIdCliente", ClientsID.Value)
+                cmd.Parameters.AddWithValue("@Id_ConceptoCliente", id)
+
+                Try
+                    ' Abrir la conexión
+                    conn.Open()
+
+                    ' Ejecutar el comando y obtener el DataReader
+                    Using rs As SqlDataReader = cmd.ExecuteReader()
+                        If rs.Read() Then
+                            ' Verificar y asignar valores a los controles
+                            If rs("TipoConcepto").ToString() = "Percepcion" Then
+                                rdoPercepcion.Checked = True
+                                rdoDeduccion.Checked = False
+                                LlenacmbCvoSAT(0, "P")
+                            ElseIf rs("TipoConcepto").ToString() = "Deduccion" Then
+                                rdoPercepcion.Checked = False
+                                rdoDeduccion.Checked = True
+                                LlenacmbCvoSAT(0, "D")
+                            End If
+
+                            If Not IsDBNull(rs("CvoSAT")) Then
+                                cmbCvoSAT.SelectedValue = rs("CvoSAT").ToString()
+                            End If
+
+                            If Not IsDBNull(rs("NombreConcepto")) Then
+                                txtNombreConcepto.Text = rs("NombreConcepto").ToString()
+                            End If
+                        End If
+                    End Using
+                Catch ex As Exception
+                    ' Manejo de errores
+                    Response.Write("Error: " & ex.Message)
+                    Response.End()
+                End Try
+            End Using
+        End Using
+    End Sub
+
+
+    Private Sub DeleteConceptoCliente(ByVal id As Integer)
+        Dim conn As New SqlConnection(ConfigurationManager.ConnectionStrings("conn").ConnectionString)
+        Try
+            Dim qry As String = "EXEC pConceptosCliente @cmd=5, @pIdCliente='" & ClientsID.Value & "', @Id_ConceptoCliente='" & id & "'"
+
+            Dim cmd As New SqlDataAdapter(qry, conn)
+
+            Dim ds As DataSet = New DataSet
+
+            Try
+
+                conn.Open()
+                cmd.Fill(ds)
+                conn.Close()
+                conn.Dispose()
+
+
+                ConceptosClienteList.MasterTableView.NoMasterRecordsText = "No se encontraron datos para mostrar"
+                ConceptosClienteList.DataSource = ObtenerConceptosCliete(ClientsID.Value)
+                ConceptosClienteList.DataBind()
+
+            Catch ex As Exception
+                Throw New Exception(ex.Message)
+            Finally
+                conn.Close()
+                conn.Dispose()
+            End Try
+
+        Catch ex As Exception
+            Response.Write(ex.Message.ToString)
+        Finally
+            conn.Close()
+            conn.Dispose()
+        End Try
+    End Sub
+
 
 End Class

@@ -50,6 +50,18 @@ Partial Public Class Concepto
         dt = db.ExecuteSP("pConsultarConceptosIncidencia", p)
         Return dt
     End Function
+
+    Public Function ConsultarConceptosCliente() As DataTable
+        p.Clear()
+        If Tipo.Length > 0 Then
+            p.Add(New SqlParameter("@pTipo", Tipo))
+        End If
+        dt = db.ExecuteSP("pConsultarConceptosCliente", p)
+        Return dt
+    End Function
+
+
+
     Public Function ConsultarConceptosComunes() As DataTable
         p.Clear()
         dt = db.ExecuteSP("pConsultarConceptosComunes", p)
