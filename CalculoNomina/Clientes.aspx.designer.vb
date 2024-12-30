@@ -722,7 +722,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnGuardar As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnGuardar As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnCancelar.
@@ -731,7 +731,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnCancelar As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnCancelar As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control CuentaID.
@@ -797,6 +797,15 @@ Partial Public Class clientes
     Protected WithEvents Label3 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control lblSpace.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblSpace As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control Label4.
     '''</summary>
     '''<remarks>
@@ -821,7 +830,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents concepto_base As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents concepto_base As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control calculo_comision.
@@ -830,7 +839,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents calculo_comision As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents calculo_comision As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control txtSpace.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtSpace As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control comision_cliente.
@@ -839,7 +857,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents comision_cliente As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents comision_cliente As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control lblPorcentajeCliente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblPorcentajeCliente As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control comision_empleado.
@@ -848,7 +875,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents comision_empleado As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents comision_empleado As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control lblPorcentajeEmpleado.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblPorcentajeEmpleado As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control btnGuardarDetalles.
@@ -857,7 +893,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnGuardarDetalles As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnGuardarDetalles As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnCancelarDetalle.
@@ -866,7 +902,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnCancelarDetalle As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnCancelarDetalle As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control HiddenField1.
@@ -894,6 +930,132 @@ Partial Public Class clientes
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
     Protected WithEvents DetallesClienteList As Global.Telerik.Web.UI.RadGrid
+
+    '''<summary>
+    '''Control RadPageView7.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents RadPageView7 As Global.Telerik.Web.UI.RadPageView
+
+    '''<summary>
+    '''Control LblConceptosCliente.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LblConceptosCliente As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LblTipoConcepto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LblTipoConcepto As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LblCvoSAT.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LblCvoSAT As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control LblNombreConcepto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LblNombreConcepto As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control rdoPercepcion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents rdoPercepcion As Global.System.Web.UI.WebControls.RadioButton
+
+    '''<summary>
+    '''Control rdoDeduccion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents rdoDeduccion As Global.System.Web.UI.WebControls.RadioButton
+
+    '''<summary>
+    '''Control cmbCvoSAT.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents cmbCvoSAT As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control txtNombreConcepto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents txtNombreConcepto As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''Control btnGuardarConcepto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnGuardarConcepto As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control btnCancelarConcepto.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents btnCancelarConcepto As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Control HiddenField5.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents HiddenField5 As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''Control LblListConceptos.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents LblListConceptos As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control ConceptosClienteList.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents ConceptosClienteList As Global.Telerik.Web.UI.RadGrid
 
     '''<summary>
     '''Control RadPageView4.
@@ -956,7 +1118,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents condicionIMSS As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents condicionIMSS As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control Label15.
@@ -974,7 +1136,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CobroIMSS As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents CobroIMSS As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control lblPorcentaje.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents lblPorcentaje As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control condicionIMSSPatronal.
@@ -983,7 +1154,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents condicionIMSSPatronal As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents condicionIMSSPatronal As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control Label16.
@@ -1001,7 +1172,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CobroIMSSPatronal As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents CobroIMSSPatronal As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label36.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label36 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control CondicionISR.
@@ -1010,7 +1190,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CondicionISR As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents CondicionISR As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control Label17.
@@ -1028,7 +1208,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CobroISR As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents CobroISR As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label37.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label37 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control CondicionISN.
@@ -1037,7 +1226,34 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CondicionISN As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents CondicionISN As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''Control Label35.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label35 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control CobroISN.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents CobroISN As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label38.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label38 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control btnGuardarIMSSISR.
@@ -1046,7 +1262,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnGuardarIMSSISR As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnGuardarIMSSISR As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnCancelarIMSSISR.
@@ -1055,16 +1271,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnCancelarIMSSISR As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''Control HiddenField2.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents HiddenField2 As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents btnCancelarIMSSISR As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control Label14.
@@ -1136,7 +1343,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CondicionIMSSEmpleado As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents CondicionIMSSEmpleado As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control Label23.
@@ -1154,7 +1361,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CobroIMSSEmpleado As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents CobroIMSSEmpleado As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label41.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label41 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control CondicionIMSSPatronalEmpleado.
@@ -1163,7 +1379,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CondicionIMSSPatronalEmpleado As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents CondicionIMSSPatronalEmpleado As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control Label24.
@@ -1181,7 +1397,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CobroIMSSPatronalEmpleado As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents CobroIMSSPatronalEmpleado As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label40.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label40 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control CondicionISREmpleado.
@@ -1190,7 +1415,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CondicionISREmpleado As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents CondicionISREmpleado As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
     '''Control Label25.
@@ -1208,7 +1433,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents CobroISREmpleado As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents CobroISREmpleado As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label39.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label39 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control btnGuardarIMSSISREmpleado.
@@ -1217,7 +1451,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnGuardarIMSSISREmpleado As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnGuardarIMSSISREmpleado As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnCancelarIMSSISREmpleado.
@@ -1226,16 +1460,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnCancelarIMSSISREmpleado As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnCancelarIMSSISREmpleado As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control HiddenField3.
+    '''Control HiddenField2.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents HiddenField3 As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents HiddenField2 As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''Control Label26.
@@ -1301,15 +1535,6 @@ Partial Public Class clientes
     Protected WithEvents Label29 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Control TIRemuneracion.
-    '''</summary>
-    '''<remarks>
-    '''Campo generado automáticamente.
-    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    '''</remarks>
-    Protected WithEvents TIRemuneracion As Global.Telerik.Web.UI.RadTextBox
-
-    '''<summary>
     '''Control Label30.
     '''</summary>
     '''<remarks>
@@ -1319,13 +1544,76 @@ Partial Public Class clientes
     Protected WithEvents Label30 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''Control TIRemuneracion.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents TIRemuneracion As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label46.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label46 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control TIComision.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents TIComision As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label48.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label48 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''Control TICuotaObrera.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents TICuotaObrera As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label47.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label47 As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''Control TICuotaPatronal.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TICuotaPatronal As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents TICuotaPatronal As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label45.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label45 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control Label34.
@@ -1343,16 +1631,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TIISN As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents TIISN As Global.Telerik.Web.UI.RadNumericTextBox
 
     '''<summary>
-    '''Control TIComision.
+    '''Control Label44.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TIComision As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents Label44 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control Label31.
@@ -1370,16 +1658,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TIInfonavit As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents TIInfonavit As Global.Telerik.Web.UI.RadNumericTextBox
 
     '''<summary>
-    '''Control TICuotaObrera.
+    '''Control Label43.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TICuotaObrera As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents Label43 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control Label32.
@@ -1397,7 +1685,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents TIISR As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents TIISR As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
+    '''Control Label42.
+    '''</summary>
+    '''<remarks>
+    '''Campo generado automáticamente.
+    '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    '''</remarks>
+    Protected WithEvents Label42 As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''Control btnGuardarTasaIVA.
@@ -1406,7 +1703,7 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnGuardarTasaIVA As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnGuardarTasaIVA As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''Control btnCancelarTasaIVA.
@@ -1415,16 +1712,16 @@ Partial Public Class clientes
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents btnCancelarTasaIVA As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnCancelarTasaIVA As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''Control HiddenField4.
+    '''Control HiddenField3.
     '''</summary>
     '''<remarks>
     '''Campo generado automáticamente.
     '''Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     '''</remarks>
-    Protected WithEvents HiddenField4 As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents HiddenField3 As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''Control Label33.

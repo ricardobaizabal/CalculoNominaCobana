@@ -116,15 +116,17 @@
                     <Tabs>
                         <telerik:RadTab Text="Datos Generales" TabIndex="0" Value="0" Enabled="true" Selected="true">
                         </telerik:RadTab>
-                        <telerik:RadTab Text="Cuentas Bancarias" TabIndex="1" Value="2" Enabled="false">
+                        <telerik:RadTab Text="Cuentas Bancarias" TabIndex="1" Value="1" Enabled="false">
                         </telerik:RadTab>
                         <telerik:RadTab Text="Detalles" TabIndex="2" Value="2" Enabled="false">
                         </telerik:RadTab>
-                        <telerik:RadTab Text="Cobros y Condiciones IMSS/ISR Cliente" TabIndex="3" Value="3" Enabled="false">
+                        <telerik:RadTab Text="Conceptos" TabIndex="3" Value="3" Enabled="false">
                         </telerik:RadTab>
-                        <telerik:RadTab Text="Cobros y Condiciones IMSS/ISR Empleado" TabIndex="4" Value="4" Enabled="false">
+                        <telerik:RadTab Text="Cobros y Condiciones IMSS/ISR Cliente" TabIndex="4" Value="4" Enabled="false">
                         </telerik:RadTab>
-                        <telerik:RadTab Text="Tasa IVA" TabIndex="5" Value="5" Enabled="false">
+                        <telerik:RadTab Text="Cobros y Condiciones IMSS/ISR Empleado" TabIndex="5" Value="5" Enabled="false">
+                        </telerik:RadTab>
+                        <telerik:RadTab Text="Tasa IVA" TabIndex="6" Value="6" Enabled="false">
                         </telerik:RadTab>
                     </Tabs>
                 </telerik:RadTabStrip>
@@ -472,7 +474,8 @@
                                         </telerik:RadTextBox>
                                     </td>
                                     <td style="width: 30%;">
-                                        <asp:CheckBox runat="server" ID="chkPredeterminado" />
+                                        <asp:CheckBox runat="server" ID="chkPredeterminado" style="zoom: 1.5;" />
+
                                     </td>
                                     <td style="width: 30%;">&nbsp;</td>
                                     <td style="width: 10%;">&nbsp;</td>
@@ -486,11 +489,10 @@
                                     <td style="width: 30%;">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
                                     <td style="width: 30%;">
-                                        <asp:Button ID="btnGuardar" runat="server" ValidationGroup="vDatosCuenta" Text="Guardar" />&nbsp;&nbsp;
-                                        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" Visible="false" />
+                                        <telerik:RadButton ID="btnGuardar" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" ValidationGroup="vDatosCuenta" Text="Guardar"></telerik:RadButton>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <telerik:RadButton ID="btnCancelar" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" ValidationGroup="vDatosCuenta" Text="Cancelar"></telerik:RadButton>
                                     </td>
                                 </tr>
                                 <tr>
@@ -523,7 +525,7 @@
                                                         <ItemStyle HorizontalAlign="Center" />
                                                     </telerik:GridTemplateColumn>
 
-                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id" Visible="false">
                                                     </telerik:GridBoundColumn>
 
                                                     <telerik:GridBoundColumn DataField="banconacional" HeaderText="Banco Nacional" UniqueName="banconacional">
@@ -567,86 +569,81 @@
                             <legend style="padding-right: 6px; color: Black">
                                 <asp:Label ID="Label1" runat="server" Text="Agregar / Editar Detalles Cliente" Font-Bold="true" CssClass="item"></asp:Label>
                             </legend>
-                            <table border="0" style="width: 100%;">
+                            <table border="0" width="100%">
                                 <tr>
                                     <td colspan="7">&nbsp;</td>
                                 </tr>
+                                <!-- Encabezados de columnas -->
                                 <tr>
-                                    <td style="width: 20%;">
+                                    <td width="20%">
                                         <asp:Label ID="Label2" runat="server" CssClass="item" Font-Bold="True" Text="Concepto base:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td width="20%">
                                         <asp:Label ID="Label3" runat="server" CssClass="item" Font-Bold="True" Text="Calculo comisión:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td width="2%">
+                                        <asp:Label ID="lblSpace" runat="server" CssClass="item" Font-Bold="True"></asp:Label>
+                                    </td>
+                                    <td width="20%">
                                         <asp:Label ID="Label4" runat="server" CssClass="item" Font-Bold="True" Text="Comisión cliente:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td width="20%">
                                         <asp:Label ID="Label10" runat="server" CssClass="item" Font-Bold="True" Text="Comisión empleado:"></asp:Label>
                                     </td>
-
+                                    <td width="20%">&nbsp;</td>
                                 </tr>
+                                <!-- Controles en las columnas -->
                                 <tr>
-
-                                    <td width="20%">
-                                        <asp:DropDownList ID="concepto_base" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList>
+                                    <td>
+                                        <telerik:RadComboBox ID="concepto_base" runat="server" Width="90%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
                                     </td>
-
-                                    <td width="20%">
-                                        <asp:DropDownList ID="calculo_comision" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList>
+                                    <td>
+                                        <telerik:RadComboBox ID="calculo_comision" runat="server" Width="90%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
                                     </td>
-
-                                    <td style="width: 20%;">
-                                        <telerik:RadTextBox ID="comision_cliente" runat="server" Width="95%" ValidationGroup="vDetallesCliente">
-                                        </telerik:RadTextBox>
+                                    <td>
+                                        <asp:Label ID="txtSpace" runat="server" CssClass="item" Font-Bold="True"  Width="2%"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
-                                        <telerik:RadTextBox ID="comision_empleado" runat="server" Width="85%" ValidationGroup="vDetallesCliente">
-                                        </telerik:RadTextBox>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <telerik:RadNumericTextBox ID="comision_cliente" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                                <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                            </telerik:RadNumericTextBox>
+                                            <asp:Label ID="lblPorcentajeCliente" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
+                                        </div>
                                     </td>
-
-                                    <td style="width: 20%;"></td>
+                                    <td>
+                                        <div style="display: flex; align-items: center;">
+                                            <telerik:RadNumericTextBox ID="comision_empleado" runat="server"  Value="0"  MinValue="0"  MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                                <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                            </telerik:RadNumericTextBox>
+                                            <asp:Label ID="lblPorcentajeEmpleado" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
+                                        </div>
+                                    </td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;"></td>
+                                    <td colspan="5">&nbsp;</td>
                                 </tr>
+                                <!-- Botones -->
                                 <tr>
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">
-                                        <asp:Button ID="btnGuardarDetalles" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
-                                        <asp:Button ID="btnCancelarDetalle" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    <td>
+                                        <telerik:RadButton ID="btnGuardarDetalles" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click"></telerik:RadButton>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <telerik:RadButton ID="btnCancelarDetalle"  RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" Text="Cancelar" ValidationGroup="vDetallesCliente"></telerik:RadButton>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" style="width: 66%; height: 5px;">
+                                    <td colspan="5" height="5px;">
                                         <asp:HiddenField ID="HiddenField1" runat="server" Value="0" />
                                     </td>
                                 </tr>
                             </table>
+
                         </fieldset>
                         <br />
                         <fieldset>
                             <legend style="padding-right: 6px; color: Black">
-                                <asp:Label ID="Label9" runat="server" Text="Listado de Detalles del Cliente" Font-Bold="true" CssClass="item"></asp:Label>
+                                <asp:Label ID="Label9" runat="server" Text="Listado de Detalles" Font-Bold="true" CssClass="item"></asp:Label>
                             </legend>
                             <table border="0" style="width: 100%;">
                                 <tr>
@@ -666,7 +663,7 @@
                                                         <ItemStyle HorizontalAlign="Center" />
                                                     </telerik:GridTemplateColumn>
 
-                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id" Visible="false">
                                                     </telerik:GridBoundColumn>
 
                                                     <telerik:GridBoundColumn DataField="concepto_base_descripcion" HeaderText="Concepto Base" UniqueName="banconacional">
@@ -695,6 +692,119 @@
                             </table>
                         </fieldset>
                     </telerik:RadPageView>
+                    <telerik:RadPageView ID="RadPageView7" runat="server">
+                        <br />
+                        <br />
+
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="LblConceptosCliente" runat="server" Text="Agregar / Editar Conceptos Cliente" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td colspan="7">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td width="15%">
+                                        <asp:Label ID="LblTipoConcepto" runat="server" CssClass="item" Font-Bold="True" Text="Tipo de Concepto:"></asp:Label>
+                                    </td>
+                                    <td width="15%">
+                                        <asp:Label ID="LblCvoSAT" runat="server" CssClass="item" Font-Bold="True" Text="CvoSAT:"></asp:Label>
+                                    </td>
+                                    <td width="30%">
+                                        <asp:Label ID="LblNombreConcepto" runat="server" CssClass="item" Font-Bold="True" Text="Nombre del Concepto:"></asp:Label>
+                                    </td>
+<%--                                    <td width="30%">
+                                        <asp:Label ID="LblDescripcionSAT" runat="server" CssClass="item" Font-Bold="True" Text="Descripcion SAT:"></asp:Label>
+                                    </td>--%>
+                                </tr>
+                                <tr>
+<%--                                    <td width="15%">
+                                        <telerik:RadComboBox ID="TipoConceptoid" runat="server" Width="60%" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                    </td>--%>
+                                    <td style="width: 15%;">
+                                        <asp:RadioButton ID="rdoPercepcion" Text="Percepcion" GroupName="ConceptosCliente" runat="server" TabIndex="1" AutoPostBack="true" Checked="true" />&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <asp:RadioButton ID="rdoDeduccion" Text=" Deducción" GroupName="ConceptosCliente" runat="server" TabIndex="2" AutoPostBack="true" />
+                                    </td>
+                                    <td style="width: 25%;">
+                                        <telerik:RadComboBox ID="cmbCvoSAT" runat="server" AutoPostBack="true" TabIndex="3" Width="70%" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                    </td>
+                                    <td style="width: 30%;">
+                                        <telerik:RadTextBox ID="txtNombreConcepto" runat="server" Width="50%" ValidationGroup="vDetallesCliente"></telerik:RadTextBox>
+                                    </td>
+<%--                                    <td style="width: 27%;">
+                                        <telerik:RadTextBox ID="txtDescripcionSAT" runat="server" Width="80%" ValidationGroup="vDetallesCliente"></telerik:RadTextBox>
+                                    </td>--%>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="width: 45%;">&nbsp;</td>
+                                    <td colspan="2" style="width: 55%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td valign="bottom" colspan="2">
+                                        <telerik:RadButton ID="btnGuardarConcepto" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" ValidationGroup="vConceptosCliente" Text="Guardar"  OnClick="btnGuardarConcepto_Click"></telerik:RadButton>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <telerik:RadButton ID="btnCancelarConcepto" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Cancelar"></telerik:RadButton>
+                                    </td>
+                                    <td colspan="2" style="width: 30%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="width: 66%; height: 5px;">
+                                        <asp:HiddenField ID="HiddenField5" runat="server" Value="0" />
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </fieldset>
+                        <br />
+                        <fieldset>
+                            <legend style="padding-right: 6px; color: Black">
+                                <asp:Label ID="LblListConceptos" runat="server" Text="Listado de Conceptos" Font-Bold="true" CssClass="item"></asp:Label>
+                            </legend>
+                            <table border="0" style="width: 100%;">
+                                <tr>
+                                    <td style="height: 5px">
+                                        <telerik:RadGrid ID="ConceptosClienteList" runat="server" AllowPaging="True"
+                                            AutoGenerateColumns="False" GridLines="None"
+                                            PageSize="20" ShowStatusBar="True"
+                                            Skin="Bootstrap" Width="100%">
+                                            <PagerStyle Mode="NumericPages" />
+                                            <MasterTableView AllowMultiColumnSorting="False" DataKeyNames="id" Name="ConceptosCliente" NoMasterRecordsText="No se encontraron datos para mostrar" Width="100%">
+                                                <Columns>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="Delete">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="lnkEditConcepto" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdEditConcepto" ImageUrl="~/images/action_edit.png" ValidationGroup="vConceptosCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                    
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id" Visible="false">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="CvoSAT" HeaderText="Cvo" UniqueName="CvoSAT">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="NombreConcepto" HeaderText="Nombre Concepto" UniqueName="NombreConcepto">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridBoundColumn DataField="TipoConcepto" HeaderText="Tipo de Concepto" UniqueName="TipoConcepto">
+                                                    </telerik:GridBoundColumn>
+                                                    <telerik:GridTemplateColumn AllowFiltering="False" HeaderStyle-HorizontalAlign="Center" UniqueName="DeleteConcepto">
+                                                        <ItemTemplate>
+                                                            <asp:ImageButton ID="btnDeleteConcepto" runat="server" CommandArgument='<%# Eval("id") %>' CommandName="cmdDeleteConcepto" ImageUrl="~/images/action_delete.gif" ValidationGroup="vConceptosCliente" />
+                                                        </ItemTemplate>
+                                                        <HeaderStyle HorizontalAlign="Center" />
+                                                        <ItemStyle HorizontalAlign="Center" />
+                                                    </telerik:GridTemplateColumn>
+                                                </Columns>
+                                            </MasterTableView>
+                                        </telerik:RadGrid>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </telerik:RadPageView>
                     <telerik:RadPageView ID="RadPageView4" runat="server">
                         <br />
                         <br />
@@ -705,86 +815,78 @@
                             </legend>
                             <table border="0" style="width: 100%;">
                                 <tr>
-                                    <td colspan="7">&nbsp;</td>
+                                    <td colspan="4" style="height: 10px;"></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 20%;">
+                                    <!-- Cabeceras de las columnas -->
+                                    <td style="width: 25%; text-align: left;">
                                         <asp:Label ID="Label8" runat="server" CssClass="item" Font-Bold="True" Text="Condicion IMSS:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td style="width: 25%; text-align: left;">
                                         <asp:Label ID="Label11" runat="server" CssClass="item" Font-Bold="True" Text="Condicion IMSS Patronal:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td style="width: 25%; text-align: left;">
                                         <asp:Label ID="Label12" runat="server" CssClass="item" Font-Bold="True" Text="Condicion ISR:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td style="width: 25%; text-align: left;">
                                         <asp:Label ID="Label13" runat="server" CssClass="item" Font-Bold="True" Text="Condicion ISN:"></asp:Label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="20%">
-                                        <asp:DropDownList ID="condicionIMSS" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                    <!-- Primera columna -->
+                                    <td style="width: 25%; vertical-align: top;">
+                                        <telerik:RadComboBox ID="condicionIMSS" runat="server" Width="85%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                        <br /><br />
                                         <asp:Label ID="Label15" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="CobroIMSS" runat="server" Width="85%">
-                                        </telerik:RadTextBox>
+                                        <telerik:RadNumericTextBox ID="CobroIMSS" runat="server" Value="0" MinValue="0" MaxValue="100" Width="30%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="lblPorcentaje" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
-
-                                    <td width="20%">
-                                        <asp:DropDownList ID="condicionIMSSPatronal" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                    <!-- Segunda columna -->
+                                    <td style="width: 25%; vertical-align: top;">
+                                        <telerik:RadComboBox ID="condicionIMSSPatronal" runat="server" Width="85%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                        <br /><br />
                                         <asp:Label ID="Label16" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS Patronal:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="CobroIMSSPatronal" runat="server" Width="85%">
-                                        </telerik:RadTextBox>
+                                        <telerik:RadNumericTextBox ID="CobroIMSSPatronal" runat="server" Value="0" MinValue="0" MaxValue="100" Width="30%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label36" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
-
-                                    <td style="width: 20%;">
-                                        <asp:DropDownList ID="CondicionISR" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente">
-                                        </asp:DropDownList><br />
+                                    <!-- Tercera columna -->
+                                    <td style="width: 25%; vertical-align: top;">
+                                        <telerik:RadComboBox ID="CondicionISR" runat="server" Width="85%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                        <br /><br />
                                         <asp:Label ID="Label17" runat="server" CssClass="item" Font-Bold="True" Text="Cobro ISR:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="CobroISR" runat="server" Width="85%">
-                                        </telerik:RadTextBox>
+                                        <telerik:RadNumericTextBox ID="CobroISR" runat="server" Value="0" MinValue="0" MaxValue="100" Width="30%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label37" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
-                                        <asp:DropDownList ID="CondicionISN" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente">
-                                        </asp:DropDownList>
-                                    </td>
-
-                                    <td style="width: 20%;"></td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;"></td>
-                                </tr>
-                                <tr>
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">
-                                        <asp:Button ID="btnGuardarIMSSISR" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
-                                    <asp:Button ID="btnCancelarIMSSISR" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    <!-- Cuarta columna -->
+                                    <td style="width: 25%; vertical-align: top;">
+                                        <telerik:RadComboBox ID="CondicionISN" runat="server" Width="85%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                        <br /><br />
+                                        <asp:Label ID="Label35" runat="server" CssClass="item" Font-Bold="True" Text="Cobro ISN:"></asp:Label><br />
+                                        <telerik:RadNumericTextBox ID="CobroISN" runat="server" Value="0" MinValue="0" MaxValue="100" Width="30%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label38" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" style="width: 66%; height: 5px;">
-                                        <asp:HiddenField ID="HiddenField2" runat="server" Value="0" />
+                                    <td colspan="2" style="width: 45%;">&nbsp;</td>
+                                    <td colspan="2" style="width: 55%;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <telerik:RadButton ID="btnGuardarIMSSISR" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" ValidationGroup="vDetallesCliente" Text="Guardar" OnClick="btnGuardarDetalles_Click"></telerik:RadButton>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <telerik:RadButton ID="btnCancelarIMSSISR" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Cancelar" ValidationGroup="vDetallesCliente"></telerik:RadButton>
                                     </td>
                                 </tr>
                             </table>
+
                         </fieldset>
                         <br />
                         <fieldset>
@@ -809,7 +911,7 @@
                                                         <ItemStyle HorizontalAlign="Center" />
                                                     </telerik:GridTemplateColumn>
 
-                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id" Visible="false">
                                                     </telerik:GridBoundColumn>
 
                                                     <telerik:GridBoundColumn DataField="condicion_imss_descripcion" HeaderText="Condicion IMSS" UniqueName="banconacional">
@@ -857,7 +959,7 @@
                                     <td colspan="7">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 20%;">
+                                    <td style="width: 25%;">
                                         <asp:Label ID="Label19" runat="server" CssClass="item" Font-Bold="True" Text="Condicion IMSS:"></asp:Label>
                                     </td>
                                     <td style="width: 20%;">
@@ -868,64 +970,54 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="20%">
-                                        <asp:DropDownList ID="CondicionIMSSEmpleado" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                    <td width="30%">
+                                        <telerik:RadComboBox ID="CondicionIMSSEmpleado" runat="server" Width="80%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                        <br />
                                         <br />
                                         <asp:Label ID="Label23" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="CobroIMSSEmpleado" runat="server" Width="85%">
-                                        </telerik:RadTextBox>
+                                        <telerik:RadNumericTextBox ID="CobroIMSSEmpleado" runat="server"  Value="0"  MinValue="0"  MaxValue="100" Width="25%" ValidationGroup="">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label41" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
 
                                     <td width="20%">
-                                        <asp:DropDownList ID="CondicionIMSSPatronalEmpleado" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente"></asp:DropDownList><br />
+                                        <telerik:RadComboBox ID="CondicionIMSSPatronalEmpleado" runat="server" Width="80%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                        <br />
                                         <br />
                                         <asp:Label ID="Label24" runat="server" CssClass="item" Font-Bold="True" Text="Cobro IMSS Patronal:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="CobroIMSSPatronalEmpleado" runat="server" Width="85%">
-                                        </telerik:RadTextBox>
+                                        <telerik:RadNumericTextBox ID="CobroIMSSPatronalEmpleado" runat="server"  Value="0"  MinValue="0"  MaxValue="100" Width="30%" ValidationGroup="">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label40" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
 
                                     <td style="width: 20%;">
-                                        <asp:DropDownList ID="CondicionISREmpleado" runat="server" CssClass="box" AutoPostBack="true" ValidationGroup="vDetallesCliente">
-                                        </asp:DropDownList><br />
+                                        <telerik:RadComboBox ID="CondicionISREmpleado" runat="server" Width="80%" AutoPostBack="true" ValidationGroup="vDetallesCliente"></telerik:RadComboBox>
+                                        <br />
                                         <br />
                                         <asp:Label ID="Label25" runat="server" CssClass="item" Font-Bold="True" Text="Cobro ISR:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="CobroISREmpleado" runat="server" Width="85%">
-                                        </telerik:RadTextBox>
+                                        <telerik:RadNumericTextBox ID="CobroISREmpleado" runat="server"  Value="0"  MinValue="0"  MaxValue="100" Width="30%" ValidationGroup="">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label39" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;"></td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;"></td>
+                                    <td colspan="2" style="width: 45%;">&nbsp;</td>
+                                    <td colspan="2" style="width: 55%;">&nbsp;</td>
                                 </tr>
                                 <tr>
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">
-                                        <asp:Button ID="btnGuardarIMSSISREmpleado" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
-                                    <asp:Button ID="btnCancelarIMSSISREmpleado" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    <td valign="bottom" colspan="2">
+                                        <telerik:RadButton ID="btnGuardarIMSSISREmpleado" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" ValidationGroup="vDetallesCliente" Text="Guardar"  OnClick="btnGuardarDetalles_Click"></telerik:RadButton>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <telerik:RadButton ID="btnCancelarIMSSISREmpleado" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Cancelar" ValidationGroup="vDetallesCliente"></telerik:RadButton>
                                     </td>
+                                    <td colspan="2" style="width: 30%;">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4" style="width: 66%; height: 5px;">
-                                        <asp:HiddenField ID="HiddenField3" runat="server" Value="0" />
+                                        <asp:HiddenField ID="HiddenField2" runat="server" Value="0" />
                                     </td>
                                 </tr>
                             </table>
@@ -953,7 +1045,7 @@
                                                         <ItemStyle HorizontalAlign="Center" />
                                                     </telerik:GridTemplateColumn>
 
-                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id" Visible="false">
                                                     </telerik:GridBoundColumn>
 
                                                     <telerik:GridBoundColumn DataField="condicion_imss_descripcion" HeaderText="Condicion IMSS" UniqueName="banconacional">
@@ -996,93 +1088,93 @@
                             </legend>
                             <table border="0" style="width: 100%;">
                                 <tr>
-                                    <td colspan="7">&nbsp;</td>
+                                    <td colspan="4">&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 20%;">
-                                        <asp:Label ID="Label27" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Remuneracion:"></asp:Label>
+                                    <td style="width: 25%;">
+                                        <asp:Label ID="Label27" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Remuneración:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td style="width: 25%;">
                                         <asp:Label ID="Label28" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Comisión:"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;">
+                                    <td style="width: 25%;">
                                         <asp:Label ID="Label29" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Cuota Obrera:"></asp:Label>
                                     </td>
+                                    <td style="width: 25%;">
+                                        <asp:Label ID="Label30" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Cuota Patronal:"></asp:Label>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td width="20%">
-                                        <telerik:RadTextBox ID="TIRemuneracion" runat="server" Width="85%"></telerik:RadTextBox><br />
-                                        <br />
-                                        <asp:Label ID="Label30" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Cuota Patronal:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="TICuotaPatronal" runat="server" Width="85%">
-                                        </telerik:RadTextBox><br />
+                                    <td>
+                                        <telerik:RadNumericTextBox ID="TIRemuneracion" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label46" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadNumericTextBox ID="TIComision" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label48" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadNumericTextBox ID="TICuotaObrera" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label47" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
+                                    </td>
+                                    <td>
+                                        <telerik:RadNumericTextBox ID="TICuotaPatronal" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label45" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         <br />
                                         <asp:Label ID="Label34" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA ISN:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="TIISN" runat="server" Width="85%">
-                                        </telerik:RadTextBox>
+                                        <telerik:RadNumericTextBox ID="TIISN" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label44" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
-
-                                    <td width="20%">
-                                        <telerik:RadTextBox ID="TIComision" runat="server" Width="85%"></telerik:RadTextBox><br />
+                                    <td>
                                         <br />
                                         <asp:Label ID="Label31" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA Infonavit:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="TIInfonavit" runat="server" Width="85%">
-                                        </telerik:RadTextBox><br />
-                                        <br />
-                                        &nbsp;<br />
-                                        <br />
-                                        &nbsp;
+                                        <telerik:RadNumericTextBox ID="TIInfonavit" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label43" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
-
-                                    <td style="width: 20%;">
-                                        <telerik:RadTextBox ID="TICuotaObrera" runat="server" Width="85%">
-                                        </telerik:RadTextBox><br />
+                                    <td>
                                         <br />
                                         <asp:Label ID="Label32" runat="server" CssClass="item" Font-Bold="True" Text="Tasa IVA ISR:"></asp:Label><br />
-                                        <telerik:RadTextBox ID="TIISR" runat="server" Width="85%">
-                                        </telerik:RadTextBox><br />
-                                        <br />
-                                        &nbsp;<br />
-                                        <br />
-                                        &nbsp;
+                                        <telerik:RadNumericTextBox ID="TIISR" runat="server" Value="0" MinValue="0" MaxValue="100" Width="50%" ValidationGroup="vDetallesCliente">
+                                            <NumberFormat GroupSeparator="" DecimalDigits="0" AllowRounding="true" KeepNotRoundedValue="false" />
+                                        </telerik:RadNumericTextBox>
+                                        <asp:Label ID="Label42" runat="server" CssClass="item" Font-Bold="True" Text="%" Style="margin-left: 5px;"></asp:Label>
                                     </td>
-                                    <td style="width: 20%;"></td>
+                                    <td>&nbsp;</td>
                                 </tr>
                                 <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;"></td>
+                                    <td colspan="2" style="width: 45%;">&nbsp;</td>
+                                    <td colspan="2" style="width: 55%;">&nbsp;</td>
                                 </tr>
                                 <tr>
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-
-
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 10%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">&nbsp;</td>
-                                    <td style="width: 30%;">
-                                        <asp:Button ID="btnGuardarTasaIVA" runat="server" Text="Guardar" ValidationGroup="vDetallesCliente" OnClick="btnGuardarDetalles_Click" />&nbsp;&nbsp;
-                                    <asp:Button ID="btnCancelarTasaIVA" runat="server" Text="Cancelar" Visible="true" ValidationGroup="vDetallesCliente" />
+                                    <td>
+                                        <telerik:RadButton ID="btnGuardarTasaIVA" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" ValidationGroup="vDetallesCliente" Text="Guardar" OnClick="btnGuardarDetalles_Click"></telerik:RadButton>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <telerik:RadButton ID="btnCancelarTasaIVA" RenderMode="Lightweight" runat="server" Width="120px" Skin="Bootstrap" CssClass="rbPrimaryButton" CausesValidation="false" Text="Cancelar" ValidationGroup="vDetallesCliente"></telerik:RadButton>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" style="width: 66%; height: 5px;">
-                                        <asp:HiddenField ID="HiddenField4" runat="server" Value="0" />
+                                    <td colspan="4" style="height: 5px;">
+                                        <asp:HiddenField ID="HiddenField3" runat="server" Value="0" />
                                     </td>
                                 </tr>
                             </table>
+
                         </fieldset>
                         <br />
                         <fieldset>
@@ -1107,7 +1199,7 @@
                                                         <ItemStyle HorizontalAlign="Center" />
                                                     </telerik:GridTemplateColumn>
 
-                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id">
+                                                    <telerik:GridBoundColumn DataField="id" HeaderText="Folio" UniqueName="id" Visible="false">
                                                     </telerik:GridBoundColumn>
 
                                                     <telerik:GridBoundColumn DataField="TIRemuneracion" HeaderText="Tasa IVA Remuneracion" UniqueName="banconacional">
